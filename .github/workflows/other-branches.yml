@@ -9,6 +9,7 @@ jobs:
   build-frontend:
     name: Build frontend
     runs-on: ubuntu-latest
+    environment: Main
 
     steps:
     - name: Link checkut action
