@@ -1,4 +1,4 @@
-name: Main branch
+name: Other branches
 
 on:
   push:
@@ -23,10 +23,11 @@ jobs:
         key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
         restore-keys: |
           ${{ runner.os }}-node-
-    - run: cd science-archive-web
-    - run: npm cache clean --force
-    - run: npm install
-    - run: npm install -g @angular/cli
+
+    - run: cd science-archive-web && ls
+    - run: ls && npm cache clean --force
+    - run: ls && npm install
+    - run: ls && npm install -g @angular/cli
     - run: ls && ng build
 
     - name: Copy build files to web-server folder
