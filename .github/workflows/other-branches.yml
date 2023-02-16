@@ -46,3 +46,4 @@ jobs:
       with:
         source: "./science-archive-web/*"
         target: "/var/www/html/"
+        rm: true
