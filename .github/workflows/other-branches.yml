@@ -23,10 +23,11 @@ jobs:
         key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
         restore-keys: |
           ${{ runner.os }}-node-
+    - run: cd science-archive-web
     - run: npm cache clean --force
     - run: npm install
     - run: npm install -g @angular/cli
-    - run: cd science-archive-web && ng build
+    - run: ng build
 
     - name: Copy build files to web-server folder
       uses: appleboy/scp-action@master
