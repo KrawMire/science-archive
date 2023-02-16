@@ -24,11 +24,12 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-node-
 
-    - run: cd science-archive-web && ls
-    - run: ls && npm cache clean --force
-    - run: ls && npm install
-    - run: ls && npm install -g @angular/cli
-    - run: ls && ng build
+    - run: |
+        cd science-archive-web &&
+        npm cache clean --force &&
+        npm install &&
+        npm install -g @angular/cli &&
+        ng build
 
     - name: Copy build files to web-server folder
       uses: appleboy/scp-action@master
