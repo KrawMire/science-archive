@@ -47,4 +47,4 @@ jobs:
         source: "./science-archive-web/dist/"
         target: "/var/www/html/"
         rm: true
-        strip_components: 3
+        strip_components: 1
