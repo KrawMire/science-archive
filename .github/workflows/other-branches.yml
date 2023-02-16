@@ -44,6 +44,7 @@ jobs:
         PORT: ${{ secrets.PORT }}
         KEY: ${{ secrets.SSHKEY }}
       with:
-        source: "./science-archive-web/*"
+        source: "./science-archive-web/dist/"
         target: "/var/www/html/"
         rm: true
+        strip_components: 2
