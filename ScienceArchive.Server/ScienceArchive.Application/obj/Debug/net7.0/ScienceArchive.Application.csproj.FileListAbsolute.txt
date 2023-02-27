@@ -1,0 +1,15 @@
+/Users/krawmire/Documents/dev/mine/From_Git/science-archive/ScienceArchive.Server/ScienceArchive.Application/obj/Debug/net7.0/ScienceArchive.Application.csproj.AssemblyReference.cache
+/Users/krawmire/Documents/dev/mine/From_Git/science-archive/ScienceArchive.Server/ScienceArchive.Application/obj/Debug/net7.0/ScienceArchive.Application.GeneratedMSBuildEditorConfig.editorconfig
+/Users/krawmire/Documents/dev/mine/From_Git/science-archive/ScienceArchive.Server/ScienceArchive.Application/obj/Debug/net7.0/ScienceArchive.Application.AssemblyInfoInputs.cache
+/Users/krawmire/Documents/dev/mine/From_Git/science-archive/ScienceArchive.Server/ScienceArchive.Application/obj/Debug/net7.0/ScienceArchive.Application.AssemblyInfo.cs
+/Users/krawmire/Documents/dev/mine/From_Git/science-archive/ScienceArchive.Server/ScienceArchive.Application/obj/Debug/net7.0/ScienceArchive.Application.csproj.CoreCompileInputs.cache
+/Users/krawmire/Documents/dev/mine/From_Git/science-archive/ScienceArchive.Server/ScienceArchive.Application/bin/Debug/net7.0/ScienceArchive.Application.deps.json
+/Users/krawmire/Documents/dev/mine/From_Git/science-archive/ScienceArchive.Server/ScienceArchive.Application/bin/Debug/net7.0/ScienceArchive.Application.dll
+/Users/krawmire/Documents/dev/mine/From_Git/science-archive/ScienceArchive.Server/ScienceArchive.Application/bin/Debug/net7.0/ScienceArchive.Application.pdb
+/Users/krawmire/Documents/dev/mine/From_Git/science-archive/ScienceArchive.Server/ScienceArchive.Application/bin/Debug/net7.0/ScienceArchive.Core.dll
+/Users/krawmire/Documents/dev/mine/From_Git/science-archive/ScienceArchive.Server/ScienceArchive.Application/bin/Debug/net7.0/ScienceArchive.Core.pdb
+/Users/krawmire/Documents/dev/mine/From_Git/science-archive/ScienceArchive.Server/ScienceArchive.Application/obj/Debug/net7.0/ScienceArchive.Application.csproj.CopyComplete
+/Users/krawmire/Documents/dev/mine/From_Git/science-archive/ScienceArchive.Server/ScienceArchive.Application/obj/Debug/net7.0/ScienceArchive.Application.dll
+/Users/krawmire/Documents/dev/mine/From_Git/science-archive/ScienceArchive.Server/ScienceArchive.Application/obj/Debug/net7.0/refint/ScienceArchive.Application.dll
+/Users/krawmire/Documents/dev/mine/From_Git/science-archive/ScienceArchive.Server/ScienceArchive.Application/obj/Debug/net7.0/ScienceArchive.Application.pdb
+/Users/krawmire/Documents/dev/mine/From_Git/science-archive/ScienceArchive.Server/ScienceArchive.Application/obj/Debug/net7.0/ref/ScienceArchive.Application.dll

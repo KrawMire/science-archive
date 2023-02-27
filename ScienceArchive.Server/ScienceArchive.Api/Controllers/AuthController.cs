@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 
 namespace ScienceArchive.Api.Controllers
 {
@@ -10,7 +6,7 @@ namespace ScienceArchive.Api.Controllers
     public class AuthController : Controller
     {
         [HttpGet]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             return Json(new
             {

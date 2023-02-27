@@ -1,0 +1,36 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v7.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v7.0": {
+      "ScienceArchive.Application/1.0.0": {
+        "dependencies": {
+          "ScienceArchive.Core": "1.0.0"
+        },
+        "runtime": {
+          "ScienceArchive.Application.dll": {}
+        }
+      },
+      "ScienceArchive.Core/1.0.0": {
+        "runtime": {
+          "ScienceArchive.Core.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "ScienceArchive.Application/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "ScienceArchive.Core/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}
