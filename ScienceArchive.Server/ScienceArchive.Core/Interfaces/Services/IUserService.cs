@@ -1,4 +1,6 @@
 ﻿using System;
+using ScienceArchive.Core.Dtos.UserRequest;
+using ScienceArchive.Core.Dtos.UserResponse;
 using ScienceArchive.Core.Entities;
 
 namespace ScienceArchive.Core.Interfaces.Services
@@ -13,7 +15,7 @@ namespace ScienceArchive.Core.Interfaces.Services
         /// </summary>
         /// <param name="newUser">New user to create</param>
         /// <returns>Created user</returns>
-        Task<User> Create(User newUser);
+        Task<CreateUserResponseDto> Create(CreateUserRequestDto contract);
 
         /// <summary>
         /// Update existing user
@@ -21,14 +23,14 @@ namespace ScienceArchive.Core.Interfaces.Services
         /// <param name="userId">User ID to update</param>
         /// <param name="newUser">New user data</param>
         /// <returns>Updated user</returns>
-        Task<User> Update(Guid userId, User newUser);
+        Task<UpdateUserResponseDto> Update(UpdateUserRequestDto contract);
 
         /// <summary>
         /// Delete existing user
         /// </summary>
         /// <param name="userId">User ID to delete</param>
         /// <returns>Deleted user ID</returns>
-        Task<Guid> Delete(Guid userId);
+        Task<DeleteUserResponseDto> Delete(DeleteUserRequestDto contract);
     }
 }
 

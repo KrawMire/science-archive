@@ -32,6 +32,17 @@ namespace ScienceArchive.Core.Utils
 
             return salt;
         }
+
+        /// <summary>
+        /// Generate hash from string value
+        /// </summary>
+        /// <param name="value">String value to create hash from</param>
+        /// <returns>Hashed value</returns>
+        public static string CreateHash(string value)
+        {
+            // TODO: Create strong hash algorythm
+            return value;
+        }
     }
 }
 

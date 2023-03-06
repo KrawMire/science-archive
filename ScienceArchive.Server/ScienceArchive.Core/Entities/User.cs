@@ -15,16 +15,16 @@ namespace ScienceArchive.Core.Entities
         private string _password = string.Empty;
         private string _passwordSalt = string.Empty;
 
-        internal User(Guid id = default, string? salt = null)
+        public User(Guid id = default, string? salt = null)
         {
-            Id = id == default ? Guid.NewGuid() : id;
+            _id = id == default ? Guid.NewGuid() : id;
             _passwordSalt = salt ?? StringGenerator.CreateSalt();
         }
 
         /// <summary>
         /// Identifier of the user
         /// </summary>
-        Guid Id { get; }
+        public Guid Id { get; init; }
 
         /// <summary>
         /// Name of the user
@@ -77,8 +77,8 @@ namespace ScienceArchive.Core.Entities
             get => _password;
             set
             {
-                // TODO: Create hashing algorithm
-                _password = value + _passwordSalt;
+                string passwordValue = value + _passwordSalt;
+                _password = StringGenerator.CreateHash(passwordValue);
             }
         }
     }

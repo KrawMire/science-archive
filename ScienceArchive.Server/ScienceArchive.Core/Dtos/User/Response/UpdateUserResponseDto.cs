@@ -1,8 +1,8 @@
 ﻿using System;
-namespace ScienceArchive.Data.Models
+namespace ScienceArchive.Core.Dtos.UserResponse
 {
-    public record class UserModel
-    {
+	public record class UpdateUserResponseDto
+	{
         /// <summary>
         /// ID of the user to update
         /// </summary>
@@ -27,11 +27,6 @@ namespace ScienceArchive.Data.Models
         /// User password
         /// </summary>
         public required string Password { get; set; }
-
-        /// <summary>
-        /// Salt for password
-        /// </summary>
-        public required string PasswordSalt { get; set; }
     }
 }
 

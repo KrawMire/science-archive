@@ -1,12 +1,15 @@
 ﻿using System;
+using ScienceArchive.Application.Mappers;
 using ScienceArchive.Application.UseCases;
+using ScienceArchive.Core.Dtos.UserRequest;
+using ScienceArchive.Core.Dtos.UserResponse;
 using ScienceArchive.Core.Entities;
 using ScienceArchive.Core.Interfaces.Services;
 
 namespace ScienceArchive.Application.Services
 {
-	public class UserService : IUserService
-	{
+    public class UserService : IUserService
+    {
         private CreateUserUseCase _createUseCase;
         private DeleteUserUseCase _deleteUseCase;
         private UpdateUserUseCase _updateUseCase;
@@ -22,22 +25,27 @@ namespace ScienceArchive.Application.Services
             _updateUseCase = updateUserUseCase;
         }
 
-        /// <inheritdoc/>
-        public async Task<User> Create(User newUser)
+        public async Task<CreateUserResponseDto> Create(CreateUserRequestDto contract)
         {
-            return await _createUseCase.Execute(newUser);
+            User userToCreate = CreateUserMapper.MapToEntity(contract);
+            User createdUser = await _createUseCase.Execute(userToCreate);
+
+            return CreateUserMapper.MapToResponse(createdUser);
         }
 
-        /// <inheritdoc/>
-        public async Task<Guid> Delete(Guid userId)
+        public async Task<DeleteUserResponseDto> Delete(DeleteUserRequestDto contract)
         {
-            return await _deleteUseCase.Execute(userId);
+            Guid deletedUserId = await _deleteUseCase.Execute(contract.Id);
+
+            return DeleteUserMapper.MapToResponse(deletedUserId);
         }
 
-        /// <inheritdoc/>
-        public async Task<User> Update(Guid userId, User newUser)
+        public async Task<UpdateUserResponseDto> Update(UpdateUserRequestDto contract)
         {
-            return await _updateUseCase.Execute(userId, newUser);
+            User userToUpdate = UpdateUserMapper.MapToEntity(contract);
+            User updatedUser = await _updateUseCase.Execute(contract.Id, userToUpdate);
+
+            return UpdateUserMapper.MapToResponse(updatedUser);
         }
     }
 }

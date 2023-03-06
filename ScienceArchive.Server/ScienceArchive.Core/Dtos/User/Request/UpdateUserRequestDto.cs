@@ -1,12 +1,12 @@
 ﻿using System;
-namespace ScienceArchive.Data.Models
+namespace ScienceArchive.Core.Dtos.UserRequest
 {
-    public record class UserModel
-    {
-        /// <summary>
-        /// ID of the user to update
-        /// </summary>
-        public required Guid Id { get; set; }
+	public record class UpdateUserRequestDto
+	{
+		/// <summary>
+		/// ID of the user to update
+		/// </summary>
+		public required Guid Id { get; set; }
 
         /// <summary>
         /// User name
@@ -27,11 +27,6 @@ namespace ScienceArchive.Data.Models
         /// User password
         /// </summary>
         public required string Password { get; set; }
-
-        /// <summary>
-        /// Salt for password
-        /// </summary>
-        public required string PasswordSalt { get; set; }
     }
 }
 

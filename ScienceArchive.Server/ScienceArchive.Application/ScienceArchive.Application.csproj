@@ -7,18 +7,18 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Dtos\" />
     <None Remove="Services\" />
     <None Remove="Mappers\" />
     <None Remove="UseCases\" />
     <None Remove="UseCases\User\" />
+    <None Remove="Mappers\User\" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Dtos\" />
     <Folder Include="Services\" />
     <Folder Include="Mappers\" />
     <Folder Include="UseCases\" />
     <Folder Include="UseCases\User\" />
+    <Folder Include="Mappers\User\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ScienceArchive.Core\ScienceArchive.Core.csproj" />
