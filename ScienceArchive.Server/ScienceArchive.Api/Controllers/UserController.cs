@@ -6,9 +6,11 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ScienceArchive.Api.Controllers
 {
+    [Route("api/user")]
     public class UserController : Controller
     {
-        public IActionResult Index()
+        [HttpPost]
+        public IActionResult Update()
         {
             return View();
         }

@@ -12,19 +12,19 @@ namespace ScienceArchive.Application.Services
     {
         private CreateUserUseCase _createUseCase;
         private DeleteUserUseCase _deleteUseCase;
-        private UpdateUserUseCase _updateUseCase;
+        private readonly UpdateUserUseCase _updateUseCase;
 
         public UserService(
             CreateUserUseCase createUserUseCase,
             DeleteUserUseCase deleteUserUseCase,
-            UpdateUserUseCase updateUserUseCase
-        )
+            UpdateUserUseCase updateUserUseCase)
         {
             _createUseCase = createUserUseCase;
             _deleteUseCase = deleteUserUseCase;
             _updateUseCase = updateUserUseCase;
         }
 
+        /// <inheritdoc/>
         public async Task<CreateUserResponseDto> Create(CreateUserRequestDto contract)
         {
             User userToCreate = CreateUserMapper.MapToEntity(contract);
@@ -33,6 +33,7 @@ namespace ScienceArchive.Application.Services
             return CreateUserMapper.MapToResponse(createdUser);
         }
 
+        /// <inheritdoc/>
         public async Task<DeleteUserResponseDto> Delete(DeleteUserRequestDto contract)
         {
             Guid deletedUserId = await _deleteUseCase.Execute(contract.Id);
@@ -40,6 +41,7 @@ namespace ScienceArchive.Application.Services
             return DeleteUserMapper.MapToResponse(deletedUserId);
         }
 
+        /// <inheritdoc/>
         public async Task<UpdateUserResponseDto> Update(UpdateUserRequestDto contract)
         {
             User userToUpdate = UpdateUserMapper.MapToEntity(contract);

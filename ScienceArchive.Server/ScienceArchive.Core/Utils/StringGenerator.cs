@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Security.Cryptography;
+using System.Text;
 
 namespace ScienceArchive.Core.Utils
 {
@@ -38,10 +39,22 @@ namespace ScienceArchive.Core.Utils
         /// </summary>
         /// <param name="value">String value to create hash from</param>
         /// <returns>Hashed value</returns>
-        public static string CreateHash(string value)
+        public static string HashPassword(string password, string? salt = null)
         {
-            // TODO: Create strong hash algorythm
-            return value;
+            if (salt == null)
+            {
+                salt = CreateSalt();
+            }
+
+            var hash = Rfc2898DeriveBytes.Pbkdf2(
+                Encoding.UTF8.GetBytes(password),
+                Encoding.UTF8.GetBytes(salt),
+                10000,
+                HashAlgorithmName.SHA256,
+                64
+            );
+
+            return Convert.ToHexString(hash);
         }
     }
 }

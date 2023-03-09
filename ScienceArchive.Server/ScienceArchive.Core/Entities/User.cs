@@ -24,7 +24,10 @@ namespace ScienceArchive.Core.Entities
         /// <summary>
         /// Identifier of the user
         /// </summary>
-        public Guid Id { get; init; }
+        public Guid Id
+        {
+            get => _id;
+        }
 
         /// <summary>
         /// Name of the user
@@ -78,8 +81,16 @@ namespace ScienceArchive.Core.Entities
             set
             {
                 string passwordValue = value + _passwordSalt;
-                _password = StringGenerator.CreateHash(passwordValue);
+                _password = StringGenerator.HashPassword(passwordValue);
             }
+        }
+
+        /// <summary>
+        /// Salt for password
+        /// </summary>
+        public string? PasswordSalt
+        {
+            get => _passwordSalt;
         }
     }
 }
