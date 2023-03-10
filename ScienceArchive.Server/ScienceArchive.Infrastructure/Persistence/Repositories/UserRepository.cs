@@ -23,20 +23,20 @@ namespace ScienceArchive.Infrastructure.Persistence.Repositories
         }
 
         /// <inheritdoc/>
-        public async Task<User[]> GetAll()
+        public async Task<List<User>> GetAll()
         {
-            UserModel[] users;
+            List<UserModel> users;
 
             try
             {
-                users = await _dbContext.Users.ToArrayAsync();
+                users = await _dbContext.Users.ToListAsync();
             }
             catch (Exception)
             {
                 throw new Exception("Cannot get users");
             }
 
-            return Array.ConvertAll(users, user => UserMapper.MapToDomain(user));
+            return users.Select(user => UserMapper.MapToDomain(user)).ToList();
         }
 
         /// <inheritdoc/>

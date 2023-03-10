@@ -8,6 +8,11 @@ namespace ScienceArchive.Infrastructure.Persistence.Mappers
     {
         public static UserModel MapToPersistence(User user)
         {
+            if (String.IsNullOrWhiteSpace(user.PasswordSalt))
+            {
+                throw new NullReferenceException("Password salt is invalid!");
+            }
+
             var userModel = new UserModel
             {
                 Id = user.Id,
@@ -15,7 +20,7 @@ namespace ScienceArchive.Infrastructure.Persistence.Mappers
                 Login = user.Login,
                 Name = user.Name,
                 Password = user.Password,
-                PasswordSalt = user.PasswordSalt ?? "",
+                PasswordSalt = user.PasswordSalt,
             };
 
             return userModel;

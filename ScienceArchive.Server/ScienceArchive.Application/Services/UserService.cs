@@ -10,18 +10,32 @@ namespace ScienceArchive.Application.Services
 {
     public class UserService : IUserService
     {
-        private CreateUserUseCase _createUseCase;
-        private DeleteUserUseCase _deleteUseCase;
+        private readonly CheckUserExistUseCase _checkUserExistUseCase;
+        private readonly CreateUserUseCase _createUseCase;
+        private readonly DeleteUserUseCase _deleteUseCase;
         private readonly UpdateUserUseCase _updateUseCase;
 
         public UserService(
+            CheckUserExistUseCase checkUserExistUseCase,
             CreateUserUseCase createUserUseCase,
             DeleteUserUseCase deleteUserUseCase,
             UpdateUserUseCase updateUserUseCase)
         {
+            _checkUserExistUseCase = checkUserExistUseCase;
             _createUseCase = createUserUseCase;
             _deleteUseCase = deleteUserUseCase;
             _updateUseCase = updateUserUseCase;
+        }
+
+        /// <inheritdoc/>
+        public async Task<CheckUserExistResponseDto> CheckUserExist(CheckUserExistRequestDto contract)
+        {
+            bool result = await _checkUserExistUseCase.Execute(contract.Login, contract.Password);
+
+            return new CheckUserExistResponseDto
+            {
+                UserExist = result
+            };
         }
 
         /// <inheritdoc/>
@@ -49,6 +63,7 @@ namespace ScienceArchive.Application.Services
 
             return UpdateUserMapper.MapToResponse(updatedUser);
         }
+
     }
 }
 

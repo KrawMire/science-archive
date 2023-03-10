@@ -78,11 +78,7 @@ namespace ScienceArchive.Core.Entities
         public required string Password
         {
             get => _password;
-            set
-            {
-                string passwordValue = value + _passwordSalt;
-                _password = StringGenerator.HashPassword(passwordValue);
-            }
+            set => _password = value;
         }
 
         /// <summary>
@@ -91,6 +87,14 @@ namespace ScienceArchive.Core.Entities
         public string? PasswordSalt
         {
             get => _passwordSalt;
+        }
+
+        /// <summary>
+        /// Hash current inner password value
+        /// </summary>
+        public void HashOwnPassword()
+        {
+            _password = StringGenerator.HashPassword(_password, _passwordSalt);
         }
     }
 }

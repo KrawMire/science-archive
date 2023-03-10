@@ -15,20 +15,36 @@ namespace ScienceArchive.Api.Controllers
             _userService = userService;
         }
 
-        [HttpPost("new")]
-        public async Task<IActionResult> Create([FromBody] CreateUserRequestDto request)
+        [HttpPost("signin")]
+        public async Task<IActionResult> SignIn([FromBody] CheckUserExistRequestDto request)
+        {
+            try
+            {
+                var result = await _userService.CheckUserExist(request);
+                var response = new SuccessResponse(result);
+
+                return Json(response);
+            }
+            catch (Exception e)
+            {
+                var response = new ErrorResponse(e.Message);
+                return Json(response);
+            }
+        }
+
+        [HttpPost("signup")]
+        public async Task<IActionResult> SignUp([FromBody] CreateUserRequestDto request)
         {
             try
             {
                 var result = await _userService.Create(request);
-                Response response = new SuccessResponse(result);
+                var response = new SuccessResponse(result);
 
                 return Json(result);
             }
             catch (Exception e)
             {
-                Response response = new ErrorResponse(e.Message);
-
+                var response = new ErrorResponse(e.Message);
                 return Json(response);
             }
         }

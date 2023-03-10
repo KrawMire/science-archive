@@ -11,6 +11,13 @@ namespace ScienceArchive.Core.Interfaces.Services
     public interface IUserService
     {
         /// <summary>
+        /// Check if user exist
+        /// </summary>
+        /// <param name="contract">Data to check user</param>
+        /// <returns>Checking result</returns>
+        Task<CheckUserExistResponseDto> CheckUserExist(CheckUserExistRequestDto contract);
+
+        /// <summary>
         /// Create new user
         /// </summary>
         /// <param name="newUser">New user to create</param>

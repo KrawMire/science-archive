@@ -1,8 +1,8 @@
 ﻿using System;
 namespace ScienceArchive.Core.Dtos.UserResponse
 {
-	public record class CreateUserResponseDto
-	{
+    public record class CreateUserResponseDto
+    {
         /// <summary>
         /// ID of the user
         /// </summary>
@@ -22,11 +22,6 @@ namespace ScienceArchive.Core.Dtos.UserResponse
         /// User auth login
         /// </summary>
         public required string Login { get; set; }
-
-        /// <summary>
-        /// User password
-        /// </summary>
-        public required string Password { get; set; }
     }
 }
 

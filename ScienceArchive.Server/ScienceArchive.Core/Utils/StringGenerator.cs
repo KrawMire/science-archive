@@ -18,18 +18,10 @@ namespace ScienceArchive.Core.Utils
         public static string CreateSalt(int size = 64)
         {
             var byteSalt = RandomNumberGenerator.GetBytes(size);
+            _ = byteSalt ?? throw new Exception("Cannot generate password salt");
 
-            if (byteSalt == null)
-            {
-                throw new Exception("Cannot generate password salt");
-            }
-
-            var salt = byteSalt.ToString();
-
-            if (salt == null)
-            {
-                throw new Exception("Cannot convert salt to string");
-            }
+            var salt = Convert.ToBase64String(byteSalt);
+            _ = salt ?? throw new Exception("Cannot convert salt to string");
 
             return salt;
         }
@@ -41,10 +33,7 @@ namespace ScienceArchive.Core.Utils
         /// <returns>Hashed value</returns>
         public static string HashPassword(string password, string? salt = null)
         {
-            if (salt == null)
-            {
-                salt = CreateSalt();
-            }
+            salt = salt ?? CreateSalt();
 
             var hash = Rfc2898DeriveBytes.Pbkdf2(
                 Encoding.UTF8.GetBytes(password),
@@ -54,7 +43,7 @@ namespace ScienceArchive.Core.Utils
                 64
             );
 
-            return Convert.ToHexString(hash);
+            return Convert.ToBase64String(hash);
         }
     }
 }

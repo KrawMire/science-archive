@@ -19,7 +19,7 @@ namespace ScienceArchive.Core.Interfaces.Repositories
         /// Get all existing users
         /// </summary>
         /// <returns>Existing users</returns>
-        Task<User[]> GetAll();
+        Task<List<User>> GetAll();
 
         /// <summary>
         /// Create new user
