@@ -22,6 +22,7 @@ public class Program
         builder.Services.RegisterUseCases();
         builder.Services.RegisterRepositories();
         builder.Services.RegisterDbContext(dbConnectionString);
+        builder.Services.RegisterAuth(builder.Configuration);
 
         var app = builder.Build();
 
@@ -32,6 +33,7 @@ public class Program
         }
 
         //app.UseHttpsRedirection();
+        app.UseAuthentication();
         app.UseAuthorization();
         app.MapControllers();
 

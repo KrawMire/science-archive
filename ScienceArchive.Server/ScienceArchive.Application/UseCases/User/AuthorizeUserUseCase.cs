@@ -1,20 +1,33 @@
 ﻿using System;
+using System.IdentityModel.Tokens.Jwt;
 using ScienceArchive.Core.Entities;
 using ScienceArchive.Core.Interfaces.Repositories;
 using ScienceArchive.Core.Utils;
 
 namespace ScienceArchive.Application.UseCases
 {
-    public class CheckUserExistUseCase
+    public class AuthorizeUserUseCase
     {
         private IUserRepository _userRepository;
 
-        public CheckUserExistUseCase(IUserRepository userRepository)
+        public AuthorizeUserUseCase(IUserRepository userRepository)
         {
             _userRepository = userRepository;
         }
 
-        public async Task<bool> Execute(string login, string password)
+        /// <summary>
+        /// Authorize user by his credentials
+        /// </summary>
+        /// <param name="login">User login</param>
+        /// <param name="password">User password</param>
+        /// <returns>JWT token</returns>
+        public async Task<User> Execute(string login, string password)
+        {
+            var userExist = await CheckUserExist(login, password);
+            return userExist;
+        }
+
+        private async Task<User> CheckUserExist(string login, string password)
         {
             User? foundUser = null;
 
@@ -25,16 +38,16 @@ namespace ScienceArchive.Application.UseCases
 
             var users = await _userRepository.GetAll();
             foundUser = users.Find(u => u.Login == login || u.Email == login);
-            _ = foundUser ?? throw new Exception($"User with login or email {login} does not exist!");
+            _ = foundUser ?? throw new Exception($"Wrong login or password!");
 
             var passwordHash = StringGenerator.HashPassword(password, foundUser.PasswordSalt);
 
             if (passwordHash != foundUser.Password)
             {
-                throw new Exception("Wrong password was sent!");
+                throw new Exception("Wrong login or password!");
             }
 
-            return true;
+            return foundUser;
         }
     }
 }

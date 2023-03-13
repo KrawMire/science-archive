@@ -2,6 +2,7 @@
 using ScienceArchive.Core.Interfaces.Services;
 using ScienceArchive.Api.Responses;
 using ScienceArchive.Core.Dtos.UserRequest;
+using ScienceArchive.Api.Auth;
 
 namespace ScienceArchive.Api.Controllers
 {
@@ -9,21 +10,32 @@ namespace ScienceArchive.Api.Controllers
     public class AuthController : Controller
     {
         private readonly IUserService _userService;
+        private readonly IConfiguration _configuration;
+        private readonly AuthManager _authManager;
 
-        public AuthController(IUserService userService)
+        public AuthController(IUserService userService, IConfiguration configuration)
         {
             _userService = userService;
+            _configuration = configuration;
+            _authManager = new AuthManager(configuration);
         }
 
         [HttpPost("signin")]
-        public async Task<IActionResult> SignIn([FromBody] CheckUserExistRequestDto request)
+        public async Task<IActionResult> SignIn([FromBody] AuthorizeUserRequestDto request)
         {
             try
             {
-                var result = await _userService.CheckUserExist(request);
-                var response = new SuccessResponse(result);
+                var result = await _userService.Authorize(request);
 
-                return Json(response);
+                if (!result.UserExist || result.User is null)
+                {
+                    var response = new ErrorResponse("This user does not exist!");
+                    return Json(response);
+                }
+
+                var token = _authManager.GenerateToken(result.User);
+
+                return Ok(token);
             }
             catch (Exception e)
             {

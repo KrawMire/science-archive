@@ -1,7 +1,7 @@
 ﻿using System;
 namespace ScienceArchive.Core.Dtos.UserRequest
 {
-    public record class CheckUserExistRequestDto
+    public record class AuthorizeUserRequestDto
     {
         /// <summary>
         /// User auth login or email

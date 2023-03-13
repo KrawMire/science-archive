@@ -28,7 +28,9 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <returns>Services with registered Use Cases</returns>
         public static IServiceCollection RegisterUseCases(this IServiceCollection services)
         {
-            _ = services.AddTransient<CheckUserExistUseCase>();
+            // User use cases
+            _ = services.AddTransient<AuthorizeUserUseCase>();
+            _ = services.AddTransient<GetAllUsersUseCase>();
             _ = services.AddTransient<CreateUserUseCase>();
             _ = services.AddTransient<UpdateUserUseCase>();
             _ = services.AddTransient<DeleteUserUseCase>();

@@ -15,7 +15,6 @@ namespace ScienceArchive.Application.Mappers
                 Name = user.Name,
                 Email = user.Email,
                 Login = user.Login,
-                Password = user.Password,
             };
         }
 

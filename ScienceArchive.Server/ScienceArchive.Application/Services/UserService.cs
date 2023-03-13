@@ -10,32 +10,49 @@ namespace ScienceArchive.Application.Services
 {
     public class UserService : IUserService
     {
-        private readonly CheckUserExistUseCase _checkUserExistUseCase;
+        private readonly AuthorizeUserUseCase _authorizeUseCase;
+        private readonly GetAllUsersUseCase _getAllUseCase;
         private readonly CreateUserUseCase _createUseCase;
         private readonly DeleteUserUseCase _deleteUseCase;
         private readonly UpdateUserUseCase _updateUseCase;
 
         public UserService(
-            CheckUserExistUseCase checkUserExistUseCase,
+            AuthorizeUserUseCase checkUserExistUseCase,
+            GetAllUsersUseCase getAllUseCase,
             CreateUserUseCase createUserUseCase,
             DeleteUserUseCase deleteUserUseCase,
             UpdateUserUseCase updateUserUseCase)
         {
-            _checkUserExistUseCase = checkUserExistUseCase;
+            _authorizeUseCase = checkUserExistUseCase;
+            _getAllUseCase = getAllUseCase;
             _createUseCase = createUserUseCase;
             _deleteUseCase = deleteUserUseCase;
             _updateUseCase = updateUserUseCase;
         }
 
         /// <inheritdoc/>
-        public async Task<CheckUserExistResponseDto> CheckUserExist(CheckUserExistRequestDto contract)
+        public async Task<AuthorizeUserResponseDto> Authorize(AuthorizeUserRequestDto contract)
         {
-            bool result = await _checkUserExistUseCase.Execute(contract.Login, contract.Password);
+            var user = await _authorizeUseCase.Execute(contract.Login, contract.Password);
 
-            return new CheckUserExistResponseDto
+            if (user is null)
             {
-                UserExist = result
+                throw new Exception("No such user exist!");
+            }
+
+            return new AuthorizeUserResponseDto
+            {
+                UserExist = true,
+                User = user
             };
+        }
+
+        /// <inheritdoc/>
+        public async Task<GetAllUsersResponseDto> GetAll()
+        {
+            List<User> users = await _getAllUseCase.Execute();
+
+            return GetAllUsersMapper.MapToResponse(users);
         }
 
         /// <inheritdoc/>

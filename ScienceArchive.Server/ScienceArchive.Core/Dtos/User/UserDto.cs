@@ -1,10 +1,10 @@
 ﻿using System;
-namespace ScienceArchive.Core.Dtos.UserResponse
+namespace ScienceArchive.Core.Dtos
 {
-    public record class UpdateUserResponseDto
+    public class UserDto
     {
         /// <summary>
-        /// ID of the user to update
+        /// ID of the user
         /// </summary>
         public required Guid Id { get; set; }
 

@@ -15,7 +15,13 @@ namespace ScienceArchive.Core.Interfaces.Services
         /// </summary>
         /// <param name="contract">Data to check user</param>
         /// <returns>Checking result</returns>
-        Task<CheckUserExistResponseDto> CheckUserExist(CheckUserExistRequestDto contract);
+        Task<AuthorizeUserResponseDto> Authorize(AuthorizeUserRequestDto contract);
+
+        /// <summary>
+        /// Get all existing users
+        /// </summary>
+        /// <returns>All existing users</returns>
+        Task<GetAllUsersResponseDto> GetAll();
 
         /// <summary>
         /// Create new user
