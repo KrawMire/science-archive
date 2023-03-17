@@ -7,20 +7,29 @@ import { AuthComponent } from './pages/auth/auth.component';
 import { MainComponent } from './pages/main/main.component';
 import { SignInFormComponent } from './components/auth/sign-in-form/sign-in-form.component';
 import { SignUpFormComponent } from './components/auth/sign-up-form/sign-up-form.component';
+import { FormsModule } from '@angular/forms';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { AuthRequestInterceptor } from './helpers/auth-request.interceptor';
 
 @NgModule({
   declarations: [
     AppComponent,
+
     AuthComponent,
-    MainComponent,
     SignInFormComponent,
-    SignUpFormComponent
+    SignUpFormComponent,
+
+    MainComponent,
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    FormsModule,
+    HttpClientModule,
   ],
-  providers: [],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: AuthRequestInterceptor, multi: true }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
