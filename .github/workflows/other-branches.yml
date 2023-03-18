@@ -52,7 +52,7 @@ jobs:
         dotnet restore
 
     - name: Build solution
-      run: dotnet build --configuration Release --no-restore
+      run: ls && dotnet build --configuration Release --no-restore
 
     - name: Publish backend
       run: dotnet publish -c Release -o /var/www/science-archive-api
