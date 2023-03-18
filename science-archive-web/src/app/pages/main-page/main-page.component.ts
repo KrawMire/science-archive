@@ -1,11 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { LocalStorageService } from 'src/app/services/local-storage.service';
 import { UserService } from 'src/app/services/user.service';
 
 @Component({
-  selector: 'app-main',
-  templateUrl: './main.component.html',
-  styleUrls: ['./main.component.scss']
+  selector: 'app-main-page',
+  templateUrl: './main-page.component.html',
+  styleUrls: ['./main-page.component.scss']
 })
 export class MainComponent implements OnInit {
   constructor(
