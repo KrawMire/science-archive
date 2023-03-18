@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UserService } from 'src/app/services/user.service';
+import { LocalStorageService } from 'src/app/services/local-storage.service';
 
 @Component({
   selector: 'app-main-page',
@@ -7,25 +7,19 @@ import { UserService } from 'src/app/services/user.service';
   styleUrls: ['./main-page.component.scss']
 })
 export class MainComponent implements OnInit {
+  welcomeMessage: string = "";
+
   constructor(
-    private userService: UserService
+    private storageService: LocalStorageService,
   ) {}
 
   ngOnInit(): void {
-    this.userService
-      .getAllUsers()
-      .subscribe({
-        next: (response) => {
-          if (response.success) {
-            console.log(response.data);
-          } else {
-            alert(response.error);
-          }
-        },
-        error: (error) => {
-          alert(error);
-        }
-      })
+    const login = this.storageService.getLogin();
 
+    if (!login) {
+      this.welcomeMessage = "It seems you are not registered yet. Anyway welcome, our service will come soon!";
+    } else {
+      this.welcomeMessage = `Welcome, ${login}, our service will be ready soon!`;
+    }
   }
 }

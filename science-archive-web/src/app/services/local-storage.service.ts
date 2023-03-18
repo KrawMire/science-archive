@@ -26,4 +26,13 @@ export class LocalStorageService {
 
     return !!token;
   }
+
+  public getLogin(): string | null {
+    return localStorage.getItem("login");
+  }
+
+  public saveLogin(login: string): void {
+    localStorage.removeItem("login");
+    localStorage.setItem("login", login);
+  }
 }
