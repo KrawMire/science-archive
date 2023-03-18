@@ -47,14 +47,15 @@ jobs:
       uses: actions/setup-dotnet@v1.7.2
 
     - name: Install backend dependencies
-      run: |
-        cd ScienceArchive.Server &&
-        dotnet restore
+      working-directory: ./ScienceArchive.Server
+      run: dotnet restore
 
     - name: Build solution
-      run: ls && dotnet build --configuration Release --no-restore
+      working-directory: ./ScienceArchive.Server
+      run: dotnet build --configuration Release --no-restore
 
     - name: Publish backend
+      working-directory: ./ScienceArchive.Server
       run: dotnet publish -c Release -o /var/www/science-archive-api
 
     - name: Reload API service
