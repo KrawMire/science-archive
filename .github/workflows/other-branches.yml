@@ -56,7 +56,7 @@ jobs:
 
     - name: Publish backend
       working-directory: ./ScienceArchive.Server
-      run: dotnet publish -c Release -o /var/www/science-archive-api
+      run: dotnet publish -c Release --property:PublishDir=/var/www/science-archive-api
 
     - name: Reload API service
       run: service science-archive-api restart
