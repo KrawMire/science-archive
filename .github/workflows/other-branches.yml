@@ -1,4 +1,4 @@
-name: Other branches
+name: Feature and fixes branches
 
 on:
   push:
@@ -6,30 +6,54 @@ on:
     - feature/**
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+  # check-and-test:
+  #   name: Test changes
+  #   runs-on: ubuntu-latest
+
+  #   steps:
+  #   - name: Checkout repo
+  #     uses: actions/checkout@v1
+
+  #   - name: Set up NodeJS
+  #     uses: actions/setup-node@v1
+  #     with:
+  #       node-version: "14.x"
+
+  #   - name: Link cache action
+  #     uses: actions/cache@v1
+  #     with:
+  #       path: ~/.npm
+  #       key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+  #       restore-keys: |
+  #         ${{ runner.os }}-node-
+
+  #   - name: Install dependencies and build
+  #     run: |
+  #       cd science-archive-web &&
+  #       npm cache clean --force &&
+  #       npm install &&
+  #       npm install -g @angular/cli &&
+  #       ng build
+
+  build-and-deploy:
+    name: Build and delpoy service
+    runs-on: self-hosted
 
     steps:
-    - name: Checkout repo
-      uses: actions/checkout@v1
+    - name: Checkout repository
+      uses: actions/checkout@v2
 
-    - name: Set up NodeJS
-      uses: actions/setup-node@v1
-      with:
-        node-version: "14.x"
+    - name: Set up .NET SDK
+      uses: actions/setup-dotnet@v1.7.2
 
-    - name: Link cache action
-      uses: actions/cache@v1
-      with:
-        path: ~/.npm
-        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: |
-          ${{ runner.os }}-node-
+    - name: Install backend dependencies
+      run: dotnet restore
 
-    - name: Install dependencies and build
-      run: |
-        cd science-archive-web &&
-        npm cache clean --force &&
-        npm install &&
-        npm install -g @angular/cli &&
-        ng build
+    - name: Build solution
+      run: dotnet build --configuration Release --no-restore
+
+    - name: Publish backend
+      run: dotnet publish -c Release -o /var/www/science-archive-api
+
+    - name: Reload API service
+      run: service science-archive-api restart
