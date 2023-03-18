@@ -48,7 +48,7 @@ jobs:
 
     - name: Install backend dependencies
       run: |
-        ls &&
+        cd ScienceArchive.Server &&
         dotnet restore
 
     - name: Build solution
