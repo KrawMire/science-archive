@@ -47,7 +47,9 @@ jobs:
       uses: actions/setup-dotnet@v1.7.2
 
     - name: Install backend dependencies
-      run: dotnet restore
+      run: |
+        ls &&
+        dotnet restore
 
     - name: Build solution
       run: dotnet build --configuration Release --no-restore
