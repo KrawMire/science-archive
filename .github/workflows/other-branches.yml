@@ -59,4 +59,4 @@ jobs:
       run: dotnet publish -c Release --property:PublishDir=/var/www/science-archive-api
 
     - name: Reload API service
-      run: whoami && sudo systemctl restart science-archive-api
+      run: sudo /usr/bin/systemctl restart science-archive-api
