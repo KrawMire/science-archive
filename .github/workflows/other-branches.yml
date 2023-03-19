@@ -60,7 +60,9 @@ jobs:
 
     - name: Clean previous build
       working-directory: /var/www/
-      run: sudo rm -rf ./science-archive-api/
+      run: |
+        ls &&
+        sudo rm -rf ./science-archive-api/
 
     - name: Copy build files
       working-directory: ./ScienceArchive.Server/ScienceArchive.Api/bin/Release/net7.0/
