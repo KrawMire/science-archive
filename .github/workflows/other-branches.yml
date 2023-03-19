@@ -67,4 +67,6 @@ jobs:
       run: sudo cp -r ./publish /var/www/science-archive-api
 
     - name: Reload API service
-      run: systemctl --user restart science-archive-api
+      run: |
+        export XDG_RUNTIME_DIR=/run/user/$(id -u)
+        systemctl --user restart science-archive-api
