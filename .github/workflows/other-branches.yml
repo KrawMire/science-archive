@@ -67,4 +67,4 @@ jobs:
       run: sudo cp -r ./publish /var/www/science-archive-api
 
     - name: Reload API service
-      run: systemctl restart science-archive-api
+      run: systemctl --user restart science-archive-api
