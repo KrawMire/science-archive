@@ -6,12 +6,6 @@ on:
     - dev
 
 jobs:
-  check_changed_files:
-    runs-on: ubuntu-latest
-    name: Check changes files
-    steps:
-
-
   build:
     runs-on: ubuntu-latest
     name: Build frontend
