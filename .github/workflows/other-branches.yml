@@ -58,11 +58,12 @@ jobs:
       working-directory: ./ScienceArchive.Server
       run: dotnet publish -c Release
 
+    - name: Check user
+      run: whoami
+
     - name: Clean previous build
       working-directory: /var/www/
-      run: |
-        ls &&
-        sudo rm -rf ./science-archive-api/
+      run: sudo rm -rf ./science-archive-api/
 
     - name: Copy build files
       working-directory: ./ScienceArchive.Server/ScienceArchive.Api/bin/Release/net7.0/
