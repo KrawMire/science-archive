@@ -58,9 +58,6 @@ jobs:
       working-directory: ./ScienceArchive.Server
       run: dotnet publish -c Release
 
-    - name: Check user
-      run: whoami
-
     - name: Clean previous build
       working-directory: /var/www/
       run: sudo rm -rf ./science-archive-api/
@@ -70,4 +67,4 @@ jobs:
       run: sudo cp -r ./publish /var/www/science-archive-api
 
     - name: Reload API service
-      run: sudo systemctl restart science-archive-api
+      run: systemctl restart science-archive-api
