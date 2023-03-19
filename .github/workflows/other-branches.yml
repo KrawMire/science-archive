@@ -60,9 +60,6 @@ jobs:
       working-directory: ./ScienceArchive.Server
       run: dotnet publish -c Release
 
-    - name: Stop service
-      run: sudo systemctl stop science-archive-api
-
     - name: Clean previous build
       working-directory: /var/www/
       run: sudo rm -rf ./science-archive-api/
@@ -71,5 +68,5 @@ jobs:
       working-directory: ./ScienceArchive.Server/ScienceArchive.Api/bin/Release/net7.0/
       run: sudo cp -r ./publish /var/www/science-archive-api
 
-    - name: Reload API service
-      run: sudo systemctl restart science-archive-api
+    # - name: Reload API service
+    #   run: sudo systemctl restart science-archive-api
