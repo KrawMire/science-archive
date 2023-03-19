@@ -45,6 +45,8 @@ jobs:
 
     - name: Set up .NET SDK
       uses: actions/setup-dotnet@v1.7.2
+      with:
+        dotnet-version: 7.0.x
 
     - name: Install backend dependencies
       working-directory: ./ScienceArchive.Server
@@ -58,6 +60,9 @@ jobs:
       working-directory: ./ScienceArchive.Server
       run: dotnet publish -c Release
 
+    - name: Stop service
+      run: sudo systemctl stop science-archive-api
+
     - name: Clean previous build
       working-directory: /var/www/
       run: sudo rm -rf ./science-archive-api/
@@ -67,6 +72,4 @@ jobs:
       run: sudo cp -r ./publish /var/www/science-archive-api
 
     - name: Reload API service
-      run: |
-        export XDG_RUNTIME_DIR=/run/user/$(id -u)
-        systemctl --user restart science-archive-api
+      run: sudo systemctl restart science-archive-api
