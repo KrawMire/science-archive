@@ -7,37 +7,36 @@ on:
     - feature/**
 
 jobs:
-  # check-and-test:
-  #   name: Test changes
-  #   runs-on: ubuntu-latest
+  delpoy-frontend:
+    name: Build and deploy frontend
+    runs-on: self-hosted
 
-  #   steps:
-  #   - name: Checkout repo
-  #     uses: actions/checkout@v1
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
 
-  #   - name: Set up NodeJS
-  #     uses: actions/setup-node@v1
-  #     with:
-  #       node-version: "14.x"
+    - name: Set up NodeJS
+      uses: actions/setup-node@v1
+      with:
+        node-version: "14.x"
 
-  #   - name: Link cache action
-  #     uses: actions/cache@v1
-  #     with:
-  #       path: ~/.npm
-  #       key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-  #       restore-keys: |
-  #         ${{ runner.os }}-node-
+    - name: Install dependencies
+      working-directory: science-archive-web
+      run: |
+        npm cache clean --force
+        npm install
 
-  #   - name: Install dependencies and build
-  #     run: |
-  #       cd science-archive-web &&
-  #       npm cache clean --force &&
-  #       npm install &&
-  #       npm install -g @angular/cli &&
-  #       ng build
+    - name: Build frontend
+      working-directory: science-archive-web
+      run: npm run build
 
-  build-and-deploy:
-    name: Build and delpoy service
+    - name: Copy build files
+      working-directory: ./science-archive-web/dist/science-archive-web/
+      run: sudo \cp -r ./* /var/www/science-archive-api/science-archive.com
+
+
+  deploy-backend:
+    name: Build and delpoy backend
     runs-on: self-hosted
 
     steps:
@@ -50,11 +49,11 @@ jobs:
         dotnet-version: 7.0.x
 
     - name: Install backend dependencies
-      working-directory: ./ScienceArchive.Server
+      working-directory: ./ScienceArchive.Server/
       run: dotnet restore
 
     - name: Build solution
-      working-directory: ./ScienceArchive.Server
+      working-directory: ./ScienceArchive.Server/
       run: dotnet build --configuration Release --no-restore
 
     - name: Clean previous build
@@ -66,11 +65,11 @@ jobs:
       run: sudo mkdir -p ./science-archive-api/
 
     - name: Publish backend
-      working-directory: ./ScienceArchive.Server
+      working-directory: ./ScienceArchive.Server/
       run: dotnet publish -c Release
 
     - name: Publish backend and copy build files
-      working-directory: ./ScienceArchive.Server
+      working-directory: ./ScienceArchive.Server/
       run: |
         dotnet publish -c Release
         cd ./ScienceArchive.Api/bin/Release/net7.0/publish/
