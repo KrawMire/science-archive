@@ -76,7 +76,7 @@ jobs:
         sudo \cp -r ./* /var/www/science-archive-api/
 
     - name: JUST FOR TEST DELETE LATER
-      run: echo $POSTGRESQL_CONNECTION_STRING
+      run: printenv
 
     - name: Reload API service
       run: sudo systemctl restart science-archive-api
