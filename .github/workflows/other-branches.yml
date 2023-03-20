@@ -7,7 +7,7 @@ on:
     - feature/**
 
 jobs:
-  delpoy-frontend:
+  deploy-frontend:
     name: Build and deploy frontend
     runs-on: self-hosted
 
@@ -38,6 +38,7 @@ jobs:
   deploy-backend:
     name: Build and delpoy backend
     runs-on: self-hosted
+    needs: deploy-frontend
 
     steps:
     - name: Checkout repository
