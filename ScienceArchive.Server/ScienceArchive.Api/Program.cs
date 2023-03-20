@@ -11,13 +11,13 @@ public class Program
         {
             dbConnectionString =
                 builder.Configuration.GetConnectionString("PostgreSQL") ??
-                throw new NullReferenceException("Cannot get DB connection string");
+                throw new NullReferenceException("Cannot get DB connection string from config");
         }
         else
         {
             dbConnectionString =
                 Environment.GetEnvironmentVariable("POSTGRESQL_CONNECTION_STRING") ??
-                throw new NullReferenceException("Cannot get DB connection string");
+                throw new NullReferenceException("Cannot get DB connection string from environment");
         }
 
         if (String.IsNullOrWhiteSpace(dbConnectionString))
