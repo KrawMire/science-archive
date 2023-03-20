@@ -75,5 +75,8 @@ jobs:
         cd ./ScienceArchive.Api/bin/Release/net7.0/publish/
         sudo \cp -r ./* /var/www/science-archive-api/
 
+    - name: JUST FOR TEST DELETE LATER
+      run: echo $POSTGRESQL_CONNECTION_STRING
+
     - name: Reload API service
       run: sudo systemctl restart science-archive-api
