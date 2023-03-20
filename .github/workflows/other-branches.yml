@@ -32,7 +32,7 @@ jobs:
 
     - name: Copy build files
       working-directory: ./science-archive-web/dist/science-archive-web/
-      run: sudo \cp -r ./* /var/www/science-archive-api/science-archive.com
+      run: sudo \cp -r ./* /var/www/science-archive.com
 
 
   deploy-backend:
