@@ -77,5 +77,3 @@ jobs:
 
     - name: Reload API service
       run: sudo systemctl restart science-archive-api
-      env:
-        POSTGRESQL_CONNECTION_STRING: ${{ secrets.POSTGRESQL_CONNECTION_STRING }}

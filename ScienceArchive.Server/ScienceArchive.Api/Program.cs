@@ -1,4 +1,6 @@
-﻿namespace ScienceArchive.Api;
+﻿using System.Collections;
+
+namespace ScienceArchive.Api;
 
 public class Program
 {
@@ -15,6 +17,11 @@ public class Program
         }
         else
         {
+            foreach (DictionaryEntry e in System.Environment.GetEnvironmentVariables())
+            {
+                Console.WriteLine(e.Key + ":" + e.Value);
+            }
+
             dbConnectionString =
                 Environment.GetEnvironmentVariable("POSTGRESQL_CONNECTION_STRING", EnvironmentVariableTarget.User) ??
                 throw new NullReferenceException("Cannot get DB connection string from environment");
