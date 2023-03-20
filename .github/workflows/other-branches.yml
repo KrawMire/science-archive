@@ -68,9 +68,9 @@ jobs:
       working-directory: /var/www/
       run: sudo mkdir -p ./science-archive-api/
 
-    # - name: Copy build files
-    #   working-directory: ./ScienceArchive.Server/ScienceArchive.Api/bin/Release/net7.0/publish/
-    #   run: sudo \cp -r ./* /var/www/science-archive-api/
+    - name: Copy build files
+      working-directory: ./ScienceArchive.Server/ScienceArchive.Api/bin/Release/net7.0/publish/
+      run: sudo \cp -r ./* /var/www/science-archive-api/
 
-    # - name: Reload API service
-    #   run: sudo systemctl restart science-archive-api
+    - name: Reload API service
+      run: sudo systemctl restart science-archive-api
