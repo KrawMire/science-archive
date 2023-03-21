@@ -17,13 +17,13 @@ public class Program
         }
         else
         {
-            foreach (DictionaryEntry e in System.Environment.GetEnvironmentVariables(EnvironmentVariableTarget.Machine))
+            foreach (DictionaryEntry e in System.Environment.GetEnvironmentVariables())
             {
                 Console.WriteLine(e.Key + ":" + e.Value);
             }
 
             dbConnectionString =
-                Environment.GetEnvironmentVariable("POSTGRESQL_CONNECTION_STRING", EnvironmentVariableTarget.Machine) ??
+                Environment.GetEnvironmentVariable("POSTGRESQL_CONNECTION_STRING") ??
                 throw new NullReferenceException("Cannot get DB connection string from environment");
         }
 
