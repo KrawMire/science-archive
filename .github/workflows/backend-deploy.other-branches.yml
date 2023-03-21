@@ -1,44 +1,18 @@
 # TODO This will be places in main branches workflow later
-name: Feature and fixes branches
+name: Backend deployment workflow
 
 on:
   push:
     branches:
     - feature/**
 
+    paths:
+    - ScienceArchive.Server/**
+
 jobs:
-  deploy-frontend:
-    name: Build and deploy frontend
-    runs-on: self-hosted
-
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
-
-    - name: Set up NodeJS
-      uses: actions/setup-node@v1
-      with:
-        node-version: "14.x"
-
-    - name: Install dependencies
-      working-directory: science-archive-web
-      run: |
-        npm cache clean --force
-        npm install
-
-    - name: Build frontend
-      working-directory: science-archive-web
-      run: npm run build
-
-    - name: Copy build files
-      working-directory: ./science-archive-web/dist/science-archive-web/
-      run: sudo \cp -r ./* /var/www/science-archive.com
-
-
-  deploy-backend:
-    name: Build and delpoy backend
-    runs-on: self-hosted
-    needs: deploy-frontend
+  build-and-test:
+    name: Build and test
+    runs-on: ubuntu-latest
 
     steps:
     - name: Checkout repository
@@ -49,7 +23,34 @@ jobs:
       with:
         dotnet-version: 7.0.x
 
-    - name: Install backend dependencies
+    - name: Restore dependenices
+      working-directory: ScienceArchive.Server/
+      run: dotnet restore
+
+    - name: Build solution
+      working-directory: ScienceArchive.Server/
+      run: dotnet build --configuration Release --no-restore
+
+    - name: Run tests
+      working-directory: ScienceArchive.Server/
+      run: dotnet test
+
+
+  deploy-backend:
+    name: Build and delpoy backend
+    runs-on: self-hosted
+    needs: build-and-test
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up .NET SDK
+      uses: actions/setup-dotnet@v1.7.2
+      with:
+        dotnet-version: 7.0.x
+
+    - name: Restore dependencies
       working-directory: ScienceArchive.Server/
       run: dotnet restore
 
@@ -65,7 +66,7 @@ jobs:
       working-directory: /var/www/
       run: sudo mkdir -p ./science-archive-api/
 
-    - name: Publish backend
+    - name: Publish
       working-directory: ScienceArchive.Server/
       run: dotnet publish -c Release
 
