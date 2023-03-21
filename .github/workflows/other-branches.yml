@@ -70,11 +70,8 @@ jobs:
       run: dotnet publish -c Release
 
     - name: Publish backend and copy build files
-      working-directory: ./ScienceArchive.Server/
-      run: |
-        dotnet publish -c Release
-        cd ./ScienceArchive.Api/bin/Release/net7.0/publish/
-        sudo \cp -r ./* /var/www/science-archive-api/
+      working-directory: ./ScienceArchive.Api/bin/Release/net7.0/publish/
+      run: sudo \cp -r ./* /var/www/science-archive-api/
 
     - name: Reload API service
       run: sudo systemctl restart science-archive-api
