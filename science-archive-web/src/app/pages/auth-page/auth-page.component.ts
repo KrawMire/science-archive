@@ -12,7 +12,6 @@ export class AuthComponent {
   constructor() {
     this.isSignIn = false;
     this.isSignUp = true;
-    console.log("JUST FOR TESTS");
   }
 
   public changeAuthType(value: string): void {

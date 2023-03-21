@@ -17,7 +17,6 @@ public class Program
         }
         else
         {
-            Console.WriteLine("FOR TESTS");
             dbConnectionString =
                 Environment.GetEnvironmentVariable("POSTGRESQL_CONNECTION_STRING") ??
                 throw new NullReferenceException("Cannot get DB connection string from environment");
