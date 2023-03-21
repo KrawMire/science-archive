@@ -70,7 +70,7 @@ jobs:
       run: dotnet publish -c Release
 
     - name: Copy build files
-      working-directory: ScienceArchive.Api/bin/Release/net7.0/publish/
+      working-directory: ScienceArchive.Server/ScienceArchive.Api/bin/Release/net7.0/publish/
       run: sudo \cp -r ./* /var/www/science-archive-api/
 
     - name: Reload API service
