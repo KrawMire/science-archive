@@ -1,10 +1,9 @@
-# TODO This will be places in main branches workflow later
-name: Backend deployment workflow
+name: Backend deployment workflow from main branch
 
 on:
   push:
     branches:
-    - feature/**
+    - main
 
     paths:
     - ScienceArchive.Server/**
