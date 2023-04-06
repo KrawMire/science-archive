@@ -13,10 +13,12 @@ WORKDIR /publish
 
 # Copy files from "Build stage"
 COPY --from=build /publish .
-EXPOSE 80
+EXPOSE 5000
 
 # Set up environment variables
 ARG POSTGRESQL_CONNECTION_STRING
 ENV POSTGRESQL_CONNECTION_STRING=$POSTGRESQL_CONNECTION_STRING
+
+ENV ASPNETCORE_URLS=http://+:5000
 
 ENTRYPOINT ["dotnet", "ScienceArchive.Api.dll"]
