@@ -51,6 +51,9 @@ jobs:
         dotnet-version: 7.0.x
 
     - name: For tests
+      env:
+        POSTGRESQL_CONNECTION_STRING: ${{ secrets.POSTGRESQL_CONNECTION_STRING }}
+        BACKEND_IMAGE_NAME: ${{ secrets.BACKEND_IMAGE_NAME }}
       working-directory: ScienceArchive.Server/
       run: echo "{{ secrets.POSTGRESQL_CONNECTION_STRING }}" &&
         echo {{ secrets.BACKEND_IMAGE_NAME }} &&
