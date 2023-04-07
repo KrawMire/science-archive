@@ -51,6 +51,8 @@ jobs:
         POSTGRESQL_CONNECTION_STRING: ${{ secrets.POSTGRESQL_CONNECTION_STRING }}
         BACKEND_IMAGE_NAME: ${{ secrets.BACKEND_IMAGE_NAME }}
       run: |
+        echo $POSTGRESQL_CONNECTION_STRING &&
+        echo $BACKEND_IMAGE_NAME
         docker build
         --build-arg POSTGRESQL_CONNECTION_STRING="$POSTGRESQL_CONNECTION_STRING"
         -t $BACKEND_IMAGE_NAME
