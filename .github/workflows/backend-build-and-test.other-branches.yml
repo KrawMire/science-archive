@@ -6,13 +6,40 @@ on:
     - feature/**
     - fix/**
 
-    paths:
-    - ScienceArchive.Server/**
+    # paths:
+    # - ScienceArchive.Server/**
 
 jobs:
-  build-and-test-backend:
-    name: Build and test backend solution
-    runs-on: ubuntu-latest
+  # build-and-test-backend:
+  #   name: Build and test backend solution
+  #   runs-on: ubuntu-latest
+
+  #   steps:
+  #   - name: Checkout repository
+  #     uses: actions/checkout@v2
+
+  #   - name: Set up .NET SDK
+  #     uses: actions/setup-dotnet@v1.7.2
+  #     with:
+  #       dotnet-version: 7.0.x
+
+  #   - name: Restore dependenices
+  #     working-directory: ScienceArchive.Server/
+  #     run: dotnet restore
+
+  #   - name: Build solution
+  #     working-directory: ScienceArchive.Server/
+  #     run: dotnet build --configuration Release --no-restore
+
+  #   - name: Run tests
+  #     working-directory: ScienceArchive.Server/
+  #     run: dotnet test
+
+
+  deploy-backend:
+    name: Build and delpoy backend
+    runs-on: self-hosted
+    # needs: build-and-test-backend
 
     steps:
     - name: Checkout repository
@@ -23,14 +50,14 @@ jobs:
       with:
         dotnet-version: 7.0.x
 
-    - name: Restore dependenices
+    - name: Build backend image
       working-directory: ScienceArchive.Server/
-      run: dotnet restore
+      run: |
+        docker build
+        --build-arg POSTGRESQL_CONNECTION_STRING={{ secrets.POSTGRESQL_CONNECTION_STRING }}
+        -t {{ secrets.BACKEND_IMAGE_NAME }}
+        .
 
     - name: Build solution
-      working-directory: ScienceArchive.Server/
-      run: dotnet build --configuration Release --no-restore
+      run: docker run {{ secrets.BACKEND_IMAGE_NAME }}
 
-    - name: Run tests
-      working-directory: ScienceArchive.Server/
-      run: dotnet test
