@@ -56,15 +56,14 @@ jobs:
     - name: For tests
       working-directory: ScienceArchive.Server/
       run: echo $BACKEND_IMAGE_NAME &&
-        echo $POSTGRESQL_CONNECTION_STRING &&
-        ls
+        echo $POSTGRESQL_CONNECTION_STRING
 
     - name: Build backend image
       working-directory: ScienceArchive.Server/
       run: |
         docker build
-        --build-arg POSTGRESQL_CONNECTION_STRING="$POSTGRESQL_CONNECTION_STRING"
-        -t $BACKEND_IMAGE_NAME
+        --build-arg POSTGRESQL_CONNECTION_STRING="${{ secrets.BACKEND_IMAGE_NAME }}"
+        -t ${{ secrets.POSTGRESQL_CONNECTION_STRING }}
         .
 
     - name: Build solution
