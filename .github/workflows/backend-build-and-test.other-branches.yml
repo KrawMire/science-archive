@@ -48,7 +48,9 @@ jobs:
     - name: Build backend image
       working-directory: ScienceArchive.Server/
       run: |
-        docker build --build-arg POSTGRESQL_CONNECTION_STRING="${{ secrets.POSTGRESQL_CONNECTION_STRING }}" -t ${{ secrets.BACKEND_IMAGE_NAME }} .
+        docker build \
+          --build-arg POSTGRESQL_CONNECTION_STRING="${{ secrets.POSTGRESQL_CONNECTION_STRING }}" \
+          -t ${{ secrets.BACKEND_IMAGE_NAME }} .
 
     - name: Run backend container
       run: docker run --net="host" -d ${{ secrets.BACKEND_IMAGE_NAME }}
