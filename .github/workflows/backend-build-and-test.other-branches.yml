@@ -45,15 +45,10 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v2
 
-    - name: Set up .NET SDK
-      uses: actions/setup-dotnet@v1.7.2
-      with:
-        dotnet-version: 7.0.x
-
     - name: For tests
       working-directory: ScienceArchive.Server/
       run: echo ${{ secrets.BACKEND_IMAGE_NAME }} &&
-        echo ${{ secrets.POSTGRESQL_CONNECTION_STRING }}
+        echo "${{ secrets.POSTGRESQL_CONNECTION_STRING }}"
 
     - name: Build backend image
       working-directory: ScienceArchive.Server/
