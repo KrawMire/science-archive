@@ -39,6 +39,9 @@ jobs:
   deploy-backend:
     name: Build and delpoy backend
     runs-on: self-hosted
+    env:
+      POSTGRESQL_CONNECTION_STRING: ${{ secrets.POSTGRESQL_CONNECTION_STRING }}
+      BACKEND_IMAGE_NAME: ${{ secrets.BACKEND_IMAGE_NAME }}
     # needs: build-and-test-backend
 
     steps:
@@ -51,22 +54,19 @@ jobs:
         dotnet-version: 7.0.x
 
     - name: For tests
-      env:
-        POSTGRESQL_CONNECTION_STRING: ${{ secrets.POSTGRESQL_CONNECTION_STRING }}
-        BACKEND_IMAGE_NAME: ${{ secrets.BACKEND_IMAGE_NAME }}
       working-directory: ScienceArchive.Server/
-      run: echo "{{ secrets.POSTGRESQL_CONNECTION_STRING }}" &&
-        echo {{ secrets.BACKEND_IMAGE_NAME }} &&
+      run: echo $BACKEND_IMAGE_NAME &&
+        echo $POSTGRESQL_CONNECTION_STRING &&
         ls
 
     - name: Build backend image
       working-directory: ScienceArchive.Server/
       run: |
         docker build
-        --build-arg POSTGRESQL_CONNECTION_STRING="{{ secrets.POSTGRESQL_CONNECTION_STRING }}"
-        -t {{ secrets.BACKEND_IMAGE_NAME }}
+        --build-arg POSTGRESQL_CONNECTION_STRING="$POSTGRESQL_CONNECTION_STRING"
+        -t $BACKEND_IMAGE_NAME
         .
 
     - name: Build solution
-      run: docker run {{ secrets.BACKEND_IMAGE_NAME }}
+      run: docker run
 
