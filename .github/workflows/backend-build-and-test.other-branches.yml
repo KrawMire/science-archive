@@ -51,5 +51,5 @@ jobs:
         docker build --build-arg POSTGRESQL_CONNECTION_STRING="${{ secrets.POSTGRESQL_CONNECTION_STRING }}" -t ${{ secrets.BACKEND_IMAGE_NAME }} .
 
     - name: Run backend container
-      run: docker run -d ${{ secrets.BACKEND_IMAGE_NAME }}
+      run: docker run --net="host" -d ${{ secrets.BACKEND_IMAGE_NAME }}
 
