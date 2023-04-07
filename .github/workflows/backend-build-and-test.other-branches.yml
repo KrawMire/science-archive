@@ -39,9 +39,6 @@ jobs:
   deploy-backend:
     name: Build and delpoy backend
     runs-on: self-hosted
-    env:
-      POSTGRESQL_CONNECTION_STRING: ${{ secrets.POSTGRESQL_CONNECTION_STRING }}
-      BACKEND_IMAGE_NAME: ${{ secrets.BACKEND_IMAGE_NAME }}
     # needs: build-and-test-backend
 
     steps:
@@ -55,8 +52,8 @@ jobs:
 
     - name: For tests
       working-directory: ScienceArchive.Server/
-      run: echo $BACKEND_IMAGE_NAME &&
-        echo $POSTGRESQL_CONNECTION_STRING
+      run: echo ${{ secrets.BACKEND_IMAGE_NAME }} &&
+        echo ${{ secrets.POSTGRESQL_CONNECTION_STRING }}
 
     - name: Build backend image
       working-directory: ScienceArchive.Server/
