@@ -54,8 +54,8 @@ jobs:
       working-directory: ScienceArchive.Server/
       run: |
         docker build
-        --build-arg POSTGRESQL_CONNECTION_STRING="${{ secrets.BACKEND_IMAGE_NAME }}"
-        -t ${{ secrets.POSTGRESQL_CONNECTION_STRING }}
+        --build-arg POSTGRESQL_CONNECTION_STRING="${{ secrets.POSTGRESQL_CONNECTION_STRING }}"
+        -t ${{ secrets.BACKEND_IMAGE_NAME }}
         .
 
     - name: Build solution
