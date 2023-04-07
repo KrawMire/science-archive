@@ -50,6 +50,12 @@ jobs:
       with:
         dotnet-version: 7.0.x
 
+    - name: For tests
+      working-directory: ScienceArchive.Server/
+      run: echo "{{ secrets.POSTGRESQL_CONNECTION_STRING }}" &&
+        echo {{ secrets.BACKEND_IMAGE_NAME }} &&
+        ls
+
     - name: Build backend image
       working-directory: ScienceArchive.Server/
       run: |
