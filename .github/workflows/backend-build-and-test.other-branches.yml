@@ -45,17 +45,15 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v2
 
-    - name: For tests
-      working-directory: ScienceArchive.Server/
-      run: echo ${{ secrets.BACKEND_IMAGE_NAME }} &&
-        echo "${{ secrets.POSTGRESQL_CONNECTION_STRING }}"
-
     - name: Build backend image
       working-directory: ScienceArchive.Server/
+      env:
+        POSTGRESQL_CONNECTION_STRING: ${{ secrets.POSTGRESQL_CONNECTION_STRING }}
+        BACKEND_IMAGE_NAME: ${{ secrets.BACKEND_IMAGE_NAME }}
       run: |
         docker build
-        --build-arg POSTGRESQL_CONNECTION_STRING="${{ secrets.POSTGRESQL_CONNECTION_STRING }}"
-        -t ${{ secrets.BACKEND_IMAGE_NAME }}
+        --build-arg POSTGRESQL_CONNECTION_STRING="$POSTGRESQL_CONNECTION_STRING"
+        -t $BACKEND_IMAGE_NAME
         .
 
     - name: Build solution
