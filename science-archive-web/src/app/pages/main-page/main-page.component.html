@@ -4,16 +4,28 @@
   </div>
   <div class="top-menu">
     <div class="top-menu-elements-wrapper">
-      <div class="top-menu-element">
+      <div
+        class="top-menu-element"
+        routerLink="/main/articles"
+      >
         Articles
       </div>
-      <div class="top-menu-element">
-        Authors
-      </div>
-      <div class="top-menu-element">
+      <div
+        class="top-menu-element"
+        routerLink="/main/categories"
+      >
         Categories
       </div>
-      <div class="top-menu-element">
+      <div
+        class="top-menu-element"
+        routerLink="/main/authors"
+      >
+        Authors
+      </div>
+      <div
+        class="top-menu-element"
+        routerLink="/main/news"
+      >
         News
       </div>
     </div>
@@ -27,10 +39,11 @@
     <ng-template #notAuthorizedBlock>
       <div
         class="top-menu-auth"
-        (click)='onSignIn()'
+        routerLink="/auth"
       >
         Sign in
       </div>
     </ng-template>
   </div>
+  <router-outlet></router-outlet>
 </div>

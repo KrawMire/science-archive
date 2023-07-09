@@ -21,10 +21,6 @@ export class MainPageComponent implements OnInit {
     }
   }
 
-  onSignIn() {
-    window.location.href = "auth";
-  }
-
   onSignOut() {
     this.storageService.clean();
   }

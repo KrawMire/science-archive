@@ -2,7 +2,7 @@ import { NgModule } from "@angular/core";
 import { BrowserModule } from "@angular/platform-browser";
 import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
 
-import { AuthRequestInterceptor } from "@helpers/auth-request.interceptor";
+import { AuthRequestInterceptor } from "@middleware/auth-request.interceptor";
 
 import { AccountPageComponent } from "@pages/account-page/account-page.component";
 import { AuthPageComponent } from "@pages/auth-page/auth-page.component";

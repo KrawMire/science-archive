@@ -2,9 +2,14 @@
   background-color: #1B57CFFF;
   padding: 5px;
   color: #FFFFFF;
+  height: 50px;
+  line-height: 50px;
 }
 
 .top-menu {
+  position: sticky;
+  top: 0;
+  background-color: #FFFFFF;
   display: flex;
   height: 50px;
   box-shadow: 0 5px 10px 2px #9b9b9b4a;
