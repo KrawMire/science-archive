@@ -1,14 +1,17 @@
-﻿using ScienceArchive.Core.Domain.Common;
+﻿using ScienceArchive.Core.Domain.Aggregates.Claim.ValueObjects;
+using ScienceArchive.Core.Domain.Common;
 
-namespace ScienceArchive.Core.Domain.Entities;
+namespace ScienceArchive.Core.Domain.Aggregates.Claim;
 
 /// <summary>
 /// Claim entity. Represents permission of
 /// doing some actions in the system
 /// </summary>
-public class Claim : BaseEntity
+public class Claim : Entity<ClaimId>
 {
-    public Claim(Guid? id = null) : base(id) { }
+    public Claim(ClaimId? id = null) : base(id ?? ClaimId.CreateNew())
+    {
+    }
 
     /// <summary>
     /// Claim value
