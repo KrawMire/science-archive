@@ -1,5 +1,3 @@
-using ScienceArchive.Core.Domain.Common.Identifiers;
-
 namespace ScienceArchive.Core.Domain.Common;
 
 /// <summary>

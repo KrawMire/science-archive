@@ -1,6 +1,4 @@
-﻿using ScienceArchive.Core.Domain.Common.Identifiers;
-
-namespace ScienceArchive.Core.Domain.Common;
+﻿namespace ScienceArchive.Core.Domain.Common;
 
 /// <summary>
 /// Represents object in system which
