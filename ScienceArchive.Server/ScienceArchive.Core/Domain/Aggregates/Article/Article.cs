@@ -37,7 +37,7 @@ public class Article : Entity<ArticleId>
     /// <summary>
     /// Linked article document
     /// </summary>
-    public required ArticleDocument Document { get; set; }
+    public required List<ArticleDocument> Documents { get; set; }
     
     /// <summary>
     /// Article description
