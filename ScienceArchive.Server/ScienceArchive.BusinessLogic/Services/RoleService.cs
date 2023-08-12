@@ -1,10 +1,10 @@
-﻿using ScienceArchive.Core.Domain.Entities;
+﻿using ScienceArchive.Core.Domain.Aggregates.Role;
 using ScienceArchive.Core.Services;
 using ScienceArchive.Core.Services.RoleContracts;
 
 namespace ScienceArchive.BusinessLogic.Services;
 
-public class RoleService : BaseService, IRoleService
+internal class RoleService : BaseService, IRoleService
 {
     public RoleService(IServiceProvider serviceProvider) : base(serviceProvider) { }
 

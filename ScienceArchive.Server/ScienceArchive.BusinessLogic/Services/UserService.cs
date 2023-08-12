@@ -1,10 +1,10 @@
-﻿using ScienceArchive.Core.Domain.Entities;
+﻿using ScienceArchive.Core.Domain.Aggregates.User;
 using ScienceArchive.Core.Services;
 using ScienceArchive.Core.Services.UserContracts;
 
 namespace ScienceArchive.BusinessLogic.Services;
 
-public class UserService : BaseService, IUserService
+internal class UserService : BaseService, IUserService
 {
     public UserService(IServiceProvider serviceProvider) : base(serviceProvider) { }
 

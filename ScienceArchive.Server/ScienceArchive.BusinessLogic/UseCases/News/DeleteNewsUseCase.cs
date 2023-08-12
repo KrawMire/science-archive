@@ -4,7 +4,7 @@ using ScienceArchive.Core.Services.NewsContracts;
 
 namespace ScienceArchive.BusinessLogic.NewsUseCases;
 
-public class DeleteNewsUseCase : IUseCase<Guid, DeleteNewsContract>
+internal class DeleteNewsUseCase : IUseCase<Guid, DeleteNewsContract>
 {
     private readonly INewsRepository _newsRepository;
 
@@ -15,6 +15,6 @@ public class DeleteNewsUseCase : IUseCase<Guid, DeleteNewsContract>
 
     public async Task<Guid> Execute(DeleteNewsContract contract)
     {
-        return await _newsRepository.Delete(contract.NewsId);
+        return await _newsRepository.Delete(contract.Id);
     }
 }

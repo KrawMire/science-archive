@@ -4,7 +4,7 @@ using ScienceArchive.Core.Services.ArticleContracts;
 
 namespace ScienceArchive.BusinessLogic.ArticleUseCases;
 
-public class DeleteArticleUseCase : IUseCase<Guid, DeleteArticleContract>
+internal class DeleteArticleUseCase : IUseCase<Guid, DeleteArticleContract>
 {
     private readonly IArticleRepository _articleRepository;
 

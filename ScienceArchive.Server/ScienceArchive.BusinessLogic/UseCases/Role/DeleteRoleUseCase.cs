@@ -4,7 +4,7 @@ using ScienceArchive.Core.Services.RoleContracts;
 
 namespace ScienceArchive.BusinessLogic.RoleUseCases;
 
-public class DeleteRoleUseCase : IUseCase<Guid, DeleteRoleContract>
+internal class DeleteRoleUseCase : IUseCase<Guid, DeleteRoleContract>
 {
     private readonly IRoleRepository _roleRepository;
 
@@ -15,6 +15,6 @@ public class DeleteRoleUseCase : IUseCase<Guid, DeleteRoleContract>
 
     public async Task<Guid> Execute(DeleteRoleContract contract)
     {
-        return await _roleRepository.Delete(contract.RoleId);
+        return await _roleRepository.Delete(contract.Id);
     }
 }

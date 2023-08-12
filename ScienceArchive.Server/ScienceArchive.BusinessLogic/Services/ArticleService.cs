@@ -1,10 +1,10 @@
-﻿using ScienceArchive.Core.Domain.Entities;
+﻿using ScienceArchive.Core.Domain.Aggregates.Article;
 using ScienceArchive.Core.Services;
 using ScienceArchive.Core.Services.ArticleContracts;
 
 namespace ScienceArchive.BusinessLogic.Services;
 
-public class ArticleService : BaseService, IArticleService
+internal class ArticleService : BaseService, IArticleService
 {
     public ArticleService(IServiceProvider serviceProvider) : base(serviceProvider) { }
 

@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using ScienceArchive.BusinessLogic.ArticleUseCases;
+using ScienceArchive.BusinessLogic.CategoryUseCases;
 using ScienceArchive.BusinessLogic.Interfaces;
 using ScienceArchive.BusinessLogic.NewsUseCases;
 using ScienceArchive.BusinessLogic.RoleUseCases;
@@ -7,11 +8,16 @@ using ScienceArchive.BusinessLogic.Services;
 using ScienceArchive.BusinessLogic.UseCases.Auth;
 using ScienceArchive.BusinessLogic.UseCases.System;
 using ScienceArchive.BusinessLogic.UserUseCases;
-using ScienceArchive.Core.Domain.Entities;
+using ScienceArchive.Core.Domain.Aggregates.Article;
+using ScienceArchive.Core.Domain.Aggregates.Category;
+using ScienceArchive.Core.Domain.Aggregates.News;
+using ScienceArchive.Core.Domain.Aggregates.Role;
+using ScienceArchive.Core.Domain.Aggregates.User;
 using ScienceArchive.Core.Domain.ValueObjects;
 using ScienceArchive.Core.Services;
 using ScienceArchive.Core.Services.ArticleContracts;
 using ScienceArchive.Core.Services.AuthContracts;
+using ScienceArchive.Core.Services.CategoryContracts;
 using ScienceArchive.Core.Services.NewsContracts;
 using ScienceArchive.Core.Services.RoleContracts;
 using ScienceArchive.Core.Services.SystemContracts;
@@ -30,6 +36,7 @@ public static class BusinessLogicRegistry
     {
         _ = services.AddSingleton<IArticleService, ArticleService>();
         _ = services.AddSingleton<IAuthService, AuthService>();
+        _ = services.AddSingleton<ICategoryService, CategoryService>();
         _ = services.AddSingleton<INewsService, NewsService>();
         _ = services.AddSingleton<IRoleService, RoleService>();
         _ = services.AddSingleton<ISystemService, SystemService>();
@@ -54,6 +61,11 @@ public static class BusinessLogicRegistry
         // Auth use cases
         _ = services.AddTransient<IUseCase<User, LoginContract>, LoginUseCase>();
 
+        // Category use cases
+        _ = services.AddTransient<IUseCase<List<Category>, GetAllCategoriesContract>, GetAllCategoriesUseCase>();
+        _ = services.AddTransient<IUseCase<Category, CreateCategoryContract>, CreateCategoryUseCase>();
+        _ = services.AddTransient<IUseCase<Category, UpdateCategoryContract>, UpdateCategoryUseCase>();
+        
         // News use cases
         _ = services.AddTransient<IUseCase<List<News>, GetAllNewsContract>, GetAllNewsUseCase>();
         _ = services.AddTransient<IUseCase<News, CreateNewsContract>, CreateNewsUseCase>();
