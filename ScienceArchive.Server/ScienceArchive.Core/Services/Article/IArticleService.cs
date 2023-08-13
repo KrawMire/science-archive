@@ -1,10 +1,12 @@
-﻿using ScienceArchive.Core.Domain.Entities;
+﻿using ScienceArchive.Core.Domain.Aggregates.Article;
+using ScienceArchive.Core.Domain.Aggregates.Article.ValueObjects;
 using ScienceArchive.Core.Services.ArticleContracts;
 
 namespace ScienceArchive.Core.Services;
 
 /// <summary>
-/// Functionality of article service
+/// Contains a set of business-logic methods
+/// to interact with articles
 /// </summary>
 public interface IArticleService
 {
@@ -34,5 +36,5 @@ public interface IArticleService
     /// </summary>
     /// <param name="contract">Contract to delete article</param>
     /// <returns>Deleted article ID</returns>
-    Task<Guid> Delete(DeleteArticleContract contract);
+    Task<ArticleId> Delete(DeleteArticleContract contract);
 }

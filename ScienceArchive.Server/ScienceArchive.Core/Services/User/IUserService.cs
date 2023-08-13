@@ -1,10 +1,12 @@
-﻿using ScienceArchive.Core.Domain.Entities;
+﻿using ScienceArchive.Core.Domain.Aggregates.User;
+using ScienceArchive.Core.Domain.Aggregates.User.ValueObjects;
 using ScienceArchive.Core.Services.UserContracts;
 
 namespace ScienceArchive.Core.Services;
 
 /// <summary>
-/// Represents user service
+/// Contains a set of business-logic methods
+/// to interact with users
 /// </summary>
 public interface IUserService
 {
@@ -34,5 +36,5 @@ public interface IUserService
     /// </summary>
     /// <param name="contract">Contract to delete user</param>
     /// <returns>Deleted user ID</returns>
-    Task<Guid> Delete(DeleteUserContract contract);
+    Task<UserId> Delete(DeleteUserContract contract);
 }

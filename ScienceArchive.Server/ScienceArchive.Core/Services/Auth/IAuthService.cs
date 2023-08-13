@@ -1,10 +1,11 @@
-﻿using ScienceArchive.Core.Domain.Entities;
+﻿using ScienceArchive.Core.Domain.Aggregates.User;
 using ScienceArchive.Core.Services.AuthContracts;
 
 namespace ScienceArchive.Core.Services;
 
 /// <summary>
-/// Functionality of auth service
+/// Contains a set of business-logic methods
+/// to interact with authentication
 /// </summary>
 public interface IAuthService
 {
