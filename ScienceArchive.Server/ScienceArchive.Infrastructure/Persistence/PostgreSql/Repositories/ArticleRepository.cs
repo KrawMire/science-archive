@@ -71,7 +71,7 @@ public class PostgresArticleRepository : IArticleRepository
         return _mapper.MapToEntity(createdArticle);
     }
 
-    public async Task<Guid> Delete(ArticleId id)
+    public async Task<ArticleId> Delete(ArticleId id)
     {
         var parameters = new DynamicParameters();
         parameters.Add("Id", id);
@@ -86,7 +86,7 @@ public class PostgresArticleRepository : IArticleRepository
             throw new PersistenceException("Article was not deleted");
         }
             
-        return deletedArticleId;
+        return ArticleId.CreateFromGuid(deletedArticleId);
     }
 
     public async Task<Article> Update(ArticleId id, Article newValue)

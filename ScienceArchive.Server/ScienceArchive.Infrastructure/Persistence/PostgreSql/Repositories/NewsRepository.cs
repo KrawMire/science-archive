@@ -72,7 +72,7 @@ public class PostgresNewsRepository : INewsRepository
         return _mapper.MapToEntity(createdNews);
     }
 
-    public async Task<Guid> Delete(NewsId id)
+    public async Task<NewsId> Delete(NewsId id)
     {
         var parameters = new DynamicParameters();
         parameters.Add("Id", id);
@@ -87,7 +87,7 @@ public class PostgresNewsRepository : INewsRepository
             throw new PersistenceException("News was not deleted");
         }
 
-        return deletedNewsId;
+        return NewsId.CreateFromGuid(deletedNewsId);
     }
 
     public async Task<News> Update(NewsId id, News newValue)

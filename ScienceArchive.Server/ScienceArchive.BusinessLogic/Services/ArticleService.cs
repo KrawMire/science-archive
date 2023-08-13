@@ -1,4 +1,5 @@
 ﻿using ScienceArchive.Core.Domain.Aggregates.Article;
+using ScienceArchive.Core.Domain.Aggregates.Article.ValueObjects;
 using ScienceArchive.Core.Services;
 using ScienceArchive.Core.Services.ArticleContracts;
 
@@ -27,8 +28,8 @@ internal class ArticleService : BaseService, IArticleService
     }
 
     /// <inheritdoc/>
-    public async Task<Guid> Delete(DeleteArticleContract contract)
+    public async Task<ArticleId> Delete(DeleteArticleContract contract)
     {
-        return await ExecuteUseCase<Guid, DeleteArticleContract>(contract);
+        return await ExecuteUseCase<ArticleId, DeleteArticleContract>(contract);
     }
 }

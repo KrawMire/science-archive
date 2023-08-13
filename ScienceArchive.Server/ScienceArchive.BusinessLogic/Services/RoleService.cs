@@ -1,4 +1,5 @@
 ﻿using ScienceArchive.Core.Domain.Aggregates.Role;
+using ScienceArchive.Core.Domain.Aggregates.Role.ValueObjects;
 using ScienceArchive.Core.Services;
 using ScienceArchive.Core.Services.RoleContracts;
 
@@ -27,8 +28,8 @@ internal class RoleService : BaseService, IRoleService
     }
 
     /// <inheritdoc/>
-    public async Task<Guid> Delete(DeleteRoleContract contract)
+    public async Task<RoleId> Delete(DeleteRoleContract contract)
     {
-        return await ExecuteUseCase<Guid, DeleteRoleContract>(contract);
+        return await ExecuteUseCase<RoleId, DeleteRoleContract>(contract);
     }
 }

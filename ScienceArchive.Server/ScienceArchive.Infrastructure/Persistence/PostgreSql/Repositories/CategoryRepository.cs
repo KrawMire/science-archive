@@ -26,7 +26,7 @@ public class PostgresCategoryRepository : ICategoryRepository
 		throw new NotImplementedException();
 	}
 
-	public Task<Guid> Delete(CategoryId id)
+	public Task<CategoryId> Delete(CategoryId id)
 	{
 		throw new NotImplementedException();
 	}

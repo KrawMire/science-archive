@@ -75,7 +75,7 @@ public class PostgresRoleRepository : IRoleRepository
     }
 
     /// <inheritdoc/>
-    public async Task<Guid> Delete(RoleId id)
+    public async Task<RoleId> Delete(RoleId id)
     {
         var parameters = new DynamicParameters();
         parameters.Add("Id", id);
@@ -90,7 +90,7 @@ public class PostgresRoleRepository : IRoleRepository
             throw new PersistenceException("Role was not deleted!");
         }
 
-        return deletedRoleId;
+        return RoleId.CreateFromGuid(deletedRoleId);
     }
         
     /// <inheritdoc/>

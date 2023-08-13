@@ -112,7 +112,7 @@ public class PostgresUserRepository : IUserRepository
     }
 
     /// <inheritdoc/>
-    public async Task<Guid> Delete(UserId userId)
+    public async Task<UserId> Delete(UserId userId)
     {
         var parameters = new DynamicParameters();
         parameters.Add("Id", userId);
@@ -128,6 +128,6 @@ public class PostgresUserRepository : IUserRepository
             throw new PersistenceException("User was not deleted!");
         }
 
-        return deletedUserId;
+        return UserId.CreateFromGuid(deletedUserId);
     }
 }

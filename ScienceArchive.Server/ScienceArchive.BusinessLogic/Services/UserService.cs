@@ -1,4 +1,5 @@
 ﻿using ScienceArchive.Core.Domain.Aggregates.User;
+using ScienceArchive.Core.Domain.Aggregates.User.ValueObjects;
 using ScienceArchive.Core.Services;
 using ScienceArchive.Core.Services.UserContracts;
 
@@ -23,8 +24,8 @@ internal class UserService : BaseService, IUserService
         return await ExecuteUseCase<User, UpdateUserContract>(contract);
     }
 
-    public async Task<Guid> Delete(DeleteUserContract contract)
+    public async Task<UserId> Delete(DeleteUserContract contract)
     {
-        return await ExecuteUseCase<Guid, DeleteUserContract>(contract);
+        return await ExecuteUseCase<UserId, DeleteUserContract>(contract);
     }
 }

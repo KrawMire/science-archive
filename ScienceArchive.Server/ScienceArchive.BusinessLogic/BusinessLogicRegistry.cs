@@ -9,10 +9,14 @@ using ScienceArchive.BusinessLogic.UseCases.Auth;
 using ScienceArchive.BusinessLogic.UseCases.System;
 using ScienceArchive.BusinessLogic.UserUseCases;
 using ScienceArchive.Core.Domain.Aggregates.Article;
+using ScienceArchive.Core.Domain.Aggregates.Article.ValueObjects;
 using ScienceArchive.Core.Domain.Aggregates.Category;
 using ScienceArchive.Core.Domain.Aggregates.News;
+using ScienceArchive.Core.Domain.Aggregates.News.ValueObjects;
 using ScienceArchive.Core.Domain.Aggregates.Role;
+using ScienceArchive.Core.Domain.Aggregates.Role.ValueObjects;
 using ScienceArchive.Core.Domain.Aggregates.User;
+using ScienceArchive.Core.Domain.Aggregates.User.ValueObjects;
 using ScienceArchive.Core.Domain.ValueObjects;
 using ScienceArchive.Core.Services;
 using ScienceArchive.Core.Services.ArticleContracts;
@@ -56,7 +60,7 @@ public static class BusinessLogicRegistry
         _ = services.AddTransient<IUseCase<List<Article>, GetAllArticlesContract>, GetAllArticlesUseCase>();
         _ = services.AddTransient<IUseCase<Article, CreateArticleContract>, CreateArticleUseCase>();
         _ = services.AddTransient<IUseCase<Article, UpdateArticleContract>, UpdateArticleUseCase>();
-        _ = services.AddTransient<IUseCase<Guid, DeleteArticleContract>, DeleteArticleUseCase>();
+        _ = services.AddTransient<IUseCase<ArticleId, DeleteArticleContract>, DeleteArticleUseCase>();
 
         // Auth use cases
         _ = services.AddTransient<IUseCase<User, LoginContract>, LoginUseCase>();
@@ -70,13 +74,13 @@ public static class BusinessLogicRegistry
         _ = services.AddTransient<IUseCase<List<News>, GetAllNewsContract>, GetAllNewsUseCase>();
         _ = services.AddTransient<IUseCase<News, CreateNewsContract>, CreateNewsUseCase>();
         _ = services.AddTransient<IUseCase<News, UpdateNewsContract>, UpdateNewsUseCase>();
-        _ = services.AddTransient<IUseCase<Guid, DeleteNewsContract>, DeleteNewsUseCase>();
+        _ = services.AddTransient<IUseCase<NewsId, DeleteNewsContract>, DeleteNewsUseCase>();
 
         // Role use cases
         _ = services.AddTransient<IUseCase<List<Role>, GetAllRolesContract>, GetAllRolesUseCase>();
         _ = services.AddTransient<IUseCase<Role, CreateRoleContract>, CreateRoleUseCase>();
         _ = services.AddTransient<IUseCase<Role, UpdateRoleContract>, UpdateRoleUseCase>();
-        _ = services.AddTransient<IUseCase<Guid, DeleteRoleContract>, DeleteRoleUseCase>();
+        _ = services.AddTransient<IUseCase<RoleId, DeleteRoleContract>, DeleteRoleUseCase>();
 
         // System use cases
         _ = services.AddTransient<IUseCase<SystemStatus, CheckSystemStatusContract>, CheckSystemStatusUseCase>();
@@ -85,7 +89,7 @@ public static class BusinessLogicRegistry
         _ = services.AddTransient<IUseCase<List<User>, GetAllUsersContract>, GetAllUsersUseCase>();
         _ = services.AddTransient<IUseCase<User, CreateUserContract>, CreateUserUseCase>();
         _ = services.AddTransient<IUseCase<User, UpdateUserContract>, UpdateUserUseCase>();
-        _ = services.AddTransient<IUseCase<Guid, DeleteUserContract>, DeleteUserUseCase>();
+        _ = services.AddTransient<IUseCase<UserId, DeleteUserContract>, DeleteUserUseCase>();
 
         return services;
     }
