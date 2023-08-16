@@ -20,16 +20,8 @@ public class NewsController : Controller
     {
         var emptyRequest = new GetAllNewsRequestDto();
 
-        try
-        {
-            var result = await _newsInteractor.GetAllNews(emptyRequest);
-            var response = new SuccessResponse(result);
-            return Json(response);
-        }
-        catch (Exception ex)
-        {
-            var response = new ErrorResponse(ex.Message);
-            return Json(response);
-        }
+        var result = await _newsInteractor.GetAllNews(emptyRequest);
+        var response = new SuccessResponse(result);
+        return Json(response);
     }
 }

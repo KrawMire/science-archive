@@ -20,16 +20,8 @@ public class RoleController : Controller
     {
         var emptyRequest = new GetAllRolesRequestDto();
 
-        try
-        {
-            var result = await _roleInteractor.GetAllRoles(emptyRequest);
-            var response = new SuccessResponse(result);
-            return Json(response);
-        }
-        catch (Exception ex)
-        {
-            var response = new ErrorResponse(ex.Message);
-            return Json(response);
-        }
+        var result = await _roleInteractor.GetAllRoles(emptyRequest);
+        var response = new SuccessResponse(result);
+        return Json(response);
     }
 }

@@ -19,19 +19,10 @@ public class UserController : Controller
     public async Task<IActionResult> GetAll()
     {
         var emptyRequest = new GetAllUsersRequestDto();
+        
+        var result = await _userInteractor.GetAllUsers(emptyRequest);
+        var response = new SuccessResponse(result);
 
-        try
-        {
-            var result = await _userInteractor.GetAllUsers(emptyRequest);
-            var response = new SuccessResponse(result);
-
-            return Json(response);
-        }
-        catch (Exception ex)
-        {
-            var response = new ErrorResponse(ex.Message);
-
-            return Json(response);
-        }
+        return Json(response);
     }
 }

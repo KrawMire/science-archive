@@ -20,16 +20,8 @@ public class ArticleController : Controller
     {
         var emptyRequest = new GetAllArticlesRequestDto();
 
-        try
-        {
-            var result = await _articleInteractor.GetAllArticles(emptyRequest);
-            var response = new SuccessResponse(result);
-            return Json(response);
-        }
-        catch (Exception ex)
-        {
-            var response = new ErrorResponse(ex.Message);
-            return Json(response);
-        }
+        var result = await _articleInteractor.GetAllArticles(emptyRequest);
+        var response = new SuccessResponse(result);
+        return Json(response);
     }
 }
