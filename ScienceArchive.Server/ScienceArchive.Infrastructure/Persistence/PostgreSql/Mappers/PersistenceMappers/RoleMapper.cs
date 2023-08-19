@@ -3,7 +3,7 @@ using ScienceArchive.Core.Domain.Aggregates.Role.ValueObjects;
 using ScienceArchive.Infrastructure.Persistence.Interfaces;
 using ScienceArchive.Infrastructure.Persistence.PostgreSql.Models;
 
-namespace ScienceArchive.Infrastructure.Persistence.PostgreSql.Mappers;
+namespace ScienceArchive.Infrastructure.PostgreSql.PersistenceMappers;
 
 public class RoleMapper : IPersistenceMapper<Role, RoleModel>
 {

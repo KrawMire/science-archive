@@ -22,6 +22,35 @@ public class ArticleController : Controller
 
         var result = await _articleInteractor.GetAllArticles(emptyRequest);
         var response = new SuccessResponse(result);
+        
+        return Json(response);
+    }
+
+    [HttpPost("create")]
+    public async Task<IActionResult> Create([FromBody] CreateArticleRequestDto dto)
+    {
+        var result = await _articleInteractor.CreateArticle(dto);
+        var response = new SuccessResponse(result);
+        
+        return Json(response);
+    }
+
+    [HttpPost("update")]
+    public async Task<IActionResult> Update([FromBody] UpdateArticleRequestDto dto)
+    {
+        var result = await _articleInteractor.UpdateArticle(dto);
+        var response = new SuccessResponse(result);
+
+        return Json(response);
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete(string id)
+    {
+        var dto = new DeleteArticleRequestDto(id);
+        var result = await _articleInteractor.DeleteArticle(dto);
+        var response = new SuccessResponse(result);
+        
         return Json(response);
     }
 }
