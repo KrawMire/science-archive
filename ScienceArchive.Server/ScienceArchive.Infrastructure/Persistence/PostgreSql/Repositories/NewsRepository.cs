@@ -75,7 +75,7 @@ public class PostgresNewsRepository : INewsRepository
     public async Task<NewsId> Delete(NewsId id)
     {
         var parameters = new DynamicParameters();
-        parameters.Add("Id", id);
+        parameters.Add("Id", id.Value);
 
         var deletedNewsId = await _connection.QueryFirstOrDefaultAsync<Guid>(
             "SELECT * FROM func_delete_news(@Id)",

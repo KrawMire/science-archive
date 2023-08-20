@@ -1,8 +1,6 @@
 ﻿using Dapper;
 using System.Data;
 using System.Text.Json;
-using Npgsql;
-using NpgsqlTypes;
 using ScienceArchive.Core.Domain.Aggregates.Article;
 using ScienceArchive.Core.Domain.Aggregates.Article.ValueObjects;
 using ScienceArchive.Core.Repositories;
@@ -41,7 +39,7 @@ public class PostgresArticleRepository : IArticleRepository
     public async Task<Article?> GetById(ArticleId id)
     {
         var parameters = new DynamicParameters();
-        parameters.Add("Id", id.ToString());
+        parameters.Add("Id", id.Value);
 
         var article = await _connection.QueryFirstOrDefaultAsync<ArticleModel>(
             "SELECT * FROM func_get_article_by_id(@Id)",
