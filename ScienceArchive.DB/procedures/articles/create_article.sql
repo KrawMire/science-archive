@@ -3,7 +3,7 @@ CREATE OR REPLACE PROCEDURE "proc_create_article" (
   "p_category_id"       UUID,
   "p_authors_ids"       UUID[],
   "p_title"             VARCHAR(255),
-  "p_created_timestamp" TIMESTAMP WITH TIME ZONE,
+  "p_created_timestamp" TIMESTAMP,
   "p_description"       TEXT,
   "p_documents"         JSONB
 )
