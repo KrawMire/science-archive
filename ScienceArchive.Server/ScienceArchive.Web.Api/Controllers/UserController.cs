@@ -25,4 +25,24 @@ public class UserController : Controller
 
         return Json(response);
     }
+
+    [HttpPost("update")]
+    public async Task<IActionResult> Update([FromBody] UpdateUserRequestDto dto)
+    {
+        var result = await _userInteractor.UpdateUser(dto);
+        var response = new SuccessResponse(result);
+
+        return Json(response);
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete(string id)
+    {
+        var dto = new DeleteUserRequestDto(id);
+
+        var result = await _userInteractor.DeleteUser(dto);
+        var response = new SuccessResponse(result);
+
+        return Json(response);
+    }
 }
