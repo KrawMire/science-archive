@@ -30,6 +30,19 @@ public class ArticleInteractor : IArticleInteractor
 
         return new(articlesDtos);
     }
+
+    /// <inheritdoc/>
+    public async Task<GetArticleByIdResponseDto> GetArticleById(GetArticleByIdRequestDto dto)
+    {
+        var contract = new GetArticleByIdContract(ArticleId.CreateFromString(dto.Id));
+        var article = await _articleService.GetById(contract);
+
+        var articleDto = article is not null
+            ? _articleMapper.MapToDto(article)
+            : null;
+        
+        return new(articleDto);
+    }
     
     /// <inheritdoc/>
     public async Task<CreateArticleResponseDto> CreateArticle(CreateArticleRequestDto dto)

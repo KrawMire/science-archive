@@ -33,6 +33,18 @@ namespace ScienceArchive.Application.Interactors
             return new(usersDtos);
         }
 
+        public async Task<GetUserByIdResponseDto> GetUserById(GetUserByIdRequestDto dto)
+        {
+            var contract = new GetUserByIdContract(UserId.CreateFromString(dto.Id));
+            var user = await _userService.GetById(contract);
+
+            var userDto = user is not null
+                ? _userMapper.MapToDto(user)
+                : null;
+
+            return new(userDto);
+        }
+
         /// <inheritdoc/>
         public async Task<DeleteUserResponseDto> DeleteUser(DeleteUserRequestDto dto)
         {

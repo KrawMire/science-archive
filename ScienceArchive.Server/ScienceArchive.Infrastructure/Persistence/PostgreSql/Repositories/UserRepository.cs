@@ -32,7 +32,7 @@ public class PostgresUserRepository : IUserRepository
         var user = await _connection.QuerySingleOrDefaultAsync<UserModel>(
             "SELECT * FROM func_get_user_by_id(@Id)", 
             parameters, 
-            commandType: CommandType.StoredProcedure);
+            commandType: CommandType.Text);
 
         return _mapper.MapToEntity(user);
     }

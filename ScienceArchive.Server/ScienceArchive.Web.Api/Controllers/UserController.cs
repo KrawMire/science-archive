@@ -15,6 +15,16 @@ public class UserController : Controller
         _userInteractor = userInteractor ?? throw new ArgumentNullException(nameof(userInteractor));
     }
 
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetById(string id)
+    {
+        var dto = new GetUserByIdRequestDto(id);
+        var result = await _userInteractor.GetUserById(dto);
+        var response = new SuccessResponse(result);
+
+        return Json(response);
+    }
+    
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {

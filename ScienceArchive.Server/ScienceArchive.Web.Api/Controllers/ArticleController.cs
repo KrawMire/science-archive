@@ -15,6 +15,16 @@ public class ArticleController : Controller
         _articleInteractor = articleInteractor ?? throw new ArgumentNullException(nameof(articleInteractor));
     }
 
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetById(string id)
+    {
+        var dto = new GetArticleByIdRequestDto(id);
+        var result = await _articleInteractor.GetArticleById(dto);
+        var response = new SuccessResponse(result);
+
+        return Json(response);
+    }
+    
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
