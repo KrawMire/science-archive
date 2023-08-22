@@ -11,9 +11,10 @@ import { SubcategoryCardComponent } from "./components/categories/subcategory-ca
 import { AuthorArticleCardComponent } from "./components/authors/author-article-card/author-article-card.component";
 import { NewsCardComponent } from "./components/news/news-card/news-card.component";
 import SharedModule from "@modules/shared/shared.module";
+import { NewsDetailsPageComponent } from "./pages/news-details-page/news-details-page.component";
 
 @NgModule({
-  imports: [CommonModule, SharedModule, SharedModule, SharedModule],
+  imports: [CommonModule, SharedModule, SharedModule, SharedModule, SharedModule, SharedModule],
   declarations: [
     ArticlesPageComponent,
     AuthorsPageComponent,
@@ -25,6 +26,8 @@ import SharedModule from "@modules/shared/shared.module";
     SubcategoryCardComponent,
     AuthorArticleCardComponent,
     NewsCardComponent,
+    NewsDetailsPageComponent,
+    NewsDetailsPageComponent,
   ],
   exports: [CommonModule],
 })

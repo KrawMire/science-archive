@@ -1,8 +1,8 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
-import { Response } from "@models/operations/response";
-import { GetAllUsersResponse } from "@models/operations/users/responses/get-all-users.response";
+import { Response } from "@models/common/response";
+import { GetAllUsersResponse } from "@models/user/responses/get-all-users.response";
 
 @Injectable({
   providedIn: "root",
