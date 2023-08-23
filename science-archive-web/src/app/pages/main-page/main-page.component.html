@@ -43,7 +43,7 @@
     <div
       *ngIf='isAuthorized; else notAuthorizedBlock'
       class='top-menu-auth'
-      (click)='onSignOut()'
+      (click)='onOpenDrawer()'
     >
       {{login}}
     </div>
@@ -60,3 +60,11 @@
     <router-outlet></router-outlet>
   </div>
 </div>
+
+<app-side-drawer
+  [title]="login"
+  [isOpen]="isShowAccountDrawer"
+  (onClose)="onCloseDrawer()"
+>
+
+</app-side-drawer>

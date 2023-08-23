@@ -10,6 +10,7 @@ export class MainPageComponent implements OnInit {
   login: string = "";
   isAuthorized: boolean = false;
   isMobileMenuOpen: boolean = false;
+  isShowAccountDrawer: boolean = false;
 
   constructor(private storageService: LocalStorageService) {}
 
@@ -32,6 +33,14 @@ export class MainPageComponent implements OnInit {
 
   onCloseMenu() {
     this.isMobileMenuOpen = false;
+  }
+
+  onOpenDrawer() {
+    this.isShowAccountDrawer = true;
+  }
+
+  onCloseDrawer() {
+    this.isShowAccountDrawer = false;
   }
 
   protected readonly ontoggle = ontoggle;
