@@ -20,11 +20,15 @@ export class MainPageComponent implements OnInit {
     if (login) {
       this.login = login;
       this.isAuthorized = true;
+    } else {
+      this.login = "";
+      this.isAuthorized = false;
     }
   }
 
   onSignOut() {
     this.storageService.clean();
+    this.ngOnInit();
   }
 
   onToggleMenu() {

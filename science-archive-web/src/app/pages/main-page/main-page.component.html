@@ -66,5 +66,10 @@
   [isOpen]="isShowAccountDrawer"
   (onClose)="onCloseDrawer()"
 >
-
+  <div class="account-actions">
+    <span class="account-action">Account</span>
+    <span class="account-action">My Articles</span>
+    <span class="account-action">Settings</span>
+    <span class="account-action sign-out-action" (click)="onSignOut()">Sign Out</span>
+  </div>
 </app-side-drawer>

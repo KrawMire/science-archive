@@ -68,6 +68,34 @@
   width: 70%;
 }
 
+.account-actions {
+  display: flex;
+  flex-direction: column;
+  margin-top: 30px;
+}
+
+.account-action {
+  cursor: pointer;
+  color: #565656;
+  padding: 5px;
+  margin-bottom: 10px;
+  font-size: 1.2em;
+  transition: 300ms;
+
+  &:hover {
+    color: #1e1e1e;
+  }
+
+  &.sign-out-action {
+    color: #ff0000;
+    margin-top: 30px;
+
+    &:hover {
+      color: #860000;
+    }
+  }
+}
+
 @media screen and (max-width: 768px) {
   .mobile-menu-toggle {
     display: block;
