@@ -2,32 +2,43 @@
   <div class="top-logo-wrapper">
     <h1>Science Archive</h1>
   </div>
-  <div class="top-menu">
+  <div class="top-menu" [ngClass]="{'open': isMobileMenuOpen}">
     <div class="top-menu-elements-wrapper">
-      <div
-        class="top-menu-element"
-        routerLink="/main/articles"
+      <a
+        class="mobile-menu-toggle"
+        (click)="onToggleMenu()"
       >
-        Articles
-      </div>
-      <div
-        class="top-menu-element"
-        routerLink="/main/categories"
-      >
-        Categories
-      </div>
-      <div
-        class="top-menu-element"
-        routerLink="/main/authors"
-      >
-        Authors
-      </div>
-      <div
-        class="top-menu-element"
-        routerLink="/main/news"
-      >
-        News
-      </div>
+      </a>
+      <nav>
+        <span
+          (click)="onCloseMenu()"
+          class="top-menu-element"
+          routerLink="/main/articles"
+        >
+          Articles
+        </span>
+        <span
+          (click)="onCloseMenu()"
+          class="top-menu-element"
+          routerLink="/main/categories"
+        >
+          Categories
+        </span>
+        <span
+          (click)="onCloseMenu()"
+          class="top-menu-element"
+          routerLink="/main/authors"
+        >
+          Authors
+        </span>
+        <span
+          (click)="onCloseMenu()"
+          class="top-menu-element"
+          routerLink="/main/news"
+        >
+          News
+        </span>
+      </nav>
     </div>
     <div
       *ngIf='isAuthorized; else notAuthorizedBlock'
@@ -45,5 +56,7 @@
       </div>
     </ng-template>
   </div>
-  <router-outlet></router-outlet>
+  <div class="main-content">
+    <router-outlet></router-outlet>
+  </div>
 </div>

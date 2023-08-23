@@ -9,6 +9,7 @@ import { LocalStorageService } from "src/app/services/local-storage.service";
 export class MainPageComponent implements OnInit {
   login: string = "";
   isAuthorized: boolean = false;
+  isMobileMenuOpen: boolean = false;
 
   constructor(private storageService: LocalStorageService) {}
 
@@ -24,4 +25,14 @@ export class MainPageComponent implements OnInit {
   onSignOut() {
     this.storageService.clean();
   }
+
+  onToggleMenu() {
+    this.isMobileMenuOpen = !this.isMobileMenuOpen;
+  }
+
+  onCloseMenu() {
+    this.isMobileMenuOpen = false;
+  }
+
+  protected readonly ontoggle = ontoggle;
 }
