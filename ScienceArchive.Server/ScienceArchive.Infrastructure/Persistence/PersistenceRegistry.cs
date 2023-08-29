@@ -40,6 +40,7 @@ public static class PersistenceRegistry
         _ = services.AddTransient<IPersistenceMapper<Article, ArticleModel>, ArticleMapper>();
         _ = services.AddTransient<IPersistenceMapper<Category, CategoryModel>, CategoryMapper>();
         _ = services.AddTransient<IPersistenceMapper<RoleClaim, ClaimModel>, ClaimMapper>();
+        _ = services.AddTransient<IPersistenceMapper<Category, SubcategoryModel>, SubcategoryMapper>();
         _ = services.AddTransient<IPersistenceMapper<News, NewsModel>, NewsMapper>();
         _ = services.AddTransient<IPersistenceMapper<Role, RoleModel>, RoleMapper>();
         _ = services.AddTransient<IPersistenceMapper<User, UserModel>, UserMapper>();
@@ -47,6 +48,7 @@ public static class PersistenceRegistry
         // Register mappers from SQL tables to models
         SqlMapper.AddTypeHandler(new GenericArrayToListMapper<Guid>());
         SqlMapper.AddTypeHandler(new GenericJsonMapper<List<ArticleDocumentModel>>());
+        SqlMapper.AddTypeHandler(new GenericJsonMapper<List<SubcategoryModel>>());
 
         return services;
     }
