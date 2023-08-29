@@ -16,7 +16,7 @@ BEGIN
   RETURN QUERY
     SELECT
       a."id",
-      ac."category_id",
+      ac."subcategory_id",
       a."title",
       a."description",
       acr."created_timestamp" AS "creationDate",
