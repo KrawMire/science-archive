@@ -51,6 +51,7 @@ public static class ApplicationRegistry
         _ = services.AddTransient<IApplicationMapper<News, NewsDto>, NewsMapper>();
         _ = services.AddTransient<IApplicationMapper<Role, RoleDto>, RoleMapper>();
         _ = services.AddTransient<IApplicationMapper<User, UserDto>, UserMapper>();
+        _ = services.AddTransient<IApplicationMapper<Author, AuthorDto>, AuthorMapper>();
 
         return services;
     }

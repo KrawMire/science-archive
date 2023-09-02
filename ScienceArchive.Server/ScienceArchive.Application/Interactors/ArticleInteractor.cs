@@ -5,6 +5,7 @@ using ScienceArchive.Application.Interfaces;
 using ScienceArchive.Application.Interfaces.Interactors;
 using ScienceArchive.Core.Domain.Aggregates.Article;
 using ScienceArchive.Core.Domain.Aggregates.Article.ValueObjects;
+using ScienceArchive.Core.Domain.Aggregates.Category.ValueObjects;
 using ScienceArchive.Core.Services;
 using ScienceArchive.Core.Services.ArticleContracts;
 
@@ -43,7 +44,16 @@ public class ArticleInteractor : IArticleInteractor
         
         return new(articleDto);
     }
-    
+
+    public async Task<GetArticlesByCategoryIdResponseDto> GetArticlesByCategoryId(GetArticlesByCategoryIdRequestDto dto)
+    {
+        var contract = new GetArticlesByCategoryIdContract(CategoryId.CreateFromString(dto.CategoryId));
+        var articles = await _articleService.GetByCategoryId(contract);
+
+        var articlesDtos = articles.Select(_articleMapper.MapToDto).ToList();
+        return new(articlesDtos);
+    }
+
     /// <inheritdoc/>
     public async Task<CreateArticleResponseDto> CreateArticle(CreateArticleRequestDto dto)
     {

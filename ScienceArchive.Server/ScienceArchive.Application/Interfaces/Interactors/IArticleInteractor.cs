@@ -23,6 +23,13 @@ public interface IArticleInteractor
     Task<GetArticleByIdResponseDto> GetArticleById(GetArticleByIdRequestDto dto);
 
     /// <summary>
+    /// Get articles by category ID
+    /// </summary>
+    /// <param name="dto">DTO contract to get articles by category ID</param>
+    /// <returns>Response DTO</returns>
+    Task<GetArticlesByCategoryIdResponseDto> GetArticlesByCategoryId(GetArticlesByCategoryIdRequestDto dto);
+
+    /// <summary>
     /// Create new article
     /// </summary>
     /// <param name="dto">DTO contract to create new article</param>
