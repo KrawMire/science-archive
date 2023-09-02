@@ -11,7 +11,7 @@ import { ActivatedRoute } from "@angular/router";
 export class ArticleDetailsPageComponent implements OnInit {
   article: Article | null = null;
 
-  constructor(private articleService: ArticleService, private route: ActivatedRoute) {}
+  constructor(private readonly articleService: ArticleService, private readonly route: ActivatedRoute) {}
 
   ngOnInit() {
     const articleId = this.route.snapshot.paramMap.get("id");
@@ -22,7 +22,7 @@ export class ArticleDetailsPageComponent implements OnInit {
     }
 
     this.articleService.getArticleById(articleId).subscribe({
-      next: (response) => {
+      next: async (response) => {
         if (!response.success) {
           alert(response.error);
           return;

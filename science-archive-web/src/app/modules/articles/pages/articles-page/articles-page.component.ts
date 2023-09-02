@@ -1,6 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { Article } from "@models/article/article";
 import { ArticleService } from "@services/article.service";
+import { ActivatedRoute } from "@angular/router";
 
 @Component({
   selector: "app-articles-page",
@@ -9,12 +10,27 @@ import { ArticleService } from "@services/article.service";
 })
 export class ArticlesPageComponent implements OnInit {
   articles: Article[] = [];
+  isLoading: boolean = true;
 
-  constructor(private articleService: ArticleService) {}
+  constructor(private readonly articleService: ArticleService, private readonly route: ActivatedRoute) {}
 
   ngOnInit() {
+    this.route.queryParams.subscribe((params) => {
+      const categoryId = params["categoryId"] as string;
+
+      if (!categoryId) {
+        this.getAllArticles();
+      } else {
+        this.getArticlesByCategoryId(categoryId);
+      }
+    });
+  }
+
+  private getAllArticles() {
     this.articleService.getAllArticles().subscribe({
       next: (response) => {
+        this.isLoading = false;
+
         if (!response.success) {
           alert(response.error);
           return;
@@ -26,6 +42,32 @@ export class ArticlesPageComponent implements OnInit {
         }
 
         this.articles = response.data!.articles;
+      },
+      error: (err) => {
+        alert(err.message);
+      },
+    });
+  }
+
+  private getArticlesByCategoryId(categoryId: string) {
+    this.articleService.getArticlesByCategoryId(categoryId).subscribe({
+      next: (response) => {
+        this.isLoading = false;
+
+        if (!response.success) {
+          alert(response.error);
+          return;
+        }
+
+        if (!response.data) {
+          alert("Cannot get any data!");
+          return;
+        }
+
+        this.articles = response.data!.articles;
+      },
+      error: (err) => {
+        alert(err.message);
       },
     });
   }

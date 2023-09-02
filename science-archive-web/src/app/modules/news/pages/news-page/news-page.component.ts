@@ -9,12 +9,14 @@ import { NewsService } from "@services/news.service";
 })
 export class NewsPageComponent implements OnInit {
   news: News[] = [];
+  isLoading: boolean = true;
 
   constructor(private readonly newsService: NewsService) {}
 
   ngOnInit(): void {
     this.newsService.getAllNews().subscribe({
       next: (response) => {
+        this.isLoading = false;
         if (!response.success) {
           alert(response.error);
           return;
