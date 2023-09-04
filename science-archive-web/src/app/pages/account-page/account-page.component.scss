@@ -1,0 +1,21 @@
+.top-logo-wrapper {
+  display: flex;
+  flex-direction: row;
+  background-color: #1B57CFFF;
+  padding: 5px;
+  color: #FFFFFF;
+  height: 50px;
+  line-height: 50px;
+
+  h2 {
+    margin-left: 10px;
+  }
+}
+
+.back-button {
+  display: block;
+  margin-top: 10px;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+}

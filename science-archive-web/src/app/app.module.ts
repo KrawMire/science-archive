@@ -17,6 +17,8 @@ import { ArticlesModule } from "@modules/articles/articles.module";
 import { AuthorsModule } from "@modules/authors/authors.module";
 import { CategoriesModule } from "@modules/categories/categories.module";
 import { NewsModule } from "@modules/news/news.module";
+import { AdminPageComponent } from "@pages/admin-page/admin-page.component";
+import { NgOptimizedImage } from "@angular/common";
 
 @NgModule({
   imports: [
@@ -32,8 +34,9 @@ import { NewsModule } from "@modules/news/news.module";
     AuthorsModule,
     CategoriesModule,
     NewsModule,
+    NgOptimizedImage,
   ],
-  declarations: [AppComponent, AccountPageComponent, AuthPageComponent, MainPageComponent],
+  declarations: [AppComponent, AccountPageComponent, AuthPageComponent, MainPageComponent, AdminPageComponent],
   providers: [{ provide: HTTP_INTERCEPTORS, useClass: AuthRequestInterceptor, multi: true }],
   bootstrap: [AppComponent],
 })

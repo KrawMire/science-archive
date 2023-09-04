@@ -9,10 +9,18 @@ import { CategoriesPageComponent } from "@modules/categories/pages/categories-pa
 import { NewsPageComponent } from "@modules/news/pages/news-page/news-page.component";
 import { NewsDetailsPageComponent } from "@modules/news/pages/news-details-page/news-details-page.component";
 import { ArticleDetailsPageComponent } from "@modules/articles/pages/article-details-page/article-details-page.component";
+import { AccountPageComponent } from "@pages/account-page/account-page.component";
+import { AuthGuard } from "./guards/auth.guard";
 
 const routes: Routes = [
   { path: "", pathMatch: "full", redirectTo: "main" },
   { path: "auth", component: AuthPageComponent },
+  {
+    path: "account",
+    component: AccountPageComponent,
+    canActivate: [AuthGuard],
+    children: [],
+  },
   {
     path: "main",
     component: MainPageComponent,
