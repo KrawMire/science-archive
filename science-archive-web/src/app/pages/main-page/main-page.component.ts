@@ -28,6 +28,7 @@ export class MainPageComponent implements OnInit {
 
   onSignOut() {
     this.storageService.clean();
+    this.isShowAccountDrawer = false;
     this.ngOnInit();
   }
 

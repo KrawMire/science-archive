@@ -1,4 +1,4 @@
-import { NgModule } from "@angular/core";
+import { NgModule, isDevMode } from "@angular/core";
 import { BrowserModule } from "@angular/platform-browser";
 import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
 
@@ -19,6 +19,8 @@ import { CategoriesModule } from "@modules/categories/categories.module";
 import { NewsModule } from "@modules/news/news.module";
 import { AdminPageComponent } from "@pages/admin-page/admin-page.component";
 import { NgOptimizedImage } from "@angular/common";
+import { ServiceWorkerModule } from "@angular/service-worker";
+import { environment } from "@environments/environment";
 
 @NgModule({
   imports: [
@@ -35,6 +37,14 @@ import { NgOptimizedImage } from "@angular/common";
     CategoriesModule,
     NewsModule,
     NgOptimizedImage,
+    ServiceWorkerModule.register("ngsw-worker.js", {
+      enabled: environment.production,
+      registrationStrategy: "registerWhenStable:30000",
+    }),
+    ServiceWorkerModule.register("ngsw-worker.js", {
+      enabled: !isDevMode(),
+      registrationStrategy: "registerWhenStable:30000",
+    }),
   ],
   declarations: [AppComponent, AccountPageComponent, AuthPageComponent, MainPageComponent, AdminPageComponent],
   providers: [{ provide: HTTP_INTERCEPTORS, useClass: AuthRequestInterceptor, multi: true }],

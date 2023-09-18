@@ -28,20 +28,11 @@ export class ArticlesPageComponent implements OnInit {
 
   private getAllArticles() {
     this.articleService.getAllArticles().subscribe({
-      next: (response) => {
+      complete: () => {
         this.isLoading = false;
-
-        if (!response.success) {
-          alert(response.error);
-          return;
-        }
-
-        if (!response.data) {
-          alert("Cannot get any data!");
-          return;
-        }
-
-        this.articles = response.data!.articles;
+      },
+      next: (response) => {
+        this.articles = response.articles;
       },
       error: (err) => {
         alert(err.message);
@@ -51,20 +42,11 @@ export class ArticlesPageComponent implements OnInit {
 
   private getArticlesByCategoryId(categoryId: string) {
     this.articleService.getArticlesByCategoryId(categoryId).subscribe({
-      next: (response) => {
+      complete: () => {
         this.isLoading = false;
-
-        if (!response.success) {
-          alert(response.error);
-          return;
-        }
-
-        if (!response.data) {
-          alert("Cannot get any data!");
-          return;
-        }
-
-        this.articles = response.data!.articles;
+      },
+      next: (response) => {
+        this.articles = response.articles;
       },
       error: (err) => {
         alert(err.message);

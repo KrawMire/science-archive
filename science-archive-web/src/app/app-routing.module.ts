@@ -11,6 +11,7 @@ import { NewsDetailsPageComponent } from "@modules/news/pages/news-details-page/
 import { ArticleDetailsPageComponent } from "@modules/articles/pages/article-details-page/article-details-page.component";
 import { AccountPageComponent } from "@pages/account-page/account-page.component";
 import { AuthGuard } from "./guards/auth.guard";
+import { ProfilePageComponent } from "@modules/account/pages/profile-page/profile-page.component";
 
 const routes: Routes = [
   { path: "", pathMatch: "full", redirectTo: "main" },
@@ -19,7 +20,10 @@ const routes: Routes = [
     path: "account",
     component: AccountPageComponent,
     canActivate: [AuthGuard],
-    children: [],
+    children: [
+      { path: "", pathMatch: "full", redirectTo: "profile" },
+      { path: "profile", component: ProfilePageComponent },
+    ],
   },
   {
     path: "main",
