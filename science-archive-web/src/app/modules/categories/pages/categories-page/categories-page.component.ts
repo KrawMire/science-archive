@@ -15,10 +15,9 @@ export class CategoriesPageComponent implements OnInit {
 
   ngOnInit() {
     this.categoryService.getAllArticles().subscribe({
-      next: (response) => {
-        this.isLoading = false;
-        this.categories = response.categories;
-      },
+      complete: () => setTimeout(() => (this.isLoading = false), 3000),
+      next: (response) => (this.categories = response.categories),
+      error: (err) => alert(err),
     });
   }
 }

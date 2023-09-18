@@ -15,10 +15,9 @@ export class NewsPageComponent implements OnInit {
 
   ngOnInit(): void {
     this.newsService.getAllNews().subscribe({
-      next: (response) => {
-        this.isLoading = false;
-        this.news = this.processNews(response.news);
-      },
+      complete: () => setTimeout(() => (this.isLoading = false), 3000),
+      next: (response) => (this.news = this.processNews(response.news)),
+      error: (err) => alert(err),
     });
   }
 

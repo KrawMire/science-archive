@@ -28,29 +28,17 @@ export class ArticlesPageComponent implements OnInit {
 
   private getAllArticles() {
     this.articleService.getAllArticles().subscribe({
-      complete: () => {
-        this.isLoading = false;
-      },
-      next: (response) => {
-        this.articles = response.articles;
-      },
-      error: (err) => {
-        alert(err.message);
-      },
+      complete: () => setTimeout(() => (this.isLoading = false), 3000),
+      next: (response) => (this.articles = response.articles),
+      error: (err) => alert(err.message),
     });
   }
 
   private getArticlesByCategoryId(categoryId: string) {
     this.articleService.getArticlesByCategoryId(categoryId).subscribe({
-      complete: () => {
-        this.isLoading = false;
-      },
-      next: (response) => {
-        this.articles = response.articles;
-      },
-      error: (err) => {
-        alert(err.message);
-      },
+      complete: () => (this.isLoading = false),
+      next: (response) => (this.articles = response.articles),
+      error: (err) => alert(err.message),
     });
   }
 }
