@@ -15,7 +15,7 @@ export class AuthorsPageComponent implements OnInit {
 
   ngOnInit() {
     this.userService.getAllAuthors().subscribe({
-      complete: () => setTimeout(() => (this.isLoading = false), 3000),
+      complete: () => (this.isLoading = false),
       next: (response) => (this.authors = response.authors),
       error: (err) => alert(err),
     });

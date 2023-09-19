@@ -28,7 +28,7 @@ export class ArticlesPageComponent implements OnInit {
 
   private getAllArticles() {
     this.articleService.getAllArticles().subscribe({
-      complete: () => setTimeout(() => (this.isLoading = false), 3000),
+      complete: () => (this.isLoading = false),
       next: (response) => (this.articles = response.articles),
       error: (err) => alert(err.message),
     });
