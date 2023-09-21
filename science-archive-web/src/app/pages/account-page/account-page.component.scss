@@ -1,3 +1,7 @@
+.page-wrapper {
+  height: 100%;
+}
+
 .top-logo-wrapper {
   display: flex;
   flex-direction: row;
@@ -18,6 +22,36 @@
   width: 30px;
   height: 30px;
   cursor: pointer;
+}
+
+.page-content {
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+
+  nav {
+    display: flex;
+    flex-direction: column;
+    width: 200px;
+    box-shadow: 0 5px 10px 2px #9b9b9b4a;
+    height: 100%;
+  }
+}
+
+.menu-header {
+  margin-left: 15px;
+  margin-top: 20px;
+  margin-bottom: 30px;
+}
+
+.menu-element {
+  padding: 15px;
+  border-radius: 5px;
+
+  &:hover {
+    background-color: #f3f3f3;
+    cursor: pointer;
+  }
 }
 
 .main-content {

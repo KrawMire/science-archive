@@ -29,7 +29,7 @@ export class SignInFormComponent {
     this.authService.signIn(request).subscribe({
       next: (response) => {
         this.storageService.saveToken(response.token);
-        this.storageService.saveLogin(response.user.login);
+        this.storageService.saveCurrentUser(response.user);
         window.location.href = "/main";
       },
     });

@@ -3,7 +3,14 @@
     <img alt="Back" ngSrc="assets/icons/navigation-back-arrow.svg" class="back-button" routerLink="/main" height="800" width="800" />
     <h2>Science Archive Account</h2>
   </div>
-  <div class="main-content">
-    <router-outlet></router-outlet>
+  <div class="page-content">
+    <nav>
+      <h3 class="menu-header">Account</h3>
+      <span class="menu-element" routerLink="/account/profile">My Profile</span>
+      <span class="menu-element" routerLink="/account/my-articles">My Articles</span>
+    </nav>
+    <div class="main-content">
+      <router-outlet></router-outlet>
+    </div>
   </div>
 </div>

@@ -1,18 +1,17 @@
-import { Injectable } from "@angular/core";
-import { ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot, UrlTree } from "@angular/router";
-import { Observable } from "rxjs";
+import { inject } from "@angular/core";
+import { ActivatedRouteSnapshot, CanActivateFn, Router, RouterStateSnapshot } from "@angular/router";
 import { LocalStorageService } from "@services/local-storage.service";
 
-@Injectable({
-  providedIn: "root",
-})
-export class AuthGuard implements CanActivate {
-  constructor(private localStorageService: LocalStorageService) {}
-
-  canActivate(
-    route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot
-  ): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-    return !!this.localStorageService.getToken();
+export const isAuthorizedGuard: CanActivateFn = (
+  route: ActivatedRouteSnapshot,
+  state: RouterStateSnapshot,
+  localStorageService = inject(LocalStorageService),
+  router = inject(Router)
+) => {
+  if (!localStorageService.isLoggedIn()) {
+    alert("This resource is only for authorized users!");
+    return router.createUrlTree(["/auth"]);
   }
-}
+
+  return true;
+};
