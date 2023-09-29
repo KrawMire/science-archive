@@ -21,6 +21,7 @@ import { AdminPageComponent } from "@pages/admin-page/admin-page.component";
 import { NgOptimizedImage } from "@angular/common";
 import { ServiceWorkerModule } from "@angular/service-worker";
 import { environment } from "@environments/environment";
+import { AccountModule } from "@modules/account/account.module";
 
 @NgModule({
   imports: [
@@ -28,15 +29,16 @@ import { environment } from "@environments/environment";
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
+    NgOptimizedImage,
 
     // Other modules
     SharedModule,
     AuthModule,
+    AccountModule,
     ArticlesModule,
     AuthorsModule,
     CategoriesModule,
     NewsModule,
-    NgOptimizedImage,
     ServiceWorkerModule.register("ngsw-worker.js", {
       enabled: environment.production,
       registrationStrategy: "registerWhenStable:30000",

@@ -6,6 +6,7 @@ import { GetArticleByIdResponse } from "@models/article/responses/get-article-by
 import { GetAllArticlesResponse } from "@models/article/responses/get-all-articles.response";
 import { GetArticlesByCategoryIdResponse } from "@models/article/responses/get-articles-by-category-id.response";
 import { ApiService } from "@services/api.service";
+import { GetArticlesByAuthorIdResponse } from "@models/article/responses/get-articles-by-author-id.response";
 
 @Injectable({
   providedIn: "root",
@@ -23,6 +24,13 @@ export class ArticleService extends ApiService {
   getArticlesByCategoryId(categoryId: string): Observable<GetArticlesByCategoryIdResponse> {
     const response = this.httpClient.get<Response<GetArticlesByCategoryIdResponse>>(
       `/api/articles/by-category/${categoryId}`
+    );
+    return this.handleResponse(response);
+  }
+
+  getArticleByAuthorId(authorId: string): Observable<GetArticlesByAuthorIdResponse> {
+    const response = this.httpClient.get<Response<GetArticlesByAuthorIdResponse>>(
+      `/api/articles/by-author/${authorId}`
     );
     return this.handleResponse(response);
   }

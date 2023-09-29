@@ -1,1 +1,12 @@
 <h2>My Articles</h2>
+
+<div *ngIf="isLoading">
+  <p>Loading...</p>
+</div>
+
+<div *ngIf="!isLoading">
+  <app-my-article-card
+    *ngFor="let article of articles"
+    [article]="article"
+  />
+</div>

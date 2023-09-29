@@ -24,7 +24,7 @@ const routes: Routes = [
     children: [
       { path: "", pathMatch: "full", redirectTo: "profile" },
       { path: "profile", component: ProfilePageComponent },
-      { path: "my-articles", component: MyArticlesPageComponent },
+      { path: "articles", component: MyArticlesPageComponent },
     ],
   },
   {
