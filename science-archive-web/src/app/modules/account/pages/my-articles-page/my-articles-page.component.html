@@ -4,7 +4,7 @@
   <p>Loading...</p>
 </div>
 
-<div *ngIf="!isLoading">
+<div class="articles-container" *ngIf="!isLoading">
   <app-my-article-card
     *ngFor="let article of articles"
     [article]="article"
