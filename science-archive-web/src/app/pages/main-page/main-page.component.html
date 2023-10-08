@@ -114,6 +114,7 @@
   <div class="account-actions">
     <span class="account-action" routerLink="/account/profile">My Profile</span>
     <span class="account-action" routerLink="/account/articles">My Articles</span>
+    <span *ngIf="isAdmin" class="account-action" routerLink="/admin">Admin Panel</span>
     <span class="account-action sign-out-action" (click)="onSignOut()">Sign Out</span>
   </div>
 </app-side-drawer>

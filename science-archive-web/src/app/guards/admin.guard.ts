@@ -20,7 +20,7 @@ export const isAdminGuard: CanActivateFn = (
 
   return authService.checkAdmin(currentUser.id).pipe(
     map((response) => {
-      return response.isAdmin;
+      return response.isAdmin ? true : router.createUrlTree(["main", "articles"]);
     }),
     catchError(() => {
       alert("This resource is only for authorized administrators!");
