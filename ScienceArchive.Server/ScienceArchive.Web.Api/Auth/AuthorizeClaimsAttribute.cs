@@ -1,13 +1,12 @@
-using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using ScienceArchive.Core.Domain.Aggregates.User.ValueObjects;
-using ScienceArchive.Core.Repositories;
+using ScienceArchive.Application.Dtos.Auth.Request;
+using ScienceArchive.Application.Interfaces.Interactors;
 
 namespace ScienceArchive.Web.Api.Auth;
 
-[AttributeUsage(AttributeTargets.Method | AttributeTargets.Class, Inherited = true, AllowMultiple = true)]
+[AttributeUsage(AttributeTargets.Method | AttributeTargets.Class, AllowMultiple = true)]
 public class AuthorizeClaimsAttribute : AuthorizeAttribute, IAuthorizationFilter
 {
 	private readonly string[] _requiredClaims;
@@ -31,27 +30,29 @@ public class AuthorizeClaimsAttribute : AuthorizeAttribute, IAuthorizationFilter
 		}
 		
 		var userId = context.HttpContext.User.FindFirst("UserId")?.Value;
-		var roleRepository = context.HttpContext.RequestServices.GetService<IRoleRepository>();
+		var authInteractor = context.HttpContext.RequestServices.GetService<IAuthInteractor>();
 
-		if (roleRepository is null)
+		if (authInteractor is null)
 		{
-			throw new NullReferenceException("Cannot get role repository service");
+			throw new NullReferenceException("Cannot get auth interactor");
 		}
 
 		if (userId is null)
 		{
 			throw new NullReferenceException("Cannot get user ID from token");
 		}
-		
-		var userClaims = roleRepository.GetUserClaims(UserId.CreateFromString(userId)).Result;
-		
-		foreach (var requiredClaim in _requiredClaims)
+
+		var dto = new CheckUserClaimsRequestDto
 		{
-			if (!userClaims.Exists(uc => uc.Value == requiredClaim))
-			{
-				context.Result = new ForbidResult();
-				return;
-			}
+			UserId = userId,
+			RequiredClaims = _requiredClaims.ToList()
+		};
+		
+		var result = authInteractor.CheckUserClaims(dto).Result.Success;
+
+		if (!result)
+		{
+			context.Result = new ForbidResult();
 		}
 	}
 }
