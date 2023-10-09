@@ -5,9 +5,9 @@
 .top-logo-wrapper {
   display: flex;
   flex-direction: row;
-  background-color: #1B57CFFF;
+  background-color: #FFFFFF;
   padding: 5px;
-  color: #FFFFFF;
+  color: #1B57CFFF;
   height: 50px;
   line-height: 50px;
 
@@ -28,15 +28,16 @@
   display: flex;
   flex-direction: row;
   height: 100%;
-  background-color: #f7f9ff;
+  background-color: #ffffff;
 
   nav {
     display: flex;
     flex-direction: column;
     width: 300px;
-    box-shadow: 0 5px 10px 2px #9b9b9b4a;
     height: 100%;
-    background-color: #ffffff;
+    background-color: #1B57CFFF;
+    color: #ffffff;
+    border-radius: 0 50px 0 0;
   }
 }
 
@@ -55,14 +56,14 @@
   }
 
   &:hover {
-    background-color: #f3f3f3;
+    background-color: #0043cb;
     cursor: pointer;
   }
 }
 
 .main-content {
-  margin-top: 25px;
-  margin-left: 25px;
+  margin-top: 10px;
+  margin-left: 50px;
   width: 100%;
 }
 
