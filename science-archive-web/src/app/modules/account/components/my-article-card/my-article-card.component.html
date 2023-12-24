@@ -2,6 +2,11 @@
   class="article-card"
   (click)="onCardClick()"
 >
-  <h3 class="article-card-title">{{article.title}}</h3>
+  <div class="article-card-header">
+    <h3 class="article-card-title">{{article.title}}</h3>
+    <app-article-verification-badge
+      [status]="article.status"
+    />
+  </div>
   <p class="article-card-description">{{article.description}}</p>
 </div>

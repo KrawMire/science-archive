@@ -18,6 +18,7 @@
     <app-my-article-card
       *ngFor="let article of articles"
       [article]="article"
+      (selectArticle)="onArticleEditSelect($event)"
     />
   </div>
 </div>

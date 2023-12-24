@@ -10,6 +10,8 @@ import { GetArticlesByAuthorIdResponse } from "@models/article/responses/get-art
 import { Article } from "@models/article/article";
 import { CreateArticleResponse } from "@models/article/responses/create-article.response";
 import { CreateArticleRequest } from "@models/article/requests/create-article.request";
+import { UpdateArticleResponse } from "@models/article/responses/update-article.response";
+import { UpdateArticleRequest } from "@models/article/requests/update-article.request";
 
 @Injectable({
   providedIn: "root",
@@ -54,6 +56,13 @@ export class ArticleService extends ApiService {
     };
 
     const response = this.httpClient.post<Response<CreateArticleResponse>>("/api/articles/create", dto);
+    return this.handleResponse(response);
+  }
+
+  updateArticle(id: string, article: Article): Observable<UpdateArticleResponse> {
+    const dto: UpdateArticleRequest = { id, article };
+
+    const response = this.httpClient.post<Response<UpdateArticleResponse>>("/api/articles/update", dto);
     return this.handleResponse(response);
   }
 }

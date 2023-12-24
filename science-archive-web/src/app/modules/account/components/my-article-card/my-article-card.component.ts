@@ -1,6 +1,5 @@
-import { Component, Input } from "@angular/core";
+import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { Article } from "@models/article/article";
-import { Router } from "@angular/router";
 
 @Component({
   selector: "app-my-article-card",
@@ -9,10 +8,11 @@ import { Router } from "@angular/router";
 })
 export class MyArticleCardComponent {
   @Input() article!: Article;
+  @Output() selectArticle = new EventEmitter<Article>();
 
-  constructor(private readonly router: Router) {}
+  constructor() {}
 
   async onCardClick() {
-    // TODO Create logic for card click
+    this.selectArticle.emit(this.article);
   }
 }

@@ -1,4 +1,4 @@
-DROP FUNCTION "func_get_all_authors";
+DROP FUNCTION IF EXISTS "func_get_all_authors";
 
 CREATE OR REPLACE FUNCTION "func_get_all_authors" ()
 RETURNS TABLE

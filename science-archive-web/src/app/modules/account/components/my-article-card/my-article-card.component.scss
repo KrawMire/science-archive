@@ -6,6 +6,12 @@
   border-radius: 10px;
   cursor: pointer;
 
+  &-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
   &-description {
     font-size: 0.85em;
     color: #6c6c6c;
