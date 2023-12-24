@@ -3,6 +3,7 @@ package handlers
 import (
 	"github.com/gin-gonic/gin"
 	"log"
+	"net/http"
 	"science-archive/doc-store-api/internal/api/dtos"
 	"science-archive/doc-store-api/internal/api/dtos/storage/response_dtos"
 	"science-archive/doc-store-api/internal/core/serivces"
@@ -18,6 +19,28 @@ func NewStorageHandler(service serivces.StorageService) *StorageHandler {
 	}
 }
 
+func (d *StorageHandler) GetDocument(c *gin.Context) {
+	docName := c.Param("docName")
+
+	if docName == "" {
+		c.IndentedJSON(400, dtos.Response{Success: false, Error: "Document name is not presented"})
+	}
+
+	result, err := d.storageService.GetDocument(docName)
+
+	if err != nil {
+		errorStr := "Error occurred while getting document"
+
+		log.Println(errorStr, err)
+		c.IndentedJSON(400, dtos.Response{Success: false, Error: errorStr})
+		return
+	}
+
+	c.Header("Content-Disposition", "inline; filename="+docName)
+
+	c.Data(http.StatusOK, "application/pdf", result)
+}
+
 func (d *StorageHandler) UploadDocument(c *gin.Context) {
 	fileHeader, err := c.FormFile("document")
 
@@ -29,23 +52,11 @@ func (d *StorageHandler) UploadDocument(c *gin.Context) {
 		return
 	}
 
-	file, err := fileHeader.Open()
+	path, err := d.storageService.UploadDocument(fileHeader)
 
 	if err != nil {
-		errorStr := "Could not read file"
-
-		log.Println(errorStr, err)
-		c.IndentedJSON(400, dtos.Response{Success: false, Error: errorStr})
-		return
-	}
-
-	path, err := d.storageService.UploadDocument(file)
-
-	if err != nil {
-		errorStr := "An error occurred while uploading document"
-
-		log.Println(errorStr, err)
-		c.IndentedJSON(400, dtos.Response{Success: false, Error: errorStr})
+		log.Println("Error while uploading file", err)
+		c.IndentedJSON(400, dtos.Response{Success: false, Error: err.Error()})
 		return
 	}
 

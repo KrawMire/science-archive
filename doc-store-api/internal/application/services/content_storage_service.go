@@ -1,8 +1,10 @@
 package services
 
 import (
+	"errors"
 	"github.com/google/uuid"
-	"io"
+	"mime/multipart"
+	"path/filepath"
 	"science-archive/doc-store-api/internal/core/repositories"
 )
 
@@ -16,7 +18,32 @@ func NewContentStorageService(repository repositories.StorageRepository) *Conten
 	}
 }
 
-func (s *ContentStorageService) UploadDocument(file io.Reader) (string, error) {
+func (s *ContentStorageService) GetDocument(filename string) ([]byte, error) {
+	result, err := s.storageRepository.GetDocument(filename)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return result, nil
+}
+
+func (s *ContentStorageService) UploadDocument(fileHeader *multipart.FileHeader) (string, error) {
 	id := uuid.New().String()
-	return s.storageRepository.UploadDocument(file, id)
+
+	file, err := fileHeader.Open()
+
+	if err != nil {
+		return "", errors.New("cannot read file")
+	}
+
+	fileExtension := filepath.Ext(fileHeader.Filename)
+
+	if fileExtension != ".pdf" {
+		return "", errors.New("file can be only in PDF format")
+	}
+
+	filename := id + fileExtension
+
+	return s.storageRepository.UploadDocument(file, filename)
 }
