@@ -12,6 +12,7 @@ import { CreateArticleResponse } from "@models/article/responses/create-article.
 import { CreateArticleRequest } from "@models/article/requests/create-article.request";
 import { UpdateArticleResponse } from "@models/article/responses/update-article.response";
 import { UpdateArticleRequest } from "@models/article/requests/update-article.request";
+import { DeleteArticleResponse } from "@models/article/responses/delete-article.response";
 
 @Injectable({
   providedIn: "root",
@@ -63,6 +64,11 @@ export class ArticleService extends ApiService {
     const dto: UpdateArticleRequest = { id, article };
 
     const response = this.httpClient.post<Response<UpdateArticleResponse>>("/api/articles/update", dto);
+    return this.handleResponse(response);
+  }
+
+  deleteArticle(id: string): Observable<DeleteArticleResponse> {
+    const response = this.httpClient.delete<Response<DeleteArticleResponse>>(`/api/articles/${id}`);
     return this.handleResponse(response);
   }
 }

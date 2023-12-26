@@ -1,12 +1,28 @@
-<div
-  class="article-card"
-  (click)="onCardClick()"
->
+<div class="article-card">
   <div class="article-card-header">
-    <h3 class="article-card-title">{{article.title}}</h3>
+    <h3
+      class="article-card-title"
+      [routerLink]="['/main', 'articles', article.id]"
+    >
+      {{article.title}}
+    </h3>
     <app-article-verification-badge
       [status]="article.status"
     />
   </div>
   <p class="article-card-description">{{article.description}}</p>
+
+  <div class="action-buttons-block">
+    <app-action-button
+      (onClick)="onEditClick()"
+    >
+      Edit
+    </app-action-button>
+    <app-action-button
+      style="margin-left: 5px"
+      (onClick)="onDeleteClick()"
+    >
+      Delete
+    </app-action-button>
+  </div>
 </div>

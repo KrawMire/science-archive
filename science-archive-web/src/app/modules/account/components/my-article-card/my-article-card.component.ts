@@ -9,10 +9,15 @@ import { Article } from "@models/article/article";
 export class MyArticleCardComponent {
   @Input() article!: Article;
   @Output() selectArticle = new EventEmitter<Article>();
+  @Output() selectArticleToDelete = new EventEmitter<Article>();
 
   constructor() {}
 
-  async onCardClick() {
+  onEditClick() {
     this.selectArticle.emit(this.article);
+  }
+
+  onDeleteClick() {
+    this.selectArticleToDelete.emit(this.article);
   }
 }

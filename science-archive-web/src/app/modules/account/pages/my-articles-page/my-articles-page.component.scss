@@ -62,3 +62,16 @@
     cursor: pointer;
   }
 }
+
+.delete-modal-content {
+  padding: 20px;
+
+  &-description {
+    margin-top: 20px;
+    font-size: 0.9em;
+  }
+}
+
+.delete-modal-buttons-block {
+  margin-top: 20px;
+}

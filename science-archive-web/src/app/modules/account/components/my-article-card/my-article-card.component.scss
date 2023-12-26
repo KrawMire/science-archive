@@ -4,12 +4,12 @@
   padding: 30px;
   background-color: #ffffff;
   border-radius: 10px;
-  cursor: pointer;
 
   &-header {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    cursor: pointer;
   }
 
   &-description {
@@ -17,4 +17,10 @@
     color: #6c6c6c;
     margin-top: 10px;
   }
+}
+
+.action-buttons-block {
+  display: flex;
+  flex-direction: row;
+  margin-top: 15px;
 }

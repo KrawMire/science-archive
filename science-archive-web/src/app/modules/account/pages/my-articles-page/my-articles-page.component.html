@@ -2,7 +2,7 @@
   <div class="page-header">
     <h2>My Articles</h2>
     <app-action-button
-      (onClick)="onCreateClick()"
+      (onClick)="onCreateNewClick()"
     >Create</app-action-button>
   </div>
 
@@ -19,6 +19,7 @@
       *ngFor="let article of articles"
       [article]="article"
       (selectArticle)="onArticleEditSelect($event)"
+      (selectArticleToDelete)="onDeleteArticleSelect($event)"
     />
   </div>
 </div>
@@ -66,5 +67,30 @@
       class="save-button" (click)="onSaveClick()">
       {{createNew ? "Create" : "Save"}}
     </button>
+  </div>
+</app-modal-window>
+
+<app-modal-window
+  [isShown]="showDeleteModal"
+  (onClose)="onDeleteModalClose()"
+>
+  <div class="delete-modal-content">
+    <h3>Delete confirmation</h3>
+    <p class="delete-modal-content-description">
+      Are you sure to delete article "{{articleToDelete?.title}}"?
+    </p>
+    <div class="delete-modal-buttons-block">
+      <app-action-button
+        (onClick)="onDeleteModalClose()"
+      >
+        Cancel
+      </app-action-button>
+      <app-action-button
+        (onClick)="onDeleteArticle()"
+        style="margin-left: 5px"
+      >
+        Delete
+      </app-action-button>
+    </div>
   </div>
 </app-modal-window>

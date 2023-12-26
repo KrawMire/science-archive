@@ -12,7 +12,7 @@ import { Router } from "@angular/router";
 })
 export class AdminNewsPageComponent implements OnInit {
   news: News[] = [];
-  isLoading = false;
+  isLoading = true;
   showModal = false;
 
   newNews!: News;

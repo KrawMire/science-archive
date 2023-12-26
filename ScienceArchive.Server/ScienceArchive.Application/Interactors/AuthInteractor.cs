@@ -77,14 +77,11 @@ internal class AuthInteractor : IAuthInteractor
         var getClaimsContract = new GetUserClaimsContract(UserId.CreateFromString(dto.UserId));
         var userClaims = await _roleService.GetUserClaims(getClaimsContract);
         
-        foreach (var requiredClaim in dto.RequiredClaims)
+        if (dto.RequiredClaims.Any(requiredClaim => !userClaims.Exists(uc => uc.Value == requiredClaim)))
         {
-            if (!userClaims.Exists(uc => uc.Value == requiredClaim))
-            {
-                return new(false);
-            }
+            return new CheckUserClaimsResponseDto(false);
         }
 
-        return new(true);
+        return new CheckUserClaimsResponseDto(true);
     }
 }

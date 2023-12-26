@@ -15,10 +15,13 @@ import { IdentifiedUser } from "@models/user/identified-user";
 export class MyArticlesPageComponent implements OnInit {
   isLoading = true;
   showEditModal = false;
-  articles: Article[] = [];
-  categories: Category[] = [];
+  showDeleteModal = false;
   createNew = false;
 
+  articles: Article[] = [];
+  categories: Category[] = [];
+
+  articleToDelete: Article | null = null;
   currentArticle!: Article;
   selectedCategory: Category | null = null;
 
@@ -51,10 +54,10 @@ export class MyArticlesPageComponent implements OnInit {
       error: (err) => alert(err),
     });
 
-    this.currentArticle = this.getEmptyArticle();
+    this.currentArticle = this.createEmptyArticle();
   }
 
-  getEmptyArticle(): Article {
+  createEmptyArticle(): Article {
     return {
       title: "",
       description: "",
@@ -71,10 +74,10 @@ export class MyArticlesPageComponent implements OnInit {
     this.showEditModal = true;
   }
 
-  onCreateClick() {
+  onCreateNewClick() {
     this.showEditModal = true;
     this.createNew = true;
-    this.currentArticle = this.getEmptyArticle();
+    this.currentArticle = this.createEmptyArticle();
   }
 
   onEditModalClose() {
@@ -82,9 +85,33 @@ export class MyArticlesPageComponent implements OnInit {
     this.createNew = false;
   }
 
+  onDeleteModalClose() {
+    this.showDeleteModal = false;
+    this.articleToDelete = null;
+  }
+
+  onDeleteArticleSelect(article: Article) {
+    this.showDeleteModal = true;
+    this.articleToDelete = article;
+  }
+
+  onDeleteArticle() {
+    if (!this.articleToDelete) {
+      alert("Article to delete is not presented");
+      return;
+    }
+
+    this.articleService.deleteArticle(this.articleToDelete!.id!).subscribe({
+      complete: () => this.ngOnInit(),
+      next: () => (this.showDeleteModal = false),
+      error: (err) => alert(err),
+    });
+  }
+
   onSaveClick() {
     if (this.createNew) {
       this.articleService.createArticle(this.currentArticle).subscribe({
+        complete: () => this.ngOnInit(),
         next: () => (this.showEditModal = false),
         error: (err) => alert(err),
       });
@@ -95,6 +122,7 @@ export class MyArticlesPageComponent implements OnInit {
       }
 
       this.articleService.updateArticle(this.currentArticle.id, this.currentArticle).subscribe({
+        complete: () => this.ngOnInit(),
         next: () => (this.showEditModal = false),
         error: (err) => alert(err),
       });

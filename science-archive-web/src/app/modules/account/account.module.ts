@@ -7,9 +7,10 @@ import { MyArticleCardComponent } from "./components/my-article-card/my-article-
 
 import SharedModule from "@modules/shared/shared.module";
 import { FormsModule } from "@angular/forms";
+import { RouterLink } from "@angular/router";
 
 @NgModule({
-  imports: [CommonModule, SharedModule, FormsModule],
+  imports: [CommonModule, SharedModule, FormsModule, RouterLink, SharedModule],
   declarations: [ProfilePageComponent, MyArticlesPageComponent, ProfileDataFieldComponent, MyArticleCardComponent],
 })
 export class AccountModule {}

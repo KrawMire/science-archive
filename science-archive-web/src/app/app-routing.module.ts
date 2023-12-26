@@ -16,6 +16,7 @@ import { MyArticlesPageComponent } from "@modules/account/pages/my-articles-page
 import { AdminPageComponent } from "@pages/admin-page/admin-page.component";
 import { isAuthorizedGuard } from "./guards/auth.guard";
 import { isAdminGuard } from "./guards/admin.guard";
+import { AdminArticlesPageComponent } from "@modules/admin/pages/admin-articles-page/admin-articles-page.component";
 
 const routes: Routes = [
   { path: "", pathMatch: "full", redirectTo: "main" },
@@ -28,7 +29,8 @@ const routes: Routes = [
     component: AdminPageComponent,
     canActivate: [isAdminGuard],
     children: [
-      { path: "", pathMatch: "full", redirectTo: "news" },
+      { path: "", pathMatch: "full", redirectTo: "articles" },
+      { path: "articles", component: AdminArticlesPageComponent },
       { path: "news", component: AdminNewsPageComponent },
     ],
   },
