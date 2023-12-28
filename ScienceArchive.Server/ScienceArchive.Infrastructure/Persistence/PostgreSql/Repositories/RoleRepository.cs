@@ -49,7 +49,7 @@ internal class PostgresRoleRepository : IRoleRepository
         parameters.Add("Id", id.Value);
 
         var role = await _connection.QuerySingleOrDefaultAsync<RoleModel?>(
-            "SELECT * FROM func_get_role_by_id(@Id)",
+            "SELECT * FROM func_get_role_by_id(@Id::uuid)",
             parameters,
             commandType: CommandType.Text);
 
@@ -63,7 +63,7 @@ internal class PostgresRoleRepository : IRoleRepository
         parameters.Add("UserId", userId.Value);
 
         var claims = await _connection.QueryAsync<ClaimModel>(
-            "SELECT * FROM func_get_claims_by_user_id(@UserId)",
+            "SELECT * FROM func_get_claims_by_user_id(@UserId::uuid)",
             parameters,
             commandType: CommandType.Text);
 
@@ -81,8 +81,14 @@ internal class PostgresRoleRepository : IRoleRepository
         var roleToCreate = _roleMapper.MapToModel(newValue);
         var parameters = new DynamicParameters(roleToCreate);
 
+        var sql = @"SELECT * FROM func_create_role(
+            @Id::uuid, 
+            @Name::varchar(255), 
+            @Description::varchar(255), 
+            @ClaimsIds::uuid[])"; 
+        
         var createdRole = await _connection.QuerySingleOrDefaultAsync<RoleModel>(
-            "SELECT * FROM func_create_role(@Id, @Name, @Description, @ClaimsIds)",
+            sql,
             parameters,
             commandType: CommandType.Text);
 
@@ -101,7 +107,7 @@ internal class PostgresRoleRepository : IRoleRepository
         parameters.Add("Id", id.Value);
 
         var deletedRoleId = await _connection.QuerySingleOrDefaultAsync<Guid>(
-            "SELECT * FROM func_delete_role(@Id)",
+            "SELECT * FROM func_delete_role(@Id::uuid)",
             parameters,
             commandType: CommandType.Text);
 
@@ -120,8 +126,14 @@ internal class PostgresRoleRepository : IRoleRepository
         var parameters = new DynamicParameters(roleToUpdate);
         parameters.Add("Id", id.Value);
 
+        var sql = @"SELECT * FROM func_update_role(
+            @Id::uuid,
+            @Name::varchar(255), 
+            @Description::varchar(255), 
+            @ClaimsIds::uuid[])";
+        
         var updatedRole = await _connection.QuerySingleOrDefaultAsync<RoleModel>(
-            "SELECT * FROM func_update_role(@Id, @Name, @Description, @ClaimsIds)",
+            sql,
             parameters,
             commandType: CommandType.Text);
 

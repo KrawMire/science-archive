@@ -58,7 +58,7 @@ internal class PostgresArticleRepository : IArticleRepository
         parameters.Add("CategoryId", categoryId.Value);
 
         var articles = await _connection.QueryAsync<ArticleModel>(
-            "SELECT * FROM func_get_verified_articles_by_category_id(@CategoryId)",
+            "SELECT * FROM func_get_verified_articles_by_category_id(@CategoryId::uuid)",
             parameters,
             commandType: CommandType.Text);
 
@@ -76,7 +76,7 @@ internal class PostgresArticleRepository : IArticleRepository
         parameters.Add("UserId", userId.Value);
 
         var articles = await _connection.QueryAsync<ArticleModel>(
-            "SELECT * FROM func_get_articles_by_author_id(@UserId)",
+            "SELECT * FROM func_get_articles_by_author_id(@UserId::uuid)",
             parameters,
             commandType: CommandType.Text);
 
@@ -94,7 +94,7 @@ internal class PostgresArticleRepository : IArticleRepository
         parameters.Add("UserId", userId.Value);
 
         var articles = await _connection.QueryAsync<ArticleModel>(
-            "SELECT * FROM func_get_verified_articles_by_author_id(@UserId)",
+            "SELECT * FROM func_get_verified_articles_by_author_id(@UserId::uuid)",
             parameters,
             commandType: CommandType.Text);
 
@@ -112,7 +112,7 @@ internal class PostgresArticleRepository : IArticleRepository
         parameters.Add("Id", id.Value);
 
         var article = await _connection.QueryFirstOrDefaultAsync<ArticleModel?>(
-            "SELECT * FROM func_get_article_by_id(@Id)",
+            "SELECT * FROM func_get_article_by_id(@Id::uuid)",
             parameters,
             commandType: CommandType.Text);
 
@@ -125,8 +125,18 @@ internal class PostgresArticleRepository : IArticleRepository
         var parameters = new DynamicParameters(articleToCreate);
         parameters.Add("Documents", JsonSerializer.Serialize(articleToCreate.Documents));
 
+        var sql = @"SELECT * FROM func_create_article(
+            @Id::uuid, 
+            @CategoryId::uuid, 
+            @Title::varchar(255), 
+            @Description, 
+            @CreationDate, 
+            @AuthorsIds, 
+            @Documents::jsonb, 
+            @Status)";
+        
         var createdArticle = await _connection.QueryFirstOrDefaultAsync<ArticleModel>(
-            "SELECT * FROM func_create_article(:Id, :CategoryId, :Title, :Description, :CreationDate, :AuthorsIds, :Documents::jsonb, :Status)",
+            sql,
             parameters,
             commandType: CommandType.Text);
         
@@ -145,8 +155,17 @@ internal class PostgresArticleRepository : IArticleRepository
         parameters.Add("Id", id.Value);
         parameters.Add("Documents", JsonSerializer.Serialize(articleToUpdate.Documents));
 
+        var sql = @"SELECT * FROM func_update_article(
+            @Id::uuid,
+            @CategoryId::uuid, 
+            @Title::varchar(255), 
+            @Description::text, 
+            @AuthorsIds::uuid[], 
+            @Documents::jsonb, 
+            @Status::int)";
+        
         var updatedArticle = await _connection.QueryFirstOrDefaultAsync<ArticleModel>(
-            "SELECT * FROM func_update_article(:Id, :CategoryId, :Title, :Description, :AuthorsIds, :Documents::jsonb, :Status)",
+            sql,
             parameters,
             commandType: CommandType.Text);
 
@@ -164,7 +183,7 @@ internal class PostgresArticleRepository : IArticleRepository
         parameters.Add("Id", id.Value);
 
         var deletedArticleId = await _connection.QueryFirstOrDefaultAsync<Guid>(
-            "SELECT * FROM func_delete_article(@Id)",
+            "SELECT * FROM func_delete_article(@Id::uuid)",
             parameters,
             commandType: CommandType.Text);
 

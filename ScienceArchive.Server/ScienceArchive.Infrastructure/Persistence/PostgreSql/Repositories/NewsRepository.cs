@@ -42,7 +42,7 @@ internal class PostgresNewsRepository : INewsRepository
         parameters.Add("Id", id.Value);
 
         var news = await _connection.QueryFirstOrDefaultAsync<NewsModel?>(
-            "SELECT * FROM func_get_news_by_id(@Id)",
+            "SELECT * FROM func_get_news_by_id(@Id::uuid)",
             parameters,
             commandType: CommandType.Text);
 
@@ -54,8 +54,15 @@ internal class PostgresNewsRepository : INewsRepository
         var newsToCreate = _mapper.MapToModel(newValue);
         var parameters = new DynamicParameters(newsToCreate);
 
+        var sql = @"SELECT * FROM func_create_news(
+            @Id::uuid, 
+            @Title::varchar(255), 
+            @Body::text, 
+            @AuthorId::uuid, 
+            @CreationDate::timestamp)";
+        
         var createdNews = await _connection.QueryFirstOrDefaultAsync<NewsModel>(
-            "SELECT * FROM func_create_news(:Id, :Title::varchar, :Body, :AuthorId, :CreationDate::timestamp)",
+            sql,
             parameters,
             commandType: CommandType.Text);
 
@@ -73,7 +80,7 @@ internal class PostgresNewsRepository : INewsRepository
         parameters.Add("Id", id.Value);
 
         var deletedNewsId = await _connection.QueryFirstOrDefaultAsync<Guid>(
-            "SELECT * FROM func_delete_news(@Id)",
+            "SELECT * FROM func_delete_news(@Id::uuid)",
             parameters,
             commandType: CommandType.Text);
 
@@ -91,8 +98,13 @@ internal class PostgresNewsRepository : INewsRepository
         var parameters = new DynamicParameters(newsToUpdate);
         parameters.Add("Id", id.Value);
 
+        var sql = @"SELECT * FROM func_update_news(
+            @Id::uuid, 
+            @Title::varchar(255), 
+            @Body::text)";
+        
         var updatedNews = await _connection.QueryFirstOrDefaultAsync<NewsModel>(
-            "SELECT * FROM func_update_news(@Id, @Title, @Body)",
+            sql,
             parameters,
             commandType: CommandType.Text);
 

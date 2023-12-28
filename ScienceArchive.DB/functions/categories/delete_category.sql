@@ -1,3 +1,5 @@
+DROP FUNCTION IF EXISTS "func_delete_category";
+
 CREATE OR REPLACE FUNCTION "func_delete_category" (
   "p_id"   UUID
 )

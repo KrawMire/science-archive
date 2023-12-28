@@ -1,3 +1,5 @@
+DROP FUNCTION IF EXISTS "func_get_all_roles";
+
 CREATE OR REPLACE FUNCTION "func_get_all_roles" ()
 RETURNS TABLE (
   "id"           UUID,

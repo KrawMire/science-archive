@@ -33,7 +33,7 @@ internal class PostgresCategoryRepository : ICategoryRepository
 		parameters.Add("Id", id.Value);
 
 		var category = await _connection.QueryFirstOrDefaultAsync<CategoryModel?>(
-			"SELECT * FROM func_get_category_by_id(:Id)",
+			"SELECT * FROM func_get_category_by_id(@Id::uuid)",
 			parameters,
 			commandType: CommandType.Text);
 
@@ -77,7 +77,7 @@ internal class PostgresCategoryRepository : ICategoryRepository
 		parameters.Add("Id", subcategoryId.Value);
 
 		var subcategory = await _connection.QueryFirstOrDefaultAsync<SubcategoryModel?>(
-			"SELECT * FROM func_get_subcategory_by_id(:Id)",
+			"SELECT * FROM func_get_subcategory_by_id(@Id::uuid)",
 			parameters,
 			commandType: CommandType.Text);
 

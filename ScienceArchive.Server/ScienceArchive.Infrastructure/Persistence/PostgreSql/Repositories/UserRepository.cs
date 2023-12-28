@@ -33,7 +33,7 @@ internal class PostgresUserRepository : IUserRepository
         parameters.Add("Id", id.Value);
 
         var user = await _connection.QuerySingleOrDefaultAsync<UserModel?>(
-            "SELECT * FROM func_get_user_by_id(@Id)", 
+            "SELECT * FROM func_get_user_by_id(@Id::uuid)", 
             parameters, 
             commandType: CommandType.Text);
 
@@ -62,7 +62,7 @@ internal class PostgresUserRepository : IUserRepository
         parameters.Add("Login", login);
 
         var user = await _connection.QuerySingleOrDefaultAsync<UserModel?>(
-            "SELECT * FROM func_get_auth_user_by_login(@Login)", 
+            "SELECT * FROM func_get_auth_user_by_login(@Login::varchar(255))", 
             parameters, 
             commandType: CommandType.Text);
 
@@ -90,8 +90,17 @@ internal class PostgresUserRepository : IUserRepository
         var userToCreate = _userMapper.MapToModel(newUser);
         var parameters = new DynamicParameters(userToCreate);
 
+        var sql = @"SELECT * FROM func_create_user(
+            @Id::uuid, 
+            @Name::varchar(100), 
+            @Email::varchar(50), 
+            @Login::varchar(30), 
+            @Password::varchar(255), 
+            @PasswordSalt::varchar(255), 
+            @RolesIds::uuid[])";
+        
         var createdUser = await _connection.QuerySingleOrDefaultAsync<UserModel>(
-            "SELECT * FROM func_create_user(@Id, @Name, @Email, @Login, @Password, @PasswordSalt, @RolesIds)",
+            sql,
             parameters,
             commandType: CommandType.Text);
 
@@ -110,8 +119,17 @@ internal class PostgresUserRepository : IUserRepository
         var parameters = new DynamicParameters(userToUpdate);
         parameters.Add("Id", id.Value);
 
+        var sql = @"SELECT * FROM func_update_user(
+            @Id::uuid, 
+            @Name::varchar(100), 
+            @Email::varchar(50), 
+            @Login::varchar(30), 
+            @Password::varchar(255), 
+            @PasswordSalt::varchar(255), 
+            @RolesIds::uuid[])";
+        
         var updatedUser = await _connection.QuerySingleOrDefaultAsync<UserModel>(
-            "SELECT * FROM func_update_user(@Id, @Name, @Email, @Login, @Password, @PasswordSalt, @RolesIds)",
+            sql,
             parameters,
             commandType: CommandType.Text
         );
@@ -131,7 +149,7 @@ internal class PostgresUserRepository : IUserRepository
         parameters.Add("Id", id.Value);
 
         var deletedUserId = await _connection.QuerySingleOrDefaultAsync<Guid>(
-            "SELECT * FROM func_delete_user(@Id)",
+            "SELECT * FROM func_delete_user(@Id::uuid)",
             parameters,
             commandType: CommandType.Text
         );
