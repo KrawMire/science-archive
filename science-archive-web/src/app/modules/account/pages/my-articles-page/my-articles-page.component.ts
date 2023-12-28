@@ -6,6 +6,7 @@ import { Router } from "@angular/router";
 import { Category } from "@models/category/category";
 import { CategoryService } from "@services/category.service";
 import { IdentifiedUser } from "@models/user/identified-user";
+import { DocumentStorageService } from "@services/document-storage.service";
 
 @Component({
   selector: "app-my-articles-page",
@@ -31,7 +32,8 @@ export class MyArticlesPageComponent implements OnInit {
     private router: Router,
     private localStorageService: LocalStorageService,
     private articleService: ArticleService,
-    private categoryService: CategoryService
+    private categoryService: CategoryService,
+    private documentStorageService: DocumentStorageService
   ) {
     this.currentUser = this.localStorageService.getCurrentUser();
   }
@@ -106,6 +108,31 @@ export class MyArticlesPageComponent implements OnInit {
       next: () => (this.showDeleteModal = false),
       error: (err) => alert(err),
     });
+  }
+
+  onArticleDocumentUpload(event: any) {
+    const files = event.target?.files;
+
+    if (!files || files.length === 0) {
+      alert("No file was presented");
+      return;
+    }
+
+    const fileToUpload = files[0] as File;
+
+    if (!fileToUpload) {
+      alert("No file was presented");
+      return;
+    }
+
+    this.documentStorageService.uploadDocument(fileToUpload).subscribe({
+      next: (res) => this.currentArticle.documentsPaths.push(res.path),
+      error: (err) => alert(err),
+    });
+  }
+
+  onRemoveDocument(path: string) {
+    this.currentArticle.documentsPaths = this.currentArticle.documentsPaths.filter((p) => p !== path);
   }
 
   onSaveClick() {

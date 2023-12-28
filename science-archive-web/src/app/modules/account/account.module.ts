@@ -10,7 +10,7 @@ import { FormsModule } from "@angular/forms";
 import { RouterLink } from "@angular/router";
 
 @NgModule({
-  imports: [CommonModule, SharedModule, FormsModule, RouterLink, SharedModule],
+  imports: [CommonModule, SharedModule, FormsModule, RouterLink],
   declarations: [ProfilePageComponent, MyArticlesPageComponent, ProfileDataFieldComponent, MyArticleCardComponent],
 })
 export class AccountModule {}

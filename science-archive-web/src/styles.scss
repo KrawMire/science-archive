@@ -3,8 +3,13 @@
   src: url('./assets/fonts/MerriweatherSans.ttf');
 }
 
+@font-face {
+  font-family: 'Golos';
+  src: url('./assets/fonts/golos-text_vf.ttf');
+}
+
 * {
-  font-family: 'Merriweather', serif;
+  font-family: 'Merriweather', 'Golos', serif;
   margin: 0;
   padding: 0;
 }
