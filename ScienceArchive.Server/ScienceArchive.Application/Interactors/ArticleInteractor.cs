@@ -35,12 +35,22 @@ internal class ArticleInteractor : IArticleInteractor
         _categoryMapper = categoryMapper ?? throw new ArgumentNullException(nameof(categoryMapper));
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public async Task<GetAllArticlesResponseDto> GetAllArticles(GetAllArticlesRequestDto dto)
+    {
+        var contract = new GetAllArticlesContract();
+        var articles = await _articleService.GetAll(contract);
+        var articlesDtos = articles.Select(_articleMapper.MapToDto).ToList();
+
+        return new GetAllArticlesResponseDto(articlesDtos);
+    }
+
+    /// <inheritdoc/>
+    public async Task<GetAllArticlesResponseDto> GetAllVerifiedArticles(GetAllVerifiedArticlesRequestDto dto)
     {
         var contract = new GetAllVerifiedArticlesContract();
         var articles = await _articleService.GetAllVerified(contract);
-        var articlesDtos = articles.Select(article => _articleMapper.MapToDto(article)).ToList();
+        var articlesDtos = articles.Select(_articleMapper.MapToDto).ToList();
 
         return new(articlesDtos);
     }

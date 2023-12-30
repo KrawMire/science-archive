@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using ScienceArchive.Application.Dtos.Article.Request;
 using ScienceArchive.Application.Interfaces.Interactors;
+using ScienceArchive.Web.Api.Auth;
 using ScienceArchive.Web.Api.Responses;
 using ScienceArchive.Web.Api.Utils;
 
@@ -71,12 +72,22 @@ public class ArticleController : ControllerBase
         return new SuccessResponse(result);
     }
 
-    [HttpGet]
+    [HttpGet("all")]
+    [AuthorizeClaims("ADMIN")]
     public async Task<Response> GetAll()
     {
         var emptyRequest = new GetAllArticlesRequestDto();
-
         var result = await _articleInteractor.GetAllArticles(emptyRequest);
+
+        return new SuccessResponse(result);
+    }
+    
+    [HttpGet]
+    public async Task<Response> GetAllVerified()
+    {
+        var emptyRequest = new GetAllVerifiedArticlesRequestDto();
+
+        var result = await _articleInteractor.GetAllVerifiedArticles(emptyRequest);
         return new SuccessResponse(result);
     }
     

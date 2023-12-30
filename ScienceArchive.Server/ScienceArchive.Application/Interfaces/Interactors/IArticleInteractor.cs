@@ -9,11 +9,18 @@ namespace ScienceArchive.Application.Interfaces.Interactors;
 public interface IArticleInteractor
 {
     /// <summary>
-    /// Get all articles
+    /// Get all articles: verified and not
     /// </summary>
     /// <param name="dto">DTO contract to get all articles</param>
-    /// <returns>Response DTO</returns>
+    /// <returns></returns>
     Task<GetAllArticlesResponseDto> GetAllArticles(GetAllArticlesRequestDto dto);
+    
+    /// <summary>
+    /// Get all articles
+    /// </summary>
+    /// <param name="dto">DTO contract to get all verified articles</param>
+    /// <returns>Response DTO</returns>
+    Task<GetAllArticlesResponseDto> GetAllVerifiedArticles(GetAllVerifiedArticlesRequestDto dto);
 
     /// <summary>
     /// Get articles with specified author ID
