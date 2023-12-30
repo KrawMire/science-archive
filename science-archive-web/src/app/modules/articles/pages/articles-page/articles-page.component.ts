@@ -30,7 +30,7 @@ export class ArticlesPageComponent implements OnInit {
   }
 
   private getAllArticles() {
-    this.articleService.getAllArticles().subscribe({
+    this.articleService.getAllVerifiedArticles().subscribe({
       complete: () => (this.isLoading = false),
       next: (response) => (this.articles = response.articles),
       error: (err) => alert(err.message),

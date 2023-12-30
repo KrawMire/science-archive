@@ -3,8 +3,56 @@
     <h2 class="page-header">Articles</h2>
   </div>
   <div class="articles-container">
-    <div *ngIf="isLoading">
+    <div *ngIf="isLoading else articlesList">
       Loading...
     </div>
+
+    <ng-template #articlesList>
+      <app-admin-article-card
+        *ngFor="let article of articles"
+        [article]="article"
+        (articleSelect)="onArticleClick($event)"
+        style="margin-top: 10px"
+      />
+    </ng-template>
   </div>
 </div>
+
+<app-modal-window
+  [isShown]="showArticleModal"
+  (onClose)="onArticleModalClose()"
+>
+  <div class="modal-content-container">
+    <p *ngIf="isLoadingCurrentArticle">
+      Loading...
+    </p>
+
+    <p *ngIf="!currentArticle">
+      Article was not found
+    </p>
+
+    <div *ngIf="currentArticle">
+      <h2>{{currentArticle!.title}}</h2>
+      <p class="block-text">{{currentArticle!.description}}</p>
+      <p class="block-text">Attached Files:</p>
+
+      <p *ngIf="currentArticle!.documentsPaths.length === 0 else pathsBlock">
+        No attached documents
+      </p>
+      <ng-template #pathsBlock>
+        <p
+          (click)="openAttachedFile(path)"
+          *ngFor="let path of currentArticle!.documentsPaths"
+          class="doc-path"
+        >
+          {{path}}
+        </p>
+      </ng-template>
+      <div class="action-buttons-block">
+        <app-action-button (onClick)="onDeclineClick()">Decline</app-action-button>
+        <app-action-button (onClick)="onApproveClick()" style="margin-left: 5px">Approve</app-action-button>
+      </div>
+    </div>
+  </div>
+</app-modal-window>
+

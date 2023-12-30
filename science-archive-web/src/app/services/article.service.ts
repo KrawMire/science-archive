@@ -13,6 +13,10 @@ import { CreateArticleRequest } from "@models/article/requests/create-article.re
 import { UpdateArticleResponse } from "@models/article/responses/update-article.response";
 import { UpdateArticleRequest } from "@models/article/requests/update-article.request";
 import { DeleteArticleResponse } from "@models/article/responses/delete-article.response";
+import { ApproveArticleResponse } from "@models/article/responses/approve-article.response";
+import { DeclineArticleResponse } from "@models/article/responses/decline-article.response";
+import { ApproveArticleRequest } from "@models/article/requests/approve-article.request";
+import { DeclineArticleRequest } from "@models/article/requests/decline-article.request";
 
 @Injectable({
   providedIn: "root",
@@ -23,6 +27,11 @@ export class ArticleService extends ApiService {
   }
 
   getAllArticles(): Observable<GetAllArticlesResponse> {
+    const response = this.httpClient.get<Response<GetAllArticlesResponse>>("api/articles/all");
+    return this.handleResponse(response);
+  }
+
+  getAllVerifiedArticles(): Observable<GetAllArticlesResponse> {
     const response = this.httpClient.get<Response<GetAllArticlesResponse>>("/api/articles/");
     return this.handleResponse(response);
   }
@@ -69,6 +78,24 @@ export class ArticleService extends ApiService {
 
   deleteArticle(id: string): Observable<DeleteArticleResponse> {
     const response = this.httpClient.delete<Response<DeleteArticleResponse>>(`/api/articles/${id}`);
+    return this.handleResponse(response);
+  }
+
+  approveArticle(id: string): Observable<ApproveArticleResponse> {
+    const dto: ApproveArticleRequest = {
+      articleId: id,
+    };
+
+    const response = this.httpClient.post<Response<ApproveArticleResponse>>("/api/articles/approve", dto);
+    return this.handleResponse(response);
+  }
+
+  declineArticle(id: string): Observable<DeclineArticleResponse> {
+    const dto: DeclineArticleRequest = {
+      articleId: id,
+    };
+
+    const response = this.httpClient.post<Response<ApproveArticleResponse>>("/api/articles/decline", dto);
     return this.handleResponse(response);
   }
 }

@@ -3,6 +3,9 @@
   <p class="article-description">{{article?.description}}</p>
   <div class="documents-paths-container" *ngIf="article">
     <p class="documents-paths-container-header">Article documents</p>
+    <p *ngIf="article!.documentsPaths.length === 0">
+      No files are attached to this article
+    </p>
     <p (click)="openArticleDocument(path)" class="document-path" *ngFor="let path of article!.documentsPaths">
       {{path}}
     </p>
