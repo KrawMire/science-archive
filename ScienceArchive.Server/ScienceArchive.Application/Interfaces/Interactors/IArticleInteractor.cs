@@ -70,4 +70,18 @@ public interface IArticleInteractor
     /// <param name="dto">DTO contract to delete article</param>
     /// <returns>Response DTO</returns>
     Task<DeleteArticleResponseDto> DeleteArticle(DeleteArticleRequestDto dto);
+
+    /// <summary>
+    /// Approve article
+    /// </summary>
+    /// <param name="dto">DTO contract to approve article</param>
+    /// <returns>Response DTO</returns>
+    Task<ApproveArticleResponseDto> ApproveArticle(ApproveArticleRequestDto dto);
+
+    /// <summary>
+    /// Decline article
+    /// </summary>
+    /// <param name="dto">DTO contract to decline article</param>
+    /// <returns>Response DTO</returns>
+    Task<DeclineArticleResponseDto> DeclineArticle(DeclineArticleRequestDto dto);
 }

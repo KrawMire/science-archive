@@ -22,5 +22,5 @@ public enum ArticleStatus
 	/// Article is verified, but has some
 	/// problems and cannot be shown to users 
 	/// </summary>
-	Cancelled
+	Declined
 }

@@ -68,4 +68,16 @@ internal class ArticleService : BaseService, IArticleService
     {
         return await ExecuteUseCase<ArticleId, DeleteArticleContract>(contract);
     }
+
+    /// <inheritdoc/>
+    public async Task<Article> ApproveArticle(ApproveArticleContract contract)
+    {
+        return await ExecuteUseCase<Article, ApproveArticleContract>(contract);
+    }
+
+    /// <inheritdoc/>
+    public async Task<Article> DeclineArticle(DeclineArticleContract contract)
+    {
+        return await ExecuteUseCase<Article, DeclineArticleContract>(contract);
+    }
 }

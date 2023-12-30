@@ -17,7 +17,7 @@ internal class CreateArticleUseCase : IUseCase<Article, CreateArticleContract>
 
     public async Task<Article> Execute(CreateArticleContract contract)
     {
-        contract.Article.Status = ArticleStatus.ToVerify;
+        contract.Article.SetToVerify();
         return await _articleRepository.Create(contract.Article);
     }
 }

@@ -17,7 +17,7 @@ internal class UpdateArticleUseCase : IUseCase<Article, UpdateArticleContract>
 
     public Task<Article> Execute(UpdateArticleContract contract)
     {
-        contract.Article.Status = ArticleStatus.ToVerify;
+        contract.Article.SetToVerify();
         return _articleRepository.Update(contract.Id, contract.Article);
     }
 }

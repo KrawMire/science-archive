@@ -79,4 +79,18 @@ public interface IArticleService
     /// <param name="contract">Contract to delete article</param>
     /// <returns>Deleted article ID</returns>
     Task<ArticleId> Delete(DeleteArticleContract contract);
+
+    /// <summary>
+    /// Approve article
+    /// </summary>
+    /// <param name="contract"></param>
+    /// <returns>Approved article</returns>
+    Task<Article> ApproveArticle(ApproveArticleContract contract);
+
+    /// <summary>
+    /// Decline article
+    /// </summary>
+    /// <param name="contract">Contract to decline article</param>
+    /// <returns>Declined article</returns>
+    Task<Article> DeclineArticle(DeclineArticleContract contract);
 }

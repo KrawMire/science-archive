@@ -78,8 +78,8 @@ internal class ArticleInteractor : IArticleInteractor
     /// <inheritdoc/>
     public async Task<GetArticleByIdResponseDto> GetArticleById(GetArticleByIdRequestDto dto)
     {
-        var contract = new GetVerifiedArticleByIdContract(ArticleId.CreateFromString(dto.Id));
-        var article = await _articleService.GetVerifiedById(contract);
+        var contract = new GetArticleByIdContract(ArticleId.CreateFromString(dto.Id));
+        var article = await _articleService.GetById(contract);
         
         var articleDto = article is not null
             ? _articleMapper.MapToDto(article)
@@ -125,6 +125,24 @@ internal class ArticleInteractor : IArticleInteractor
         var deletedArticleId = await _articleService.Delete(contract);
         
         return new(deletedArticleId.ToString());
+    }
+
+    /// <inheritdoc/>
+    public async Task<ApproveArticleResponseDto> ApproveArticle(ApproveArticleRequestDto dto)
+    {
+        var contract = new ApproveArticleContract(ArticleId.CreateFromString(dto.ArticleId));
+        var approvedArticle = await _articleService.ApproveArticle(contract);
+
+        return new ApproveArticleResponseDto(_articleMapper.MapToDto(approvedArticle));
+    }
+
+    /// <inheritdoc/>
+    public async Task<DeclineArticleResponseDto> DeclineArticle(DeclineArticleRequestDto dto)
+    {
+        var contract = new DeclineArticleContract(ArticleId.CreateFromString(dto.ArticleId));
+        var declinedArticle = await _articleService.DeclineArticle(contract);
+
+        return new DeclineArticleResponseDto(_articleMapper.MapToDto(declinedArticle));
     }
 
     /// <inheritdoc/>

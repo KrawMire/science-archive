@@ -117,6 +117,33 @@ public class ArticleController : ControllerBase
         return new SuccessResponse(result);
     }
 
+    [AuthorizeClaims("ADMIN")]
+    [HttpPost("approve")]
+    public async Task<Response> Approve([FromBody] ApproveArticleRequestDto? dto)
+    {
+        if (dto is null)
+        {
+            throw new BadHttpRequestException("No data presented");
+        }
+
+        var result = await _articleInteractor.ApproveArticle(dto);
+        return new SuccessResponse(result);
+    }
+    
+    
+    [AuthorizeClaims("ADMIN")]
+    [HttpPost("decline")]
+    public async Task<Response> Decline([FromBody] DeclineArticleRequestDto? dto)
+    {
+        if (dto is null)
+        {
+            throw new BadHttpRequestException("No data presented");
+        }
+
+        var result = await _articleInteractor.DeclineArticle(dto);
+        return new SuccessResponse(result);
+    }
+    
     [Authorize]
     [HttpDelete("{id}")]
     public async Task<Response> Delete(string? id)
