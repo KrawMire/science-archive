@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-	listenAddress := flag.String("listenaddr", ":3000", "the server address")
+	listenAddress := flag.String("listenaddr", ":32400", "the server address")
 	flag.Parse()
 
 	server := api.NewServer(*listenAddress)
