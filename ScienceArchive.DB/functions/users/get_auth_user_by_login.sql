@@ -1,3 +1,5 @@
+DROP FUNCTION IF EXISTS "func_get_auth_user_by_login";
+
 CREATE OR REPLACE FUNCTION "func_get_auth_user_by_login" (
   "p_login"         varchar(255)
 )

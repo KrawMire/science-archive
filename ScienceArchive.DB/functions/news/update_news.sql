@@ -1,3 +1,5 @@
+DROP FUNCTION IF EXISTS "func_update_news";
+
 CREATE OR REPLACE FUNCTION "func_update_news" (
   "p_id"    UUID,
   "p_title" VARCHAR(255),

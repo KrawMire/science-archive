@@ -1,3 +1,5 @@
+DROP FUNCTION IF EXISTS "func_get_user_by_id";
+
 CREATE OR REPLACE FUNCTION "func_get_user_by_id" (
   "p_id" UUID
 )

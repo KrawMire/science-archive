@@ -13,3 +13,7 @@ func GetObjectStorageRegion() string {
 func GetObjectStorageCredentials() (string, string) {
 	return os.Getenv("OBJ_STOR_KEYID"), os.Getenv("OBJ_STOR_KEY")
 }
+
+func GetBucketName() string {
+	return os.Getenv("OBJ_STOR_BUCKET_NAME")
+}

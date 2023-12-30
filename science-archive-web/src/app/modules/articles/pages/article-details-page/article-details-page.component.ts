@@ -9,7 +9,7 @@ import { ActivatedRoute } from "@angular/router";
   styleUrls: ["./article-details-page.component.scss"],
 })
 export class ArticleDetailsPageComponent implements OnInit {
-  article!: Article;
+  article?: Article;
 
   constructor(private readonly articleService: ArticleService, private readonly route: ActivatedRoute) {}
 
@@ -22,7 +22,12 @@ export class ArticleDetailsPageComponent implements OnInit {
     }
 
     this.articleService.getArticleById(articleId).subscribe({
-      next: async (response) => (this.article = response.article),
+      next: (response) => (this.article = response.article),
+      error: (err) => alert(err),
     });
+  }
+
+  openArticleDocument(path: string) {
+    window.open("/api/documents/" + path);
   }
 }

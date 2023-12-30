@@ -1,6 +1,6 @@
-﻿namespace ScienceArchive.Core.Services.ArticleContracts;
+namespace ScienceArchive.Core.Services.ArticleContracts;
 
 /// <summary>
 /// Contract to get all articles
 /// </summary>
-public record GetAllArticlesContract();
+public record GetAllArticlesContract;

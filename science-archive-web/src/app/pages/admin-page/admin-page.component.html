@@ -4,12 +4,15 @@
     <h2>Science Archive Admin</h2>
   </div>
   <div class="page-content">
-    <nav>
-      <h3 class="menu-header">Admin Panel</h3>
-      <div class="menu-element">
-        <span class="menu-element-text">News</span>
-      </div>
-    </nav>
+      <nav>
+        <h3 class="menu-header">Admin Panel</h3>
+        <div class="menu-element" routerLink="articles">
+          <span class="menu-element-text">Articles</span>
+        </div>
+        <div class="menu-element" routerLink="news">
+          <span class="menu-element-text">News</span>
+        </div>
+      </nav>
     <div class="main-content">
       <router-outlet></router-outlet>
     </div>

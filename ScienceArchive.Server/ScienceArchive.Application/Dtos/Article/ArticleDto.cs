@@ -21,6 +21,11 @@ public record ArticleDto
     public required string Title { get; set; }
 
     /// <summary>
+    /// Article's status
+    /// </summary>
+    public int Status { get; set; }
+
+    /// <summary>
     /// Author of an article
     /// </summary>
     public required List<string> AuthorsIds { get; set; }

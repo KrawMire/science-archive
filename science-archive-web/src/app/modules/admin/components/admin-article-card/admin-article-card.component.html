@@ -1,0 +1,9 @@
+<div class="card-container" (click)="onClick()">
+  <div class="card-header">
+    <h2>{{article.title}}</h2>
+    <app-article-verification-badge
+      [status]="article.status"
+    />
+  </div>
+  <p class="article-description">{{article.description}}</p>
+</div>

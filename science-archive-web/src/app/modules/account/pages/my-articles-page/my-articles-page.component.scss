@@ -1,4 +1,95 @@
 .articles-container {
-  margin-top: 30px;
+  margin-top: 20px;
+  padding: 10px;
   width: 90%;
+}
+
+.page-wrapper {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  height: 100%;
+  overflow-y: auto;
+}
+
+.page-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.edit-modal-content {
+  padding: 20px;
+}
+
+.edit-modal-form-field {
+
+}
+
+.edit-modal-form-field {
+  margin-top: 20px;
+  width: 100%;
+
+  .document-path {
+    margin-top: 7px;
+    color: #464646;
+    font-size: .9em;
+
+    b {
+      padding: 2px;
+      border-radius: 5px;
+      border: 1px solid #6b6b6b;
+      cursor: pointer;
+    }
+  }
+
+  .upload-file-button {
+    margin-top: 10px;
+    padding: 5px;
+  }
+
+  p {
+    font-size: 0.9em;
+    color: #6c6c6c;
+  }
+
+  &-input {
+    margin-top: 5px;
+    border-radius: 5px;
+    border: 1px solid #a4a4a4;
+    width: 100%;
+    max-width: 100%;
+
+    padding: 10px;
+    box-sizing: border-box;
+  }
+}
+
+.save-button {
+  margin-top: 20px;
+  width: 100%;
+  padding: 20px;
+  border: none;
+  border-radius: 10px;
+  background-color: #1b57cf;
+  color: #ffffff;
+
+  &:hover {
+    background-color: #5f95ff;
+    cursor: pointer;
+  }
+}
+
+.delete-modal-content {
+  padding: 20px;
+
+  &-description {
+    margin-top: 20px;
+    font-size: 0.9em;
+  }
+}
+
+.delete-modal-buttons-block {
+  margin-top: 20px;
 }

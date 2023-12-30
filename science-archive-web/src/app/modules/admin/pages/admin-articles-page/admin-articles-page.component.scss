@@ -1,0 +1,44 @@
+.page-wrapper {
+  width: 90%;
+}
+
+.articles-container {
+  margin-top: 50px;
+  padding-bottom: 30px;
+}
+
+.page-header-wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.page-header {
+  font-size: 30px;
+  color: #333333;
+}
+
+.modal-content-container {
+  padding: 30px;
+}
+
+.modal-data-container {
+  display: flex;
+  flex-direction: column;
+  margin-top: 10px;
+}
+
+.block-text {
+  margin-top: 20px;
+}
+
+.doc-path {
+  margin-top: 5px;
+  cursor: pointer;
+}
+
+.action-buttons-block {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: row;
+}

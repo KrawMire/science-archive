@@ -6,16 +6,18 @@ export abstract class ApiService {
     return res.pipe(
       map((response) => {
         if (!response.success) {
-          alert(response.error);
           throw new Error(response.error ?? "Unknown error while request execution");
         }
 
         if (!response.data) {
           alert("Cannot get any data!");
-          throw new Error();
+          throw new Error("Cannot get any data!");
         }
 
         return response.data!;
+      }),
+      catchError((err) => {
+        throw new Error(err.error?.error ?? err.message);
       })
     );
   }

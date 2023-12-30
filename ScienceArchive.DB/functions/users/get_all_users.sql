@@ -1,3 +1,5 @@
+DROP FUNCTION IF EXISTS "func_get_all_users";
+
 CREATE OR REPLACE FUNCTION "func_get_all_users" ()
 RETURNS TABLE
 (

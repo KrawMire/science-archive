@@ -1,3 +1,5 @@
+DROP FUNCTION IF EXISTS "func_get_all_news";
+
 CREATE OR REPLACE FUNCTION "func_get_all_news" ()
 RETURNS TABLE (
   "id"                UUID,

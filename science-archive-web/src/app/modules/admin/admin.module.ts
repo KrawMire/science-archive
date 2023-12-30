@@ -5,9 +5,11 @@ import { AdminNewsCardComponent } from "./components/admin-news-card/admin-news-
 import { SafeHtmlPipe } from "../../pipes/safe-html.pipe";
 import SharedModule from "@modules/shared/shared.module";
 import { FormsModule } from "@angular/forms";
+import { AdminArticlesPageComponent } from './pages/admin-articles-page/admin-articles-page.component';
+import { AdminArticleCardComponent } from './components/admin-article-card/admin-article-card.component';
 
 @NgModule({
-  declarations: [AdminNewsPageComponent, AdminNewsCardComponent],
+  declarations: [AdminNewsPageComponent, AdminNewsCardComponent, AdminArticlesPageComponent, AdminArticleCardComponent],
   imports: [CommonModule, SafeHtmlPipe, SharedModule, SharedModule, FormsModule],
 })
 export class AdminModule {}

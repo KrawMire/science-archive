@@ -1,3 +1,5 @@
+DROP FUNCTION IF EXISTS "func_delete_user";
+
 CREATE OR REPLACE FUNCTION "func_delete_user" (
   "p_id" UUID
 )
