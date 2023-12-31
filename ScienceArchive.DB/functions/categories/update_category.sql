@@ -1,3 +1,5 @@
+DROP FUNCTION IF EXISTS "func_update_category";
+
 CREATE OR REPLACE FUNCTION "func_update_category" (
   "p_id"   UUID,
   "p_name" VARCHAR(255)

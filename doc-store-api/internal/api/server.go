@@ -31,4 +31,5 @@ func (s *Server) configureRouter(r *gin.Engine) {
 
 	// Map HTTP paths to handler functions
 	r.POST("api/documents/upload", handler.UploadDocument)
+	r.GET("api/documents/:docName", handler.GetDocument)
 }

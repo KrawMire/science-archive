@@ -5,7 +5,7 @@ export interface Article {
   /**
    * Identifier of the article
    */
-  id: string;
+  id?: string;
 
   /**
    * Article title
@@ -16,12 +16,17 @@ export interface Article {
    * Identifier of the user
    * created the article
    */
-  authorId: string;
+  authorsIds: string[];
 
   /**
    * Date when article was created
    */
-  creationDate: Date;
+  creationDate?: Date;
+
+  /**
+   * ID of category
+   */
+  categoryId: string;
 
   /**
    * Article description
@@ -29,7 +34,12 @@ export interface Article {
   description: string | null;
 
   /**
-   * Path to a document linked to article
+   * Paths to documents linked to article
    */
-  documentPath: string;
+  documentsPaths: string[];
+
+  /**
+   * Current article status represented as number
+   */
+  status: number;
 }

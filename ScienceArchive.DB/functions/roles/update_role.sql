@@ -1,3 +1,5 @@
+DROP FUNCTION IF EXISTS "func_update_role";
+
 CREATE OR REPLACE FUNCTION "func_update_role" (
   "p_id"           UUID,
   "p_name"         VARCHAR(255),

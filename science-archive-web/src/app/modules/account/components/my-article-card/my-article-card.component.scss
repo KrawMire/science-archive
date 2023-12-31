@@ -1,13 +1,26 @@
 .article-card {
+  margin-top: 15px;
   box-shadow: 0 1px 10px 1px #9b9b9b4a;
   padding: 30px;
   background-color: #ffffff;
   border-radius: 10px;
-  cursor: pointer;
+
+  &-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    cursor: pointer;
+  }
 
   &-description {
     font-size: 0.85em;
     color: #6c6c6c;
     margin-top: 10px;
   }
+}
+
+.action-buttons-block {
+  display: flex;
+  flex-direction: row;
+  margin-top: 15px;
 }

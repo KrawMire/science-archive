@@ -1,12 +1,120 @@
-<h2>My Articles</h2>
+<div class="page-wrapper">
+  <div class="page-header">
+    <h2>My Articles</h2>
+    <app-action-button
+      (onClick)="onCreateNewClick()"
+    >
+      Create
+    </app-action-button>
+  </div>
 
-<div *ngIf="isLoading">
-  <p>Loading...</p>
+  <div *ngIf="isLoading">
+    <p>Loading...</p>
+  </div>
+
+  <div class="articles-container" *ngIf="!isLoading">
+    <p *ngIf="articles.length === 0">
+      There are no articles from you yet
+    </p>
+
+    <app-my-article-card
+      *ngFor="let article of articles"
+      [article]="article"
+      (selectArticle)="onArticleEditSelect($event)"
+      (selectArticleToDelete)="onDeleteArticleSelect($event)"
+    />
+  </div>
 </div>
 
-<div class="articles-container" *ngIf="!isLoading">
-  <app-my-article-card
-    *ngFor="let article of articles"
-    [article]="article"
-  />
-</div>
+<app-modal-window
+  [isShown]="showEditModal"
+  (onClose)="onEditModalClose()"
+>
+  <div class="edit-modal-content">
+    <div class="edit-form">
+      <h3 *ngIf="createNew">Create new article</h3>
+      <h3 *ngIf="!createNew">Edit article</h3>
+
+      <div class="edit-modal-form-field">
+        <p>Category</p>
+        <select class="edit-modal-form-field-input" [(ngModel)]="selectedCategory">
+          <option
+            *ngFor="let category of categories"
+            [ngValue]="category"
+          >{{category.name}}</option>
+        </select>
+      </div>
+
+      <div *ngIf="selectedCategory" class="edit-modal-form-field">
+        <p>Category</p>
+        <select class="edit-modal-form-field-input" [(ngModel)]="currentArticle.categoryId">
+          <option
+            *ngFor="let subcategory of selectedCategory.subcategories"
+            [ngValue]="subcategory.id"
+          >{{subcategory.name}}</option>
+        </select>
+      </div>
+
+      <div class="edit-modal-form-field">
+        <p>Title</p>
+        <input class="edit-modal-form-field-input" [(ngModel)]="currentArticle.title">
+      </div>
+
+      <div class="edit-modal-form-field">
+        <p>Description</p>
+        <textarea class="edit-modal-form-field-input" [(ngModel)]="currentArticle.description"></textarea>
+      </div>
+
+      <div class="edit-modal-form-field">
+        <p>Article Documents</p>
+        <input
+          #file
+          hidden
+          type="file"
+          class="edit-modal-form-field-input"
+          value="Upload file here"
+          (change)="onArticleDocumentUpload($event)"
+        >
+        <button
+          (click)="file.click()"
+          class="upload-file-button"
+        >
+          Upload file
+        </button>
+        <p class="document-path" *ngFor="let path of currentArticle.documentsPaths">
+          {{path}}
+          <b (click)="onRemoveDocument(path)">Remove</b>
+        </p>
+      </div>
+    </div>
+    <button
+      class="save-button" (click)="onSaveClick()">
+      {{createNew ? "Create" : "Save"}}
+    </button>
+  </div>
+</app-modal-window>
+
+<app-modal-window
+  [isShown]="showDeleteModal"
+  (onClose)="onDeleteModalClose()"
+>
+  <div class="delete-modal-content">
+    <h3>Delete confirmation</h3>
+    <p class="delete-modal-content-description">
+      Are you sure to delete article "{{articleToDelete?.title}}"?
+    </p>
+    <div class="delete-modal-buttons-block">
+      <app-action-button
+        (onClick)="onDeleteModalClose()"
+      >
+        Cancel
+      </app-action-button>
+      <app-action-button
+        (onClick)="onDeleteArticle()"
+        style="margin-left: 5px"
+      >
+        Delete
+      </app-action-button>
+    </div>
+  </div>
+</app-modal-window>

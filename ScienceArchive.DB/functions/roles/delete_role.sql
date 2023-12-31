@@ -1,3 +1,5 @@
+DROP FUNCTION IF EXISTS "func_delete_role";
+
 CREATE OR REPLACE FUNCTION "func_delete_role" (
   "p_id" UUID
 )

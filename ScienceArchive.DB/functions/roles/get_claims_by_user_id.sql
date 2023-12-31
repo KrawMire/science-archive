@@ -1,3 +1,5 @@
+DROP FUNCTION IF EXISTS "func_get_claims_by_user_id";
+
 CREATE OR REPLACE FUNCTION "func_get_claims_by_user_id" (
   "p_user_id" UUID
 )

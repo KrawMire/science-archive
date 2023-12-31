@@ -10,25 +10,45 @@ internal class ArticleService : BaseService, IArticleService
     public ArticleService(IServiceProvider serviceProvider) : base(serviceProvider) { }
 
     /// <inheritdoc/>
+    public async Task<Article?> GetVerifiedById(GetVerifiedArticleByIdContract contract)
+    {
+        return await ExecuteUseCase<Article?, GetVerifiedArticleByIdContract>(contract);
+    }
+
+    /// <inheritdoc/>
     public async Task<Article?> GetById(GetArticleByIdContract contract)
     {
         return await ExecuteUseCase<Article?, GetArticleByIdContract>(contract);
     }
 
+    /// <inheritdoc/>
     public async Task<List<Article>> GetByAuthorId(GetArticlesByAuthorIdContract contract)
     {
         return await ExecuteUseCase<List<Article>, GetArticlesByAuthorIdContract>(contract);
     }
 
-    public async Task<List<Article>> GetByCategoryId(GetArticlesByCategoryIdContract contract)
+    /// <inheritdoc/>
+    public async Task<List<Article>> GetVerifiedByAuthorId(GetVerifiedArticlesByAuthorIdContract contract)
     {
-        return await ExecuteUseCase<List<Article>, GetArticlesByCategoryIdContract>(contract);
+        return await ExecuteUseCase<List<Article>, GetVerifiedArticlesByAuthorIdContract>(contract);
+    }
+
+    /// <inheritdoc/>
+    public async Task<List<Article>> GetVerifiedBySubcategoryId(GetVerifiedArticlesBySubcategoryIdContract contract)
+    {
+        return await ExecuteUseCase<List<Article>, GetVerifiedArticlesBySubcategoryIdContract>(contract);
     }
 
     /// <inheritdoc/>
     public async Task<List<Article>> GetAll(GetAllArticlesContract contract)
     {
         return await ExecuteUseCase<List<Article>, GetAllArticlesContract>(contract);
+    }
+
+    /// <inheritdoc/>
+    public async Task<List<Article>> GetAllVerified(GetAllVerifiedArticlesContract contract)
+    {
+        return await ExecuteUseCase<List<Article>, GetAllVerifiedArticlesContract>(contract);
     }
 
     /// <inheritdoc/>
@@ -47,5 +67,17 @@ internal class ArticleService : BaseService, IArticleService
     public async Task<ArticleId> Delete(DeleteArticleContract contract)
     {
         return await ExecuteUseCase<ArticleId, DeleteArticleContract>(contract);
+    }
+
+    /// <inheritdoc/>
+    public async Task<Article> ApproveArticle(ApproveArticleContract contract)
+    {
+        return await ExecuteUseCase<Article, ApproveArticleContract>(contract);
+    }
+
+    /// <inheritdoc/>
+    public async Task<Article> DeclineArticle(DeclineArticleContract contract)
+    {
+        return await ExecuteUseCase<Article, DeclineArticleContract>(contract);
     }
 }

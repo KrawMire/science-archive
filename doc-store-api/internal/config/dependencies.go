@@ -30,6 +30,7 @@ func configureRepositories() corerepositories.StorageRepository {
 			Region:      aws.String(GetObjectStorageRegion()),
 			Credentials: credentials.NewStaticCredentials(keyID, key, ""),
 		},
+		BucketName: GetBucketName(),
 	}
 
 	return repositories.NewObjectStorageRepository(connOptions)

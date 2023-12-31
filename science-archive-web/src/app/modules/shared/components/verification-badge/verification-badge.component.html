@@ -1,0 +1,5 @@
+<div [ngSwitch]="status">
+  <div *ngSwitchCase="1" class="article-verification-badge badge-verified">Published</div>
+  <div *ngSwitchCase="2" class="article-verification-badge badge-declined">Declined</div>
+  <div *ngSwitchDefault class="article-verification-badge badge-to-verify">On verification</div>
+</div>

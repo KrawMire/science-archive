@@ -1,7 +1,8 @@
 package serivces
 
-import "io"
+import "mime/multipart"
 
 type StorageService interface {
-	UploadDocument(file io.Reader) (string, error)
+	GetDocument(filename string) ([]byte, error)
+	UploadDocument(fileHeader *multipart.FileHeader) (string, error)
 }

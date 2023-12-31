@@ -1,5 +1,6 @@
 ﻿using ScienceArchive.BusinessLogic.Interfaces;
 using ScienceArchive.Core.Domain.Aggregates.Article;
+using ScienceArchive.Core.Domain.Aggregates.Article.Enums;
 using ScienceArchive.Core.Repositories;
 using ScienceArchive.Core.Services.ArticleContracts;
 
@@ -14,8 +15,9 @@ internal class UpdateArticleUseCase : IUseCase<Article, UpdateArticleContract>
         _articleRepository = articleRepository ?? throw new ArgumentNullException(nameof(articleRepository));
     }
 
-    public async Task<Article> Execute(UpdateArticleContract contract)
+    public Task<Article> Execute(UpdateArticleContract contract)
     {
-        return await _articleRepository.Update(contract.Id, contract.Article);
+        contract.Article.SetToVerify();
+        return _articleRepository.Update(contract.Id, contract.Article);
     }
 }
