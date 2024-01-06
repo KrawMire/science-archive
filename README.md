@@ -1,7 +1,7 @@
 # Science Archive Project
 
 <p align="center">
-  <img src="docs/assets/docs-images/science-archive.icon.svg" alt="Title image" height="175px"/>
+  <img src="docs/assets/docs-images/science-archive.logo.png" alt="Title image" height="175px"/>
 </p>
 
 <p align="center">
