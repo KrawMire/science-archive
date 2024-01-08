@@ -1,0 +1,87 @@
+<header class="sar-header">
+  <a href="/">
+    <span class="sar-logo-wrapper">
+    <img
+      src="assets/images/science-archive.logo.with-text.svg"
+      alt="Logo"
+      class="sar-logo"
+    >
+  <title>Science Archive</title>
+  </span>
+  </a>
+</header>
+<nav class="sar-top-menu-container">
+  <ul
+    nz-menu
+    nzTheme="light"
+    nzMode="horizontal"
+  >
+    <li
+      nz-menu-item
+      routerLink="articles"
+      nzMatchRouter
+    >
+      Articles
+    </li>
+    <li
+      nz-menu-item
+      routerLink="categories"
+      nzMatchRouter
+    >
+      Categories
+    </li>
+    <li
+      nz-menu-item
+      routerLink="news"
+      nzMatchRouter
+    >
+      News
+    </li>
+  </ul>
+  <div
+    (click)="onAccountClick()"
+    class="sar-account-button"
+  >
+    <span>Account</span>
+  </div>
+</nav>
+<router-outlet></router-outlet>
+<nz-drawer
+  nzClosable="true"
+  nzPlacement="right"
+  nzTitle="Account"
+  [nzVisible]="showAccountDrawer"
+  (nzOnClose)="onAccountDrawerClose()"
+>
+  <ng-container *nzDrawerContent>
+    <ul
+      nz-menu
+      nzTheme="light"
+      nzMode="vertical"
+    >
+      <li nz-menu-item>
+        <span nz-icon nzType="user" nzTheme="outline"></span>
+        My profile
+      </li>
+      <li nz-menu-item>
+        <span nz-icon nzType="book" nzTheme="outline"></span>
+        My articles
+      </li>
+      <li nz-menu-item>
+        <span nz-icon nzType="lock" nzTheme="outline"></span>
+        Admin panel
+      </li>
+      <li nz-menu-item>
+        <span
+          nz-icon
+          nzType="warning"
+          [nzTheme]="'twotone'"
+          [nzTwotoneColor]="'#ff4d4f'"
+        ></span>
+        <span nz-typography nzType="danger">
+          Sign out
+        </span>
+      </li>
+    </ul>
+  </ng-container>
+</nz-drawer>
