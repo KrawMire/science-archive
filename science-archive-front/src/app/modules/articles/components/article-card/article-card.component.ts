@@ -1,4 +1,5 @@
 import { Component, Input } from "@angular/core";
+import { Article } from "@models/article/article";
 
 @Component({
   selector: "sar-article-card",
@@ -7,4 +8,5 @@ import { Component, Input } from "@angular/core";
 })
 export class ArticleCardComponent {
   @Input() style?: string;
+  @Input() article!: Article;
 }

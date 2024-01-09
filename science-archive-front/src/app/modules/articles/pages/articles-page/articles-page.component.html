@@ -1,26 +1,19 @@
-<sar-article-card [style]="'margin-top: 10px'"></sar-article-card>
-<sar-article-card [style]="'margin-top: 10px'"></sar-article-card>
-<sar-article-card [style]="'margin-top: 10px'"></sar-article-card>
-<sar-article-card [style]="'margin-top: 10px'"></sar-article-card>
-<sar-article-card [style]="'margin-top: 10px'"></sar-article-card>
-<sar-article-card [style]="'margin-top: 10px'"></sar-article-card>
-<sar-article-card [style]="'margin-top: 10px'"></sar-article-card>
-<sar-article-card [style]="'margin-top: 10px'"></sar-article-card>
-<sar-article-card [style]="'margin-top: 10px'"></sar-article-card>
-<sar-article-card [style]="'margin-top: 10px'"></sar-article-card>
-<sar-article-card [style]="'margin-top: 10px'"></sar-article-card>
-<sar-article-card [style]="'margin-top: 10px'"></sar-article-card>
-<sar-article-card [style]="'margin-top: 10px'"></sar-article-card>
-<sar-article-card [style]="'margin-top: 10px'"></sar-article-card>
-<sar-article-card [style]="'margin-top: 10px'"></sar-article-card>
-<sar-article-card [style]="'margin-top: 10px'"></sar-article-card>
-<sar-article-card [style]="'margin-top: 10px'"></sar-article-card>
-<sar-article-card [style]="'margin-top: 10px'"></sar-article-card>
-<sar-article-card [style]="'margin-top: 10px'"></sar-article-card>
-<sar-article-card [style]="'margin-top: 10px'"></sar-article-card>
-<sar-article-card [style]="'margin-top: 10px'"></sar-article-card>
-<sar-article-card [style]="'margin-top: 10px'"></sar-article-card>
-<sar-article-card [style]="'margin-top: 10px'"></sar-article-card>
+<div *ngIf="isLoading; else articlesView">
+  <sar-article-card-skeleton
+    [style]="'margin-top: 10px'"
+    *ngFor="let _ of [1,2,3]"
+  ></sar-article-card-skeleton>
+</div>
+
+<ng-template #articlesView>
+  <sar-article-card
+    [style]="'margin-top: 10px'"
+    *ngFor="let article of articles$ | async"
+    [article]="article"
+  ></sar-article-card>
+</ng-template>
+
+
 
 
 
