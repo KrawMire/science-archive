@@ -10,46 +10,53 @@
   </span>
   </a>
 </header>
-<nav class="sar-top-menu-container">
-  <ul
-    nz-menu
-    nzTheme="light"
-    nzMode="horizontal"
-  >
-    <li
-      nz-menu-item
-      routerLink="articles"
-      nzMatchRouter
+
+<nz-affix nzOffsetTop="0">
+  <nav class="sar-top-menu-container">
+    <ul
+      nz-menu
+      nzTheme="light"
+      nzMode="horizontal"
     >
-      Articles
-    </li>
-    <li
-      nz-menu-item
-      routerLink="categories"
-      nzMatchRouter
+      <li
+        nz-menu-item
+        routerLink="articles"
+        nzMatchRouter
+      >
+        Articles
+      </li>
+      <li
+        nz-menu-item
+        routerLink="categories"
+        nzMatchRouter
+      >
+        Categories
+      </li>
+      <li
+        nz-menu-item
+        routerLink="news"
+        nzMatchRouter
+      >
+        News
+      </li>
+    </ul>
+    <div
+      (click)="onAccountClick()"
+      class="sar-account-button"
     >
-      Categories
-    </li>
-    <li
-      nz-menu-item
-      routerLink="news"
-      nzMatchRouter
-    >
-      News
-    </li>
-  </ul>
-  <div
-    (click)="onAccountClick()"
-    class="sar-account-button"
-  >
-    <span>Account</span>
-  </div>
-</nav>
-<router-outlet></router-outlet>
+      <span>KrawMire</span>
+    </div>
+  </nav>
+</nz-affix>
+
+<div class="sar-page-content">
+  <router-outlet></router-outlet>
+</div>
+
 <nz-drawer
   nzClosable="true"
   nzPlacement="right"
-  nzTitle="Account"
+  nzTitle="KrawMire"
   [nzVisible]="showAccountDrawer"
   (nzOnClose)="onAccountDrawerClose()"
 >

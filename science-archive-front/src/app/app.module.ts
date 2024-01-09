@@ -20,6 +20,7 @@ import { CategoriesModule } from "./modules/categories/categories.module";
 import { NewsModule } from "./modules/news/news.module";
 import { NzDrawerModule } from "ng-zorro-antd/drawer";
 import { NzTypographyModule } from "ng-zorro-antd/typography";
+import { NzAffixModule } from "ng-zorro-antd/affix";
 
 registerLocaleData(en);
 
@@ -45,6 +46,7 @@ registerLocaleData(en);
     NewsModule,
     NzDrawerModule,
     NzTypographyModule,
+    NzAffixModule,
   ],
   providers: [{ provide: NZ_I18N, useValue: en_US }],
   bootstrap: [AppComponent],
