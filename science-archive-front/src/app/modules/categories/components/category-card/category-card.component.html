@@ -1,18 +1,12 @@
 <nz-card
   [style]="style"
-  nzTitle="Computer Science"
+  [nzTitle]="category.name"
 >
   <div class="sar-subcategories-container">
-    <sar-subcategory-card style="margin: 2px"></sar-subcategory-card>
-    <sar-subcategory-card style="margin: 2px"></sar-subcategory-card>
-    <sar-subcategory-card style="margin: 2px"></sar-subcategory-card>
-    <sar-subcategory-card style="margin: 2px"></sar-subcategory-card>
-    <sar-subcategory-card style="margin: 2px"></sar-subcategory-card>
-    <sar-subcategory-card style="margin: 2px"></sar-subcategory-card>
-    <sar-subcategory-card style="margin: 2px"></sar-subcategory-card>
-    <sar-subcategory-card style="margin: 2px"></sar-subcategory-card>
-    <sar-subcategory-card style="margin: 2px"></sar-subcategory-card>
-    <sar-subcategory-card style="margin: 2px"></sar-subcategory-card>
-    <sar-subcategory-card style="margin: 2px"></sar-subcategory-card>
+    <sar-subcategory-card
+      *ngFor="let subcategory of category.subcategories"
+      [subcategory]="subcategory"
+      style="margin: 2px"
+    ></sar-subcategory-card>
   </div>
 </nz-card>

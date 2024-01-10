@@ -1,4 +1,5 @@
 import { Component, Input } from "@angular/core";
+import { Category } from "@models/category/category";
 
 @Component({
   selector: "sar-category-card",
@@ -7,4 +8,5 @@ import { Component, Input } from "@angular/core";
 })
 export class CategoryCardComponent {
   @Input() style?: string;
+  @Input() category!: Category;
 }

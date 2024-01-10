@@ -10,5 +10,6 @@ import { NzSkeletonModule } from "ng-zorro-antd/skeleton";
 @NgModule({
   declarations: [ArticlesPageComponent, ArticleCardComponent, ArticleCardSkeletonComponent],
   imports: [CommonModule, NzCardModule, NzButtonModule, NzSkeletonModule],
+  exports: [ArticleCardComponent],
 })
 export class ArticlesModule {}

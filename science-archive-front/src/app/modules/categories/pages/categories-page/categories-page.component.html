@@ -1,15 +1,11 @@
-<sar-category-card [style]="'margin-top: 10px'"></sar-category-card>
-<sar-category-card [style]="'margin-top: 10px'"></sar-category-card>
-<sar-category-card [style]="'margin-top: 10px'"></sar-category-card>
-<sar-category-card [style]="'margin-top: 10px'"></sar-category-card>
-<sar-category-card [style]="'margin-top: 10px'"></sar-category-card>
-<sar-category-card [style]="'margin-top: 10px'"></sar-category-card>
-<sar-category-card [style]="'margin-top: 10px'"></sar-category-card>
-<sar-category-card [style]="'margin-top: 10px'"></sar-category-card>
-<sar-category-card [style]="'margin-top: 10px'"></sar-category-card>
-<sar-category-card [style]="'margin-top: 10px'"></sar-category-card>
-<sar-category-card [style]="'margin-top: 10px'"></sar-category-card>
-<sar-category-card [style]="'margin-top: 10px'"></sar-category-card>
-<sar-category-card [style]="'margin-top: 10px'"></sar-category-card>
-<sar-category-card [style]="'margin-top: 10px'"></sar-category-card>
-<sar-category-card [style]="'margin-top: 10px'"></sar-category-card>
+<div *ngIf="isLoading; else categoriesView">
+  <sar-category-card-skeleton *ngFor="let _ of [1,2,3]"></sar-category-card-skeleton>
+</div>
+
+<ng-template #categoriesView>
+  <sar-category-card
+    *ngFor="let category of categories$ | async"
+    [category]="category"
+    style="margin-top: 10px"
+  ></sar-category-card>
+</ng-template>
