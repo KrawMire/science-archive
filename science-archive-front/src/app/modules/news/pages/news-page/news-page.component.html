@@ -1,10 +1,16 @@
-<sar-news-card [style]="'margin-top: 10px'"></sar-news-card>
-<sar-news-card [style]="'margin-top: 10px'"></sar-news-card>
-<sar-news-card [style]="'margin-top: 10px'"></sar-news-card>
-<sar-news-card [style]="'margin-top: 10px'"></sar-news-card>
-<sar-news-card [style]="'margin-top: 10px'"></sar-news-card>
-<sar-news-card [style]="'margin-top: 10px'"></sar-news-card>
-<sar-news-card [style]="'margin-top: 10px'"></sar-news-card>
-<sar-news-card [style]="'margin-top: 10px'"></sar-news-card>
-<sar-news-card [style]="'margin-top: 10px'"></sar-news-card>
-<sar-news-card [style]="'margin-top: 10px'"></sar-news-card>
+<div *ngIf="isLoading; else newsView">
+  <sar-news-card-skeleton
+    *ngFor="let _ of [1,2,3]"
+    [style]="'margin-top: 10px'"
+  ></sar-news-card-skeleton>
+</div>
+
+<ng-template #newsView>
+  <sar-news-card
+    *ngFor="let singleNews of news$ | async"
+    [news]="singleNews"
+    [style]="'margin-top: 10px'"
+  ></sar-news-card>
+</ng-template>
+
+

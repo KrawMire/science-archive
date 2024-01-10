@@ -1,4 +1,5 @@
 import { Component, Input } from "@angular/core";
+import { News } from "@models/news/news";
 
 @Component({
   selector: "sar-news-card",
@@ -7,6 +8,5 @@ import { Component, Input } from "@angular/core";
 })
 export class NewsCardComponent {
   @Input() style?: string;
-
-  date = new Date();
+  @Input() news!: News;
 }

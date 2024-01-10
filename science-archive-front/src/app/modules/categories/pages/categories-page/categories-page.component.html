@@ -1,5 +1,8 @@
 <div *ngIf="isLoading; else categoriesView">
-  <sar-category-card-skeleton *ngFor="let _ of [1,2,3]"></sar-category-card-skeleton>
+  <sar-category-card-skeleton
+    *ngFor="let _ of [1,2,3]"
+    style="margin-top: 10px"
+  ></sar-category-card-skeleton>
 </div>
 
 <ng-template #categoriesView>
