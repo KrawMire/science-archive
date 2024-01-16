@@ -1,7 +1,7 @@
 <nz-card
   [nzTitle]="news.title"
   [style]="style"
-  [nzExtra]="newsDate"
+  [nzExtra]="newsCreationDate"
 >
   <p>
     {{news.body}}
@@ -15,6 +15,6 @@
   </button>
 </nz-card>
 
-<ng-template #newsDate>
+<ng-template #newsCreationDate>
   <p>{{news.creationDate.toDateString()}}</p>
 </ng-template>

@@ -1,8 +1,12 @@
-<nz-card [style]="style">
-  <nz-card-meta
-    [nzTitle]="article.title"
-    nzDescription="Computer Science"
-  ></nz-card-meta>
+<nz-card
+  [style]="style"
+  [nzTitle]="article.title"
+  [nzExtra]="articleCreationDate"
+>
+  <nz-tag>
+    <!-- TODO: Add category -->
+    <a href="/content/categories">Computer Science</a>
+  </nz-tag>
 
   <p class="sar-card-description">
     {{article.description}}
@@ -15,3 +19,7 @@
     Read more
   </button>
 </nz-card>
+
+<ng-template #articleCreationDate>
+  <p>{{article.creationDate?.toDateString()}}</p>
+</ng-template>
