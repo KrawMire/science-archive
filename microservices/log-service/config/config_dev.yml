@@ -1,0 +1,9 @@
+mqConsumer:
+  queueName: "request_logs"
+  connectionString: "amqp://guest:guest@localhost:5672/"
+
+clickHouse:
+  Database: ""
+  Port: ""
+  Login: ""
+  Password: ""
