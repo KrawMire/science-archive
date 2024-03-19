@@ -3,7 +3,7 @@ mqConsumer:
   connectionString: "amqp://guest:guest@localhost:5672/"
 
 clickHouse:
-  Database: ""
-  Port: ""
-  Login: ""
-  Password: ""
+  database: "science-archive"
+  host: "127.0.0.1:9000"
+  username: "default"
+  password: ""

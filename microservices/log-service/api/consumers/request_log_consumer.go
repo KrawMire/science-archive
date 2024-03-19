@@ -51,7 +51,7 @@ func (c *RequestLogConsumer) WatchRequestLogsQueue() {
 	msgs, err := ch.Consume(
 		q.Name,
 		"",
-		false,
+		true,
 		false,
 		false,
 		false,
@@ -65,11 +65,9 @@ func (c *RequestLogConsumer) WatchRequestLogsQueue() {
 	go func() {
 		for d := range msgs {
 			var reqDto dtos.RequestLog
-			str := string(d.Body[:])
-			log.Println(str)
 			err = json.Unmarshal(d.Body, &reqDto)
 			if err != nil {
-				fmt.Printf("Cannot unmarshall request DTO: %s", err)
+				fmt.Printf("Cannot unmarshall request DTO: %s\n", err)
 				continue
 			}
 

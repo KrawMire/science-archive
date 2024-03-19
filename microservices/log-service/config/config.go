@@ -22,6 +22,10 @@ type MqConsumerConfig struct {
 }
 
 type ClickHouseConfig struct {
+	Host     string
+	Database string
+	Username string
+	Password string
 }
 
 func GetConfig() *Config {

@@ -12,7 +12,11 @@ import (
 func main() {
 	appConfig := config.GetConfig()
 
-	logRepository := clickhouse.NewLogRepository()
+	logRepository := clickhouse.NewLogRepository(
+		appConfig.ClickHouse.Host,
+		appConfig.ClickHouse.Database,
+		appConfig.ClickHouse.Username,
+		appConfig.ClickHouse.Password)
 	logService := application.NewLogService(logRepository)
 	logConsumer := consumers.NewRequestLogConsumer(
 		appConfig.MqConsumer.ConnectionString,
