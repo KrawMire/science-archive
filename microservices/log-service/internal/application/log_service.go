@@ -1,7 +1,6 @@
 package application
 
 import (
-	"fmt"
 	"log-service/internal/core/interfaces"
 	"log-service/internal/core/models"
 )
@@ -18,7 +17,6 @@ func NewLogService(repository interfaces.LogRepository) *LogService {
 
 func (l *LogService) LogRequest(log models.RequestLog) error {
 	if err := l.logRepository.CreateRequestLog(log); err != nil {
-		fmt.Printf("An error occurred while loggin a request")
 		return err
 	}
 

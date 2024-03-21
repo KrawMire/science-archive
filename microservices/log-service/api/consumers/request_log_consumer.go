@@ -2,7 +2,6 @@ package consumers
 
 import (
 	"encoding/json"
-	"fmt"
 	amqp "github.com/rabbitmq/amqp091-go"
 	"log"
 	"log-service/api/dtos"
@@ -60,35 +59,39 @@ func (c *RequestLogConsumer) WatchRequestLogsQueue() {
 		log.Fatal("Failed to register a consumer")
 	}
 
+	go c.handleRequestLogMessages(msgs)
+
+	log.Println("Listening to request logs messages...")
+
 	var forever chan struct{}
-
-	go func() {
-		for d := range msgs {
-			var reqDto dtos.RequestLog
-			err = json.Unmarshal(d.Body, &reqDto)
-			if err != nil {
-				fmt.Printf("Cannot unmarshall request DTO: %s\n", err)
-				continue
-			}
-
-			reqModel := models.RequestLog{
-				Timestamp:      reqDto.Timestamp,
-				Ip:             reqDto.Ip,
-				Url:            reqDto.Url,
-				UserAgent:      reqDto.UserAgent,
-				RequestString:  reqDto.RequestString,
-				StatusCode:     reqDto.StatusCode,
-				ResponseString: reqDto.ResponseString,
-			}
-
-			err = c.service.LogRequest(reqModel)
-			if err != nil {
-				log.Println(err)
-				continue
-			}
-		}
-	}()
-
-	log.Printf("Waiting for messages...")
 	<-forever
+}
+
+func (c *RequestLogConsumer) handleRequestLogMessages(msgs <-chan amqp.Delivery) {
+	for d := range msgs {
+		var reqDto dtos.RequestLog
+		err := json.Unmarshal(d.Body, &reqDto)
+		if err != nil {
+			log.Printf("Cannot unmarshall request DTO: %s\n", err)
+			continue
+		}
+
+		reqModel := models.RequestLog{
+			Timestamp:      reqDto.Timestamp,
+			Ip:             reqDto.Ip,
+			Url:            reqDto.Url,
+			UserAgent:      reqDto.UserAgent,
+			RequestString:  reqDto.RequestString,
+			StatusCode:     reqDto.StatusCode,
+			ResponseString: reqDto.ResponseString,
+		}
+
+		err = c.service.LogRequest(reqModel)
+		if err != nil {
+			log.Println(err)
+			continue
+		}
+
+		log.Println("Successfully processed request log message")
+	}
 }
