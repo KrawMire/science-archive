@@ -1,6 +1,6 @@
 package dtos
 
-type RequestLog struct {
+type RequestLogDto struct {
 	Timestamp      string `json:"timestamp"`
 	Ip             string `json:"ip"`
 	Url            string `json:"url"`

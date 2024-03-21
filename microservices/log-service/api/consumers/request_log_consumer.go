@@ -69,7 +69,7 @@ func (c *RequestLogConsumer) WatchRequestLogsQueue() {
 
 func (c *RequestLogConsumer) handleRequestLogMessages(msgs <-chan amqp.Delivery) {
 	for d := range msgs {
-		var reqDto dtos.RequestLog
+		var reqDto dtos.RequestLogDto
 		err := json.Unmarshal(d.Body, &reqDto)
 		if err != nil {
 			log.Printf("Cannot unmarshall request DTO: %s\n", err)
