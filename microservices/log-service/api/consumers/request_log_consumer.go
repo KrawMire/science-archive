@@ -24,7 +24,7 @@ func NewRequestLogConsumer(connectionString string, queueName string, service in
 }
 
 func (c *RequestLogConsumer) WatchRequestLogsQueue() {
-	conn, err := amqp.Dial("amqp://guest:guest@localhost:5672/")
+	conn, err := amqp.Dial(c.connectionString)
 	if err != nil {
 		log.Fatal("Failed to connect to RabbitMQ")
 	}
