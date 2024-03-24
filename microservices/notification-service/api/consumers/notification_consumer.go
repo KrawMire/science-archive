@@ -82,7 +82,7 @@ func (c *NotificationConsumer) handleRequestLogMessages(msgs <-chan amqp.Deliver
 
 		err = c.service.SendNotification(reqModel)
 		if err != nil {
-			log.Println(err)
+			log.Printf("Error while sending notification: %s\n", err)
 			continue
 		}
 

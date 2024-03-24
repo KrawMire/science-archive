@@ -22,7 +22,7 @@ func (n *NotificationService) SendNotification(notification models.Notification)
 		return err
 	}
 
-	if err = adapter.SendMessage(notification.Recipient, notification.Message); err != nil {
+	if err = adapter.SendMessage(notification); err != nil {
 		return err
 	}
 
