@@ -3,12 +3,12 @@ package config
 import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/credentials"
-	"science-archive/doc-store-api/internal/api/handlers"
-	"science-archive/doc-store-api/internal/application/services"
-	corerepositories "science-archive/doc-store-api/internal/core/repositories"
-	coreservices "science-archive/doc-store-api/internal/core/serivces"
-	"science-archive/doc-store-api/internal/persistence/object_storage/options"
-	"science-archive/doc-store-api/internal/persistence/object_storage/repositories"
+	"science-archive/content-storage-service/internal/api/handlers"
+	"science-archive/content-storage-service/internal/application/services"
+	corerepositories "science-archive/content-storage-service/internal/core/repositories"
+	coreservices "science-archive/content-storage-service/internal/core/serivces"
+	"science-archive/content-storage-service/internal/persistence/object_storage/options"
+	"science-archive/content-storage-service/internal/persistence/object_storage/repositories"
 )
 
 func ConfigureHandlers() *handlers.StorageHandler {

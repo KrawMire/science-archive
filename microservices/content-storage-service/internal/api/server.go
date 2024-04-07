@@ -2,7 +2,7 @@ package api
 
 import (
 	"github.com/gin-gonic/gin"
-	"science-archive/doc-store-api/internal/config"
+	"science-archive/content-storage-service/internal/config"
 )
 
 // Server is an HTTP server

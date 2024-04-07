@@ -7,7 +7,7 @@ import (
 	"github.com/aws/aws-sdk-go/service/s3"
 	"github.com/aws/aws-sdk-go/service/s3/s3manager"
 	"io"
-	"science-archive/doc-store-api/internal/persistence/object_storage/options"
+	"science-archive/content-storage-service/internal/persistence/object_storage/options"
 )
 
 type ObjectStorageRepository struct {

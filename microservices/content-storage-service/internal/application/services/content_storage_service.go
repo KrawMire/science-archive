@@ -5,7 +5,7 @@ import (
 	"github.com/google/uuid"
 	"mime/multipart"
 	"path/filepath"
-	"science-archive/doc-store-api/internal/core/repositories"
+	"science-archive/content-storage-service/internal/core/repositories"
 )
 
 type ContentStorageService struct {

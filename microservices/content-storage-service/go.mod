@@ -1,4 +1,4 @@
-module science-archive/doc-store-api
+module science-archive/content-storage-service
 
 go 1.20
 

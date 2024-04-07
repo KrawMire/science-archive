@@ -4,9 +4,9 @@ import (
 	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"
-	"science-archive/doc-store-api/internal/api/dtos"
-	"science-archive/doc-store-api/internal/api/dtos/storage/response_dtos"
-	"science-archive/doc-store-api/internal/core/serivces"
+	"science-archive/content-storage-service/internal/api/dtos"
+	"science-archive/content-storage-service/internal/api/dtos/storage/response_dtos"
+	"science-archive/content-storage-service/internal/core/serivces"
 )
 
 type StorageHandler struct {
