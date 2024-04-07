@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"science-archive/telegram-bot-api/internal/domain/models"
-	"science-archive/telegram-bot-api/internal/domain/services"
+	"science-archive/telegram-bot-service/internal/domain/models"
+	"science-archive/telegram-bot-service/internal/domain/services"
 )
 
 type TelegramWebhookHandler struct {

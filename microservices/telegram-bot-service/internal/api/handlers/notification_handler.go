@@ -2,7 +2,7 @@ package handlers
 
 import (
 	"net/http"
-	"science-archive/telegram-bot-api/internal/domain/services"
+	"science-archive/telegram-bot-service/internal/domain/services"
 )
 
 type NotificationHandler struct {

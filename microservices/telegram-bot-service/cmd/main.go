@@ -2,8 +2,8 @@ package main
 
 import (
 	"net/http"
-	"science-archive/telegram-bot-api/internal/api/handlers"
-	"science-archive/telegram-bot-api/internal/application/services"
+	"science-archive/telegram-bot-service/internal/api/handlers"
+	"science-archive/telegram-bot-service/internal/application/services"
 )
 
 func main() {

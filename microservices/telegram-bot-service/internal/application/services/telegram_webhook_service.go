@@ -3,8 +3,8 @@ package services
 import (
 	"net/http"
 	"net/url"
-	"science-archive/telegram-bot-api/internal/domain/models"
-	"science-archive/telegram-bot-api/pkg/config"
+	"science-archive/telegram-bot-service/internal/domain/models"
+	"science-archive/telegram-bot-service/pkg/config"
 	"strconv"
 )
 

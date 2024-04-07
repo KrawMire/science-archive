@@ -1,6 +1,6 @@
 package services
 
-import "science-archive/telegram-bot-api/internal/domain/models"
+import "science-archive/telegram-bot-service/internal/domain/models"
 
 // WebhookService is used to handle webhook requests
 type WebhookService interface {
