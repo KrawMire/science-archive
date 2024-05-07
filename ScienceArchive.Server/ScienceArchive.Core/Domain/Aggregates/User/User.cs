@@ -1,7 +1,7 @@
-﻿using ScienceArchive.Core.Domain.Aggregates.Role.ValueObjects;
-using ScienceArchive.Core.Domain.Aggregates.User.ValueObjects;
+﻿using ScienceArchive.Core.Domain.Aggregates.User.ValueObjects;
 using ScienceArchive.Core.Domain.Common;
-using ScienceArchive.Core.Domain.Utils;
+using ScienceArchive.Core.Exceptions;
+using ScienceArchive.Shared.Utils;
 
 namespace ScienceArchive.Core.Domain.Aggregates.User;
 
@@ -21,7 +21,7 @@ public class User : Entity<UserId>
     /// <summary>
     /// Set of user roles identifiers
     /// </summary>
-    public required List<RoleId> RolesIds { get; set; }
+    public required List<UserRole> Roles { get; init; }
     
     /// <summary>
     /// Name of the user
@@ -33,7 +33,7 @@ public class User : Entity<UserId>
         {
             if (string.IsNullOrWhiteSpace(value))
             {
-                throw new Exception("Name must not be empty or containing only whitespaces");
+                throw new InvalidFieldValueException(nameof(Name));
             }
 
             _name = value.Trim();
@@ -50,7 +50,7 @@ public class User : Entity<UserId>
         {
             if (!StringValidator.IsEmail(value))
             {
-                throw new Exception("Email value is invalid!");
+                throw new InvalidFieldValueException(nameof(Email));
             }
 
             _email = value.Trim();
@@ -63,21 +63,29 @@ public class User : Entity<UserId>
     public required string Login
     {
         get => _login;
-        set => _login = value.Trim();
+        set
+        {
+            if (string.IsNullOrWhiteSpace(value))
+            {
+                throw new InvalidFieldValueException(nameof(Login));
+            }
+
+            _login = value.Trim();
+        }
     }
+    
+    /// <summary>
+    /// List of articles which are related to user
+    /// </summary>
+    public List<UserArticle> Articles { get; set; }
+    
+    /// <summary>
+    /// Short user self-descriptive text
+    /// </summary>
+    public string? About { get; set; }
     
     /// <summary>
     /// User password
     /// </summary>
     public required UserPassword Password { get; set; }
-
-    /// <summary>
-    /// Does user have a password
-    /// </summary>
-    public bool HasPassword => !string.IsNullOrWhiteSpace(Password.Value);
-
-    /// <summary>
-    /// Does user have a password salt
-    /// </summary>
-    public bool HasPasswordSalt => !string.IsNullOrWhiteSpace(Password.Salt);
 }

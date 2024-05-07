@@ -1,9 +1,8 @@
-﻿using ScienceArchive.Core.Domain.Aggregates.Role;
-using ScienceArchive.Core.Domain.Aggregates.Role.ValueObjects;
+﻿using ScienceArchive.Core.Domain.Aggregates.Role.ValueObjects;
 using ScienceArchive.Core.Domain.Aggregates.User.ValueObjects;
-using ScienceArchive.Core.Repositories.Common;
+using ScienceArchive.Core.Domain.Common;
 
-namespace ScienceArchive.Core.Repositories;
+namespace ScienceArchive.Core.Domain.Aggregates.Role.Repositories;
 
 /// <summary>
 /// Role repository functionality

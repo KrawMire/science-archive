@@ -10,10 +10,10 @@ public class UserPassword : ValueObject
 	/// <summary>
 	///	Value of a user password
 	/// </summary>
-	public string Value { get; set; } = string.Empty;
+	public string? Value { get; set; }
 
 	/// <summary>
 	/// Salt for password
 	/// </summary>
-	public string Salt { get; set; } = string.Empty;
+	public string? Salt { get; set; }
 }

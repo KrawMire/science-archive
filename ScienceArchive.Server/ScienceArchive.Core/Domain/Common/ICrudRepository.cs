@@ -1,10 +1,10 @@
-﻿namespace ScienceArchive.Core.Repositories.Common;
+﻿namespace ScienceArchive.Core.Domain.Common;
 
 /// <summary>
 /// Base functionality of a CRUD repository
 /// </summary>
 /// <typeparam name="TId">Identifier of an entity</typeparam>
-/// <typeparam name="TEntity">Type of an entity</typeparam>
+/// <typeparam name="TEntity">Type of entity</typeparam>
 public interface ICrudRepository<TId, TEntity>
 {
     /// <summary>

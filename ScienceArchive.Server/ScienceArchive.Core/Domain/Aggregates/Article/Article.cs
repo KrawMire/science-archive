@@ -1,8 +1,8 @@
-﻿using ScienceArchive.Core.Domain.Aggregates.Article.Enums;
+﻿using ScienceArchive.Core.Domain.Aggregates.Article.Entities;
+using ScienceArchive.Core.Domain.Aggregates.Article.Enums;
 using ScienceArchive.Core.Domain.Aggregates.Article.ValueObjects;
-using ScienceArchive.Core.Domain.Aggregates.Category.ValueObjects;
-using ScienceArchive.Core.Domain.Aggregates.User.ValueObjects;
 using ScienceArchive.Core.Domain.Common;
+using ScienceArchive.Core.Exceptions;
 
 namespace ScienceArchive.Core.Domain.Aggregates.Article;
 
@@ -11,26 +11,41 @@ namespace ScienceArchive.Core.Domain.Aggregates.Article;
 /// </summary>
 public class Article : Entity<ArticleId>
 {
+    private string _title;
+    private string? _description;
     private ArticleStatus _status;
     
-    public Article(ArticleId? id = null) : base(id ?? ArticleId.CreateNew())
+    public Article(ArticleId? id) : base(id ?? ArticleId.CreateNew())
     {
+        _status = ArticleStatus.ToVerify;
     }
     
     /// <summary>
     /// Category of an article
     /// </summary>
-    public required CategoryId CategoryId { get; set; }
-    
+    public required ArticleCategory Category { get; init; }
+
     /// <summary>
     /// Article's title
     /// </summary>
-    public required string Title { get; set; }
+    public required string Title
+    {
+        get => _title;
+        set
+        {
+            if (string.IsNullOrWhiteSpace(value))
+            {
+                throw new InvalidFieldValueException(nameof(Title));
+            }
+
+            _title = value.Trim();
+        }
+    }
 
     /// <summary>
-    /// Author of an article
+    /// Authors of an article
     /// </summary>
-    public required List<UserId> AuthorsIds { get; set; }
+    public required List<ArticleAuthor> Authors { get; init; }
 
     /// <summary>
     /// Current status of an article
@@ -44,17 +59,21 @@ public class Article : Entity<ArticleId>
     /// <summary>
     /// Date when article was created
     /// </summary>
-    public required DateTime CreationDate { get; set; }
+    public required DateTime CreationDate { get; init; }
 
     /// <summary>
     /// Linked article document
     /// </summary>
-    public required List<ArticleDocument> Documents { get; set; }
-    
+    public required List<ArticleDocument> Documents { get; init; }
+
     /// <summary>
     /// Article description
     /// </summary>
-    public string? Description { get; set; }
+    public string? Description
+    {
+        get => _description;
+        set => _description = value?.Trim();
+    }
 
     /// <summary>
     /// Approve article

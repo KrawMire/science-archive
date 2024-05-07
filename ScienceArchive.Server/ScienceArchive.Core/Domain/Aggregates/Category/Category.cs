@@ -15,10 +15,15 @@ public class Category : AggregateRoot<CategoryId>
 	/// <summary>
 	/// Name of category
 	/// </summary>
-	public required string Name { get; set; }
+	public required string Name { get; init; }
 	
 	/// <summary>
 	/// Subcategories of a category
 	/// </summary>
-	public List<Category>? Subcategories { get; set; }
+	public required List<Category> Subcategories { get; init; }
+	
+	/// <summary>
+	/// Description of category
+	/// </summary>
+	public string? Description { get; init; }
 }

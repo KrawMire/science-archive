@@ -29,12 +29,9 @@
     <None Remove="Domain\Utils\" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Domain\" />
-    <Folder Include="Services\Article\" />
-    <Folder Include="Services\News\" />
-    <Folder Include="Services\News\" />
-    <Folder Include="Services\Role\" />
-    <Folder Include="Services\User\" />
-    <Folder Include="Services\System\" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.0-preview.3.24172.9" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ScienceArchive.Shared\ScienceArchive.Shared.csproj" />
   </ItemGroup>
 </Project>

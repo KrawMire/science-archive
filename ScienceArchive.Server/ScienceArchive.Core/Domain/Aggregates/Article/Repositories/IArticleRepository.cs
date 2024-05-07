@@ -1,10 +1,9 @@
-﻿using ScienceArchive.Core.Domain.Aggregates.Article;
-using ScienceArchive.Core.Domain.Aggregates.Article.ValueObjects;
+﻿using ScienceArchive.Core.Domain.Aggregates.Article.ValueObjects;
 using ScienceArchive.Core.Domain.Aggregates.Category.ValueObjects;
 using ScienceArchive.Core.Domain.Aggregates.User.ValueObjects;
-using ScienceArchive.Core.Repositories.Common;
+using ScienceArchive.Core.Domain.Common;
 
-namespace ScienceArchive.Core.Repositories;
+namespace ScienceArchive.Core.Domain.Aggregates.Article.Repositories;
 
 /// <summary>
 /// Article repository functionality

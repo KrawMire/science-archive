@@ -1,8 +1,7 @@
-using ScienceArchive.Core.Domain.Aggregates.Category;
 using ScienceArchive.Core.Domain.Aggregates.Category.ValueObjects;
-using ScienceArchive.Core.Repositories.Common;
+using ScienceArchive.Core.Domain.Common;
 
-namespace ScienceArchive.Core.Repositories;
+namespace ScienceArchive.Core.Domain.Aggregates.Category.Repositories;
 
 /// <summary>
 /// Contains methods for working with

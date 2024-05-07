@@ -1,21 +1,21 @@
 using ScienceArchive.Core.Domain.Common.Identifiers;
 using ScienceArchive.Core.Exceptions;
 
-namespace ScienceArchive.Core.Domain.Aggregates.Category.ValueObjects;
+namespace ScienceArchive.Core.Domain.Aggregates.Article.ValueObjects;
 
-public sealed class CategoryId : EntityId<Guid>
+public class ArticleDocumentId : EntityId<Guid>
 {
-	private CategoryId(Guid value) : base(value)
-	{
-	}
-	
-	/// <summary>
+    private ArticleDocumentId(Guid value) : base(value)
+    {
+    }
+
+    /// <summary>
     /// Create new entity ID
     /// </summary>
     /// <returns>New instance of entity ID</returns>
-    public static CategoryId CreateNew()
+    public static ArticleDocumentId CreateNew()
     {
-        return CreateFromGuid(Guid.NewGuid());
+    	return CreateFromGuid(Guid.NewGuid());
     }
     
     /// <summary>
@@ -27,14 +27,14 @@ public sealed class CategoryId : EntityId<Guid>
     /// <exception cref="InvalidEntityIdValueException">
     /// Thrown if string value of ID is invalid
     /// </exception>
-    public static CategoryId CreateFromString(string value)
+    public static ArticleDocumentId CreateFromString(string value)
     {
-        if (!Guid.TryParse(value, out var idValue))
-        {
-        	throw new InvalidEntityIdValueException(value, nameof(CategoryId));
-        }
-        
-        return CreateFromGuid(idValue);
+    	if (!Guid.TryParse(value, out var idValue))
+    	{
+    		throw new InvalidEntityIdValueException(value, nameof(ArticleDocumentId));
+    	}
+    	
+    	return CreateFromGuid(idValue);
     }
 
     /// <summary>
@@ -46,9 +46,9 @@ public sealed class CategoryId : EntityId<Guid>
     /// <exception cref="InvalidEntityIdValueException">
     /// Thrown if ID value is invalid
     /// </exception>
-    public static CategoryId CreateFromGuid(Guid value)
+    public static ArticleDocumentId CreateFromGuid(Guid value)
     {
-        return new CategoryId(value);
+    	return new ArticleDocumentId(value);
     }
 
     /// <summary>
@@ -58,12 +58,12 @@ public sealed class CategoryId : EntityId<Guid>
     /// <returns>String representation of ID value</returns>
     public override string ToString()
     {
-        return Value.ToString();
+    	return Value.ToString();
     }
     
     /// <inheritdoc />
     public override bool Equals(EntityId<Guid> compareId)
     {
-        return compareId is CategoryId compareCategoryId && Value.Equals(compareCategoryId.Value);
+    	return compareId is ArticleDocumentId compareArticleDocumentId && Value.Equals(compareArticleDocumentId.Value);
     }
 }
