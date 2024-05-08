@@ -1,7 +1,7 @@
-﻿using ScienceArchive.Core.Domain.Aggregates.User.ValueObjects;
+﻿using System.Net.Mail;
+using ScienceArchive.Core.Domain.Aggregates.User.ValueObjects;
 using ScienceArchive.Core.Domain.Common;
 using ScienceArchive.Core.Exceptions;
-using ScienceArchive.Shared.Utils;
 
 namespace ScienceArchive.Core.Domain.Aggregates.User;
 
@@ -48,7 +48,7 @@ public class User : Entity<UserId>
         get => _email;
         set
         {
-            if (!StringValidator.IsEmail(value))
+            if (!MailAddress.TryCreate(value, out _))
             {
                 throw new InvalidFieldValueException(nameof(Email));
             }
