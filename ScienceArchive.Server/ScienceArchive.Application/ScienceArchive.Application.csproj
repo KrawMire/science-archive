@@ -31,6 +31,7 @@
     <None Remove="Interactors\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ScienceArchive.Application.Abstractions\ScienceArchive.Application.Abstractions.csproj" />
     <ProjectReference Include="..\ScienceArchive.Core\ScienceArchive.Core.csproj" />
   </ItemGroup>
   <ItemGroup>

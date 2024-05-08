@@ -1,0 +1,29 @@
+﻿using ScienceArchive.Application.Dtos.Auth.Request;
+using ScienceArchive.Application.Dtos.Auth.Response;
+using ScienceArchive.Application.Interfaces.Services;
+using ScienceArchive.Application.Services.Common;
+
+namespace ScienceArchive.Application.Services;
+
+internal class AuthApplicationService : BaseApplicationService, IAuthApplicationService
+{ 
+    public AuthApplicationService(IServiceProvider serviceProvider) : base(serviceProvider) { }
+
+    /// <inheritdoc/>
+    public Task<LoginResponseDto> Login(LoginRequestDto dto)
+    {
+        return ExecuteUseCase<LoginRequestDto, LoginResponseDto>(dto);
+    }
+
+    /// <inheritdoc/>
+    public Task<RegisterResponseDto> Register(RegisterRequestDto dto)
+    {
+        return ExecuteUseCase<RegisterRequestDto, RegisterResponseDto>(dto);
+    }
+    
+    /// <inheritdoc/>
+    public Task<CheckUserClaimsResponseDto> CheckUserClaims(CheckUserClaimsRequestDto dto)
+    {
+        return ExecuteUseCase<CheckUserClaimsRequestDto, CheckUserClaimsResponseDto>(dto);
+    }
+}

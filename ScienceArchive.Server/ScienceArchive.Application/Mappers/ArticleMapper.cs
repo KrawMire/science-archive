@@ -1,6 +1,7 @@
 ﻿using ScienceArchive.Application.Dtos.Article;
 using ScienceArchive.Application.Interfaces;
 using ScienceArchive.Core.Domain.Aggregates.Article;
+using ScienceArchive.Core.Domain.Aggregates.Article.Entities;
 using ScienceArchive.Core.Domain.Aggregates.Article.Enums;
 using ScienceArchive.Core.Domain.Aggregates.Article.ValueObjects;
 using ScienceArchive.Core.Domain.Aggregates.Category.ValueObjects;
