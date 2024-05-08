@@ -5,6 +5,9 @@ using ScienceArchive.Application.Services.Common;
 
 namespace ScienceArchive.Application.Services;
 
+/// <summary>
+/// Represents a service that handles role-related functionalities in the application.
+/// </summary>
 internal class RoleApplicationService : BaseApplicationService, IRoleApplicationService
 {
     public RoleApplicationService(IServiceProvider serviceProvider) : base(serviceProvider) { }

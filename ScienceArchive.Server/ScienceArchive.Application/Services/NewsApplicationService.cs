@@ -5,6 +5,9 @@ using ScienceArchive.Application.Services.Common;
 
 namespace ScienceArchive.Application.Services;
 
+/// <summary>
+/// Provides methods to perform operations related to news articles.
+/// </summary>
 internal class NewsApplicationService : BaseApplicationService, INewsApplicationService
 {
     public NewsApplicationService(IServiceProvider serviceProvider) : base(serviceProvider) { }

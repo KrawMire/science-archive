@@ -5,6 +5,9 @@ using ScienceArchive.Application.Services.Common;
 
 namespace ScienceArchive.Application.Services;
 
+/// <summary>
+/// Application service for managing user related operations.
+/// </summary>
 internal class UserApplicationService : BaseApplicationService, IUserApplicationService
 {
     public UserApplicationService(IServiceProvider serviceProvider) : base(serviceProvider) { }

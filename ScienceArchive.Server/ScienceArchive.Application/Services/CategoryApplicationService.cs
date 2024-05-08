@@ -5,10 +5,13 @@ using ScienceArchive.Application.Services.Common;
 
 namespace ScienceArchive.Application.Services;
 
+/// <summary>
+/// Application service for managing categories.
+/// </summary>
 internal class CategoryApplicationService : BaseApplicationService, ICategoryApplicationService
 { 
 	public CategoryApplicationService(IServiceProvider serviceProvider) : base(serviceProvider) { }
-	
+
 	/// <inheritdoc/>
 	public Task<GetAllCategoriesResponseDto> GetAllCategories(GetAllCategoriesRequestDto dto)
 	{

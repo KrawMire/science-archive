@@ -5,6 +5,9 @@ using ScienceArchive.Application.Services.Common;
 
 namespace ScienceArchive.Application.Services;
 
+/// <summary>
+/// Represents the authentication application service.
+/// </summary>
 internal class AuthApplicationService : BaseApplicationService, IAuthApplicationService
 { 
     public AuthApplicationService(IServiceProvider serviceProvider) : base(serviceProvider) { }
