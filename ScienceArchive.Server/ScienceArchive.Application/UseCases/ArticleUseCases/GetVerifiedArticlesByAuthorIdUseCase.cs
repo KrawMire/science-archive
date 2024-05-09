@@ -1,3 +1,4 @@
+using ScienceArchive.Application.Abstractions.Persistence;
 using ScienceArchive.Application.Dtos.Article;
 using ScienceArchive.Application.Dtos.Article.Request;
 using ScienceArchive.Application.Dtos.Article.Response;
@@ -10,19 +11,19 @@ namespace ScienceArchive.Application.UseCases.ArticleUseCases;
 
 internal class GetVerifiedArticlesByAuthorIdUseCase : IUseCase<GetVerifiedArticlesByAuthorIdRequestDto, GetVerifiedArticlesByAuthorIdResponseDto>
 {
-    private readonly IArticleRepository _articleRepository;
+    private readonly IDbContext _dbContext;
     private readonly IApplicationMapper<Article, ArticleDto> _articleMapper;
     
-    public GetVerifiedArticlesByAuthorIdUseCase(IArticleRepository articleRepository, IApplicationMapper<Article, ArticleDto> articleMapper)
+    public GetVerifiedArticlesByAuthorIdUseCase(IApplicationMapper<Article, ArticleDto> articleMapper, IDbContext dbContext, IArticleRepository articleRepository)
     {
-        _articleRepository = articleRepository;
         _articleMapper = articleMapper;
+        _dbContext = dbContext;
     }
     
     public async Task<GetVerifiedArticlesByAuthorIdResponseDto> Execute(GetVerifiedArticlesByAuthorIdRequestDto contract)
     {
         var userId = UserId.CreateFromString(contract.AuthorId);
-        var articles = await _articleRepository.GetVerifiedByAuthorId(userId);
+        var articles = await _dbContext.ArticleRepository.GetVerifiedByAuthorId(userId);
         var articlesDtos = articles
             .Select(_articleMapper.MapToDto)
             .ToList();

@@ -16,7 +16,7 @@ internal class ArticleMapper : IApplicationMapper<Article, ArticleDto>
         var authorsIds = entity.AuthorsIds.Select(a => a.ToString()).ToList();
         var documentsPaths = entity.Documents.Select(d => d.DocumentPath).ToList();
         
-        return new()
+        return new ArticleDto
         {
             Id = entity.Id.ToString(),
             CategoryId = entity.CategoryId.ToString(),

@@ -10,7 +10,7 @@ internal class NewsMapper : IApplicationMapper<News, NewsDto>
 {
     public NewsDto MapToDto(News entity)
     {
-        return new()
+        return new NewsDto
         {
             Id = entity.Id.ToString(),
             Body = entity.Body,
@@ -27,7 +27,7 @@ internal class NewsMapper : IApplicationMapper<News, NewsDto>
             ? NewsId.CreateFromString(model.Id)
             : NewsId.CreateNew();
 
-        return new(newsId)
+        return new News(newsId)
         {
             Body = model.Body,
             Title = model.Title,

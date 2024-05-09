@@ -1,3 +1,4 @@
+using ScienceArchive.Application.Abstractions.Persistence;
 using ScienceArchive.Application.Dtos.Auth.Request;
 using ScienceArchive.Application.Dtos.Auth.Response;
 using ScienceArchive.Application.Interfaces;
@@ -6,6 +7,13 @@ namespace ScienceArchive.Application.UseCases.AuthUseCases;
 
 internal class LoginUseCase : IUseCase<LoginRequestDto, LoginResponseDto>
 {
+    private readonly IDbContext _dbContext;
+
+    public LoginUseCase(IDbContext dbContext)
+    {
+        _dbContext = dbContext;
+    }
+    
     public async Task<LoginResponseDto> Execute(LoginRequestDto contract)
     {
         throw new NotImplementedException();

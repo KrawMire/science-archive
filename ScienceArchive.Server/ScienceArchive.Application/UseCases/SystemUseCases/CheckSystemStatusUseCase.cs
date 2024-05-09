@@ -4,7 +4,7 @@ using ScienceArchive.Application.Interfaces;
 
 namespace ScienceArchive.Application.UseCases.SystemUseCases;
 
-public class CheckSystemStatusUseCase : IUseCase<CheckSystemStatusRequestDto, CheckSystemStatusResponseDto>
+internal class CheckSystemStatusUseCase : IUseCase<CheckSystemStatusRequestDto, CheckSystemStatusResponseDto>
 {
     public Task<CheckSystemStatusResponseDto> Execute(CheckSystemStatusRequestDto contract)
     {

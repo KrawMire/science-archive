@@ -1,5 +1,7 @@
-﻿using ScienceArchive.Application.Dtos.Auth.Request;
+﻿using ScienceArchive.Application.Abstractions.Persistence;
+using ScienceArchive.Application.Dtos.Auth.Request;
 using ScienceArchive.Application.Dtos.Auth.Response;
+using ScienceArchive.Application.Interfaces;
 using ScienceArchive.Application.Interfaces.Services;
 using ScienceArchive.Application.Services.Common;
 
@@ -10,7 +12,8 @@ namespace ScienceArchive.Application.Services;
 /// </summary>
 internal class AuthApplicationService : BaseApplicationService, IAuthApplicationService
 { 
-    public AuthApplicationService(IServiceProvider serviceProvider) : base(serviceProvider) { }
+    public AuthApplicationService(IServiceProvider serviceProvider, IDbContext dbContext, IEventBus eventBus) 
+        : base(serviceProvider, dbContext, eventBus) { }
 
     /// <inheritdoc/>
     public Task<LoginResponseDto> Login(LoginRequestDto dto)

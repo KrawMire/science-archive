@@ -1,42 +1,38 @@
+using ScienceArchive.Application.Abstractions.Persistence;
 using ScienceArchive.Application.Dtos.Article;
 using ScienceArchive.Application.Dtos.Article.Request;
 using ScienceArchive.Application.Dtos.Article.Response;
 using ScienceArchive.Application.Dtos.Category;
 using ScienceArchive.Application.Interfaces;
 using ScienceArchive.Core.Domain.Aggregates.Article;
-using ScienceArchive.Core.Domain.Aggregates.Article.Repositories;
 using ScienceArchive.Core.Domain.Aggregates.Category;
-using ScienceArchive.Core.Domain.Aggregates.Category.Repositories;
 using ScienceArchive.Core.Domain.Aggregates.Category.ValueObjects;
 
 namespace ScienceArchive.Application.UseCases.ArticleUseCases;
 
 internal class GetArticlesByCategoryIdUseCase : IUseCase<GetArticlesByCategoryIdRequestDto, GetArticlesByCategoryIdResponseDto>
 {
-    private readonly IArticleRepository _articleRepository;
-    private readonly ICategoryRepository _categoryRepository;
+    private readonly IDbContext _dbContext;
     private readonly IApplicationMapper<Article, ArticleDto> _articleMapper;
     private readonly IApplicationMapper<Category, CategoryDto> _categoryMapper;
     
     public GetArticlesByCategoryIdUseCase(
-        IArticleRepository articleRepository, 
-        ICategoryRepository categoryRepository, 
         IApplicationMapper<Article, ArticleDto> articleMapper,
-        IApplicationMapper<Category, CategoryDto> categoryMapper)
+        IApplicationMapper<Category, CategoryDto> categoryMapper, 
+        IDbContext dbContext)
     {
-        _articleRepository = articleRepository;
-        _categoryRepository = categoryRepository;
         _articleMapper = articleMapper;
         _categoryMapper = categoryMapper;
+        _dbContext = dbContext;
     }
     
     public async Task<GetArticlesByCategoryIdResponseDto> Execute(GetArticlesByCategoryIdRequestDto contract)
     {
         var categoryId = CategoryId.CreateFromString(contract.CategoryId);
-        var articles = await _articleRepository.GetVerifiedByCategoryId(categoryId);
+        var articles = await _dbContext.ArticleRepository.GetVerifiedByCategoryId(categoryId);
         var articlesDtos = articles.Select(_articleMapper.MapToDto).ToList();
         
-        var category = await _categoryRepository.GetSubcategoryById(categoryId);
+        var category = await _dbContext.CategoryRepository.GetSubcategoryById(categoryId);
 
         if (category is null)
         {

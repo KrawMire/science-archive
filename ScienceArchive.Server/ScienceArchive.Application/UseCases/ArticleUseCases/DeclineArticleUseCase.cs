@@ -1,9 +1,9 @@
+using ScienceArchive.Application.Abstractions.Persistence;
 using ScienceArchive.Application.Dtos.Article;
 using ScienceArchive.Application.Dtos.Article.Request;
 using ScienceArchive.Application.Dtos.Article.Response;
 using ScienceArchive.Application.Interfaces;
 using ScienceArchive.Core.Domain.Aggregates.Article;
-using ScienceArchive.Core.Domain.Aggregates.Article.Repositories;
 using ScienceArchive.Core.Domain.Aggregates.Article.ValueObjects;
 using ScienceArchive.Core.Exceptions;
 
@@ -11,19 +11,19 @@ namespace ScienceArchive.Application.UseCases.ArticleUseCases;
 
 internal class DeclineArticleUseCase : IUseCase<DeclineArticleRequestDto, DeclineArticleResponseDto>
 {
-    private readonly IArticleRepository _articleRepository;
+    private readonly IDbContext _dbContext;
     private readonly IApplicationMapper<Article, ArticleDto> _articleMapper;
     
-    public DeclineArticleUseCase(IArticleRepository articleRepository, IApplicationMapper<Article, ArticleDto> articleMapper)
+    public DeclineArticleUseCase(IApplicationMapper<Article, ArticleDto> articleMapper, IDbContext dbContext)
     {
-        _articleRepository = articleRepository;
         _articleMapper = articleMapper;
+        _dbContext = dbContext;
     }
     
     public async Task<DeclineArticleResponseDto> Execute(DeclineArticleRequestDto contract)
     {
         var articleId = ArticleId.CreateFromString(contract.ArticleId);
-        var article = await _articleRepository.GetById(articleId);
+        var article = await _dbContext.ArticleRepository.GetById(articleId);
 
         if (article is null)
         {
@@ -32,7 +32,7 @@ internal class DeclineArticleUseCase : IUseCase<DeclineArticleRequestDto, Declin
         
         article.Decline();
 
-        var updatedArticle = await _articleRepository.Update(articleId, article);
+        var updatedArticle = await _dbContext.ArticleRepository.Update(articleId, article);
         return new DeclineArticleResponseDto(_articleMapper.MapToDto(updatedArticle));
     }
 }

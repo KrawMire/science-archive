@@ -9,9 +9,11 @@ internal class CategoryMapper : IApplicationMapper<Category, CategoryDto>
 {
 	public CategoryDto MapToDto(Category entity)
 	{
-		var subcategories = entity.Subcategories?.Select(MapToDto).ToList();
+		var subcategories = entity.Subcategories
+			.Select(MapToDto)
+			.ToList();
 
-		return new()
+		return new CategoryDto
 		{
 			Id = entity.Id.ToString(),
 			Name = entity.Name,
@@ -27,7 +29,7 @@ internal class CategoryMapper : IApplicationMapper<Category, CategoryDto>
 		
 		var subcategories = dto.Subcategories?.Select(MapToEntity).ToList();
 
-		return new(id)
+		return new Category(id)
 		{
 			Name = dto.Name,
 			Subcategories = subcategories

@@ -1,7 +1,7 @@
+using ScienceArchive.Application.Abstractions.Persistence;
 using ScienceArchive.Application.Dtos.Auth.Request;
 using ScienceArchive.Application.Dtos.Auth.Response;
 using ScienceArchive.Application.Interfaces;
-using ScienceArchive.Core.Domain.Aggregates.Role.Repositories;
 using ScienceArchive.Core.Services;
 
 namespace ScienceArchive.Application.UseCases.AuthUseCases;
@@ -9,12 +9,12 @@ namespace ScienceArchive.Application.UseCases.AuthUseCases;
 internal class CheckUserClaimsUseCase : IUseCase<CheckUserClaimsRequestDto, CheckUserClaimsResponseDto>
 {
     private readonly IAuthService _authService;
-    private readonly IRoleRepository _roleRepository;
+    private readonly IDbContext _dbContext;
     
-    public CheckUserClaimsUseCase(IAuthService authService, IRoleRepository roleRepository)
+    public CheckUserClaimsUseCase(IAuthService authService, IDbContext dbContext)
     {
         _authService = authService;
-        _roleRepository = roleRepository;
+        _dbContext = dbContext;
     }
     
     public async Task<CheckUserClaimsResponseDto> Execute(CheckUserClaimsRequestDto contract)

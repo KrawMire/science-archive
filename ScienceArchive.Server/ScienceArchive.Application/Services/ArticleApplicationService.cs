@@ -1,5 +1,7 @@
-﻿using ScienceArchive.Application.Dtos.Article.Request;
+﻿using ScienceArchive.Application.Abstractions.Persistence;
+using ScienceArchive.Application.Dtos.Article.Request;
 using ScienceArchive.Application.Dtos.Article.Response;
+using ScienceArchive.Application.Interfaces;
 using ScienceArchive.Application.Interfaces.Services;
 using ScienceArchive.Application.Services.Common;
 
@@ -10,7 +12,8 @@ namespace ScienceArchive.Application.Services;
 /// </summary>
 internal class ArticleApplicationService : BaseApplicationService, IArticleApplicationService
 { 
-    public ArticleApplicationService(IServiceProvider serviceProvider) : base(serviceProvider) { }
+    public ArticleApplicationService(IServiceProvider serviceProvider, IDbContext dbContext, IEventBus eventBus) 
+        : base(serviceProvider, dbContext, eventBus) { }
 
     /// <inheritdoc />
     public Task<GetAllArticlesResponseDto> GetAllArticles(GetAllArticlesRequestDto dto)

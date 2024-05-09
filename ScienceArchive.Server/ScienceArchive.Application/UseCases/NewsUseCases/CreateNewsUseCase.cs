@@ -1,27 +1,27 @@
+using ScienceArchive.Application.Abstractions.Persistence;
 using ScienceArchive.Application.Dtos.News;
 using ScienceArchive.Application.Dtos.News.Request;
 using ScienceArchive.Application.Dtos.News.Response;
 using ScienceArchive.Application.Interfaces;
 using ScienceArchive.Core.Domain.Aggregates.News;
-using ScienceArchive.Core.Domain.Aggregates.News.Repositories;
 
 namespace ScienceArchive.Application.UseCases.NewsUseCases;
 
 internal class CreateNewsUseCase : IUseCase<CreateNewsRequestDto, CreateNewsResponseDto>
 {
-    private readonly INewsRepository _newsRepository;
+    private readonly IDbContext _dbContext;
     private readonly IApplicationMapper<News, NewsDto> _newsMapper;
     
-    public CreateNewsUseCase(IApplicationMapper<News, NewsDto> newsMapper, INewsRepository newsRepository)
+    public CreateNewsUseCase(IApplicationMapper<News, NewsDto> newsMapper, IDbContext dbContext)
     {
         _newsMapper = newsMapper;
-        _newsRepository = newsRepository;
+        _dbContext = dbContext;
     }
     
     public async Task<CreateNewsResponseDto> Execute(CreateNewsRequestDto contract)
     {
         var newsToCreate = _newsMapper.MapToEntity(contract.News);
-        var createdNews = await _newsRepository.Create(newsToCreate);
+        var createdNews = await _dbContext.NewsRepository.Create(newsToCreate);
 
         return new CreateNewsResponseDto(_newsMapper.MapToDto(createdNews));
     }

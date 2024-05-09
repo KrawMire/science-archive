@@ -1,3 +1,4 @@
+using ScienceArchive.Application.Abstractions.Persistence;
 using ScienceArchive.Application.Dtos.Article;
 using ScienceArchive.Application.Dtos.Article.Request;
 using ScienceArchive.Application.Dtos.Article.Response;
@@ -10,6 +11,7 @@ namespace ScienceArchive.Application.UseCases.ArticleUseCases;
 
 internal class DeleteArticleUseCase : IUseCase<DeleteArticleRequestDto, DeleteArticleResponseDto>
 {
+    private readonly IDbContext _dbContext;
     private readonly IArticleRepository _articleRepository;
     private readonly IApplicationMapper<Article, ArticleDto> _articleMapper;
     

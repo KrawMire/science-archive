@@ -1,5 +1,7 @@
-﻿using ScienceArchive.Application.Dtos.System.Request;
+﻿using ScienceArchive.Application.Abstractions.Persistence;
+using ScienceArchive.Application.Dtos.System.Request;
 using ScienceArchive.Application.Dtos.System.Response;
+using ScienceArchive.Application.Interfaces;
 using ScienceArchive.Application.Interfaces.Services;
 using ScienceArchive.Application.Services.Common;
 
@@ -13,7 +15,8 @@ namespace ScienceArchive.Application.Services;
 /// </remarks>
 internal class SystemApplicationService : BaseApplicationService, ISystemApplicationService
 {
-    public SystemApplicationService(IServiceProvider serviceProvider) : base(serviceProvider) { }
+    public SystemApplicationService(IServiceProvider serviceProvider, IDbContext dbContext, IEventBus eventBus) 
+        : base(serviceProvider, dbContext, eventBus) { }
 
     /// <inheritdoc/>
     public Task<CheckSystemStatusResponseDto> CheckSystemStatus(CheckSystemStatusRequestDto dto)
