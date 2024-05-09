@@ -1,3 +1,4 @@
+using ScienceArchive.Core.Domain.Aggregates.Category.Entities;
 using ScienceArchive.Core.Domain.Aggregates.Category.ValueObjects;
 using ScienceArchive.Core.Domain.Common;
 
@@ -14,7 +15,7 @@ public interface ICategoryRepository : ICrudRepository<CategoryId, Category>
 	/// </summary>
 	/// <param name="subcategoryId">Subcategory ID</param>
 	/// <returns>Found subcategory or null</returns>
-	Task<Category?> GetSubcategoryById(CategoryId subcategoryId);
+	Task<Subcategory?> GetSubcategoryById(CategoryId subcategoryId);
 	
 	/// <summary>
 	/// Create subcategory in category

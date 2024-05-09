@@ -23,8 +23,7 @@ public class ExceptionHandlerMiddleware
         }
         catch (BadHttpRequestException ex)
         {
-            httpContext.Response.StatusCode = ex.StatusCode;
-            await ProcessException(ex, httpContext);
+            await ProcessException(ex, httpContext, 400);
         }
         catch (Exception ex)
         {
@@ -32,7 +31,7 @@ public class ExceptionHandlerMiddleware
         }
     }
 
-    private async Task ProcessException(Exception ex, HttpContext httpContext)
+    private async Task ProcessException(Exception ex, HttpContext httpContext, int statusCode = 500)
     {
         var response = new ErrorResponse(ex.Message);
         var body = JsonSerializer.Serialize(response);
@@ -40,6 +39,7 @@ public class ExceptionHandlerMiddleware
         try
         {
             httpContext.Response.ContentType = "application/json";
+            httpContext.Response.StatusCode = statusCode;
             await httpContext.Response.WriteAsync(body);
         }
         catch (Exception e)

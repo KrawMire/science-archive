@@ -16,10 +16,10 @@ namespace ScienceArchive.Infrastructure.Persistence.PostgreSql.Repositories;
 internal class PostgresArticleRepository : IArticleRepository
 {
     private readonly IInfrastructureMapper<Article, ArticleModel> _mapper;
-    private readonly PostgresDbContext _dbContext;
+    private readonly PostgresExecutionContext _dbContext;
     
     public PostgresArticleRepository(
-        PostgresDbContext dbContext, 
+        PostgresExecutionContext dbContext,
         IInfrastructureMapper<Article, ArticleModel> mapper)
     {
         _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));

@@ -12,12 +12,12 @@ namespace ScienceArchive.Infrastructure.Persistence.PostgreSql.Repositories;
 
 internal class PostgresNewsRepository : INewsRepository
 {
-    private readonly PostgresDbContext _dbContext;
+    private readonly PostgresExecutionContext _dbContext;
     private readonly IInfrastructureMapper<News, NewsModel> _mapper;
 
     public PostgresNewsRepository(
         IInfrastructureMapper<News, NewsModel> mapper, 
-        PostgresDbContext dbContext)
+        PostgresExecutionContext dbContext)
     {
         _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));

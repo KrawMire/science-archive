@@ -12,11 +12,12 @@ namespace ScienceArchive.Infrastructure.Persistence.PostgreSql.Repositories;
 
 internal class PostgresUserRepository : IUserRepository
 {
-    private readonly PostgresDbContext _dbContext;
+    private readonly PostgresExecutionContext _dbContext;
     private readonly IInfrastructureMapper<User, UserModel> _userMapper;
 
     public PostgresUserRepository(
-        IInfrastructureMapper<User, UserModel> userMapper, PostgresDbContext dbContext)
+        IInfrastructureMapper<User, UserModel> userMapper, 
+        PostgresExecutionContext dbContext)
     {
         _userMapper = userMapper ?? throw new ArgumentNullException(nameof(userMapper));
         _dbContext = dbContext;

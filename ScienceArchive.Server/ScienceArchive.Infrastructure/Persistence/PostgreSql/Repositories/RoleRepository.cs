@@ -13,14 +13,14 @@ namespace ScienceArchive.Infrastructure.Persistence.PostgreSql.Repositories;
 
 internal class PostgresRoleRepository : IRoleRepository
 {
-    private readonly PostgresDbContext _dbContext;
+    private readonly PostgresExecutionContext _dbContext;
     private readonly IInfrastructureMapper<Role, RoleModel> _roleMapper;
     private readonly IInfrastructureMapper<RoleClaim, RoleClaimModel> _claimMapper;
 
     public PostgresRoleRepository(
         IInfrastructureMapper<Role, RoleModel> roleMapper,
         IInfrastructureMapper<RoleClaim, RoleClaimModel> claimMapper, 
-        PostgresDbContext dbContext)
+        PostgresExecutionContext dbContext)
     {
         _claimMapper = claimMapper ?? throw new ArgumentNullException(nameof(claimMapper));
         _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
@@ -75,7 +75,9 @@ internal class PostgresRoleRepository : IRoleRepository
             throw new EntityNotFoundException(nameof(RoleClaim));
         }
 
-        return claims.Select(_claimMapper.MapToEntity).ToList();
+        return claims
+            .Select(_claimMapper.MapToEntity)
+            .ToList();
     }
 
     /// <inheritdoc/>
@@ -88,7 +90,7 @@ internal class PostgresRoleRepository : IRoleRepository
             @Id::uuid, 
             @Name::varchar(255), 
             @Description::varchar(255), 
-            @ClaimsIds::uuid[])"; 
+            @ClaimsIds::uuid[])";
         
         var createdRole = await _dbContext.Connection.QuerySingleOrDefaultAsync<RoleModel>(
             sql,

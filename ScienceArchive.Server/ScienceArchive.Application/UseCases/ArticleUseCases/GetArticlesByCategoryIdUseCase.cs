@@ -5,7 +5,7 @@ using ScienceArchive.Application.Dtos.Article.Response;
 using ScienceArchive.Application.Dtos.Category;
 using ScienceArchive.Application.Interfaces;
 using ScienceArchive.Core.Domain.Aggregates.Article;
-using ScienceArchive.Core.Domain.Aggregates.Category;
+using ScienceArchive.Core.Domain.Aggregates.Category.Entities;
 using ScienceArchive.Core.Domain.Aggregates.Category.ValueObjects;
 
 namespace ScienceArchive.Application.UseCases.ArticleUseCases;
@@ -14,11 +14,11 @@ internal class GetArticlesByCategoryIdUseCase : IUseCase<GetArticlesByCategoryId
 {
     private readonly IDbContext _dbContext;
     private readonly IApplicationMapper<Article, ArticleDto> _articleMapper;
-    private readonly IApplicationMapper<Category, CategoryDto> _categoryMapper;
+    private readonly IApplicationMapper<Subcategory, CategoryDto> _categoryMapper;
     
     public GetArticlesByCategoryIdUseCase(
         IApplicationMapper<Article, ArticleDto> articleMapper,
-        IApplicationMapper<Category, CategoryDto> categoryMapper, 
+        IApplicationMapper<Subcategory, CategoryDto> categoryMapper, 
         IDbContext dbContext)
     {
         _articleMapper = articleMapper;
@@ -32,14 +32,14 @@ internal class GetArticlesByCategoryIdUseCase : IUseCase<GetArticlesByCategoryId
         var articles = await _dbContext.ArticleRepository.GetVerifiedByCategoryId(categoryId);
         var articlesDtos = articles.Select(_articleMapper.MapToDto).ToList();
         
-        var category = await _dbContext.CategoryRepository.GetSubcategoryById(categoryId);
+        var subcategory = await _dbContext.CategoryRepository.GetSubcategoryById(categoryId);
 
-        if (category is null)
+        if (subcategory is null)
         {
             throw new Exception("Category with specified ID was not found");
         }
 
-        var categoryDto = _categoryMapper.MapToDto(category);
+        var categoryDto = _categoryMapper.MapToDto(subcategory);
         
         return new GetArticlesByCategoryIdResponseDto(articlesDtos, categoryDto);
     }

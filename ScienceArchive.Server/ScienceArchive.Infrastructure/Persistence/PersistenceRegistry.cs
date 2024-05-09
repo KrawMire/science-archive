@@ -4,11 +4,14 @@ using ScienceArchive.Application.Abstractions.Persistence;
 using ScienceArchive.Core.Domain.Aggregates.Article;
 using ScienceArchive.Core.Domain.Aggregates.Article.Repositories;
 using ScienceArchive.Core.Domain.Aggregates.Category;
+using ScienceArchive.Core.Domain.Aggregates.Category.Entities;
 using ScienceArchive.Core.Domain.Aggregates.Category.Repositories;
 using ScienceArchive.Core.Domain.Aggregates.News;
 using ScienceArchive.Core.Domain.Aggregates.News.Repositories;
+using ScienceArchive.Core.Domain.Aggregates.Notification.Repositories;
 using ScienceArchive.Core.Domain.Aggregates.Role;
 using ScienceArchive.Core.Domain.Aggregates.Role.Repositories;
+using ScienceArchive.Core.Domain.Aggregates.Role.ValueObjects;
 using ScienceArchive.Core.Domain.Aggregates.User;
 using ScienceArchive.Core.Domain.Aggregates.User.Repositories;
 using ScienceArchive.Infrastructure.Interfaces;
@@ -36,12 +39,14 @@ internal static class PersistenceRegistry
             .RegisterPersistenceMappers()
             .RegisterConnectionOptions(connectionOptions);
     }
+    
     private static IServiceCollection RegisterRepositories(this IServiceCollection services)
     {
         return services
             .AddTransient<IArticleRepository, PostgresArticleRepository>()
             .AddTransient<ICategoryRepository, PostgresCategoryRepository>()
             .AddTransient<INewsRepository, PostgresNewsRepository>()
+            .AddTransient<INotificationRepository, PostgresNotificationRepository>()
             .AddTransient<IRoleRepository, PostgresRoleRepository>()
             .AddTransient<IUserRepository, PostgresUserRepository>();
     }
@@ -49,8 +54,9 @@ internal static class PersistenceRegistry
     private static IServiceCollection RegisterDbContext(this IServiceCollection services)
     {
         return services
+            .AddScoped<PostgresExecutionContext>()
             .AddScoped<PostgresDbContext>()
-            .AddScoped<IDbContext>(provider => provider.GetService<PostgresDbContext>() 
+            .AddScoped<IDbContext>(provider => provider.GetService<PostgresDbContext>()
                                                ?? throw new InvalidOperationException("PostgresDbContext was not found as injectable service"));
     }
 
@@ -65,13 +71,15 @@ internal static class PersistenceRegistry
         return services
             .AddTransient<IInfrastructureMapper<Article, ArticleModel>, ArticleMapper>()
             .AddTransient<IInfrastructureMapper<Category, CategoryModel>, CategoryMapper>()
+            .AddTransient<IInfrastructureMapper<Subcategory, SubcategoryModel>, SubcategoryMapper>()
             .AddTransient<IInfrastructureMapper<News, NewsModel>, NewsMapper>()
             .AddTransient<IInfrastructureMapper<Role, RoleModel>, RoleMapper>()
+            .AddTransient<IInfrastructureMapper<RoleClaim, RoleClaimModel>, RoleClaimMapper>()
             .AddTransient<IInfrastructureMapper<User, UserModel>, UserMapper>();
     }
     
     private static IServiceCollection RegisterConnectionOptions(this IServiceCollection services, PersistenceConnectionOptions connectionOptions)
     {
-        return services.AddSingleton(connectionOptions);
+        return services.AddSingleton(connectionOptions.PostgresConnectionOptions);
     }
 }

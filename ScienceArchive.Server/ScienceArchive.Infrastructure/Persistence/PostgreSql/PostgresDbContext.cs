@@ -1,12 +1,10 @@
-﻿using Npgsql;
-using ScienceArchive.Application.Abstractions.Persistence;
+﻿using ScienceArchive.Application.Abstractions.Persistence;
 using ScienceArchive.Core.Domain.Aggregates.Article.Repositories;
 using ScienceArchive.Core.Domain.Aggregates.Category.Repositories;
 using ScienceArchive.Core.Domain.Aggregates.News.Repositories;
 using ScienceArchive.Core.Domain.Aggregates.Notification.Repositories;
 using ScienceArchive.Core.Domain.Aggregates.Role.Repositories;
 using ScienceArchive.Core.Domain.Aggregates.User.Repositories;
-using ScienceArchive.Infrastructure.Persistence.PostgreSql.Options;
 
 namespace ScienceArchive.Infrastructure.Persistence.PostgreSql;
 
@@ -15,8 +13,10 @@ namespace ScienceArchive.Infrastructure.Persistence.PostgreSql;
 /// </summary>
 internal class PostgresDbContext : IDbContext, IDisposable, IAsyncDisposable
 {
+    private readonly PostgresExecutionContext _context;
+    
     public PostgresDbContext(
-        PostgresConnectionOptions connectionOptions,
+        PostgresExecutionContext context,
         IArticleRepository articleRepository, 
         ICategoryRepository categoryRepository, 
         INewsRepository newsRepository, 
@@ -24,14 +24,13 @@ internal class PostgresDbContext : IDbContext, IDisposable, IAsyncDisposable
         IRoleRepository roleRepository, 
         IUserRepository userRepository)
     {
+        _context = context;
         ArticleRepository = articleRepository;
         CategoryRepository = categoryRepository;
         NewsRepository = newsRepository;
         NotificationRepository = notificationRepository;
         RoleRepository = roleRepository;
         UserRepository = userRepository;
-
-        Connection = new NpgsqlConnection(connectionOptions.PostgresConnectionString);
     }
 
     /// <inheritdoc/>
@@ -52,76 +51,67 @@ internal class PostgresDbContext : IDbContext, IDisposable, IAsyncDisposable
     /// <inheritdoc/>
     public IUserRepository UserRepository { get; }
 
-    /// <summary>
-    /// Represents the connection to the PostgreSQL database.
-    /// </summary>
-    public NpgsqlConnection Connection { get; }
-
-    /// <summary>
-    /// Represents a transaction within a PostgreSQL database context.
-    /// </summary>
-    public NpgsqlTransaction? Transaction { get; private set; }
-
     /// <inheritdoc/>
     public async Task StartTransactionAsync()
     {
-        if (Transaction is not null)
+        if (_context.Transaction is not null)
         {
             throw new InvalidOperationException("Transaction has already been started");
         }
-
-        Transaction = await Connection.BeginTransactionAsync();
+        
+        await _context.Connection.OpenAsync();
+        _context.Transaction = await _context.Connection.BeginTransactionAsync();
     }
 
     /// <inheritdoc/>
     public async Task SaveAsync()
     {
-        if (Transaction is null)
+        if (_context.Transaction is null)
         {
             throw new InvalidOperationException("There is no transaction to commit");
         }
         
-        await Transaction.CommitAsync();
-        await Transaction.DisposeAsync();
+        await _context.Transaction.CommitAsync();
+        await _context.Transaction.DisposeAsync();
         
-        Transaction = null;
+        _context.Transaction = null;
     }
 
     /// <inheritdoc/>
     public async Task RollbackAsync()
     {
-        if (Transaction is null)
+        if (_context.Transaction is null)
         {
             throw new InvalidOperationException("There is no transaction to rollback");
         }
         
-        await Transaction.RollbackAsync();
-        await Transaction.DisposeAsync();
+        await _context.Transaction.RollbackAsync();
+        await _context.Transaction.DisposeAsync();
         
-        Transaction = null;
+        _context.Transaction = null;
     }
 
     /// <inheritdoc/>
     public void Dispose()
     {
-        Connection.Dispose();
+        _context.Connection.Dispose();
 
-        if (Transaction is not null)
+        if (_context.Transaction is not null)
         {
-            Transaction.Rollback();
-            Transaction.Dispose();   
+            _context.Transaction.Rollback();
+            _context.Transaction.Dispose();   
         }
     }
 
     /// <inheritdoc/>
     public async ValueTask DisposeAsync()
     {
-        await Connection.DisposeAsync();
+        await _context.Connection.DisposeAsync();
 
-        if (Transaction is not null)
+        if (_context.Transaction is not null)
         {
-            await Transaction.RollbackAsync();
-            await Transaction.DisposeAsync();   
+            await _context.Transaction.RollbackAsync();
+            await _context.Transaction.DisposeAsync();   
         }
     }
 }

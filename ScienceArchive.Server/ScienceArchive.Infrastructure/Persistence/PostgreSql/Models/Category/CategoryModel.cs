@@ -1,6 +1,6 @@
 namespace ScienceArchive.Infrastructure.Persistence.PostgreSql.Models;
 
-internal class CategoryModel
+internal record CategoryModel
 {
 	public required Guid Id { get; set; }
 	public required string Name { get; set; }

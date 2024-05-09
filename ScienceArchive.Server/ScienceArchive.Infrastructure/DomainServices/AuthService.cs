@@ -7,6 +7,8 @@ namespace ScienceArchive.Infrastructure.DomainServices;
 
 internal class AuthService : IAuthService 
 {
+    
+    
     public Task<User> RegisterUser(User user, string password)
     {
         throw new NotImplementedException();

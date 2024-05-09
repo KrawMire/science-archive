@@ -1,6 +1,7 @@
 using System.Data;
 using Dapper;
 using ScienceArchive.Core.Domain.Aggregates.Category;
+using ScienceArchive.Core.Domain.Aggregates.Category.Entities;
 using ScienceArchive.Core.Domain.Aggregates.Category.Repositories;
 using ScienceArchive.Core.Domain.Aggregates.Category.ValueObjects;
 using ScienceArchive.Core.Exceptions;
@@ -11,14 +12,14 @@ namespace ScienceArchive.Infrastructure.Persistence.PostgreSql.Repositories;
 
 internal class PostgresCategoryRepository : ICategoryRepository
 {
-	private readonly PostgresDbContext _dbContext;
+	private readonly PostgresExecutionContext _dbContext;
 	private readonly IInfrastructureMapper<Category, CategoryModel> _mapper;
-	private readonly IInfrastructureMapper<Category, SubcategoryModel> _subcategoryMapper;
+	private readonly IInfrastructureMapper<Subcategory, SubcategoryModel> _subcategoryMapper;
 	
 	public PostgresCategoryRepository(
 		IInfrastructureMapper<Category, CategoryModel> mapper,
-		IInfrastructureMapper<Category, SubcategoryModel> subcategoryMapper, 
-		PostgresDbContext dbContext)
+		IInfrastructureMapper<Subcategory, SubcategoryModel> subcategoryMapper, 
+		PostgresExecutionContext dbContext)
 	{
 		_mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
 		_subcategoryMapper = subcategoryMapper ?? throw new ArgumentNullException(nameof(subcategoryMapper));
@@ -71,7 +72,7 @@ internal class PostgresCategoryRepository : ICategoryRepository
 		throw new NotImplementedException();
 	}
 
-	public async Task<Category?> GetSubcategoryById(CategoryId subcategoryId)
+	public async Task<Subcategory?> GetSubcategoryById(CategoryId subcategoryId)
 	{
 		var parameters = new DynamicParameters();
 		parameters.Add("Id", subcategoryId.Value);

@@ -17,7 +17,9 @@ public static class InfrastructureRegistry
     {
         return services
             .RegisterPersistenceServices(persistenceOptions)
-            .RegisterConnectivityServices();
+            .RegisterConnectivityServices()
+            .RegisterDomainServices()
+            .RegisterApplicationServices();
     }
 
     private static IServiceCollection RegisterDomainServices(this IServiceCollection services)

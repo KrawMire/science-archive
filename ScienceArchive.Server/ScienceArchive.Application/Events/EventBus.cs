@@ -20,7 +20,7 @@ internal class EventBus : IEventBus
     /// <inheritdoc/>
     public Task HandleEvents()
     {
-        throw new NotImplementedException();
+        return Task.CompletedTask;
     }
 
     /// <inheritdoc/>

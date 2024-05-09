@@ -36,6 +36,7 @@ using ScienceArchive.Application.UseCases.SystemUseCases;
 using ScienceArchive.Application.UseCases.UserUseCases;
 using ScienceArchive.Core.Domain.Aggregates.Article;
 using ScienceArchive.Core.Domain.Aggregates.Category;
+using ScienceArchive.Core.Domain.Aggregates.Category.Entities;
 using ScienceArchive.Core.Domain.Aggregates.News;
 using ScienceArchive.Core.Domain.Aggregates.Role;
 using ScienceArchive.Core.Domain.Aggregates.User;
@@ -70,6 +71,7 @@ public static class ApplicationRegistry
             .AddTransient<IArticleApplicationService, ArticleApplicationService>()
             .AddTransient<IAuthApplicationService, AuthApplicationService>()
             .AddTransient<ICategoryApplicationService, CategoryApplicationService>()
+            .AddTransient<ILogApplicationService, LogApplicationService>()
             .AddTransient<INewsApplicationService, NewsApplicationService>()
             .AddTransient<IRoleApplicationService, RoleApplicationService>()
             .AddTransient<ISystemApplicationService, SystemApplicationService>()
@@ -86,6 +88,7 @@ public static class ApplicationRegistry
         return services
             .AddTransient<IApplicationMapper<Article, ArticleDto>, ArticleMapper>()
             .AddTransient<IApplicationMapper<Category, CategoryDto>, CategoryMapper>()
+            .AddTransient<IApplicationMapper<Subcategory, CategoryDto>, SubcategoryMapper>()
             .AddTransient<IApplicationMapper<News, NewsDto>, NewsMapper>()
             .AddTransient<IApplicationMapper<Role, RoleDto>, RoleMapper>()
             .AddTransient<IApplicationMapper<User, UserDto>, UserMapper>();

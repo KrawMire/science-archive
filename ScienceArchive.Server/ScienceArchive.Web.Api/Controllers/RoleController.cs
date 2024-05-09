@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ScienceArchive.Application.Dtos.Role.Request;
 using ScienceArchive.Application.Interfaces.Services;
-using ScienceArchive.Web.Api.Auth;
 using ScienceArchive.Web.Api.Responses;
 
 namespace ScienceArchive.Web.Api.Controllers;

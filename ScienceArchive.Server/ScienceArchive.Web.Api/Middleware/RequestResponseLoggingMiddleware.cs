@@ -9,19 +9,16 @@ public class RequestResponseLoggingMiddleware
 {
 	private readonly RequestDelegate _next;
 	private readonly ILogger<ExceptionHandlerMiddleware> _logger;
-	private readonly ILogApplicationService _logService;
 
 	public RequestResponseLoggingMiddleware(
 		RequestDelegate next, 
-		ILogger<ExceptionHandlerMiddleware> logger,
-		ILogApplicationService logService)
+		ILogger<ExceptionHandlerMiddleware> logger)
 	{
 		_next = next;
 		_logger = logger;
-		_logService = logService;
 	}
 	
-	public async Task Invoke(HttpContext httpContext)
+	public async Task Invoke(HttpContext httpContext, ILogApplicationService logService)
 	{
 		httpContext.Request.EnableBuffering();
 		
@@ -49,7 +46,7 @@ public class RequestResponseLoggingMiddleware
 		                        			User-Agent: {log.UserAgent}
 		                        """);
 		
-		_ = Task.Run(() => _logService.LogRequest(new LogRequestRequestDto(log)));
+		_ = Task.Run(() => logService.LogRequest(new LogRequestRequestDto(log)));
 	}
 
 	private async Task<RequestLog> GetRequestLog(HttpContext httpContext)
