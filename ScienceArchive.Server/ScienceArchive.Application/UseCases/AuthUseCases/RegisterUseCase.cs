@@ -1,4 +1,3 @@
-using ScienceArchive.Application.Dtos;
 using ScienceArchive.Application.Dtos.Auth.Request;
 using ScienceArchive.Application.Dtos.Auth.Response;
 using ScienceArchive.Application.Dtos.User;

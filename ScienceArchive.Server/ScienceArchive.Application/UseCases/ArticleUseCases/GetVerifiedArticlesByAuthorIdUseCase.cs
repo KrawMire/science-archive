@@ -14,7 +14,7 @@ internal class GetVerifiedArticlesByAuthorIdUseCase : IUseCase<GetVerifiedArticl
     private readonly IDbContext _dbContext;
     private readonly IApplicationMapper<Article, ArticleDto> _articleMapper;
     
-    public GetVerifiedArticlesByAuthorIdUseCase(IApplicationMapper<Article, ArticleDto> articleMapper, IDbContext dbContext, IArticleRepository articleRepository)
+    public GetVerifiedArticlesByAuthorIdUseCase(IApplicationMapper<Article, ArticleDto> articleMapper, IDbContext dbContext)
     {
         _articleMapper = articleMapper;
         _dbContext = dbContext;

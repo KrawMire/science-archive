@@ -1,10 +1,7 @@
 using ScienceArchive.Application.Abstractions.Persistence;
-using ScienceArchive.Application.Dtos.Article;
 using ScienceArchive.Application.Dtos.Article.Request;
 using ScienceArchive.Application.Dtos.Article.Response;
 using ScienceArchive.Application.Interfaces;
-using ScienceArchive.Core.Domain.Aggregates.Article;
-using ScienceArchive.Core.Domain.Aggregates.Article.Repositories;
 using ScienceArchive.Core.Domain.Aggregates.Article.ValueObjects;
 
 namespace ScienceArchive.Application.UseCases.ArticleUseCases;
@@ -12,19 +9,16 @@ namespace ScienceArchive.Application.UseCases.ArticleUseCases;
 internal class DeleteArticleUseCase : IUseCase<DeleteArticleRequestDto, DeleteArticleResponseDto>
 {
     private readonly IDbContext _dbContext;
-    private readonly IArticleRepository _articleRepository;
-    private readonly IApplicationMapper<Article, ArticleDto> _articleMapper;
     
-    public DeleteArticleUseCase(IArticleRepository articleRepository, IApplicationMapper<Article, ArticleDto> articleMapper)
+    public DeleteArticleUseCase(IDbContext dbContext)
     {
-        _articleRepository = articleRepository;
-        _articleMapper = articleMapper;
+        _dbContext = dbContext;
     }
     
     public async Task<DeleteArticleResponseDto> Execute(DeleteArticleRequestDto contract)
     {
         var articleId = ArticleId.CreateFromString(contract.Id);
-        var deletedArticleId = await _articleRepository.Delete(articleId);
+        var deletedArticleId = await _dbContext.ArticleRepository.Delete(articleId);
         
         return new DeleteArticleResponseDto(deletedArticleId.ToString());
     }
