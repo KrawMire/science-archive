@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ScienceArchive.Application.Dtos.Article.Request;
-using ScienceArchive.Application.Interfaces.Interactors;
+using ScienceArchive.Application.Interfaces.Services;
 using ScienceArchive.Web.Api.Auth;
 using ScienceArchive.Web.Api.Responses;
 using ScienceArchive.Web.Api.Utils;
@@ -11,11 +11,11 @@ namespace ScienceArchive.Web.Api.Controllers;
 [Route("api/articles")]
 public class ArticleController : ControllerBase
 {
-    private readonly IArticleInteractor _articleInteractor;
+    private readonly IArticleApplicationService _articleService;
 
-    public ArticleController(IArticleInteractor articleInteractor)
+    public ArticleController(IArticleApplicationService articleService)
     {
-        _articleInteractor = articleInteractor ?? throw new ArgumentNullException(nameof(articleInteractor));
+        _articleService = articleService;
     }
     
     [HttpGet("by-category/{categoryId}")]
@@ -27,7 +27,7 @@ public class ArticleController : ControllerBase
         }
         
         var dto = new GetArticlesByCategoryIdRequestDto(categoryId);
-        var result = await _articleInteractor.GetArticlesByCategoryId(dto);
+        var result = await _articleService.GetArticlesByCategoryId(dto);
         return new SuccessResponse(result);
     }
     
@@ -42,7 +42,7 @@ public class ArticleController : ControllerBase
             throw new BadHttpRequestException("Cannot get user ID", 401);
         }
 
-        var result = await _articleInteractor.GetArticlesByAuthorId(new (userId));
+        var result = await _articleService.GetArticlesByAuthorId(new GetArticlesByAuthorIdRequestDto(userId));
         return new SuccessResponse(result);
     }
     
@@ -55,7 +55,7 @@ public class ArticleController : ControllerBase
         }
 
         var dto = new GetArticlesByAuthorIdRequestDto(authorId);
-        var result = await _articleInteractor.GetArticlesByAuthorId(dto);
+        var result = await _articleService.GetArticlesByAuthorId(dto);
         return new SuccessResponse(result);
     }
     
@@ -68,7 +68,7 @@ public class ArticleController : ControllerBase
         }
         
         var dto = new GetArticleByIdRequestDto(id);
-        var result = await _articleInteractor.GetArticleById(dto);
+        var result = await _articleService.GetArticleById(dto);
         return new SuccessResponse(result);
     }
 
@@ -77,7 +77,7 @@ public class ArticleController : ControllerBase
     public async Task<Response> GetAll()
     {
         var emptyRequest = new GetAllArticlesRequestDto();
-        var result = await _articleInteractor.GetAllArticles(emptyRequest);
+        var result = await _articleService.GetAllArticles(emptyRequest);
 
         return new SuccessResponse(result);
     }
@@ -87,7 +87,7 @@ public class ArticleController : ControllerBase
     {
         var emptyRequest = new GetAllVerifiedArticlesRequestDto();
 
-        var result = await _articleInteractor.GetAllVerifiedArticles(emptyRequest);
+        var result = await _articleService.GetAllVerifiedArticles(emptyRequest);
         return new SuccessResponse(result);
     }
     
@@ -100,7 +100,7 @@ public class ArticleController : ControllerBase
             throw new BadHttpRequestException("No data presented");
         }
         
-        var result = await _articleInteractor.CreateArticle(dto);
+        var result = await _articleService.CreateArticle(dto);
         return new SuccessResponse(result);
     }
     
@@ -113,7 +113,7 @@ public class ArticleController : ControllerBase
             throw new BadHttpRequestException("No data presented");
         }
         
-        var result = await _articleInteractor.UpdateArticle(dto);
+        var result = await _articleService.UpdateArticle(dto);
         return new SuccessResponse(result);
     }
 
@@ -126,7 +126,7 @@ public class ArticleController : ControllerBase
             throw new BadHttpRequestException("No data presented");
         }
 
-        var result = await _articleInteractor.ApproveArticle(dto);
+        var result = await _articleService.ApproveArticle(dto);
         return new SuccessResponse(result);
     }
     
@@ -140,7 +140,7 @@ public class ArticleController : ControllerBase
             throw new BadHttpRequestException("No data presented");
         }
 
-        var result = await _articleInteractor.DeclineArticle(dto);
+        var result = await _articleService.DeclineArticle(dto);
         return new SuccessResponse(result);
     }
     
@@ -154,7 +154,7 @@ public class ArticleController : ControllerBase
         }
         
         var dto = new DeleteArticleRequestDto(id);
-        var result = await _articleInteractor.DeleteArticle(dto);
+        var result = await _articleService.DeleteArticle(dto);
         return new SuccessResponse(result);
     }
 }

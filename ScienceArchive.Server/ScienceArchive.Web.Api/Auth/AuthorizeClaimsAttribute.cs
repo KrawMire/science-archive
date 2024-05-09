@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using ScienceArchive.Application.Dtos.Auth.Request;
-using ScienceArchive.Application.Interfaces.Interactors;
+using ScienceArchive.Application.Interfaces.Services;
 
 namespace ScienceArchive.Web.Api.Auth;
 
@@ -16,7 +16,7 @@ public class AuthorizeClaimsAttribute : AuthorizeAttribute, IAuthorizationFilter
 		_requiredClaims = requiredClaims;
 	}
 
-	public void OnAuthorization(AuthorizationFilterContext context)
+	public async void OnAuthorization(AuthorizationFilterContext context)
 	{
 		if (context.HttpContext.User.Identity is null || !context.HttpContext.User.Identity.IsAuthenticated)
 		{
@@ -30,7 +30,7 @@ public class AuthorizeClaimsAttribute : AuthorizeAttribute, IAuthorizationFilter
 		}
 		
 		var userId = context.HttpContext.User.FindFirst("UserId")?.Value;
-		var authInteractor = context.HttpContext.RequestServices.GetService<IAuthInteractor>();
+		var authInteractor = context.HttpContext.RequestServices.GetService<IAuthApplicationService>();
 
 		if (authInteractor is null)
 		{
@@ -48,9 +48,9 @@ public class AuthorizeClaimsAttribute : AuthorizeAttribute, IAuthorizationFilter
 			RequiredClaims = _requiredClaims.ToList()
 		};
 		
-		var result = authInteractor.CheckUserClaims(dto).Result.Success;
+		var result = await authInteractor.CheckUserClaims(dto);
 
-		if (!result)
+		if (!result.Success)
 		{
 			context.Result = new ForbidResult();
 		}
