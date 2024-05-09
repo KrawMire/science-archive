@@ -1,12 +1,8 @@
-using System.Text.Json.Serialization;
-
 namespace ScienceArchive.Infrastructure.Persistence.PostgreSql.Models;
 
-internal class ArticleDocumentModel
+internal record ArticleDocumentModel
 {
-	/// <summary>
-	/// Path to a document linked to article
-	/// </summary>
-	[JsonPropertyName("document_path")]
+	public required Guid Id { get; set; }
+	public required string DocumentName { get; set; }
 	public required string DocumentPath { get; set; }
 }

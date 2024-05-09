@@ -1,42 +1,45 @@
 using ScienceArchive.Core.Domain.Aggregates.Role;
 using ScienceArchive.Core.Domain.Aggregates.Role.ValueObjects;
-using ScienceArchive.Infrastructure.Persistence.Interfaces;
+using ScienceArchive.Infrastructure.Interfaces;
 using ScienceArchive.Infrastructure.Persistence.PostgreSql.Models;
 
 namespace ScienceArchive.Infrastructure.PostgreSql.PersistenceMappers;
 
-internal class RoleMapper : IPersistenceMapper<Role, RoleModel>
+internal class RoleMapper : IInfrastructureMapper<Role, RoleModel>
 {
-	private readonly IPersistenceMapper<RoleClaim, ClaimModel> _claimMapper;
-
-	public RoleMapper(IPersistenceMapper<RoleClaim, ClaimModel> claimMapper)
-	{
-		_claimMapper = claimMapper ?? throw new ArgumentNullException(nameof(claimMapper));
-	}
-
 	public RoleModel MapToModel(Role entity)
 	{
-		var claimsIds = entity.ClaimsIds.Select(claimId => claimId.Value).ToList(); 
+		var claims = entity.Claims
+			.Select(c => new RoleClaimModel
+			{
+				Value = c.Value,
+				Description = c.Description
+			}).ToList(); 
 			
-		return new()
+		return new RoleModel
 		{
 			Id = entity.Id.Value,
 			Name = entity.Name,
 			Description = entity.Description,
-			ClaimsIds = claimsIds
+			Claims = claims
 		};
 	}
 
 	public Role MapToEntity(RoleModel model)
 	{
 		var roleId = RoleId.CreateFromGuid(model.Id);
-		var claimsIds = model.ClaimsIds.Select(RoleClaimId.CreateFromGuid).ToList();
+		var claims = model.Claims
+			.Select(c => new RoleClaim
+			{
+				Value = c.Value,
+				Description = c.Description
+			}).ToList();
 
-		return new(roleId)
+		return new Role(roleId)
 		{
 			Name = model.Name,
 			Description = model.Description,
-			ClaimsIds = claimsIds
+			Claims = claims
 		};
 	}
 }

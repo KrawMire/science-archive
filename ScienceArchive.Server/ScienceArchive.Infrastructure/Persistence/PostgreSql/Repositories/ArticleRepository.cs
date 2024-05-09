@@ -2,37 +2,40 @@
 using System.Data;
 using System.Text.Json;
 using ScienceArchive.Core.Domain.Aggregates.Article;
+using ScienceArchive.Core.Domain.Aggregates.Article.Repositories;
 using ScienceArchive.Core.Domain.Aggregates.Article.ValueObjects;
 using ScienceArchive.Core.Domain.Aggregates.Category.ValueObjects;
 using ScienceArchive.Core.Domain.Aggregates.User.ValueObjects;
-using ScienceArchive.Core.Repositories;
+using ScienceArchive.Core.Exceptions;
+using ScienceArchive.Infrastructure.Interfaces;
 using ScienceArchive.Infrastructure.Persistence.Exceptions;
-using ScienceArchive.Infrastructure.Persistence.Interfaces;
 using ScienceArchive.Infrastructure.Persistence.PostgreSql.Models;
 
 namespace ScienceArchive.Infrastructure.Persistence.PostgreSql.Repositories;
 
 internal class PostgresArticleRepository : IArticleRepository
 {
-    private readonly IDbConnection _connection;
-    private readonly IPersistenceMapper<Article, ArticleModel> _mapper;
-        
-    public PostgresArticleRepository(PostgresContext dbContext, IPersistenceMapper<Article, ArticleModel> mapper)
+    private readonly IInfrastructureMapper<Article, ArticleModel> _mapper;
+    private readonly PostgresDbContext _dbContext;
+    
+    public PostgresArticleRepository(
+        PostgresDbContext dbContext, 
+        IInfrastructureMapper<Article, ArticleModel> mapper)
     {
-        var context = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
+        _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
         _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
-        _connection = context.CreateConnection();
     }
 
     public async Task<List<Article>> GetAll()
     {
-        var articles = await _connection.QueryAsync<ArticleModel>(
+        var articles = await _dbContext.Connection.QueryAsync<ArticleModel>(
             "SELECT * FROM func_get_all_articles()",
-            commandType: CommandType.Text);
+            commandType: CommandType.Text,
+            transaction: _dbContext.Transaction);
 
         if (articles is null)
         {
-            throw new EntityNotFoundException<NewsModel>("Cannot get any article");
+            throw new EntityNotFoundException(nameof(Article));
         }
 
         return articles.Select(article => _mapper.MapToEntity(article)).ToList();
@@ -40,13 +43,14 @@ internal class PostgresArticleRepository : IArticleRepository
 
     public async Task<List<Article>> GetAllVerified()
     {
-        var articles = await _connection.QueryAsync<ArticleModel>(
+        var articles = await _dbContext.Connection.QueryAsync<ArticleModel>(
             "SELECT * FROM func_get_all_verified_articles()",
-            commandType: CommandType.Text);
+            commandType: CommandType.Text,
+            transaction: _dbContext.Transaction);
 
         if (articles is null)
         {
-            throw new EntityNotFoundException<NewsModel>("Cannot get any article");
+            throw new EntityNotFoundException(nameof(Article));
         }
 
         return articles.Select(article => _mapper.MapToEntity(article)).ToList();
@@ -57,14 +61,15 @@ internal class PostgresArticleRepository : IArticleRepository
         var parameters = new DynamicParameters();
         parameters.Add("CategoryId", categoryId.Value);
 
-        var articles = await _connection.QueryAsync<ArticleModel>(
+        var articles = await _dbContext.Connection.QueryAsync<ArticleModel>(
             "SELECT * FROM func_get_verified_articles_by_category_id(@CategoryId::uuid)",
             parameters,
-            commandType: CommandType.Text);
+            commandType: CommandType.Text,
+            transaction: _dbContext.Transaction);
 
         if (articles is null)
         {
-            throw new EntityNotFoundException<NewsModel>("Cannot get any article");
+            throw new EntityNotFoundException(nameof(Article));
         }
 
         return articles.Select(_mapper.MapToEntity).ToList();
@@ -75,14 +80,15 @@ internal class PostgresArticleRepository : IArticleRepository
         var parameters = new DynamicParameters();
         parameters.Add("UserId", userId.Value);
 
-        var articles = await _connection.QueryAsync<ArticleModel>(
+        var articles = await _dbContext.Connection.QueryAsync<ArticleModel>(
             "SELECT * FROM func_get_articles_by_author_id(@UserId::uuid)",
             parameters,
-            commandType: CommandType.Text);
+            commandType: CommandType.Text,
+            transaction: _dbContext.Transaction);
 
         if (articles is null)
         {
-            throw new EntityNotFoundException<NewsModel>("Cannot get any article");
+            throw new EntityNotFoundException(nameof(Article));
         }
 
         return articles.Select(_mapper.MapToEntity).ToList();
@@ -93,14 +99,15 @@ internal class PostgresArticleRepository : IArticleRepository
         var parameters = new DynamicParameters();
         parameters.Add("UserId", userId.Value);
 
-        var articles = await _connection.QueryAsync<ArticleModel>(
+        var articles = await _dbContext.Connection.QueryAsync<ArticleModel>(
             "SELECT * FROM func_get_verified_articles_by_author_id(@UserId::uuid)",
             parameters,
-            commandType: CommandType.Text);
+            commandType: CommandType.Text,
+            transaction: _dbContext.Transaction);
 
         if (articles is null)
         {
-            throw new EntityNotFoundException<NewsModel>("Cannot get any article");
+            throw new EntityNotFoundException(nameof(Article));
         }
 
         return articles.Select(_mapper.MapToEntity).ToList();
@@ -111,10 +118,11 @@ internal class PostgresArticleRepository : IArticleRepository
         var parameters = new DynamicParameters();
         parameters.Add("Id", id.Value);
 
-        var article = await _connection.QueryFirstOrDefaultAsync<ArticleModel?>(
+        var article = await _dbContext.Connection.QueryFirstOrDefaultAsync<ArticleModel?>(
             "SELECT * FROM func_get_article_by_id(@Id::uuid)",
             parameters,
-            commandType: CommandType.Text);
+            commandType: CommandType.Text,
+            transaction: _dbContext.Transaction);
 
         return article is not null ? _mapper.MapToEntity(article) : null;
     }
@@ -135,10 +143,11 @@ internal class PostgresArticleRepository : IArticleRepository
             @Documents::jsonb, 
             @Status)";
         
-        var createdArticle = await _connection.QueryFirstOrDefaultAsync<ArticleModel>(
+        var createdArticle = await _dbContext.Connection.QueryFirstOrDefaultAsync<ArticleModel>(
             sql,
             parameters,
-            commandType: CommandType.Text);
+            commandType: CommandType.Text,
+            transaction: _dbContext.Transaction);
         
         if (createdArticle is null)
         {
@@ -164,10 +173,11 @@ internal class PostgresArticleRepository : IArticleRepository
             @Documents::jsonb, 
             @Status::int)";
         
-        var updatedArticle = await _connection.QueryFirstOrDefaultAsync<ArticleModel>(
+        var updatedArticle = await _dbContext.Connection.QueryFirstOrDefaultAsync<ArticleModel>(
             sql,
             parameters,
-            commandType: CommandType.Text);
+            commandType: CommandType.Text,
+            transaction: _dbContext.Transaction);
 
         if (updatedArticle is null)
         {
@@ -182,10 +192,11 @@ internal class PostgresArticleRepository : IArticleRepository
         var parameters = new DynamicParameters();
         parameters.Add("Id", id.Value);
 
-        var deletedArticleId = await _connection.QueryFirstOrDefaultAsync<Guid>(
+        var deletedArticleId = await _dbContext.Connection.QueryFirstOrDefaultAsync<Guid>(
             "SELECT * FROM func_delete_article(@Id::uuid)",
             parameters,
-            commandType: CommandType.Text);
+            commandType: CommandType.Text,
+            transaction: _dbContext.Transaction);
 
         if (deletedArticleId == default)
         {

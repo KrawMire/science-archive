@@ -1,30 +1,28 @@
 using System.Data;
 using Dapper;
 using ScienceArchive.Core.Domain.Aggregates.Category;
+using ScienceArchive.Core.Domain.Aggregates.Category.Repositories;
 using ScienceArchive.Core.Domain.Aggregates.Category.ValueObjects;
-using ScienceArchive.Core.Repositories;
-using ScienceArchive.Infrastructure.Persistence.Exceptions;
-using ScienceArchive.Infrastructure.Persistence.Interfaces;
+using ScienceArchive.Core.Exceptions;
+using ScienceArchive.Infrastructure.Interfaces;
 using ScienceArchive.Infrastructure.Persistence.PostgreSql.Models;
 
 namespace ScienceArchive.Infrastructure.Persistence.PostgreSql.Repositories;
 
 internal class PostgresCategoryRepository : ICategoryRepository
 {
-	private readonly IDbConnection _connection;
-	private readonly IPersistenceMapper<Category, CategoryModel> _mapper;
-	private readonly IPersistenceMapper<Category, SubcategoryModel> _subcategoryMapper;
+	private readonly PostgresDbContext _dbContext;
+	private readonly IInfrastructureMapper<Category, CategoryModel> _mapper;
+	private readonly IInfrastructureMapper<Category, SubcategoryModel> _subcategoryMapper;
 	
 	public PostgresCategoryRepository(
-		PostgresContext dbContext, 
-		IPersistenceMapper<Category, CategoryModel> mapper,
-		IPersistenceMapper<Category, SubcategoryModel> subcategoryMapper)
+		IInfrastructureMapper<Category, CategoryModel> mapper,
+		IInfrastructureMapper<Category, SubcategoryModel> subcategoryMapper, 
+		PostgresDbContext dbContext)
 	{
-		var context = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
-
 		_mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
 		_subcategoryMapper = subcategoryMapper ?? throw new ArgumentNullException(nameof(subcategoryMapper));
-		_connection = context.CreateConnection();
+		_dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
 	}
 	
 	public async Task<Category?> GetById(CategoryId id)
@@ -32,10 +30,11 @@ internal class PostgresCategoryRepository : ICategoryRepository
 		var parameters = new DynamicParameters();
 		parameters.Add("Id", id.Value);
 
-		var category = await _connection.QueryFirstOrDefaultAsync<CategoryModel?>(
+		var category = await _dbContext.Connection.QueryFirstOrDefaultAsync<CategoryModel?>(
 			"SELECT * FROM func_get_category_by_id(@Id::uuid)",
 			parameters,
-			commandType: CommandType.Text);
+			commandType: CommandType.Text,
+			transaction: _dbContext.Transaction);
 
 		return category is null 
 			? null 
@@ -44,13 +43,14 @@ internal class PostgresCategoryRepository : ICategoryRepository
 
 	public async Task<List<Category>> GetAll()
 	{
-		var categories = await _connection.QueryAsync<CategoryModel>(
+		var categories = await _dbContext.Connection.QueryAsync<CategoryModel>(
 			"SELECT * FROM func_get_all_categories()",
-			commandType: CommandType.Text);
+			commandType: CommandType.Text,
+			transaction: _dbContext.Transaction);
 
 		if (categories is null)
 		{
-			throw new EntityNotFoundException<CategoryModel>("Cannot get any category");
+			throw new EntityNotFoundException(nameof(Category));
 		}
 
 		return categories.Select(c => _mapper.MapToEntity(c)).ToList();
@@ -76,10 +76,11 @@ internal class PostgresCategoryRepository : ICategoryRepository
 		var parameters = new DynamicParameters();
 		parameters.Add("Id", subcategoryId.Value);
 
-		var subcategory = await _connection.QueryFirstOrDefaultAsync<SubcategoryModel?>(
+		var subcategory = await _dbContext.Connection.QueryFirstOrDefaultAsync<SubcategoryModel?>(
 			"SELECT * FROM func_get_subcategory_by_id(@Id::uuid)",
 			parameters,
-			commandType: CommandType.Text);
+			commandType: CommandType.Text,
+			transaction: _dbContext.Transaction);
 
 		return subcategory is null 
 			? null 

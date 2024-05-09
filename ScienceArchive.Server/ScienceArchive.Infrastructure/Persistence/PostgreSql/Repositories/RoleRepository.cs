@@ -1,42 +1,43 @@
 ﻿using System.Data;
 using Dapper;
 using ScienceArchive.Core.Domain.Aggregates.Role;
+using ScienceArchive.Core.Domain.Aggregates.Role.Repositories;
 using ScienceArchive.Core.Domain.Aggregates.Role.ValueObjects;
 using ScienceArchive.Core.Domain.Aggregates.User.ValueObjects;
-using ScienceArchive.Core.Repositories;
+using ScienceArchive.Core.Exceptions;
+using ScienceArchive.Infrastructure.Interfaces;
 using ScienceArchive.Infrastructure.Persistence.Exceptions;
-using ScienceArchive.Infrastructure.Persistence.Interfaces;
 using ScienceArchive.Infrastructure.Persistence.PostgreSql.Models;
 
 namespace ScienceArchive.Infrastructure.Persistence.PostgreSql.Repositories;
 
 internal class PostgresRoleRepository : IRoleRepository
 {
-    private readonly IDbConnection _connection;
-    private readonly IPersistenceMapper<Role, RoleModel> _roleMapper;
-    private readonly IPersistenceMapper<RoleClaim, ClaimModel> _claimMapper;
+    private readonly PostgresDbContext _dbContext;
+    private readonly IInfrastructureMapper<Role, RoleModel> _roleMapper;
+    private readonly IInfrastructureMapper<RoleClaim, RoleClaimModel> _claimMapper;
 
     public PostgresRoleRepository(
-        PostgresContext dbContext, 
-        IPersistenceMapper<Role, RoleModel> roleMapper,
-        IPersistenceMapper<RoleClaim, ClaimModel> claimMapper)
+        IInfrastructureMapper<Role, RoleModel> roleMapper,
+        IInfrastructureMapper<RoleClaim, RoleClaimModel> claimMapper, 
+        PostgresDbContext dbContext)
     {
-        var context = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
         _claimMapper = claimMapper ?? throw new ArgumentNullException(nameof(claimMapper));
+        _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
         _roleMapper = roleMapper ?? throw new ArgumentNullException(nameof(roleMapper));
-        _connection = context.CreateConnection();
     }
 
     /// <inheritdoc/>
     public async Task<List<Role>> GetAll()
     {
-        var roles = await _connection.QueryAsync<RoleModel>(
+        var roles = await _dbContext.Connection.QueryAsync<RoleModel>(
             "SELECT * FROM func_get_all_roles()",
-            commandType: CommandType.Text);
+            commandType: CommandType.Text,
+            transaction: _dbContext.Transaction);
 
         if (roles is null)
         {
-            throw new EntityNotFoundException<Role[]>("Database returned NULL!");
+            throw new EntityNotFoundException(nameof(Role));
         }
 
         return roles.Select(role => _roleMapper.MapToEntity(role)).ToList();
@@ -48,10 +49,11 @@ internal class PostgresRoleRepository : IRoleRepository
         var parameters = new DynamicParameters();
         parameters.Add("Id", id.Value);
 
-        var role = await _connection.QuerySingleOrDefaultAsync<RoleModel?>(
+        var role = await _dbContext.Connection.QuerySingleOrDefaultAsync<RoleModel?>(
             "SELECT * FROM func_get_role_by_id(@Id::uuid)",
             parameters,
-            commandType: CommandType.Text);
+            commandType: CommandType.Text,
+            transaction: _dbContext.Transaction);
 
         return role is null ? null : _roleMapper.MapToEntity(role);
     }
@@ -62,14 +64,15 @@ internal class PostgresRoleRepository : IRoleRepository
         var parameters = new DynamicParameters();
         parameters.Add("UserId", userId.Value);
 
-        var claims = await _connection.QueryAsync<ClaimModel>(
+        var claims = await _dbContext.Connection.QueryAsync<RoleClaimModel>(
             "SELECT * FROM func_get_claims_by_user_id(@UserId::uuid)",
             parameters,
-            commandType: CommandType.Text);
+            commandType: CommandType.Text,
+            transaction: _dbContext.Transaction);
 
         if (claims is null)
         {
-            throw new EntityNotFoundException<Role[]>("Database returned NULL!");
+            throw new EntityNotFoundException(nameof(RoleClaim));
         }
 
         return claims.Select(_claimMapper.MapToEntity).ToList();
@@ -87,10 +90,11 @@ internal class PostgresRoleRepository : IRoleRepository
             @Description::varchar(255), 
             @ClaimsIds::uuid[])"; 
         
-        var createdRole = await _connection.QuerySingleOrDefaultAsync<RoleModel>(
+        var createdRole = await _dbContext.Connection.QuerySingleOrDefaultAsync<RoleModel>(
             sql,
             parameters,
-            commandType: CommandType.Text);
+            commandType: CommandType.Text,
+            transaction: _dbContext.Transaction);
 
         if (createdRole is null)
         {
@@ -106,10 +110,11 @@ internal class PostgresRoleRepository : IRoleRepository
         var parameters = new DynamicParameters();
         parameters.Add("Id", id.Value);
 
-        var deletedRoleId = await _connection.QuerySingleOrDefaultAsync<Guid>(
+        var deletedRoleId = await _dbContext.Connection.QuerySingleOrDefaultAsync<Guid>(
             "SELECT * FROM func_delete_role(@Id::uuid)",
             parameters,
-            commandType: CommandType.Text);
+            commandType: CommandType.Text,
+            transaction: _dbContext.Transaction);
 
         if (deletedRoleId == default)
         {
@@ -132,10 +137,11 @@ internal class PostgresRoleRepository : IRoleRepository
             @Description::varchar(255), 
             @ClaimsIds::uuid[])";
         
-        var updatedRole = await _connection.QuerySingleOrDefaultAsync<RoleModel>(
+        var updatedRole = await _dbContext.Connection.QuerySingleOrDefaultAsync<RoleModel>(
             sql,
             parameters,
-            commandType: CommandType.Text);
+            commandType: CommandType.Text,
+            transaction: _dbContext.Transaction);
 
         if (updatedRole is null)
         {

@@ -1,18 +1,14 @@
-﻿using System;
+﻿using ScienceArchive.Infrastructure.Persistence.PostgreSql.Options;
+
 namespace ScienceArchive.Infrastructure.Persistence.Options;
 
 /// <summary>
 /// Options of connection to different data sources
 /// </summary>
-public class ConnectionOptions
+public class PersistenceConnectionOptions
 {
     /// <summary>
-    /// Connection string for PostgreSQL
+    /// Options for connecting to a PostgreSQL database.
     /// </summary>
-    public required string PostgresConnectionString { get; set; }
-    
-    /// <summary>
-    /// Connection string for ClickHouse
-    /// </summary>
-    public required string ClickHouseConnectionString { get; set; }
+    public required PostgresConnectionOptions PostgresConnectionOptions { get; init; }
 }

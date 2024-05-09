@@ -2,38 +2,13 @@
 
 internal record UserModel
 {
-	/// <summary>
-	/// ID of the user
-	/// </summary>
 	public required Guid Id { get; set; }
-
-	/// <summary>
-	/// User name
-	/// </summary>
 	public required string Name { get; set; }
-
-	/// <summary>
-	/// User email
-	/// </summary>
 	public required string Email { get; set; }
-
-	/// <summary>
-	/// User auth login
-	/// </summary>
 	public required string Login { get; set; }
-
-	/// <summary>
-	/// List of roles of user 
-	/// </summary>
-	public List<Guid>? RolesIds { get; set; }
-
-	/// <summary>
-	/// User password
-	/// </summary>
+	public required List<UserArticleModel> Articles { get; set; }
+	public string? About { get; set; }
+	public List<UserRoleModel>? Roles { get; set; }
 	public string? Password { get; set; }
-
-	/// <summary>
-	/// Salt for password
-	/// </summary>
 	public string? PasswordSalt { get; set; }
 }

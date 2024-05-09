@@ -1,36 +1,38 @@
 ﻿using System.Data;
 using Dapper;
 using ScienceArchive.Core.Domain.Aggregates.News;
+using ScienceArchive.Core.Domain.Aggregates.News.Repositories;
 using ScienceArchive.Core.Domain.Aggregates.News.ValueObjects;
-using ScienceArchive.Core.Repositories;
+using ScienceArchive.Core.Exceptions;
+using ScienceArchive.Infrastructure.Interfaces;
 using ScienceArchive.Infrastructure.Persistence.Exceptions;
-using ScienceArchive.Infrastructure.Persistence.Interfaces;
 using ScienceArchive.Infrastructure.Persistence.PostgreSql.Models;
 
 namespace ScienceArchive.Infrastructure.Persistence.PostgreSql.Repositories;
 
 internal class PostgresNewsRepository : INewsRepository
 {
-    private readonly IDbConnection _connection;
-    private readonly IPersistenceMapper<News, NewsModel> _mapper;
+    private readonly PostgresDbContext _dbContext;
+    private readonly IInfrastructureMapper<News, NewsModel> _mapper;
 
-    public PostgresNewsRepository(PostgresContext dbContext, IPersistenceMapper<News, NewsModel> mapper)
+    public PostgresNewsRepository(
+        IInfrastructureMapper<News, NewsModel> mapper, 
+        PostgresDbContext dbContext)
     {
-        var context = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
-        
         _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
-        _connection = context.CreateConnection();
+        _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
     }
 
     public async Task<List<News>> GetAll()
     {
-        var news = await _connection.QueryAsync<NewsModel>(
+        var news = await _dbContext.Connection.QueryAsync<NewsModel>(
             "SELECT * FROM func_get_all_news()",
-            commandType: CommandType.Text);
+            commandType: CommandType.Text,
+            transaction: _dbContext.Transaction);
 
         if (news is null)
         {
-            throw new EntityNotFoundException<NewsModel>("Cannot get any news!");
+            throw new EntityNotFoundException(nameof(News));
         }
 
         return news.Select(n => _mapper.MapToEntity(n)).ToList();
@@ -41,10 +43,11 @@ internal class PostgresNewsRepository : INewsRepository
         var parameters = new DynamicParameters();
         parameters.Add("Id", id.Value);
 
-        var news = await _connection.QueryFirstOrDefaultAsync<NewsModel?>(
+        var news = await _dbContext.Connection.QueryFirstOrDefaultAsync<NewsModel?>(
             "SELECT * FROM func_get_news_by_id(@Id::uuid)",
             parameters,
-            commandType: CommandType.Text);
+            commandType: CommandType.Text,
+            transaction: _dbContext.Transaction);
 
         return news is null ? null : _mapper.MapToEntity(news);
     }
@@ -61,10 +64,11 @@ internal class PostgresNewsRepository : INewsRepository
             @AuthorId::uuid, 
             @CreationDate::timestamp)";
         
-        var createdNews = await _connection.QueryFirstOrDefaultAsync<NewsModel>(
+        var createdNews = await _dbContext.Connection.QueryFirstOrDefaultAsync<NewsModel>(
             sql,
             parameters,
-            commandType: CommandType.Text);
+            commandType: CommandType.Text,
+            transaction: _dbContext.Transaction);
 
         if (createdNews is null)
         {
@@ -79,10 +83,11 @@ internal class PostgresNewsRepository : INewsRepository
         var parameters = new DynamicParameters();
         parameters.Add("Id", id.Value);
 
-        var deletedNewsId = await _connection.QueryFirstOrDefaultAsync<Guid>(
+        var deletedNewsId = await _dbContext.Connection.QueryFirstOrDefaultAsync<Guid>(
             "SELECT * FROM func_delete_news(@Id::uuid)",
             parameters,
-            commandType: CommandType.Text);
+            commandType: CommandType.Text,
+            transaction: _dbContext.Transaction);
 
         if (deletedNewsId == default)
         {
@@ -103,10 +108,11 @@ internal class PostgresNewsRepository : INewsRepository
             @Title::varchar(255), 
             @Body::text)";
         
-        var updatedNews = await _connection.QueryFirstOrDefaultAsync<NewsModel>(
+        var updatedNews = await _dbContext.Connection.QueryFirstOrDefaultAsync<NewsModel>(
             sql,
             parameters,
-            commandType: CommandType.Text);
+            commandType: CommandType.Text,
+            transaction: _dbContext.Transaction);
 
         if (updatedNews is null)
         {

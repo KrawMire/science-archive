@@ -1,0 +1,32 @@
+using Microsoft.Extensions.DependencyInjection;
+using ScienceArchive.Application.Abstractions.Encryption;
+using ScienceArchive.Core.Services;
+using ScienceArchive.Infrastructure.Connectivity;
+using ScienceArchive.Infrastructure.DomainServices;
+using ScienceArchive.Infrastructure.Persistence;
+using ScienceArchive.Infrastructure.Persistence.Options;
+using ScienceArchive.Infrastructure.Services;
+
+namespace ScienceArchive.Infrastructure;
+
+public static class InfrastructureRegistry
+{
+    public static IServiceCollection RegisterInfrastructureServices(
+        this IServiceCollection services, 
+        PersistenceConnectionOptions persistenceOptions)
+    {
+        return services
+            .RegisterPersistenceServices(persistenceOptions)
+            .RegisterConnectivityServices();
+    }
+
+    private static IServiceCollection RegisterDomainServices(this IServiceCollection services)
+    {
+        return services.AddTransient<IAuthService, AuthService>();
+    }
+    
+    private static IServiceCollection RegisterApplicationServices(this IServiceCollection services)
+    {
+        return services.AddTransient<IEncryptionService, EncryptionService>();
+    }
+}

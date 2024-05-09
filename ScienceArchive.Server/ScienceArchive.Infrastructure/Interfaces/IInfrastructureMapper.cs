@@ -1,11 +1,11 @@
-﻿namespace ScienceArchive.Infrastructure.Persistence.Interfaces;
+﻿namespace ScienceArchive.Infrastructure.Interfaces;
 
 /// <summary>
 /// Persistence layer mapper
 /// </summary>
 /// <typeparam name="TEntity">Entity type</typeparam>
 /// <typeparam name="TModel">Model type</typeparam>
-internal interface IPersistenceMapper<TEntity, TModel>
+internal interface IInfrastructureMapper<TEntity, TModel>
 {
     /// <summary>
     /// Map entity to model type

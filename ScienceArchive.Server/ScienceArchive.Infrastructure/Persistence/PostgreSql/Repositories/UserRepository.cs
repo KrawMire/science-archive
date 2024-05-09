@@ -1,29 +1,25 @@
 ﻿using System.Data;
 using Dapper;
 using ScienceArchive.Core.Domain.Aggregates.User;
+using ScienceArchive.Core.Domain.Aggregates.User.Repositories;
 using ScienceArchive.Core.Domain.Aggregates.User.ValueObjects;
-using ScienceArchive.Core.Repositories;
+using ScienceArchive.Core.Exceptions;
+using ScienceArchive.Infrastructure.Interfaces;
 using ScienceArchive.Infrastructure.Persistence.Exceptions;
-using ScienceArchive.Infrastructure.Persistence.Interfaces;
 using ScienceArchive.Infrastructure.Persistence.PostgreSql.Models;
 
 namespace ScienceArchive.Infrastructure.Persistence.PostgreSql.Repositories;
 
 internal class PostgresUserRepository : IUserRepository
 {
-    private readonly IDbConnection _connection;
-    private readonly IPersistenceMapper<User, UserModel> _userMapper;
-    private readonly IPersistenceMapper<Author, AuthorModel> _authorMapper;
+    private readonly PostgresDbContext _dbContext;
+    private readonly IInfrastructureMapper<User, UserModel> _userMapper;
 
     public PostgresUserRepository(
-        PostgresContext dbContext,
-        IPersistenceMapper<User, UserModel> userMapper,
-        IPersistenceMapper<Author, AuthorModel> authorMapper)
+        IInfrastructureMapper<User, UserModel> userMapper, PostgresDbContext dbContext)
     {
-        var context = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
         _userMapper = userMapper ?? throw new ArgumentNullException(nameof(userMapper));
-        _authorMapper = authorMapper ?? throw new ArgumentNullException(nameof(authorMapper));
-        _connection = context.CreateConnection();
+        _dbContext = dbContext;
     }
 
     /// <inheritdoc/>
@@ -32,10 +28,11 @@ internal class PostgresUserRepository : IUserRepository
         var parameters = new DynamicParameters();
         parameters.Add("Id", id.Value);
 
-        var user = await _connection.QuerySingleOrDefaultAsync<UserModel?>(
+        var user = await _dbContext.Connection.QuerySingleOrDefaultAsync<UserModel?>(
             "SELECT * FROM func_get_user_by_id(@Id::uuid)", 
             parameters, 
-            commandType: CommandType.Text);
+            commandType: CommandType.Text,
+            transaction: _dbContext.Transaction);
 
         return user is null ? null : _userMapper.MapToEntity(user);
     }
@@ -43,45 +40,17 @@ internal class PostgresUserRepository : IUserRepository
     /// <inheritdoc/>
     public async Task<List<User>> GetAll()
     {
-        var users = await _connection.QueryAsync<UserModel>(
+        var users = await _dbContext.Connection.QueryAsync<UserModel>(
             "SELECT * FROM func_get_all_users()", 
-            commandType: CommandType.Text);
+            commandType: CommandType.Text,
+            transaction: _dbContext.Transaction);
 
         if (users is null)
         {
-            throw new EntityNotFoundException<User[]>("Database returned NULL!");
+            throw new EntityNotFoundException(nameof(User));
         }
 
         return users.Select(user => _userMapper.MapToEntity(user)).ToList();
-    }
-
-    /// <inheritdoc/>
-    public async Task<User?> GetAuthUserByLogin(string login)
-    {
-        var parameters = new DynamicParameters();
-        parameters.Add("Login", login);
-
-        var user = await _connection.QuerySingleOrDefaultAsync<UserModel?>(
-            "SELECT * FROM func_get_auth_user_by_login(@Login::varchar(255))", 
-            parameters, 
-            commandType: CommandType.Text);
-
-        return user is not null ? _userMapper.MapToEntity(user) : null;
-    }
-
-    /// <inheritdoc/>
-    public async Task<List<Author>> GetAllAuthors()
-    {
-        var users = await _connection.QueryAsync<AuthorModel>(
-            "SELECT * FROM func_get_all_authors()",
-            commandType: CommandType.Text);
-
-        if (users is null)
-        {
-            throw new EntityNotFoundException<User[]>("Database returned NULL!");
-        }
-
-        return users.Select(_authorMapper.MapToEntity).ToList();
     }
 
     /// <inheritdoc/>
@@ -99,10 +68,11 @@ internal class PostgresUserRepository : IUserRepository
             @PasswordSalt::varchar(255), 
             @RolesIds::uuid[])";
         
-        var createdUser = await _connection.QuerySingleOrDefaultAsync<UserModel>(
+        var createdUser = await _dbContext.Connection.QuerySingleOrDefaultAsync<UserModel>(
             sql,
             parameters,
-            commandType: CommandType.Text);
+            commandType: CommandType.Text,
+            transaction: _dbContext.Transaction);
 
         if (createdUser is null)
         {
@@ -128,11 +98,11 @@ internal class PostgresUserRepository : IUserRepository
             @PasswordSalt::varchar(255), 
             @RolesIds::uuid[])";
         
-        var updatedUser = await _connection.QuerySingleOrDefaultAsync<UserModel>(
+        var updatedUser = await _dbContext.Connection.QuerySingleOrDefaultAsync<UserModel>(
             sql,
             parameters,
-            commandType: CommandType.Text
-        );
+            commandType: CommandType.Text,
+            transaction: _dbContext.Transaction);
 
         if (updatedUser is null)
         {
@@ -148,11 +118,11 @@ internal class PostgresUserRepository : IUserRepository
         var parameters = new DynamicParameters();
         parameters.Add("Id", id.Value);
 
-        var deletedUserId = await _connection.QuerySingleOrDefaultAsync<Guid>(
+        var deletedUserId = await _dbContext.Connection.QuerySingleOrDefaultAsync<Guid>(
             "SELECT * FROM func_delete_user(@Id::uuid)",
             parameters,
-            commandType: CommandType.Text
-        );
+            commandType: CommandType.Text,
+            transaction: _dbContext.Transaction);
 
         if (deletedUserId == default)
         {

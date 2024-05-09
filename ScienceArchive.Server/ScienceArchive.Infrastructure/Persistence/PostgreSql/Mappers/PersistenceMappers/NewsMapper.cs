@@ -1,16 +1,16 @@
 using ScienceArchive.Core.Domain.Aggregates.News;
 using ScienceArchive.Core.Domain.Aggregates.News.ValueObjects;
 using ScienceArchive.Core.Domain.Aggregates.User.ValueObjects;
-using ScienceArchive.Infrastructure.Persistence.Interfaces;
+using ScienceArchive.Infrastructure.Interfaces;
 using ScienceArchive.Infrastructure.Persistence.PostgreSql.Models;
 
 namespace ScienceArchive.Infrastructure.PostgreSql.PersistenceMappers;
 
-internal class NewsMapper : IPersistenceMapper<News, NewsModel>
+internal class NewsMapper : IInfrastructureMapper<News, NewsModel>
 {
 	public NewsModel MapToModel(News entity)
 	{
-		return new()
+		return new NewsModel
 		{
 			Id = entity.Id.Value,
 			Title = entity.Title,
@@ -25,7 +25,7 @@ internal class NewsMapper : IPersistenceMapper<News, NewsModel>
 	{
 		var newsId = NewsId.CreateFromGuid(model.Id);
 		
-		return new(newsId)
+		return new News(newsId)
 		{
 			Body = model.Body,
 			Title = model.Title,
