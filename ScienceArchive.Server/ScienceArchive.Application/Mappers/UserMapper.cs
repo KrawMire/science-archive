@@ -1,6 +1,6 @@
-﻿using ScienceArchive.Application.Dtos;
+﻿using ScienceArchive.Application.Dtos.User;
 using ScienceArchive.Application.Interfaces;
-using ScienceArchive.Core.Domain.Aggregates.Role.ValueObjects;
+using ScienceArchive.Core.Domain.Aggregates.Article.ValueObjects;
 using ScienceArchive.Core.Domain.Aggregates.User;
 using ScienceArchive.Core.Domain.Aggregates.User.ValueObjects;
 
@@ -10,32 +10,43 @@ internal class UserMapper : IApplicationMapper<User, UserDto>
 {
     public UserDto MapToDto(User user)
     {
-        var rolesIds = user.RolesIds.Select(r => r.ToString()).ToList();
+        var articles = user.Articles
+            .Select(a => new UserArticleDto
+            {
+                ArticleId = a.ArticleId.ToString(),
+                Title = a.Title,
+            }).ToList();
         
         return new UserDto
         {
             Id = user.Id.ToString(),
-            RolesIds = rolesIds,
             Name = user.Name,
             Email = user.Email,
-            Login = user.Login
+            Login = user.Login,
+            Articles = articles
         };
     }
 
     public User MapToEntity(UserDto model)
     {
-        var userId = model.Id is not null
-            ? UserId.CreateFromString(model.Id)
+        var userId = string.IsNullOrWhiteSpace(model.Id)
+            ? null
             : UserId.CreateNew();
 
-        var rolesIds = model.RolesIds?.Select(RoleId.CreateFromString).ToList();
+        var articles = model.Articles
+            .Select(a => new UserArticle
+            {
+                ArticleId = ArticleId.CreateFromString(a.ArticleId),
+                Title = a.Title
+            }).ToList();
         
         return new User(userId)
         {
             Name = model.Name,
             Email = model.Email,
             Login = model.Login,
-            RolesIds = rolesIds ?? new List<RoleId>(),
+            Articles = articles,
+            Roles = new List<UserRole>(),
             Password = new UserPassword()
         };
     }

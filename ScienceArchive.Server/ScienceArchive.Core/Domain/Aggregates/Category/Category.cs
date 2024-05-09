@@ -1,3 +1,4 @@
+using ScienceArchive.Core.Domain.Aggregates.Category.Entities;
 using ScienceArchive.Core.Domain.Aggregates.Category.ValueObjects;
 using ScienceArchive.Core.Domain.Common;
 
@@ -8,7 +9,7 @@ namespace ScienceArchive.Core.Domain.Aggregates.Category;
 /// </summary>
 public class Category : AggregateRoot<CategoryId>
 {
-	public Category(CategoryId id) : base(id)
+	public Category(CategoryId? id) : base(id ?? CategoryId.CreateNew())
 	{
 	}
 	
@@ -20,7 +21,7 @@ public class Category : AggregateRoot<CategoryId>
 	/// <summary>
 	/// Subcategories of a category
 	/// </summary>
-	public required List<Category> Subcategories { get; init; }
+	public required List<Subcategory> Subcategories { get; init; }
 	
 	/// <summary>
 	/// Description of category

@@ -16,6 +16,7 @@ using ScienceArchive.Application.Dtos.Role.Request;
 using ScienceArchive.Application.Dtos.Role.Response;
 using ScienceArchive.Application.Dtos.System.Request;
 using ScienceArchive.Application.Dtos.System.Response;
+using ScienceArchive.Application.Dtos.User;
 using ScienceArchive.Application.Dtos.User.Request;
 using ScienceArchive.Application.Dtos.User.Response;
 using ScienceArchive.Application.Events;
@@ -132,7 +133,6 @@ public static class ApplicationRegistry
 
             // User use cases
             .AddTransient<IUseCase<DeleteUserRequestDto, DeleteUserResponseDto>, DeleteUserUseCase>()
-            .AddTransient<IUseCase<GetAllAuthorsRequestDto, GetAllAuthorsResponseDto>, GetAllAuthorsUseCase>()
             .AddTransient<IUseCase<GetAllUsersRequestDto, GetAllUsersResponseDto>, GetAllUsersUseCase>()
             .AddTransient<IUseCase<GetUserByIdRequestDto, GetUserByIdResponseDto>, GetUserByIdUseCase>()
             .AddTransient<IUseCase<UpdateUserRequestDto, UpdateUserResponseDto>, UpdateUserUseCase>();

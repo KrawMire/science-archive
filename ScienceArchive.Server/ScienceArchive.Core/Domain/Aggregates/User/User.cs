@@ -77,7 +77,7 @@ public class User : Entity<UserId>
     /// <summary>
     /// List of articles which are related to user
     /// </summary>
-    public List<UserArticle> Articles { get; set; }
+    public required List<UserArticle> Articles { get; set; }
     
     /// <summary>
     /// Short user self-descriptive text

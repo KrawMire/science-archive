@@ -1,32 +1,37 @@
-using ScienceArchive.Application.Abstractions.Persistence;
+using ScienceArchive.Application.Dtos;
 using ScienceArchive.Application.Dtos.Auth.Request;
 using ScienceArchive.Application.Dtos.Auth.Response;
+using ScienceArchive.Application.Dtos.User;
 using ScienceArchive.Application.Interfaces;
+using ScienceArchive.Core.Domain.Aggregates.User;
+using ScienceArchive.Core.Exceptions;
+using ScienceArchive.Core.Services;
 
 namespace ScienceArchive.Application.UseCases.AuthUseCases;
 
 internal class LoginUseCase : IUseCase<LoginRequestDto, LoginResponseDto>
 {
-    private readonly IDbContext _dbContext;
+    private readonly IAuthService _authService;
+    private readonly IApplicationMapper<User, UserDto> _userMapper;
 
-    public LoginUseCase(IDbContext dbContext)
+    public LoginUseCase(IAuthService authService, IApplicationMapper<User, UserDto> userMapper)
     {
-        _dbContext = dbContext;
+        _authService = authService;
+        _userMapper = userMapper;
     }
     
     public async Task<LoginResponseDto> Execute(LoginRequestDto contract)
     {
-        throw new NotImplementedException();
-        // var preparedDto = new LoginRequestDto(dto.Login.Trim(), dto.Password.Trim());
-        //
-        // var contract = new GetUserByCredentialsContract(preparedDto.Login, preparedDto.Password);
-        // var user = await _userService.GetUserByCredentials(contract);
-        //
-        // if (user is null)
-        // {
-        //     throw new Exception("User with specified credentials was not found!");
-        // }
-        //
-        // return new(_userMapper.MapToDto(user));
+        var login = contract.Login.Trim();
+        var password = contract.Password;
+        
+        var user = await _authService.AuthorizeUser(login, password);
+
+        if (user is null)
+        {
+            throw new InvalidCredentialsException();
+        }
+
+        return new LoginResponseDto(_userMapper.MapToDto(user));
     }
 }

@@ -6,4 +6,8 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\ScienceArchive.Core\ScienceArchive.Core.csproj" />
+    </ItemGroup>
+
 </Project>

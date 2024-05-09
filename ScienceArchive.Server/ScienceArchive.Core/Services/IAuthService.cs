@@ -13,8 +13,9 @@ public interface IAuthService
     /// Register a new user with the given user details
     /// </summary>
     /// <param name="user">The user to register</param>
+    /// <param name="password">Password of user</param>
     /// <returns>The registered user</returns>
-    Task<User> RegisterUser(User user);
+    Task<User> RegisterUser(User user, string password);
 
     /// <summary>
     /// Authorize user with the given login and password

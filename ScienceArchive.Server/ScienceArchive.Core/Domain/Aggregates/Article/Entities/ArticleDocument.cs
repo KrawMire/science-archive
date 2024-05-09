@@ -5,7 +5,7 @@ namespace ScienceArchive.Core.Domain.Aggregates.Article.Entities;
 
 public class ArticleDocument : Entity<ArticleDocumentId>
 {
-	public ArticleDocument(ArticleDocumentId id) : base(id)
+	public ArticleDocument(ArticleDocumentId? id) : base(id ?? ArticleDocumentId.CreateNew())
 	{
 	}
 	

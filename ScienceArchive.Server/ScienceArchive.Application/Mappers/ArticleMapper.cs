@@ -4,6 +4,7 @@ using ScienceArchive.Core.Domain.Aggregates.Article;
 using ScienceArchive.Core.Domain.Aggregates.Article.Entities;
 using ScienceArchive.Core.Domain.Aggregates.Article.Enums;
 using ScienceArchive.Core.Domain.Aggregates.Article.ValueObjects;
+using ScienceArchive.Core.Domain.Aggregates.Category;
 using ScienceArchive.Core.Domain.Aggregates.Category.ValueObjects;
 using ScienceArchive.Core.Domain.Aggregates.User.ValueObjects;
 
@@ -13,45 +14,72 @@ internal class ArticleMapper : IApplicationMapper<Article, ArticleDto>
 {
     public ArticleDto MapToDto(Article entity)
     {
-        var authorsIds = entity.AuthorsIds.Select(a => a.ToString()).ToList();
-        var documentsPaths = entity.Documents.Select(d => d.DocumentPath).ToList();
+        var authors = entity.Authors
+            .Select(a => new ArticleAuthorDto
+            {
+                UserId = a.UserId.ToString(),
+                Name = a.Name,
+                Role = (int)a.Role
+            }).ToList();
+        
+        var documents = entity.Documents
+            .Select(d => new ArticleDocumentDto
+            {
+                Name = d.Name,
+                Path = d.Path
+            })
+            .ToList();
         
         return new ArticleDto
         {
             Id = entity.Id.ToString(),
-            CategoryId = entity.CategoryId.ToString(),
-            Status = (int)entity.Status,
-            CreationDate = entity.CreationDate,
+            CategoryId = entity.Category.CategoryId.ToString(),
+            CategoryName = entity.Category.Name,
             Title = entity.Title,
-            Description = entity.Description,
-            AuthorsIds = authorsIds,
-            DocumentsPaths = documentsPaths
+            Authors = authors,
+            Status = (int)entity.Status,
+            Documents = documents,
+            CreationDate = entity.CreationDate,
+            Description = entity.Description
         };
     }
 
     public Article MapToEntity(ArticleDto dto)
     {
         var articleId = string.IsNullOrWhiteSpace(dto.Id)
-            ? ArticleId.CreateNew()
+            ? null
             : ArticleId.CreateFromString(dto.Id);
 
-        var authorsIds = dto.AuthorsIds.Select(UserId.CreateFromString).ToList();
-        var documents = dto.DocumentsPaths
-            .Select(d => new ArticleDocument
+        var authors = dto.Authors
+            .Select(a => new ArticleAuthor
             {
-                DocumentPath = d
+                UserId = UserId.CreateFromString(a.UserId),
+                Name = a.Name,
+                Role = (ArticleAuthorRole)a.Role
             })
             .ToList();
         
-        return new(articleId)
+        var documents = dto.Documents
+            .Select(d => new ArticleDocument(null)
+            {
+                Name = d.Name,
+                Path = d.Path
+            })
+            .ToList();
+        
+        return new Article(articleId)
         {
-            CategoryId = CategoryId.CreateFromString(dto.CategoryId),
+            Category = new ArticleCategory
+            {
+                Name = dto.CategoryName,
+                CategoryId = CategoryId.CreateFromString(dto.CategoryId)
+            },
+            Title = dto.Title,
+            Authors = authors,
             Status = (ArticleStatus)dto.Status,
             CreationDate = dto.CreationDate.GetValueOrDefault(DateTime.Now),
-            Title = dto.Title,
-            Description = dto.Description,
-            AuthorsIds = authorsIds,
-            Documents = documents
+            Documents = documents,
+            Description = dto.Description
         };
     }
 }

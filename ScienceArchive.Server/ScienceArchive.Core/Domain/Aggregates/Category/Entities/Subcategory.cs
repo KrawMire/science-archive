@@ -5,7 +5,7 @@ namespace ScienceArchive.Core.Domain.Aggregates.Category.Entities;
 
 public class Subcategory : Entity<SubcategoryId>
 {
-    protected Subcategory(SubcategoryId id) : base(id) { }
+    public Subcategory(SubcategoryId id) : base(id) { }
     
     /// <summary>
     /// Name of subcategory

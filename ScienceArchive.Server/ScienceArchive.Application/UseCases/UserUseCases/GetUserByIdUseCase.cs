@@ -1,5 +1,6 @@
 using ScienceArchive.Application.Abstractions.Persistence;
 using ScienceArchive.Application.Dtos;
+using ScienceArchive.Application.Dtos.User;
 using ScienceArchive.Application.Dtos.User.Request;
 using ScienceArchive.Application.Dtos.User.Response;
 using ScienceArchive.Application.Interfaces;

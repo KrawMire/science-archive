@@ -1,39 +1,29 @@
-using ScienceArchive.Application.Abstractions.Persistence;
+using ScienceArchive.Application.Dtos;
 using ScienceArchive.Application.Dtos.Auth.Request;
 using ScienceArchive.Application.Dtos.Auth.Response;
+using ScienceArchive.Application.Dtos.User;
 using ScienceArchive.Application.Interfaces;
+using ScienceArchive.Core.Domain.Aggregates.User;
+using ScienceArchive.Core.Services;
 
 namespace ScienceArchive.Application.UseCases.AuthUseCases;
 
 internal class RegisterUseCase : IUseCase<RegisterRequestDto, RegisterResponseDto>
 {
-    private readonly IDbContext _dbContext;
-
-    public RegisterUseCase(IDbContext dbContext)
+    private readonly IAuthService _authService;
+    private readonly IApplicationMapper<User, UserDto> _userMapper;
+    
+    public RegisterUseCase(IApplicationMapper<User, UserDto> userMapper, IAuthService authService)
     {
-        _dbContext = dbContext;
+        _userMapper = userMapper;
+        _authService = authService;
     }
     
     public async Task<RegisterResponseDto> Execute(RegisterRequestDto contract)
     {
-        throw new NotImplementedException();
-        // var preparedDto = new SignUpRequestDto(
-        //     new UserDto
-        //     {
-        //         Name = dto.User.Name.Trim(),
-        //         Email = dto.User.Email.Trim(),
-        //         Login = dto.User.Login.Trim(),
-        //         RolesIds = dto.User.RolesIds
-        //     },
-        //     dto.Password.Trim()
-        // );
-        //
-        // var userToCreate = _userMapper.MapToEntity(preparedDto.User);
-        // userToCreate.Password.Value = preparedDto.Password;
-        //
-        // var contract = new CreateUserContract(userToCreate);
-        // var createdUser = await _userService.Create(contract);
-        //
-        // return new(_userMapper.MapToDto(createdUser));
+        var user = _userMapper.MapToEntity(contract.User);
+        var createdUser = await _authService.RegisterUser(user, contract.Password);
+
+        return new RegisterResponseDto(_userMapper.MapToDto(createdUser));
     }
 }

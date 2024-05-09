@@ -1,4 +1,6 @@
-﻿namespace ScienceArchive.Application.Dtos.Auth.Request;
+﻿using ScienceArchive.Application.Dtos.User;
+
+namespace ScienceArchive.Application.Dtos.Auth.Request;
 
 /// <summary>
 /// Sign up request contract

@@ -17,6 +17,7 @@ public class Article : Entity<ArticleId>
     
     public Article(ArticleId? id) : base(id ?? ArticleId.CreateNew())
     {
+        _title = string.Empty;
         _status = ArticleStatus.ToVerify;
     }
     

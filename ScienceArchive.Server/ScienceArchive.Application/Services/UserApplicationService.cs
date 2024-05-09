@@ -22,12 +22,6 @@ internal class UserApplicationService : BaseApplicationService, IUserApplication
     }
 
     /// <inheritdoc/>
-    public Task<GetAllAuthorsResponseDto> GetAllAuthors(GetAllAuthorsRequestDto dto)
-    {
-        return ExecuteUseCase<GetAllAuthorsRequestDto, GetAllAuthorsResponseDto>(dto);
-    }
-
-    /// <inheritdoc/>
     public Task<GetUserByIdResponseDto> GetUserById(GetUserByIdRequestDto dto)
     {
         return ExecuteUseCase<GetUserByIdRequestDto, GetUserByIdResponseDto>(dto);
