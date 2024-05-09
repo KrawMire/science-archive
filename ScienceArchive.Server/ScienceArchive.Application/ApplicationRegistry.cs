@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using ScienceArchive.Application.Dtos;
 using ScienceArchive.Application.Dtos.Article;
 using ScienceArchive.Application.Dtos.Article.Request;
 using ScienceArchive.Application.Dtos.Article.Response;
@@ -58,7 +57,7 @@ public static class ApplicationRegistry
     }
     
     /// <summary>
-    /// Register application layer interactors
+    /// Register application layer services
     /// </summary>
     /// <param name="services">System services</param>
     /// <returns>System services with registered interactors</returns>
