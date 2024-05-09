@@ -41,7 +41,12 @@ public interface IDbContext
     /// User repository functionality.
     /// </summary>
     public IUserRepository UserRepository { get; }
-    
+
+    /// <summary>
+    /// Starts a new transaction in the context.
+    /// </summary>
+    public Task StartTransactionAsync();
+
     /// <summary>
     /// Saves changes made to the context asynchronously.
     /// </summary>

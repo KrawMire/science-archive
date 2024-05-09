@@ -43,6 +43,8 @@ internal abstract class BaseApplicationService
 
         try
         {
+            await _dbContext.StartTransactionAsync();
+            
             var result = await useCase.Execute(contract);
             
             await _eventBus.HandleEvents();
