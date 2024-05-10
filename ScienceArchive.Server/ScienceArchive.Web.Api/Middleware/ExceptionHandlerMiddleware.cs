@@ -1,5 +1,4 @@
-﻿using System.Net;
-using System.Text.Json;
+﻿using System.Text.Json;
 using ScienceArchive.Web.Api.Responses;
 
 namespace ScienceArchive.Web.Api.Middleware;
@@ -23,19 +22,24 @@ public class ExceptionHandlerMiddleware
         }
         catch (BadHttpRequestException ex)
         {
-            await ProcessException(ex, httpContext, 400);
+            await ProcessException(httpContext, ex.Message, 400);
         }
         catch (Exception ex)
         {
-            await ProcessException(ex, httpContext);
+            await ProcessException(httpContext, "Unhandled error occurred", 500, ex);
         }
     }
 
-    private async Task ProcessException(Exception ex, HttpContext httpContext, int statusCode = 500)
+    private async Task ProcessException(HttpContext httpContext, string message, int statusCode, Exception? ex = null)
     {
-        var response = new ErrorResponse(ex.Message);
+        var response = new ErrorResponse(message);
         var body = JsonSerializer.Serialize(response);
 
+        if (ex is not null)
+        {
+            _logger.LogError(ex.Message);   
+        }
+        
         try
         {
             httpContext.Response.ContentType = "application/json";
@@ -44,7 +48,7 @@ public class ExceptionHandlerMiddleware
         }
         catch (Exception e)
         {
-            _logger.LogError(e.Message);
+            _logger.LogError($"Error while writing response: {e.Message}");
         }
     }
 }
