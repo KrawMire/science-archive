@@ -2,7 +2,7 @@ using ScienceArchive.Application.Abstractions.Persistence;
 using ScienceArchive.Application.Dtos.Auth.Request;
 using ScienceArchive.Application.Dtos.Auth.Response;
 using ScienceArchive.Application.Interfaces;
-using ScienceArchive.Core.Services;
+using ScienceArchive.Core.Domain.Services;
 
 namespace ScienceArchive.Application.UseCases.AuthUseCases;
 

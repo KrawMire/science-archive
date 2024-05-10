@@ -1,6 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using ScienceArchive.Application.Abstractions.Encryption;
-using ScienceArchive.Core.Services;
+using ScienceArchive.Core.Domain.Services;
 using ScienceArchive.Infrastructure.Connectivity;
 using ScienceArchive.Infrastructure.DomainServices;
 using ScienceArchive.Infrastructure.Persistence;

@@ -1,7 +1,7 @@
 using ScienceArchive.Core.Domain.Aggregates.Role.ValueObjects;
 using ScienceArchive.Core.Domain.Aggregates.User;
 using ScienceArchive.Core.Domain.Aggregates.User.ValueObjects;
-using ScienceArchive.Core.Services;
+using ScienceArchive.Core.Domain.Services;
 
 namespace ScienceArchive.Infrastructure.DomainServices;
 

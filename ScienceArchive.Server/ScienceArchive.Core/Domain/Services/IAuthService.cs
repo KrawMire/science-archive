@@ -2,7 +2,7 @@ using ScienceArchive.Core.Domain.Aggregates.Role.ValueObjects;
 using ScienceArchive.Core.Domain.Aggregates.User;
 using ScienceArchive.Core.Domain.Aggregates.User.ValueObjects;
 
-namespace ScienceArchive.Core.Services;
+namespace ScienceArchive.Core.Domain.Services;
 
 /// <summary>
 /// Represents the authentication service.

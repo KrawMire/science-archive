@@ -3,8 +3,8 @@ using ScienceArchive.Application.Dtos.Auth.Response;
 using ScienceArchive.Application.Dtos.User;
 using ScienceArchive.Application.Interfaces;
 using ScienceArchive.Core.Domain.Aggregates.User;
+using ScienceArchive.Core.Domain.Services;
 using ScienceArchive.Core.Exceptions;
-using ScienceArchive.Core.Services;
 
 namespace ScienceArchive.Application.UseCases.AuthUseCases;
 
