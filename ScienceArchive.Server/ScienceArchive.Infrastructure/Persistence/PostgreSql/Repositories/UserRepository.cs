@@ -132,4 +132,19 @@ internal class PostgresUserRepository : IUserRepository
 
         return UserId.CreateFromGuid(deletedUserId);
     }
+
+    public Task<User?> GetUserByLoginOrEmail(string login)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<User?> GetUserByLogin(string login)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<User?> GetUserByEmail(string email)
+    {
+        throw new NotImplementedException();
+    }
 }

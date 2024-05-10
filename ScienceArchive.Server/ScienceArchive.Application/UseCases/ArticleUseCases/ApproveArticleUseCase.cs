@@ -5,6 +5,7 @@ using ScienceArchive.Application.Dtos.Article.Response;
 using ScienceArchive.Application.Interfaces;
 using ScienceArchive.Core.Domain.Aggregates.Article;
 using ScienceArchive.Core.Domain.Aggregates.Article.ValueObjects;
+using ScienceArchive.Core.Domain.Events;
 using ScienceArchive.Core.Exceptions;
 
 namespace ScienceArchive.Application.UseCases.ArticleUseCases;
@@ -12,12 +13,17 @@ namespace ScienceArchive.Application.UseCases.ArticleUseCases;
 internal class ApproveArticleUseCase : IUseCase<ApproveArticleRequestDto, ApproveArticleResponseDto>
 {
     private readonly IDbContext _dbContext;
+    private readonly IEventBus _eventBus;
     private readonly IApplicationMapper<Article, ArticleDto> _articleMapper;
     
-    public ApproveArticleUseCase(IDbContext dbContext, IApplicationMapper<Article, ArticleDto> articleMapper)
+    public ApproveArticleUseCase(
+        IDbContext dbContext, 
+        IEventBus eventBus,
+        IApplicationMapper<Article, ArticleDto> articleMapper) 
     {
         _dbContext = dbContext;
         _articleMapper = articleMapper;
+        _eventBus = eventBus;
     }
     
     public async Task<ApproveArticleResponseDto> Execute(ApproveArticleRequestDto contract)
@@ -33,6 +39,13 @@ internal class ApproveArticleUseCase : IUseCase<ApproveArticleRequestDto, Approv
         article.Approve();
 
         var updatedArticle = await _dbContext.ArticleRepository.Update(articleId, article);
+
+        await _eventBus.AddEventAsync(new ArticleStatusChangedEvent
+        {
+            ArticleId = articleId,
+            Status = updatedArticle.Status
+        });
+        
         return new ApproveArticleResponseDto(_articleMapper.MapToDto(updatedArticle));
     }
 }

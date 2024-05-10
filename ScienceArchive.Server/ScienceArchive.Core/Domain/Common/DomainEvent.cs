@@ -8,5 +8,5 @@ public abstract class DomainEvent
     /// <summary>
     /// The timestamp of the domain event
     /// </summary>
-    public required DateTime Timestamp { get; set; } 
+    public DateTime Timestamp { get; set; } = DateTime.Now;
 }
