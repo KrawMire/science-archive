@@ -1,4 +1,5 @@
 using ScienceArchive.Core.Domain.Aggregates.News;
+using ScienceArchive.Core.Domain.Aggregates.News.Factories;
 using ScienceArchive.Core.Domain.Aggregates.News.ValueObjects;
 using ScienceArchive.Core.Domain.Aggregates.User.ValueObjects;
 using ScienceArchive.Infrastructure.Interfaces;
@@ -23,18 +24,14 @@ internal class NewsMapper : IInfrastructureMapper<News, NewsModel>
 
 	public News MapToEntity(NewsModel model)
 	{
-		var newsId = NewsId.CreateFromGuid(model.Id);
-		
-		return new News(newsId)
-		{
-			Body = model.Body,
-			Title = model.Title,
-			Metadata = new NewsMetadata
-			{
-				AuthorId = UserId.CreateFromGuid(model.AuthorId),
-				CreationDate = model.CreationDate,
-				LastUpdatedDate = model.LastUpdatedDate
-			}
-		};
+		var builder = new NewsBuilder(model.Id);
+
+		return builder
+			.AddTitle(model.Title)
+			.AddBody(model.Body)
+			.AddAuthorId(model.AuthorId)
+			.AddCreationDate(model.CreationDate)
+			.AddLastUpdatedDate(model.LastUpdatedDate)
+			.Build();
 	}
 }

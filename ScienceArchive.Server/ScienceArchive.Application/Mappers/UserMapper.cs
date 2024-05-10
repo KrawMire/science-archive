@@ -1,8 +1,7 @@
 ﻿using ScienceArchive.Application.Dtos.User;
 using ScienceArchive.Application.Interfaces;
-using ScienceArchive.Core.Domain.Aggregates.Article.ValueObjects;
 using ScienceArchive.Core.Domain.Aggregates.User;
-using ScienceArchive.Core.Domain.Aggregates.User.ValueObjects;
+using ScienceArchive.Core.Domain.Aggregates.User.Factories;
 
 namespace ScienceArchive.Application.Mappers;
 
@@ -23,31 +22,25 @@ internal class UserMapper : IApplicationMapper<User, UserDto>
             Name = user.Name,
             Email = user.Email,
             Login = user.Login,
-            Articles = articles
+            Articles = articles,
+            About = user.About
         };
     }
 
     public User MapToEntity(UserDto model)
     {
-        var userId = string.IsNullOrWhiteSpace(model.Id)
-            ? null
-            : UserId.CreateNew();
+        var builder = new UserBuilder(model.Id);
 
-        var articles = model.Articles
-            .Select(a => new UserArticle
-            {
-                ArticleId = ArticleId.CreateFromString(a.ArticleId),
-                Title = a.Title
-            }).ToList();
-        
-        return new User(userId)
+        foreach (var article in model.Articles)
         {
-            Name = model.Name,
-            Email = model.Email,
-            Login = model.Login,
-            Articles = articles,
-            Roles = new List<UserRole>(),
-            Password = new UserPassword()
-        };
+            builder.AddArticle(article.ArticleId, article.Title);
+        }
+
+        return builder
+            .AddName(model.Name)
+            .AddEmail(model.Email)
+            .AddLogin(model.Login)
+            .AddAboutText(model.About)
+            .Build();
     }
 }

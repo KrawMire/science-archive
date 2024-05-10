@@ -8,13 +8,13 @@ namespace ScienceArchive.Core.Domain.Aggregates.User;
 /// <summary>
 /// User entity
 /// </summary>
-public class User : Entity<UserId>
+public class User : AggregateRoot<UserId>
 {
     private string _name = string.Empty;
     private string _email = string.Empty;
     private string _login = string.Empty;
 
-    public User(UserId? id = null) : base(id ?? UserId.CreateNew())
+    internal User(UserId? id = null) : base(id ?? UserId.CreateNew())
     {
     }
 

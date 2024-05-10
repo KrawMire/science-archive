@@ -9,13 +9,13 @@ namespace ScienceArchive.Core.Domain.Aggregates.Article;
 /// <summary>
 /// Article entity
 /// </summary>
-public class Article : Entity<ArticleId>
+public class Article : AggregateRoot<ArticleId>
 {
     private string _title;
     private string? _description;
     private ArticleStatus _status;
     
-    public Article(ArticleId? id) : base(id ?? ArticleId.CreateNew())
+    internal Article(ArticleId? id) : base(id ?? ArticleId.CreateNew())
     {
         _title = string.Empty;
         _status = ArticleStatus.ToVerify;

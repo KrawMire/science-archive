@@ -1,9 +1,5 @@
 using ScienceArchive.Core.Domain.Aggregates.Article;
-using ScienceArchive.Core.Domain.Aggregates.Article.Entities;
-using ScienceArchive.Core.Domain.Aggregates.Article.Enums;
-using ScienceArchive.Core.Domain.Aggregates.Article.ValueObjects;
-using ScienceArchive.Core.Domain.Aggregates.Category.ValueObjects;
-using ScienceArchive.Core.Domain.Aggregates.User.ValueObjects;
+using ScienceArchive.Core.Domain.Aggregates.Article.Factories;
 using ScienceArchive.Infrastructure.Interfaces;
 using ScienceArchive.Infrastructure.Persistence.PostgreSql.Models;
 
@@ -45,37 +41,24 @@ internal class ArticleMapper : IInfrastructureMapper<Article, ArticleModel>
 
 	public Article MapToEntity(ArticleModel model)
 	{
-		var articleId = ArticleId.CreateFromGuid(model.Id);
-		
-		var authors = model.Authors
-			.Select(a => new ArticleAuthor
-			{
-				UserId = UserId.CreateFromGuid(a.AuthorId),
-				Name = a.AuthorName,
-				Role = (ArticleAuthorRole)a.Role
-			})
-			.ToList();
-		
-		var documents = model.Documents
-			.Select(d => new ArticleDocument(ArticleDocumentId.CreateFromGuid(d.Id))
-			{
-				Name = d.DocumentName, 
-				Path = d.DocumentPath
-			}).ToList();
-		
-		return new Article(articleId)
+		var builder = new ArticleBuilder(model.Id);
+        
+		foreach (var author in model.Authors)
 		{
-			Title = model.Title,
-			Status = (ArticleStatus)model.Status,
-			Category = new ArticleCategory
-			{
-				CategoryId = CategoryId.CreateFromGuid(model.CategoryId),
-				Name = model.CategoryName
-			},
-			Authors = authors,
-			Documents = documents,
-			CreationDate = model.CreationDate,
-			Description = model.Description
-		};
+			builder.AddAuthor(author.AuthorId, author.AuthorName, author.Role);
+		}
+
+		foreach (var document in model.Documents)
+		{
+			builder.AddDocument(document.Id, document.DocumentName, document.DocumentPath);
+		}
+
+		return builder
+			.AddCategory(model.CategoryId, model.CategoryName)
+			.AddTitle(model.Title)
+			.AddStatus(model.Status)
+			.AddCreationDate(model.CreationDate)
+			.AddDescription(model.Description)
+			.Build();
 	}
 }

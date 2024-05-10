@@ -1,7 +1,5 @@
-﻿using ScienceArchive.Core.Domain.Aggregates.Article.ValueObjects;
-using ScienceArchive.Core.Domain.Aggregates.Role.ValueObjects;
-using ScienceArchive.Core.Domain.Aggregates.User;
-using ScienceArchive.Core.Domain.Aggregates.User.ValueObjects;
+﻿using ScienceArchive.Core.Domain.Aggregates.User;
+using ScienceArchive.Core.Domain.Aggregates.User.Factories;
 using ScienceArchive.Infrastructure.Interfaces;
 using ScienceArchive.Infrastructure.Persistence.PostgreSql.Models;
 
@@ -40,35 +38,26 @@ internal class UserMapper : IInfrastructureMapper<User, UserModel>
 
     public User MapToEntity(UserModel model)
     {
-        var userId = UserId.CreateFromGuid(model.Id);
-        
-        var roles = model.Roles is not null
-            ? model.Roles.Select(r => new UserRole
-            {
-                RoleId = RoleId.CreateFromGuid(r.RoleId)
-            }).ToList()
-            : new List<UserRole>();
+        var builder = new UserBuilder(model.Id);
 
-        var articles = model.Articles
-            .Select(a => new UserArticle
-            {
-                ArticleId = ArticleId.CreateFromGuid(a.ArticleId),
-                Title = a.Title
-            }).ToList();
-        
-        return new User(userId)
+        if (model.Roles is not null)
         {
-            Roles = roles, 
-            Email = model.Email,
-            Login = model.Login,
-            Name = model.Name,
-            Articles = articles,
-            About = model.About,
-            Password = new UserPassword
+            foreach (var role in model.Roles)
             {
-                Value = model.Password ?? "",
-                Salt = model.PasswordSalt ?? "", 
-            }
-        };
+                builder.AddRole(role.RoleId);
+            }   
+        }
+        
+        foreach (var article in model.Articles)
+        {
+            builder.AddArticle(article.ArticleId, article.Title);
+        }
+
+        return builder
+            .AddName(model.Name)
+            .AddEmail(model.Email)
+            .AddLogin(model.Login)
+            .AddAboutText(model.About)
+            .Build();
     }
 }

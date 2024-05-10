@@ -1,12 +1,7 @@
 ﻿using ScienceArchive.Application.Dtos.Article;
 using ScienceArchive.Application.Interfaces;
 using ScienceArchive.Core.Domain.Aggregates.Article;
-using ScienceArchive.Core.Domain.Aggregates.Article.Entities;
-using ScienceArchive.Core.Domain.Aggregates.Article.Enums;
-using ScienceArchive.Core.Domain.Aggregates.Article.ValueObjects;
-using ScienceArchive.Core.Domain.Aggregates.Category;
-using ScienceArchive.Core.Domain.Aggregates.Category.ValueObjects;
-using ScienceArchive.Core.Domain.Aggregates.User.ValueObjects;
+using ScienceArchive.Core.Domain.Aggregates.Article.Factories;
 
 namespace ScienceArchive.Application.Mappers;
 
@@ -46,40 +41,24 @@ internal class ArticleMapper : IApplicationMapper<Article, ArticleDto>
 
     public Article MapToEntity(ArticleDto dto)
     {
-        var articleId = string.IsNullOrWhiteSpace(dto.Id)
-            ? null
-            : ArticleId.CreateFromString(dto.Id);
-
-        var authors = dto.Authors
-            .Select(a => new ArticleAuthor
-            {
-                UserId = UserId.CreateFromString(a.UserId),
-                Name = a.Name,
-                Role = (ArticleAuthorRole)a.Role
-            })
-            .ToList();
+        var builder = new ArticleBuilder(dto.Id);
         
-        var documents = dto.Documents
-            .Select(d => new ArticleDocument(null)
-            {
-                Name = d.Name,
-                Path = d.Path
-            })
-            .ToList();
-        
-        return new Article(articleId)
+        foreach (var author in dto.Authors)
         {
-            Category = new ArticleCategory
-            {
-                Name = dto.CategoryName,
-                CategoryId = CategoryId.CreateFromString(dto.CategoryId)
-            },
-            Title = dto.Title,
-            Authors = authors,
-            Status = (ArticleStatus)dto.Status,
-            CreationDate = dto.CreationDate.GetValueOrDefault(DateTime.Now),
-            Documents = documents,
-            Description = dto.Description
-        };
+            builder.AddAuthor(author.UserId, author.Name, author.Role);
+        }
+
+        foreach (var document in dto.Documents)
+        {
+            builder.AddDocument(document.Id, document.Name, document.Path);
+        }
+
+        return builder
+            .AddCategory(dto.CategoryId, dto.CategoryName)
+            .AddTitle(dto.Title)
+            .AddStatus(dto.Status)
+            .AddCreationDate(dto.CreationDate)
+            .AddDescription(dto.Description)
+            .Build();
     }
 }
