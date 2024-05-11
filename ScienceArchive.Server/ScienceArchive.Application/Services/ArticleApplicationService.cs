@@ -22,9 +22,9 @@ internal class ArticleApplicationService : BaseApplicationService, IArticleAppli
     }
 
     /// <inheritdoc/>
-    public Task<GetAllArticlesResponseDto> GetAllVerifiedArticles(GetAllVerifiedArticlesRequestDto dto)
+    public Task<GetAllVerifiedArticlesResponseDto> GetAllVerifiedArticles(GetAllVerifiedArticlesRequestDto dto)
     {
-        return ExecuteUseCase<GetAllVerifiedArticlesRequestDto, GetAllArticlesResponseDto>(dto);
+        return ExecuteUseCase<GetAllVerifiedArticlesRequestDto, GetAllVerifiedArticlesResponseDto>(dto);
     }
 
     /// <inheritdoc/>

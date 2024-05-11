@@ -20,7 +20,7 @@ public interface IArticleApplicationService
     /// </summary>
     /// <param name="dto">DTO contract to get all verified articles</param>
     /// <returns>Response DTO</returns>
-    Task<GetAllArticlesResponseDto> GetAllVerifiedArticles(GetAllVerifiedArticlesRequestDto dto);
+    Task<GetAllVerifiedArticlesResponseDto> GetAllVerifiedArticles(GetAllVerifiedArticlesRequestDto dto);
 
     /// <summary>
     /// Get articles with specified author ID
