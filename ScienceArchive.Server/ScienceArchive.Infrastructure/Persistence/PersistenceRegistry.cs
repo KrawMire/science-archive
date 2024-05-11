@@ -19,12 +19,12 @@ internal static class PersistenceRegistry
     /// Register all required persistence services
     /// </summary>
     /// <param name="services">Instance of <see cref="IServiceCollection"/></param>
-    /// <param name="connectionOptions">Options with connection parameters</param>
-    public static IServiceCollection RegisterPersistenceServices(this IServiceCollection services, PersistenceConnectionOptions connectionOptions)
+    /// <param name="persistenceOptions">Options for persistence</param>
+    public static IServiceCollection RegisterPersistenceServices(this IServiceCollection services, PersistenceOptions persistenceOptions)
     {
         return services
             .RegisterRepositories()
-            .RegisterDbContext(connectionOptions)
+            .RegisterDbContext(persistenceOptions)
             .RegisterPersistenceMappers();
     }
     
@@ -39,12 +39,12 @@ internal static class PersistenceRegistry
             .AddTransient<IUserRepository, PostgresUserRepository>();
     }
 
-    private static IServiceCollection RegisterDbContext(this IServiceCollection services, PersistenceConnectionOptions connectionOptions)
+    private static IServiceCollection RegisterDbContext(this IServiceCollection services, PersistenceOptions persistenceOptions)
     {
         return services
             .AddDbContext<PostgresDbContext>(options =>
             {
-                options.UseNpgsql(connectionOptions.PostgresConnectionOptions.PostgresConnectionString);
+                options.UseNpgsql(persistenceOptions.PostgresConnectionOptions.PostgresConnectionString);
                 
             })
             .AddScoped<PostgresDbExecutionContext>()

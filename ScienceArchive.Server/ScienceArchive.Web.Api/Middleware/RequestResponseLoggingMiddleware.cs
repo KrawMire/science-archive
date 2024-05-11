@@ -37,7 +37,7 @@ public class RequestResponseLoggingMiddleware
 		
 		var log = await GetRequestLog(httpContext);
 
-		log.Response = responseBody;
+		log.ResponseString = responseBody;
 		
 		_logger.LogInformation($"Received request: Timestamp={log.Timestamp:u}, URL={log.Url}, IP={log.Ip}, User-Agent={log.UserAgent}");
 		
@@ -80,7 +80,7 @@ public class RequestResponseLoggingMiddleware
 			Ip = ip,
 			Url = url,
 			UserAgent = userAgent,
-			Request = requestBody
+			RequestString = requestBody
 		};
 		
 		return requestLog;

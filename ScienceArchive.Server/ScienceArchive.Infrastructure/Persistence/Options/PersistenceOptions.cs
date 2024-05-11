@@ -5,7 +5,7 @@ namespace ScienceArchive.Infrastructure.Persistence.Options;
 /// <summary>
 /// Options of connection to different data sources
 /// </summary>
-public class PersistenceConnectionOptions
+public class PersistenceOptions
 {
     /// <summary>
     /// Options for connecting to a PostgreSQL database.

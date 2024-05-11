@@ -6,6 +6,6 @@ public record RequestLog
 	public string Ip { get; set; }
 	public string Url { get; set; }
 	public string UserAgent { get; set; }
-	public string? Request { get; set; }
-	public string? Response { get; set; }
+	public string? RequestString { get; set; }
+	public string? ResponseString { get; set; }
 }

@@ -6,7 +6,8 @@ using ScienceArchive.Web.Api.Middleware;
 using ConfigurationManager = ScienceArchive.Web.Api.Configuration.ConfigurationManager;
 
 var builder = WebApplication.CreateBuilder(args);
-var connectionOptions = ConfigurationManager.GetConnectionOptions(builder);
+var persistenceOptions = ConfigurationManager.GetPersistenceOptions(builder);
+var connectivityOptions = ConfigurationManager.GetConnectivityOptions(builder);
 
 // Register built-in services
 builder.Services.AddControllers();
@@ -16,7 +17,7 @@ builder.Services
 
 // Register application-specific services
 builder.Services
-    .RegisterInfrastructureServices(connectionOptions)
+    .RegisterInfrastructureServices(persistenceOptions, connectivityOptions)
     .RegisterApplicationLayer();
 
 // Register presentation layer services

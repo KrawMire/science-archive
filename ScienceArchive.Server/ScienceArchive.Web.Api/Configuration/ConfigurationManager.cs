@@ -1,3 +1,5 @@
+using ScienceArchive.Infrastructure.Connectivity.Options;
+using ScienceArchive.Infrastructure.Connectivity.RabbitMq.Options;
 using ScienceArchive.Infrastructure.Persistence.Options;
 using ScienceArchive.Infrastructure.Persistence.PostgreSql.Options;
 
@@ -10,7 +12,7 @@ public static class ConfigurationManager
 	/// </summary>
 	/// <param name="builder">Instance of <see cref="WebApplicationBuilder"/></param>
 	/// <returns>Connection options</returns>
-	public static PersistenceConnectionOptions GetConnectionOptions(WebApplicationBuilder builder)
+	public static PersistenceOptions GetPersistenceOptions(WebApplicationBuilder builder)
 	{
 		string dbConnectionString;
 
@@ -32,11 +34,29 @@ public static class ConfigurationManager
 			throw new NullReferenceException("Cannot get connection string!");
 		}
 
-		return new PersistenceConnectionOptions
+		return new PersistenceOptions
 		{
 			PostgresConnectionOptions = new PostgresConnectionOptions
 			{
 				PostgresConnectionString = dbConnectionString 
+			}
+		};
+	}
+
+	/// <summary>
+	/// Get connectivity options
+	/// </summary>
+	/// <param name="builder">Instance of <see cref="WebApplicationBuilder"/></param>
+	/// <returns>Connectivity options</returns>
+	public static ConnectivityOptions GetConnectivityOptions(WebApplicationBuilder builder)
+	{
+		return new ConnectivityOptions
+		{
+			RabbitMqConnectionOptions = new RabbitMqConnectionOptions
+			{
+				Host = "localhost",
+				NotificationsQueueName = "notifications",
+				RequestLogsQueueName = "request_logs"
 			}
 		};
 	}

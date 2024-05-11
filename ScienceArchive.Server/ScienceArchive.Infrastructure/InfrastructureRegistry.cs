@@ -2,6 +2,7 @@ using Microsoft.Extensions.DependencyInjection;
 using ScienceArchive.Application.Abstractions.Encryption;
 using ScienceArchive.Core.Domain.Services;
 using ScienceArchive.Infrastructure.Connectivity;
+using ScienceArchive.Infrastructure.Connectivity.Options;
 using ScienceArchive.Infrastructure.DomainServices;
 using ScienceArchive.Infrastructure.Persistence;
 using ScienceArchive.Infrastructure.Persistence.Options;
@@ -13,11 +14,12 @@ public static class InfrastructureRegistry
 {
     public static IServiceCollection RegisterInfrastructureServices(
         this IServiceCollection services, 
-        PersistenceConnectionOptions persistenceOptions)
+        PersistenceOptions persistenceOptions,
+        ConnectivityOptions connectivityOptions)
     {
         return services
             .RegisterPersistenceServices(persistenceOptions)
-            .RegisterConnectivityServices()
+            .RegisterConnectivityServices(connectivityOptions)
             .RegisterDomainServices()
             .RegisterApplicationServices();
     }
