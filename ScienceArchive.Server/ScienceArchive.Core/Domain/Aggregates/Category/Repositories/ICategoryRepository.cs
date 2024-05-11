@@ -16,27 +16,4 @@ public interface ICategoryRepository : ICrudRepository<CategoryId, Category>
 	/// <param name="subcategoryId">Subcategory ID</param>
 	/// <returns>Found subcategory or null</returns>
 	Task<Subcategory?> GetSubcategoryById(CategoryId subcategoryId);
-	
-	/// <summary>
-	/// Create subcategory in category
-	/// </summary>
-	/// <param name="categoryId">Category ID where to create subcategory</param>
-	/// <param name="subcategory">Subcategory to create</param>
-	/// <returns>Created subcategory</returns>
-	Task<Category> CreateSubcategory(CategoryId categoryId, Category subcategory);
-	
-	/// <summary>
-	/// Update existing subcategory
-	/// </summary>
-	/// <param name="subcategoryId">Subcategory ID to update</param>
-	/// <param name="subcategory">New subcategory value</param>
-	/// <returns>Updated subcategory</returns>
-	Task<Category> UpdateSubcategory(CategoryId subcategoryId, Category subcategory);
-	
-	/// <summary>
-	/// Delete subcategory by its ID
-	/// </summary>
-	/// <param name="subcategoryId"></param>
-	/// <returns>Deleted subcategory ID</returns>
-	Task<CategoryId> DeleteSubcategory(CategoryId subcategoryId);
 }

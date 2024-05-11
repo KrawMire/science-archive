@@ -19,4 +19,7 @@ internal partial class Category
     [Column("description")]
     [StringLength(255)]
     public string? Description { get; set; }
+
+    [InverseProperty("Category")]
+    public virtual ICollection<Subcategory> Subcategories { get; set; } = new List<Subcategory>();
 }

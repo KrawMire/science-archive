@@ -110,6 +110,10 @@ internal partial class PostgresDbContext : DbContext
             entity.HasKey(e => e.Id).HasName("subcategories_pkey");
 
             entity.Property(e => e.Id).ValueGeneratedNever();
+
+            entity.HasOne(d => d.Category).WithMany(p => p.Subcategories)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("fk_subcategories__category_id");
         });
 
         modelBuilder.Entity<User>(entity =>

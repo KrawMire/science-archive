@@ -20,6 +20,13 @@ internal partial class Subcategory
     [StringLength(255)]
     public string? Description { get; set; }
 
+    [Column("category_id")]
+    public Guid CategoryId { get; set; }
+
     [InverseProperty("Category")]
     public virtual ICollection<Article> Articles { get; set; } = new List<Article>();
+
+    [ForeignKey("CategoryId")]
+    [InverseProperty("Subcategories")]
+    public virtual Category Category { get; set; } = null!;
 }
