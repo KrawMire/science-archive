@@ -1,5 +1,4 @@
-﻿using Dapper;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using ScienceArchive.Application.Abstractions.Persistence;
 using ScienceArchive.Core.Domain.Aggregates.Article;
 using ScienceArchive.Core.Domain.Aggregates.Article.Repositories;
@@ -17,10 +16,9 @@ using ScienceArchive.Core.Domain.Aggregates.User.Repositories;
 using ScienceArchive.Infrastructure.Interfaces;
 using ScienceArchive.Infrastructure.Persistence.Options;
 using ScienceArchive.Infrastructure.Persistence.PostgreSql;
+using ScienceArchive.Infrastructure.Persistence.PostgreSql.Mappers;
 using ScienceArchive.Infrastructure.Persistence.PostgreSql.Models;
 using ScienceArchive.Infrastructure.Persistence.PostgreSql.Repositories;
-using ScienceArchive.Infrastructure.PostgreSql.PersistenceMappers;
-using ScienceArchive.Infrastructure.PostgreSql.SqlMappers;
 
 namespace ScienceArchive.Infrastructure.Persistence;
 
@@ -62,11 +60,6 @@ internal static class PersistenceRegistry
 
     private static IServiceCollection RegisterPersistenceMappers(this IServiceCollection services)
     {
-        // Register mappers from SQL tables to models
-        SqlMapper.AddTypeHandler(new GenericArrayToListMapper<Guid>());
-        SqlMapper.AddTypeHandler(new GenericJsonMapper<List<ArticleDocumentModel>>());
-        SqlMapper.AddTypeHandler(new GenericJsonMapper<List<SubcategoryModel>>());
-        
         // Register mappers from entities to models and vice versa
         return services
             .AddTransient<IInfrastructureMapper<Article, ArticleModel>, ArticleMapper>()

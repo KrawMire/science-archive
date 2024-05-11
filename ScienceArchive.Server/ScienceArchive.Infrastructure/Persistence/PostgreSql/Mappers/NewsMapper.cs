@@ -1,11 +1,9 @@
 using ScienceArchive.Core.Domain.Aggregates.News;
 using ScienceArchive.Core.Domain.Aggregates.News.Factories;
-using ScienceArchive.Core.Domain.Aggregates.News.ValueObjects;
-using ScienceArchive.Core.Domain.Aggregates.User.ValueObjects;
 using ScienceArchive.Infrastructure.Interfaces;
 using ScienceArchive.Infrastructure.Persistence.PostgreSql.Models;
 
-namespace ScienceArchive.Infrastructure.PostgreSql.PersistenceMappers;
+namespace ScienceArchive.Infrastructure.Persistence.PostgreSql.Mappers;
 
 internal class NewsMapper : IInfrastructureMapper<News, NewsModel>
 {

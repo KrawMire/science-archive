@@ -3,7 +3,7 @@ using ScienceArchive.Core.Domain.Aggregates.Article.Factories;
 using ScienceArchive.Infrastructure.Interfaces;
 using ScienceArchive.Infrastructure.Persistence.PostgreSql.Models;
 
-namespace ScienceArchive.Infrastructure.PostgreSql.PersistenceMappers;
+namespace ScienceArchive.Infrastructure.Persistence.PostgreSql.Mappers;
 
 internal class ArticleMapper : IInfrastructureMapper<Article, ArticleModel>
 {

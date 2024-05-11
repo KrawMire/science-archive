@@ -1,10 +1,7 @@
-using System.Data;
-using Dapper;
 using ScienceArchive.Core.Domain.Aggregates.Category;
 using ScienceArchive.Core.Domain.Aggregates.Category.Entities;
 using ScienceArchive.Core.Domain.Aggregates.Category.Repositories;
 using ScienceArchive.Core.Domain.Aggregates.Category.ValueObjects;
-using ScienceArchive.Core.Exceptions;
 using ScienceArchive.Infrastructure.Interfaces;
 using ScienceArchive.Infrastructure.Persistence.PostgreSql.Models;
 
@@ -26,35 +23,14 @@ internal class PostgresCategoryRepository : ICategoryRepository
 		_dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
 	}
 	
-	public async Task<Category?> GetById(CategoryId id)
+	public Task<Category?> GetById(CategoryId id)
 	{
-		var parameters = new DynamicParameters();
-		parameters.Add("Id", id.Value);
-
-		var category = await _dbContext.Connection.QueryFirstOrDefaultAsync<CategoryModel?>(
-			"SELECT * FROM func_get_category_by_id(@Id::uuid)",
-			parameters,
-			commandType: CommandType.Text,
-			transaction: _dbContext.Transaction);
-
-		return category is null 
-			? null 
-			: _mapper.MapToEntity(category);
+		throw new NotImplementedException();
 	}
 
-	public async Task<List<Category>> GetAll()
+	public Task<List<Category>> GetAll()
 	{
-		var categories = await _dbContext.Connection.QueryAsync<CategoryModel>(
-			"SELECT * FROM func_get_all_categories()",
-			commandType: CommandType.Text,
-			transaction: _dbContext.Transaction);
-
-		if (categories is null)
-		{
-			throw new EntityNotFoundException(nameof(Category));
-		}
-
-		return categories.Select(c => _mapper.MapToEntity(c)).ToList();
+		throw new NotImplementedException();
 	}
 
 	public Task<Category> Create(Category newValue)
@@ -72,20 +48,9 @@ internal class PostgresCategoryRepository : ICategoryRepository
 		throw new NotImplementedException();
 	}
 
-	public async Task<Subcategory?> GetSubcategoryById(CategoryId subcategoryId)
+	public Task<Subcategory?> GetSubcategoryById(CategoryId subcategoryId)
 	{
-		var parameters = new DynamicParameters();
-		parameters.Add("Id", subcategoryId.Value);
-
-		var subcategory = await _dbContext.Connection.QueryFirstOrDefaultAsync<SubcategoryModel?>(
-			"SELECT * FROM func_get_subcategory_by_id(@Id::uuid)",
-			parameters,
-			commandType: CommandType.Text,
-			transaction: _dbContext.Transaction);
-
-		return subcategory is null 
-			? null 
-			: _subcategoryMapper.MapToEntity(subcategory);
+		throw new NotImplementedException();
 	}
 
 	public Task<Category> CreateSubcategory(CategoryId categoryId, Category subcategory)
