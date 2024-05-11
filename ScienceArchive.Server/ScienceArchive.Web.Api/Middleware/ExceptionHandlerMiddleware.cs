@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using ScienceArchive.Core.Exceptions;
 using ScienceArchive.Web.Api.Responses;
 
 namespace ScienceArchive.Web.Api.Middleware;
@@ -23,6 +24,18 @@ public class ExceptionHandlerMiddleware
         catch (BadHttpRequestException ex)
         {
             await ProcessException(httpContext, ex.Message, 400);
+        }
+        catch (WrongCredentialsException ex)
+        {
+            await ProcessException(httpContext, "Wrong credentials were provided", 400);
+        }
+        catch (InvalidFieldValueException ex)
+        {
+            await ProcessException(httpContext, $"Invalid value of field: {ex.InvalidFieldName}", 400);
+        }
+        catch (EntityNotFoundException ex)
+        {
+            await ProcessException(httpContext, $"{ex.EntityName} was not found", 400);
         }
         catch (Exception ex)
         {
