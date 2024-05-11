@@ -3,7 +3,7 @@ using ScienceArchive.Infrastructure.Persistence.PostgreSql.Entities;
 
 namespace ScienceArchive.Infrastructure.Persistence.PostgreSql;
 
-public partial class PostgresDbContext : DbContext
+internal partial class PostgresDbContext : DbContext
 {
     public PostgresDbContext(DbContextOptions<PostgresDbContext> options)
         : base(options)

@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.EntityFrameworkCore;
 
 namespace ScienceArchive.Infrastructure.Persistence.PostgreSql.Entities;
 
 [Table("users_auth", Schema = "auth")]
-public partial class UsersAuth
+internal partial class UsersAuth
 {
     [Key]
     [Column("user_id")]

@@ -87,5 +87,5 @@ public class User : AggregateRoot<UserId>
     /// <summary>
     /// User password
     /// </summary>
-    public required UserPassword Password { get; set; }
+    public UserPassword? Password { get; set; }
 }

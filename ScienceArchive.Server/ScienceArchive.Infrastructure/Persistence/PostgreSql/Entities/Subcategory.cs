@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,7 +6,7 @@ namespace ScienceArchive.Infrastructure.Persistence.PostgreSql.Entities;
 
 [Table("subcategories", Schema = "category")]
 [Index("Name", Name = "idx__subcategories__name")]
-public partial class Subcategory
+internal partial class Subcategory
 {
     [Key]
     [Column("id")]

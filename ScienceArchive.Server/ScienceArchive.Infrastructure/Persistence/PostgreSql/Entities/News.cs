@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,7 +6,7 @@ namespace ScienceArchive.Infrastructure.Persistence.PostgreSql.Entities;
 
 [Table("news", Schema = "news")]
 [Index("Title", Name = "idx__news__title")]
-public partial class News
+internal partial class News
 {
     [Key]
     [Column("id")]

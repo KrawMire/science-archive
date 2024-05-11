@@ -17,7 +17,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Connectivity\Options\" />
-    <Folder Include="Persistence\PostgreSql\Mappers\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ScienceArchive.Application.Abstractions\ScienceArchive.Application.Abstractions.csproj" />

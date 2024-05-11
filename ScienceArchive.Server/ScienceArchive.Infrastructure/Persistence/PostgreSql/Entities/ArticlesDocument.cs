@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.EntityFrameworkCore;
 
 namespace ScienceArchive.Infrastructure.Persistence.PostgreSql.Entities;
 
 [Table("articles_documents", Schema = "article")]
-public partial class ArticlesDocument
+internal partial class ArticlesDocument
 {
     [Key]
     [Column("id")]
