@@ -30,18 +30,18 @@ internal class NewsApplicationService : BaseApplicationService, INewsApplication
     /// <inheritdoc/>
     public Task<CreateNewsResponseDto> CreateNews(CreateNewsRequestDto dto)
     {
-        return ExecuteUseCase<CreateNewsRequestDto, CreateNewsResponseDto>(dto);
+        return ExecuteTransactionalUseCase<CreateNewsRequestDto, CreateNewsResponseDto>(dto);
     }
 
     /// <inheritdoc/>
     public Task<UpdateNewsResponseDto> UpdateNews(UpdateNewsRequestDto dto)
     {
-        return ExecuteUseCase<UpdateNewsRequestDto, UpdateNewsResponseDto>(dto);
+        return ExecuteTransactionalUseCase<UpdateNewsRequestDto, UpdateNewsResponseDto>(dto);
     }
 
     /// <inheritdoc/>
     public Task<DeleteNewsResponseDto> DeleteNews(DeleteNewsRequestDto dto)
     {
-        return ExecuteUseCase<DeleteNewsRequestDto, DeleteNewsResponseDto>(dto);
+        return ExecuteTransactionalUseCase<DeleteNewsRequestDto, DeleteNewsResponseDto>(dto);
     }
 }

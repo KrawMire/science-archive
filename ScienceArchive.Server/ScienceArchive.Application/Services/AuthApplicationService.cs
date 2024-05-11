@@ -18,13 +18,13 @@ internal class AuthApplicationService : BaseApplicationService, IAuthApplication
     /// <inheritdoc/>
     public Task<LoginResponseDto> Login(LoginRequestDto dto)
     {
-        return ExecuteUseCase<LoginRequestDto, LoginResponseDto>(dto);
+        return ExecuteTransactionalUseCase<LoginRequestDto, LoginResponseDto>(dto);
     }
 
     /// <inheritdoc/>
     public Task<RegisterResponseDto> Register(RegisterRequestDto dto)
     {
-        return ExecuteUseCase<RegisterRequestDto, RegisterResponseDto>(dto);
+        return ExecuteTransactionalUseCase<RegisterRequestDto, RegisterResponseDto>(dto);
     }
     
     /// <inheritdoc/>

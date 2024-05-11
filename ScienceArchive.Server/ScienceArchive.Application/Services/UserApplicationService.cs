@@ -30,12 +30,12 @@ internal class UserApplicationService : BaseApplicationService, IUserApplication
     /// <inheritdoc/>
     public Task<DeleteUserResponseDto> DeleteUser(DeleteUserRequestDto dto)
     {
-        return ExecuteUseCase<DeleteUserRequestDto, DeleteUserResponseDto>(dto);
+        return ExecuteTransactionalUseCase<DeleteUserRequestDto, DeleteUserResponseDto>(dto);
     }
 
     /// <inheritdoc/>
     public Task<UpdateUserResponseDto> UpdateUser(UpdateUserRequestDto dto)
     {
-        return ExecuteUseCase<UpdateUserRequestDto, UpdateUserResponseDto>(dto);
+        return ExecuteTransactionalUseCase<UpdateUserRequestDto, UpdateUserResponseDto>(dto);
     }
 }

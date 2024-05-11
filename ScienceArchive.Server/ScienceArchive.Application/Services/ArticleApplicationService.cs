@@ -54,30 +54,30 @@ internal class ArticleApplicationService : BaseApplicationService, IArticleAppli
     /// <inheritdoc/>
     public Task<CreateArticleResponseDto> CreateArticle(CreateArticleRequestDto dto)
     {
-        return ExecuteUseCase<CreateArticleRequestDto, CreateArticleResponseDto>(dto);
+        return ExecuteTransactionalUseCase<CreateArticleRequestDto, CreateArticleResponseDto>(dto);
     }
 
     /// <inheritdoc/>
     public Task<DeleteArticleResponseDto> DeleteArticle(DeleteArticleRequestDto dto)
     {
-        return ExecuteUseCase<DeleteArticleRequestDto, DeleteArticleResponseDto>(dto);   
+        return ExecuteTransactionalUseCase<DeleteArticleRequestDto, DeleteArticleResponseDto>(dto);   
     }
 
     /// <inheritdoc/>
     public Task<ApproveArticleResponseDto> ApproveArticle(ApproveArticleRequestDto dto)
     {
-        return ExecuteUseCase<ApproveArticleRequestDto, ApproveArticleResponseDto>(dto);
+        return ExecuteTransactionalUseCase<ApproveArticleRequestDto, ApproveArticleResponseDto>(dto);
     }
 
     /// <inheritdoc/>
     public Task<DeclineArticleResponseDto> DeclineArticle(DeclineArticleRequestDto dto)
     {
-        return ExecuteUseCase<DeclineArticleRequestDto, DeclineArticleResponseDto>(dto);
+        return ExecuteTransactionalUseCase<DeclineArticleRequestDto, DeclineArticleResponseDto>(dto);
     }
 
     /// <inheritdoc/>
     public Task<UpdateArticleResponseDto> UpdateArticle(UpdateArticleRequestDto dto)
     {
-        return ExecuteUseCase<UpdateArticleRequestDto, UpdateArticleResponseDto>(dto);
+        return ExecuteTransactionalUseCase<UpdateArticleRequestDto, UpdateArticleResponseDto>(dto);
     }
 }
