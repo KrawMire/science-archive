@@ -7,6 +7,7 @@ import (
 	"log-service/api/dtos"
 	"log-service/internal/core/interfaces"
 	"log-service/internal/core/models"
+	"time"
 )
 
 type RequestLogConsumer struct {
@@ -76,8 +77,13 @@ func (c *RequestLogConsumer) handleRequestLogMessages(msgs <-chan amqp.Delivery)
 			continue
 		}
 
+		parsedTimestamp, err := time.Parse(time.RFC3339, reqDto.Timestamp)
+		if err != nil {
+			parsedTimestamp = time.Now()
+		}
+
 		reqModel := models.RequestLog{
-			Timestamp:      reqDto.Timestamp,
+			Timestamp:      parsedTimestamp,
 			Ip:             reqDto.Ip,
 			Url:            reqDto.Url,
 			UserAgent:      reqDto.UserAgent,

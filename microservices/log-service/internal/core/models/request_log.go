@@ -1,7 +1,9 @@
 package models
 
+import "time"
+
 type RequestLog struct {
-	Timestamp      string
+	Timestamp      time.Time
 	Ip             string
 	Url            string
 	UserAgent      string
