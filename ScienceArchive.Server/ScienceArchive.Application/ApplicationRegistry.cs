@@ -7,8 +7,6 @@ using ScienceArchive.Application.Dtos.Auth.Response;
 using ScienceArchive.Application.Dtos.Category;
 using ScienceArchive.Application.Dtos.Category.Request;
 using ScienceArchive.Application.Dtos.Category.Response;
-using ScienceArchive.Application.Dtos.Log.Request;
-using ScienceArchive.Application.Dtos.Log.Response;
 using ScienceArchive.Application.Dtos.News;
 using ScienceArchive.Application.Dtos.News.Request;
 using ScienceArchive.Application.Dtos.News.Response;

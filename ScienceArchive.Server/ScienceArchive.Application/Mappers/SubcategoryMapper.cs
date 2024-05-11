@@ -1,12 +1,11 @@
 using ScienceArchive.Application.Dtos.Category;
 using ScienceArchive.Application.Interfaces;
-using ScienceArchive.Core.Domain.Aggregates.Category;
 using ScienceArchive.Core.Domain.Aggregates.Category.Entities;
 using ScienceArchive.Core.Domain.Aggregates.Category.ValueObjects;
 
 namespace ScienceArchive.Application.Mappers;
 
-public class SubcategoryMapper : IApplicationMapper<Subcategory, CategoryDto>
+internal class SubcategoryMapper : IApplicationMapper<Subcategory, CategoryDto>
 {
     public CategoryDto MapToDto(Subcategory entity)
     {
