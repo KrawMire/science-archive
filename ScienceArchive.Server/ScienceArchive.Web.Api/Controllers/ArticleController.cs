@@ -1,8 +1,6 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using ScienceArchive.Application.Dtos.Article.Request;
 using ScienceArchive.Application.Interfaces.Services;
-using ScienceArchive.Web.Api.Auth;
 using ScienceArchive.Web.Api.Responses;
 using ScienceArchive.Web.Api.Utils;
 
@@ -31,7 +29,6 @@ public class ArticleController : ControllerBase
         return new SuccessResponse(result);
     }
     
-    [Authorize]
     [HttpGet("my-articles")]
     public async Task<Response> GetUserArticles()
     {
@@ -73,7 +70,6 @@ public class ArticleController : ControllerBase
     }
 
     [HttpGet("all")]
-    [AuthorizeClaims("ADMIN")]
     public async Task<Response> GetAll()
     {
         var emptyRequest = new GetAllArticlesRequestDto();
@@ -91,7 +87,6 @@ public class ArticleController : ControllerBase
         return new SuccessResponse(result);
     }
     
-    [Authorize]
     [HttpPost("create")]
     public async Task<Response> Create([FromBody] CreateArticleRequestDto? dto)
     {
@@ -104,7 +99,6 @@ public class ArticleController : ControllerBase
         return new SuccessResponse(result);
     }
     
-    [Authorize]
     [HttpPost("update")]
     public async Task<Response> Update([FromBody] UpdateArticleRequestDto? dto)
     {
@@ -117,7 +111,6 @@ public class ArticleController : ControllerBase
         return new SuccessResponse(result);
     }
 
-    [AuthorizeClaims("ADMIN")]
     [HttpPost("approve")]
     public async Task<Response> Approve([FromBody] ApproveArticleRequestDto? dto)
     {
@@ -131,7 +124,6 @@ public class ArticleController : ControllerBase
     }
     
     
-    [AuthorizeClaims("ADMIN")]
     [HttpPost("decline")]
     public async Task<Response> Decline([FromBody] DeclineArticleRequestDto? dto)
     {
@@ -144,7 +136,6 @@ public class ArticleController : ControllerBase
         return new SuccessResponse(result);
     }
     
-    [Authorize]
     [HttpDelete("{id}")]
     public async Task<Response> Delete(string? id)
     {
