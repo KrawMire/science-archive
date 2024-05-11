@@ -1,19 +1,22 @@
-using ScienceArchive.Application.Abstractions.Persistence;
+using ScienceArchive.Application.Abstractions.Logging.Gateways;
 using ScienceArchive.Application.Dtos.Log.Request;
 using ScienceArchive.Application.Dtos.Log.Response;
-using ScienceArchive.Application.Interfaces;
 using ScienceArchive.Application.Interfaces.Services;
-using ScienceArchive.Application.Services.Common;
 
 namespace ScienceArchive.Application.Services;
 
-internal class LogApplicationService : BaseApplicationService, ILogApplicationService
+internal class LogApplicationService : ILogApplicationService
 {
-    public LogApplicationService(IServiceProvider serviceProvider, IDbUnitOfWork dbUnitOfWork, IEventBus eventBus) 
-        : base(serviceProvider, dbUnitOfWork, eventBus) { }
-
-    public Task<LogRequestResponseDto> LogRequest(LogRequestRequestDto dto)
+    private readonly ILogGateway _logGateway;
+    
+    public LogApplicationService(ILogGateway logGateway)
     {
-        return ExecuteUseCase<LogRequestRequestDto, LogRequestResponseDto>(dto);
+        _logGateway = logGateway;
+    }
+
+    public async Task<LogRequestResponseDto> LogRequest(LogRequestRequestDto dto)
+    {
+        await _logGateway.LogRequest(dto.RequestLog);
+        return new LogRequestResponseDto();
     }
 }

@@ -29,7 +29,6 @@ using ScienceArchive.Application.Services;
 using ScienceArchive.Application.UseCases.ArticleUseCases;
 using ScienceArchive.Application.UseCases.AuthUseCases;
 using ScienceArchive.Application.UseCases.CategoryUseCases;
-using ScienceArchive.Application.UseCases.LogUseCases;
 using ScienceArchive.Application.UseCases.NewsUseCases;
 using ScienceArchive.Application.UseCases.RoleUseCases;
 using ScienceArchive.Application.UseCases.SystemUseCases;
@@ -122,9 +121,6 @@ public static class ApplicationRegistry
 
             // Category use cases
             .AddTransient<IUseCase<GetAllCategoriesRequestDto, GetAllCategoriesResponseDto>, GetAllCategoriesUseCase>()
-
-            // Log use cases
-            .AddTransient<IUseCase<LogRequestRequestDto, LogRequestResponseDto>, LogRequestUseCase>()
             
             // News use cases 
             .AddTransient<IUseCase<CreateNewsRequestDto, CreateNewsResponseDto>, CreateNewsUseCase>()
