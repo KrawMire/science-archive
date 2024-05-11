@@ -39,12 +39,7 @@ public class RequestResponseLoggingMiddleware
 
 		log.Response = responseBody;
 		
-		_logger.LogInformation($"""
-		                        Received request:
-		                        			URL: {log.Url}
-		                        			IP: {log.Ip}
-		                        			User-Agent: {log.UserAgent}
-		                        """);
+		_logger.LogInformation($"Received request: Timestamp={log.Timestamp:u}, URL={log.Url}, IP={log.Ip}, User-Agent={log.UserAgent}");
 		
 		_ = Task.Run(() => logService.LogRequest(new LogRequestRequestDto(log)));
 	}
