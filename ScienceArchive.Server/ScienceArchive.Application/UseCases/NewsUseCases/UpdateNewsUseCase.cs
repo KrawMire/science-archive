@@ -10,20 +10,20 @@ namespace ScienceArchive.Application.UseCases.NewsUseCases;
 
 internal class UpdateNewsUseCase : IUseCase<UpdateNewsRequestDto, UpdateNewsResponseDto>
 {
-    private readonly IDbContext _dbContext;
+    private readonly IDbUnitOfWork _dbUnitOfWork;
     private readonly IApplicationMapper<News, NewsDto> _newsMapper;
     
-    public UpdateNewsUseCase(IApplicationMapper<News, NewsDto> newsMapper, IDbContext dbContext)
+    public UpdateNewsUseCase(IApplicationMapper<News, NewsDto> newsMapper, IDbUnitOfWork dbUnitOfWork)
     {
         _newsMapper = newsMapper;
-        _dbContext = dbContext;
+        _dbUnitOfWork = dbUnitOfWork;
     }
     
     public async Task<UpdateNewsResponseDto> Execute(UpdateNewsRequestDto contract)
     {
         var newsId = NewsId.CreateFromString(contract.Id);
         var news = _newsMapper.MapToEntity(contract.News);
-        var updatedNews = await _dbContext.NewsRepository.Update(newsId, news);
+        var updatedNews = await _dbUnitOfWork.NewsRepository.Update(newsId, news);
 
         return new UpdateNewsResponseDto(_newsMapper.MapToDto(updatedNews));
     }

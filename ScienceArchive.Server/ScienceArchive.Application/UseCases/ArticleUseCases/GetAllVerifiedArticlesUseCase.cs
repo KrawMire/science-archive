@@ -9,18 +9,18 @@ namespace ScienceArchive.Application.UseCases.ArticleUseCases;
 
 internal class GetAllVerifiedArticlesUseCase : IUseCase<GetAllVerifiedArticlesRequestDto, GetAllVerifiedArticlesResponseDto>
 {
-    private readonly IDbContext _dbContext;
+    private readonly IDbUnitOfWork _dbUnitOfWork;
     private readonly IApplicationMapper<Article, ArticleDto> _articleMapper;
     
-    public GetAllVerifiedArticlesUseCase(IApplicationMapper<Article, ArticleDto> articleMapper, IDbContext dbContext)
+    public GetAllVerifiedArticlesUseCase(IApplicationMapper<Article, ArticleDto> articleMapper, IDbUnitOfWork dbUnitOfWork)
     {
         _articleMapper = articleMapper;
-        _dbContext = dbContext;
+        _dbUnitOfWork = dbUnitOfWork;
     }
     
     public async Task<GetAllVerifiedArticlesResponseDto> Execute(GetAllVerifiedArticlesRequestDto contract)
     {
-        var articles = await _dbContext.ArticleRepository.GetAllVerified();
+        var articles = await _dbUnitOfWork.ArticleRepository.GetAllVerified();
         var articlesDtos = articles.Select(_articleMapper.MapToDto).ToList();
 
         return new GetAllVerifiedArticlesResponseDto(articlesDtos);

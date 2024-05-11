@@ -9,12 +9,12 @@ namespace ScienceArchive.Application.UseCases.AuthUseCases;
 internal class CheckUserClaimsUseCase : IUseCase<CheckUserClaimsRequestDto, CheckUserClaimsResponseDto>
 {
     private readonly IAuthService _authService;
-    private readonly IDbContext _dbContext;
+    private readonly IDbUnitOfWork _dbUnitOfWork;
     
-    public CheckUserClaimsUseCase(IAuthService authService, IDbContext dbContext)
+    public CheckUserClaimsUseCase(IAuthService authService, IDbUnitOfWork dbUnitOfWork)
     {
         _authService = authService;
-        _dbContext = dbContext;
+        _dbUnitOfWork = dbUnitOfWork;
     }
     
     public async Task<CheckUserClaimsResponseDto> Execute(CheckUserClaimsRequestDto contract)

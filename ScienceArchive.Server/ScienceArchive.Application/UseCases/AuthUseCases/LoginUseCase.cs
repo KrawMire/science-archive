@@ -25,12 +25,6 @@ internal class LoginUseCase : IUseCase<LoginRequestDto, LoginResponseDto>
         var password = contract.Password;
         
         var user = await _authService.AuthorizeUser(login, password);
-
-        if (user is null)
-        {
-            throw new InvalidCredentialsException();
-        }
-
         return new LoginResponseDto(_userMapper.MapToDto(user));
     }
 }

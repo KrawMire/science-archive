@@ -7,14 +7,14 @@ namespace ScienceArchive.Application.Events.Handlers;
 
 internal class ArticleStatusChangedEventHandler : IEventHandler<ArticleStatusChangedEvent>
 {
-    private readonly IDbContext _dbContext;
+    private readonly IDbUnitOfWork _dbUnitOfWork;
     private readonly INotificationGateway _notificationGateway;
 
     public ArticleStatusChangedEventHandler(
-        IDbContext dbContext, 
+        IDbUnitOfWork dbUnitOfWork, 
         INotificationGateway notificationGateway)
     {
-        _dbContext = dbContext;
+        _dbUnitOfWork = dbUnitOfWork;
         _notificationGateway = notificationGateway;
     }
 

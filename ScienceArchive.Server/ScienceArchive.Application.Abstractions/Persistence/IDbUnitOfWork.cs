@@ -10,7 +10,7 @@ namespace ScienceArchive.Application.Abstractions.Persistence;
 /// <summary>
 /// Represents the context for working with various repositories.
 /// </summary>
-public interface IDbContext
+public interface IDbUnitOfWork
 {
     /// <summary>
     /// Represents a repository for managing articles.

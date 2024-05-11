@@ -3,22 +3,16 @@ using ScienceArchive.Core.Domain.Aggregates.Article.Repositories;
 using ScienceArchive.Core.Domain.Aggregates.Article.ValueObjects;
 using ScienceArchive.Core.Domain.Aggregates.Category.ValueObjects;
 using ScienceArchive.Core.Domain.Aggregates.User.ValueObjects;
-using ScienceArchive.Infrastructure.Interfaces;
-using ScienceArchive.Infrastructure.Persistence.PostgreSql.Models;
 
 namespace ScienceArchive.Infrastructure.Persistence.PostgreSql.Repositories;
 
 internal class PostgresArticleRepository : IArticleRepository
 {
-    private readonly IInfrastructureMapper<Article, ArticleModel> _mapper;
-    private readonly PostgresExecutionContext _dbContext;
+    private readonly PostgresDbContext _dbContext;
     
-    public PostgresArticleRepository(
-        PostgresExecutionContext dbContext,
-        IInfrastructureMapper<Article, ArticleModel> mapper)
+    public PostgresArticleRepository(PostgresDbContext dbContext)
     {
         _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
-        _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
     }
 
     public Task<List<Article>> GetAll()

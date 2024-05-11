@@ -9,16 +9,16 @@ namespace ScienceArchive.Application.Services.Common;
 internal abstract class BaseApplicationService
 {
     private readonly IServiceProvider _serviceProvider;
-    private readonly IDbContext _dbContext;
+    private readonly IDbUnitOfWork _dbUnitOfWork;
     private readonly IEventBus _eventBus;
 
     protected BaseApplicationService(
         IServiceProvider serviceProvider, 
-        IDbContext dbContext, 
+        IDbUnitOfWork dbUnitOfWork, 
         IEventBus eventBus)
     {
         _serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
-        _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
+        _dbUnitOfWork = dbUnitOfWork ?? throw new ArgumentNullException(nameof(dbUnitOfWork));
         _eventBus = eventBus ?? throw new ArgumentNullException(nameof(eventBus));
     }
 
@@ -43,18 +43,18 @@ internal abstract class BaseApplicationService
 
         try
         {
-            await _dbContext.StartTransactionAsync();
+            await _dbUnitOfWork.StartTransactionAsync();
             
             var result = await useCase.Execute(contract);
             
             await _eventBus.HandleEvents();
-            await _dbContext.SaveAsync();
+            await _dbUnitOfWork.SaveAsync();
             
             return result;
         }
         catch (Exception)
         {
-            await _dbContext.RollbackAsync();
+            await _dbUnitOfWork.RollbackAsync();
             throw;
         }
     }

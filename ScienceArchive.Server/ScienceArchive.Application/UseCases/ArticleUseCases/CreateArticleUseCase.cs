@@ -9,13 +9,13 @@ namespace ScienceArchive.Application.UseCases.ArticleUseCases;
 
 internal class CreateArticleUseCase : IUseCase<CreateArticleRequestDto, CreateArticleResponseDto>
 {
-    private readonly IDbContext _dbContext;
+    private readonly IDbUnitOfWork _dbUnitOfWork;
     private readonly IApplicationMapper<Article, ArticleDto> _articleMapper;
 
-    public CreateArticleUseCase(IApplicationMapper<Article, ArticleDto> articleMapper, IDbContext dbContext)
+    public CreateArticleUseCase(IApplicationMapper<Article, ArticleDto> articleMapper, IDbUnitOfWork dbUnitOfWork)
     {
         _articleMapper = articleMapper;
-        _dbContext = dbContext;
+        _dbUnitOfWork = dbUnitOfWork;
     }
     
     public async Task<CreateArticleResponseDto> Execute(CreateArticleRequestDto contract)
@@ -23,7 +23,7 @@ internal class CreateArticleUseCase : IUseCase<CreateArticleRequestDto, CreateAr
         var article = _articleMapper.MapToEntity(contract.Article);
         article.SetToVerify();
         
-        var createdArticle = await _dbContext.ArticleRepository.Create(article);
+        var createdArticle = await _dbUnitOfWork.ArticleRepository.Create(article);
 
         return new CreateArticleResponseDto(_articleMapper.MapToDto(createdArticle));
     }

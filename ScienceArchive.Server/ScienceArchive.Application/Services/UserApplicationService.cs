@@ -12,8 +12,8 @@ namespace ScienceArchive.Application.Services;
 /// </summary>
 internal class UserApplicationService : BaseApplicationService, IUserApplicationService
 {
-    public UserApplicationService(IServiceProvider serviceProvider, IDbContext dbContext, IEventBus eventBus) 
-        : base(serviceProvider, dbContext, eventBus) { }
+    public UserApplicationService(IServiceProvider serviceProvider, IDbUnitOfWork dbUnitOfWork, IEventBus eventBus) 
+        : base(serviceProvider, dbUnitOfWork, eventBus) { }
 
     /// <inheritdoc/>
     public Task<GetAllUsersResponseDto> GetAllUsers(GetAllUsersRequestDto dto)

@@ -12,8 +12,8 @@ namespace ScienceArchive.Application.Services;
 /// </summary>
 internal class CategoryApplicationService : BaseApplicationService, ICategoryApplicationService
 { 
-	public CategoryApplicationService(IServiceProvider serviceProvider, IDbContext dbContext, IEventBus eventBus) 
-		: base(serviceProvider, dbContext, eventBus) { }
+	public CategoryApplicationService(IServiceProvider serviceProvider, IDbUnitOfWork dbUnitOfWork, IEventBus eventBus) 
+		: base(serviceProvider, dbUnitOfWork, eventBus) { }
 
 	/// <inheritdoc/>
 	public Task<GetAllCategoriesResponseDto> GetAllCategories(GetAllCategoriesRequestDto dto)

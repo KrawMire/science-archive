@@ -12,8 +12,8 @@ namespace ScienceArchive.Application.Services;
 /// </summary>
 internal class AuthApplicationService : BaseApplicationService, IAuthApplicationService
 { 
-    public AuthApplicationService(IServiceProvider serviceProvider, IDbContext dbContext, IEventBus eventBus) 
-        : base(serviceProvider, dbContext, eventBus) { }
+    public AuthApplicationService(IServiceProvider serviceProvider, IDbUnitOfWork dbUnitOfWork, IEventBus eventBus) 
+        : base(serviceProvider, dbUnitOfWork, eventBus) { }
 
     /// <inheritdoc/>
     public Task<LoginResponseDto> Login(LoginRequestDto dto)

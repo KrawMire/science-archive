@@ -10,20 +10,20 @@ namespace ScienceArchive.Application.UseCases.UserUseCases;
 
 internal class UpdateUserUseCase : IUseCase<UpdateUserRequestDto, UpdateUserResponseDto>
 {
-    private readonly IDbContext _dbContext;
+    private readonly IDbUnitOfWork _dbUnitOfWork;
     private readonly IApplicationMapper<User, UserDto> _userMapper;
     
-    public UpdateUserUseCase(IApplicationMapper<User, UserDto> userMapper, IDbContext dbContext)
+    public UpdateUserUseCase(IApplicationMapper<User, UserDto> userMapper, IDbUnitOfWork dbUnitOfWork)
     {
         _userMapper = userMapper;
-        _dbContext = dbContext;
+        _dbUnitOfWork = dbUnitOfWork;
     }
     
     public async Task<UpdateUserResponseDto> Execute(UpdateUserRequestDto contract)
     {
         var userId = UserId.CreateFromString(contract.Id);
         var user = _userMapper.MapToEntity(contract.User);
-        var updatedUser = await _dbContext.UserRepository.Update(userId, user);
+        var updatedUser = await _dbUnitOfWork.UserRepository.Update(userId, user);
 
         return new UpdateUserResponseDto(_userMapper.MapToDto(updatedUser));
     }

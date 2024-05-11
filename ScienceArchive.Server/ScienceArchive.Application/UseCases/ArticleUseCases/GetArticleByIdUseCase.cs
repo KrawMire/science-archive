@@ -11,19 +11,19 @@ namespace ScienceArchive.Application.UseCases.ArticleUseCases;
 
 internal class GetArticleByIdUseCase : IUseCase<GetArticleByIdRequestDto, GetArticleByIdResponseDto>
 {
-    private readonly IDbContext _dbContext;
+    private readonly IDbUnitOfWork _dbUnitOfWork;
     private readonly IApplicationMapper<Article, ArticleDto> _articleMapper;
     
-    public GetArticleByIdUseCase(IApplicationMapper<Article, ArticleDto> articleMapper, IDbContext dbContext)
+    public GetArticleByIdUseCase(IApplicationMapper<Article, ArticleDto> articleMapper, IDbUnitOfWork dbUnitOfWork)
     {
         _articleMapper = articleMapper;
-        _dbContext = dbContext;
+        _dbUnitOfWork = dbUnitOfWork;
     }
     
     public async Task<GetArticleByIdResponseDto> Execute(GetArticleByIdRequestDto contract)
     {
         var articleId = ArticleId.CreateFromString(contract.Id);
-        var article = await _dbContext.ArticleRepository.GetById(articleId);
+        var article = await _dbUnitOfWork.ArticleRepository.GetById(articleId);
         
         var articleDto = article is not null
             ? _articleMapper.MapToDto(article)

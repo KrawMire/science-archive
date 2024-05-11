@@ -12,24 +12,24 @@ namespace ScienceArchive.Application.UseCases.ArticleUseCases;
 
 internal class DeclineArticleUseCase : IUseCase<DeclineArticleRequestDto, DeclineArticleResponseDto>
 {
-    private readonly IDbContext _dbContext;
+    private readonly IDbUnitOfWork _dbUnitOfWork;
     private readonly IEventBus _eventBus;
     private readonly IApplicationMapper<Article, ArticleDto> _articleMapper;
     
     public DeclineArticleUseCase(
-        IDbContext dbContext, 
+        IDbUnitOfWork dbUnitOfWork, 
         IEventBus eventBus,
         IApplicationMapper<Article, ArticleDto> articleMapper)
     {
         _articleMapper = articleMapper;
-        _dbContext = dbContext;
+        _dbUnitOfWork = dbUnitOfWork;
         _eventBus = eventBus;
     }
     
     public async Task<DeclineArticleResponseDto> Execute(DeclineArticleRequestDto contract)
     {
         var articleId = ArticleId.CreateFromString(contract.ArticleId);
-        var article = await _dbContext.ArticleRepository.GetById(articleId);
+        var article = await _dbUnitOfWork.ArticleRepository.GetById(articleId);
 
         if (article is null)
         {
@@ -38,7 +38,7 @@ internal class DeclineArticleUseCase : IUseCase<DeclineArticleRequestDto, Declin
         
         article.Decline();
 
-        var updatedArticle = await _dbContext.ArticleRepository.Update(articleId, article);
+        var updatedArticle = await _dbUnitOfWork.ArticleRepository.Update(articleId, article);
 
         await _eventBus.AddEventAsync(new ArticleStatusChangedEvent
         {

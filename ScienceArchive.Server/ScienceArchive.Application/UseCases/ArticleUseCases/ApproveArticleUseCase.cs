@@ -12,16 +12,16 @@ namespace ScienceArchive.Application.UseCases.ArticleUseCases;
 
 internal class ApproveArticleUseCase : IUseCase<ApproveArticleRequestDto, ApproveArticleResponseDto>
 {
-    private readonly IDbContext _dbContext;
+    private readonly IDbUnitOfWork _dbUnitOfWork;
     private readonly IEventBus _eventBus;
     private readonly IApplicationMapper<Article, ArticleDto> _articleMapper;
     
     public ApproveArticleUseCase(
-        IDbContext dbContext, 
+        IDbUnitOfWork dbUnitOfWork, 
         IEventBus eventBus,
         IApplicationMapper<Article, ArticleDto> articleMapper) 
     {
-        _dbContext = dbContext;
+        _dbUnitOfWork = dbUnitOfWork;
         _articleMapper = articleMapper;
         _eventBus = eventBus;
     }
@@ -29,7 +29,7 @@ internal class ApproveArticleUseCase : IUseCase<ApproveArticleRequestDto, Approv
     public async Task<ApproveArticleResponseDto> Execute(ApproveArticleRequestDto contract)
     {
         var articleId = ArticleId.CreateFromString(contract.ArticleId);
-        var article = await _dbContext.ArticleRepository.GetById(articleId);
+        var article = await _dbUnitOfWork.ArticleRepository.GetById(articleId);
 
         if (article is null)
         {
@@ -38,7 +38,7 @@ internal class ApproveArticleUseCase : IUseCase<ApproveArticleRequestDto, Approv
         
         article.Approve();
 
-        var updatedArticle = await _dbContext.ArticleRepository.Update(articleId, article);
+        var updatedArticle = await _dbUnitOfWork.ArticleRepository.Update(articleId, article);
 
         await _eventBus.AddEventAsync(new ArticleStatusChangedEvent
         {

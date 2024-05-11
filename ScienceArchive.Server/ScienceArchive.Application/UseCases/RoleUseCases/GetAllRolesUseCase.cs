@@ -9,18 +9,18 @@ namespace ScienceArchive.Application.UseCases.RoleUseCases;
 
 internal class GetAllRolesUseCase : IUseCase<GetAllRolesRequestDto, GetAllRolesResponseDto>
 {
-    private readonly IDbContext _dbContext;
+    private readonly IDbUnitOfWork _dbUnitOfWork;
     private readonly IApplicationMapper<Role, RoleDto> _roleMapper;
     
-    public GetAllRolesUseCase(IApplicationMapper<Role, RoleDto> roleMapper, IDbContext dbContext)
+    public GetAllRolesUseCase(IApplicationMapper<Role, RoleDto> roleMapper, IDbUnitOfWork dbUnitOfWork)
     {
         _roleMapper = roleMapper;
-        _dbContext = dbContext;
+        _dbUnitOfWork = dbUnitOfWork;
     }
     
     public async Task<GetAllRolesResponseDto> Execute(GetAllRolesRequestDto contract)
     {
-        var roles = await _dbContext.RoleRepository.GetAll();
+        var roles = await _dbUnitOfWork.RoleRepository.GetAll();
         var rolesDtos = roles.Select(role => _roleMapper.MapToDto(role)).ToList();
 
         return new GetAllRolesResponseDto(rolesDtos);

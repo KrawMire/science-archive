@@ -10,19 +10,19 @@ namespace ScienceArchive.Application.UseCases.UserUseCases;
 
 internal class GetUserByIdUseCase : IUseCase<GetUserByIdRequestDto, GetUserByIdResponseDto>
 {
-    private readonly IDbContext _dbContext;
+    private readonly IDbUnitOfWork _dbUnitOfWork;
     private readonly IApplicationMapper<User, UserDto> _userMapper;
     
-    public GetUserByIdUseCase(IApplicationMapper<User, UserDto> userMapper, IDbContext dbContext)
+    public GetUserByIdUseCase(IApplicationMapper<User, UserDto> userMapper, IDbUnitOfWork dbUnitOfWork)
     {
         _userMapper = userMapper;
-        _dbContext = dbContext;
+        _dbUnitOfWork = dbUnitOfWork;
     }
     
     public async Task<GetUserByIdResponseDto> Execute(GetUserByIdRequestDto contract)
     {
         var userId = UserId.CreateFromString(contract.Id);
-        var user = await _dbContext.UserRepository.GetById(userId);
+        var user = await _dbUnitOfWork.UserRepository.GetById(userId);
 
         var userDto = user is not null
             ? _userMapper.MapToDto(user)

@@ -9,18 +9,18 @@ namespace ScienceArchive.Application.UseCases.UserUseCases;
 
 internal class GetAllUsersUseCase : IUseCase<GetAllUsersRequestDto, GetAllUsersResponseDto>
 {
-    private readonly IDbContext _dbContext;
+    private readonly IDbUnitOfWork _dbUnitOfWork;
     private readonly IApplicationMapper<User, UserDto> _userMapper;
     
-    public GetAllUsersUseCase(IApplicationMapper<User, UserDto> userMapper, IDbContext dbContext)
+    public GetAllUsersUseCase(IApplicationMapper<User, UserDto> userMapper, IDbUnitOfWork dbUnitOfWork)
     {
         _userMapper = userMapper;
-        _dbContext = dbContext;
+        _dbUnitOfWork = dbUnitOfWork;
     }
     
     public async Task<GetAllUsersResponseDto> Execute(GetAllUsersRequestDto contract)
     {
-        var users = await _dbContext.UserRepository.GetAll();
+        var users = await _dbUnitOfWork.UserRepository.GetAll();
         var usersDtos = users.Select(user => _userMapper.MapToDto(user)).ToList();
         
         return new GetAllUsersResponseDto(usersDtos);

@@ -11,19 +11,19 @@ namespace ScienceArchive.Application.UseCases.ArticleUseCases;
 
 internal class GetVerifiedArticlesByAuthorIdUseCase : IUseCase<GetVerifiedArticlesByAuthorIdRequestDto, GetVerifiedArticlesByAuthorIdResponseDto>
 {
-    private readonly IDbContext _dbContext;
+    private readonly IDbUnitOfWork _dbUnitOfWork;
     private readonly IApplicationMapper<Article, ArticleDto> _articleMapper;
     
-    public GetVerifiedArticlesByAuthorIdUseCase(IApplicationMapper<Article, ArticleDto> articleMapper, IDbContext dbContext)
+    public GetVerifiedArticlesByAuthorIdUseCase(IApplicationMapper<Article, ArticleDto> articleMapper, IDbUnitOfWork dbUnitOfWork)
     {
         _articleMapper = articleMapper;
-        _dbContext = dbContext;
+        _dbUnitOfWork = dbUnitOfWork;
     }
     
     public async Task<GetVerifiedArticlesByAuthorIdResponseDto> Execute(GetVerifiedArticlesByAuthorIdRequestDto contract)
     {
         var userId = UserId.CreateFromString(contract.AuthorId);
-        var articles = await _dbContext.ArticleRepository.GetVerifiedByAuthorId(userId);
+        var articles = await _dbUnitOfWork.ArticleRepository.GetVerifiedByAuthorId(userId);
         var articlesDtos = articles
             .Select(_articleMapper.MapToDto)
             .ToList();

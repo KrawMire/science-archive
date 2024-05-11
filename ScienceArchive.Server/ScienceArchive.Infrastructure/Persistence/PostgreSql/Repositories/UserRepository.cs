@@ -1,21 +1,15 @@
 ﻿using ScienceArchive.Core.Domain.Aggregates.User;
 using ScienceArchive.Core.Domain.Aggregates.User.Repositories;
 using ScienceArchive.Core.Domain.Aggregates.User.ValueObjects;
-using ScienceArchive.Infrastructure.Interfaces;
-using ScienceArchive.Infrastructure.Persistence.PostgreSql.Models;
 
 namespace ScienceArchive.Infrastructure.Persistence.PostgreSql.Repositories;
 
 internal class PostgresUserRepository : IUserRepository
 {
-    private readonly PostgresExecutionContext _dbContext;
-    private readonly IInfrastructureMapper<User, UserModel> _userMapper;
+    private readonly PostgresDbContext _dbContext;
 
-    public PostgresUserRepository(
-        IInfrastructureMapper<User, UserModel> userMapper, 
-        PostgresExecutionContext dbContext)
+    public PostgresUserRepository(PostgresDbContext dbContext)
     {
-        _userMapper = userMapper ?? throw new ArgumentNullException(nameof(userMapper));
         _dbContext = dbContext;
     }
 
@@ -26,9 +20,11 @@ internal class PostgresUserRepository : IUserRepository
     }
 
     /// <inheritdoc/>
-    public Task<List<User>> GetAll()
+    public async Task<List<User>> GetAll()
     {
         throw new NotImplementedException();
+        // var users = await _dbContext.Users.ToListAsync();
+        // return users.Select(_userMapper.MapToEntity).ToList();
     }
 
     /// <inheritdoc/>

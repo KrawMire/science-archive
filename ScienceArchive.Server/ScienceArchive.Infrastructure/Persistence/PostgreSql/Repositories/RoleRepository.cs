@@ -2,25 +2,16 @@
 using ScienceArchive.Core.Domain.Aggregates.Role.Repositories;
 using ScienceArchive.Core.Domain.Aggregates.Role.ValueObjects;
 using ScienceArchive.Core.Domain.Aggregates.User.ValueObjects;
-using ScienceArchive.Infrastructure.Interfaces;
-using ScienceArchive.Infrastructure.Persistence.PostgreSql.Models;
 
 namespace ScienceArchive.Infrastructure.Persistence.PostgreSql.Repositories;
 
 internal class PostgresRoleRepository : IRoleRepository
 {
-    private readonly PostgresExecutionContext _dbContext;
-    private readonly IInfrastructureMapper<Role, RoleModel> _roleMapper;
-    private readonly IInfrastructureMapper<RoleClaim, RoleClaimModel> _claimMapper;
+    private readonly PostgresDbContext _dbContext;
 
-    public PostgresRoleRepository(
-        IInfrastructureMapper<Role, RoleModel> roleMapper,
-        IInfrastructureMapper<RoleClaim, RoleClaimModel> claimMapper, 
-        PostgresExecutionContext dbContext)
+    public PostgresRoleRepository(PostgresDbContext dbContext)
     {
-        _claimMapper = claimMapper ?? throw new ArgumentNullException(nameof(claimMapper));
         _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
-        _roleMapper = roleMapper ?? throw new ArgumentNullException(nameof(roleMapper));
     }
 
     /// <inheritdoc/>

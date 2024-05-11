@@ -12,27 +12,27 @@ namespace ScienceArchive.Application.UseCases.ArticleUseCases;
 
 internal class GetArticlesByCategoryIdUseCase : IUseCase<GetArticlesByCategoryIdRequestDto, GetArticlesByCategoryIdResponseDto>
 {
-    private readonly IDbContext _dbContext;
+    private readonly IDbUnitOfWork _dbUnitOfWork;
     private readonly IApplicationMapper<Article, ArticleDto> _articleMapper;
     private readonly IApplicationMapper<Subcategory, CategoryDto> _categoryMapper;
     
     public GetArticlesByCategoryIdUseCase(
         IApplicationMapper<Article, ArticleDto> articleMapper,
         IApplicationMapper<Subcategory, CategoryDto> categoryMapper, 
-        IDbContext dbContext)
+        IDbUnitOfWork dbUnitOfWork)
     {
         _articleMapper = articleMapper;
         _categoryMapper = categoryMapper;
-        _dbContext = dbContext;
+        _dbUnitOfWork = dbUnitOfWork;
     }
     
     public async Task<GetArticlesByCategoryIdResponseDto> Execute(GetArticlesByCategoryIdRequestDto contract)
     {
         var categoryId = CategoryId.CreateFromString(contract.CategoryId);
-        var articles = await _dbContext.ArticleRepository.GetVerifiedByCategoryId(categoryId);
+        var articles = await _dbUnitOfWork.ArticleRepository.GetVerifiedByCategoryId(categoryId);
         var articlesDtos = articles.Select(_articleMapper.MapToDto).ToList();
         
-        var subcategory = await _dbContext.CategoryRepository.GetSubcategoryById(categoryId);
+        var subcategory = await _dbUnitOfWork.CategoryRepository.GetSubcategoryById(categoryId);
 
         if (subcategory is null)
         {

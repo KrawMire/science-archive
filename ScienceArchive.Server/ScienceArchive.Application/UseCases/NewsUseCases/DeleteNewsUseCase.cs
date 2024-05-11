@@ -8,17 +8,17 @@ namespace ScienceArchive.Application.UseCases.NewsUseCases;
 
 internal class DeleteNewsUseCase : IUseCase<DeleteNewsRequestDto, DeleteNewsResponseDto>
 {
-    private readonly IDbContext _dbContext;
+    private readonly IDbUnitOfWork _dbUnitOfWork;
     
-    public DeleteNewsUseCase(IDbContext dbContext)
+    public DeleteNewsUseCase(IDbUnitOfWork dbUnitOfWork)
     {
-        _dbContext = dbContext;
+        _dbUnitOfWork = dbUnitOfWork;
     }
     
     public async Task<DeleteNewsResponseDto> Execute(DeleteNewsRequestDto contract)
     {
         var newsId = NewsId.CreateFromString(contract.Id);
-        var deletedNewsId = await _dbContext.NewsRepository.Delete(newsId);
+        var deletedNewsId = await _dbUnitOfWork.NewsRepository.Delete(newsId);
 
         return new DeleteNewsResponseDto(deletedNewsId.ToString());
     }

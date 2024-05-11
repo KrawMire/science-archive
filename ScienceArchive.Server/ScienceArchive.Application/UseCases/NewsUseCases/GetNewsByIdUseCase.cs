@@ -10,19 +10,19 @@ namespace ScienceArchive.Application.UseCases.NewsUseCases;
 
 internal class GetNewsByIdUseCase : IUseCase<GetNewsByIdRequestDto, GetNewsByIdResponseDto>
 {
-    private readonly IDbContext _dbContext;
+    private readonly IDbUnitOfWork _dbUnitOfWork;
     private readonly IApplicationMapper<News, NewsDto> _newsMapper;
     
-    public GetNewsByIdUseCase(IApplicationMapper<News, NewsDto> newsMapper, IDbContext dbContext)
+    public GetNewsByIdUseCase(IApplicationMapper<News, NewsDto> newsMapper, IDbUnitOfWork dbUnitOfWork)
     {
         _newsMapper = newsMapper;
-        _dbContext = dbContext;
+        _dbUnitOfWork = dbUnitOfWork;
     }
     
     public async Task<GetNewsByIdResponseDto> Execute(GetNewsByIdRequestDto contract)
     {
         var newsId = NewsId.CreateFromString(contract.Id);
-        var news = await _dbContext.NewsRepository.GetById(newsId);
+        var news = await _dbUnitOfWork.NewsRepository.GetById(newsId);
 
         var newsDto = news is not null
             ? _newsMapper.MapToDto(news)

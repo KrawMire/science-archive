@@ -12,8 +12,8 @@ namespace ScienceArchive.Application.Services;
 /// </summary>
 internal class RoleApplicationService : BaseApplicationService, IRoleApplicationService
 {
-    public RoleApplicationService(IServiceProvider serviceProvider, IDbContext dbContext, IEventBus eventBus) 
-        : base(serviceProvider, dbContext, eventBus) { }
+    public RoleApplicationService(IServiceProvider serviceProvider, IDbUnitOfWork dbUnitOfWork, IEventBus eventBus) 
+        : base(serviceProvider, dbUnitOfWork, eventBus) { }
     
     /// <inheritdoc/>
     public Task<GetAllRolesResponseDto> GetAllRoles(GetAllRolesRequestDto dto)

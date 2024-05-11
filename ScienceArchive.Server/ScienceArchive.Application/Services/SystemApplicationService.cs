@@ -15,8 +15,8 @@ namespace ScienceArchive.Application.Services;
 /// </remarks>
 internal class SystemApplicationService : BaseApplicationService, ISystemApplicationService
 {
-    public SystemApplicationService(IServiceProvider serviceProvider, IDbContext dbContext, IEventBus eventBus) 
-        : base(serviceProvider, dbContext, eventBus) { }
+    public SystemApplicationService(IServiceProvider serviceProvider, IDbUnitOfWork dbUnitOfWork, IEventBus eventBus) 
+        : base(serviceProvider, dbUnitOfWork, eventBus) { }
 
     /// <inheritdoc/>
     public Task<CheckSystemStatusResponseDto> CheckSystemStatus(CheckSystemStatusRequestDto dto)

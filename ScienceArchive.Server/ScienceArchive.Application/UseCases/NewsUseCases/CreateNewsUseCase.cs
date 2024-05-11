@@ -9,19 +9,19 @@ namespace ScienceArchive.Application.UseCases.NewsUseCases;
 
 internal class CreateNewsUseCase : IUseCase<CreateNewsRequestDto, CreateNewsResponseDto>
 {
-    private readonly IDbContext _dbContext;
+    private readonly IDbUnitOfWork _dbUnitOfWork;
     private readonly IApplicationMapper<News, NewsDto> _newsMapper;
     
-    public CreateNewsUseCase(IApplicationMapper<News, NewsDto> newsMapper, IDbContext dbContext)
+    public CreateNewsUseCase(IApplicationMapper<News, NewsDto> newsMapper, IDbUnitOfWork dbUnitOfWork)
     {
         _newsMapper = newsMapper;
-        _dbContext = dbContext;
+        _dbUnitOfWork = dbUnitOfWork;
     }
     
     public async Task<CreateNewsResponseDto> Execute(CreateNewsRequestDto contract)
     {
         var newsToCreate = _newsMapper.MapToEntity(contract.News);
-        var createdNews = await _dbContext.NewsRepository.Create(newsToCreate);
+        var createdNews = await _dbUnitOfWork.NewsRepository.Create(newsToCreate);
 
         return new CreateNewsResponseDto(_newsMapper.MapToDto(createdNews));
     }

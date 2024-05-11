@@ -1,21 +1,15 @@
 ﻿using ScienceArchive.Core.Domain.Aggregates.News;
 using ScienceArchive.Core.Domain.Aggregates.News.Repositories;
 using ScienceArchive.Core.Domain.Aggregates.News.ValueObjects;
-using ScienceArchive.Infrastructure.Interfaces;
-using ScienceArchive.Infrastructure.Persistence.PostgreSql.Models;
 
 namespace ScienceArchive.Infrastructure.Persistence.PostgreSql.Repositories;
 
 internal class PostgresNewsRepository : INewsRepository
 {
-    private readonly PostgresExecutionContext _dbContext;
-    private readonly IInfrastructureMapper<News, NewsModel> _mapper;
+    private readonly PostgresDbContext _dbContext;
 
-    public PostgresNewsRepository(
-        IInfrastructureMapper<News, NewsModel> mapper, 
-        PostgresExecutionContext dbContext)
+    public PostgresNewsRepository(PostgresDbContext dbContext)
     {
-        _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
     }
 

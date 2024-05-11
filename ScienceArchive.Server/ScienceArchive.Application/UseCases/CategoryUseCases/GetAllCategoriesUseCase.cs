@@ -9,18 +9,18 @@ namespace ScienceArchive.Application.UseCases.CategoryUseCases;
 
 internal class GetAllCategoriesUseCase : IUseCase<GetAllCategoriesRequestDto, GetAllCategoriesResponseDto>
 {
-    private readonly IDbContext _dbContext;
+    private readonly IDbUnitOfWork _dbUnitOfWork;
     private readonly IApplicationMapper<Category, CategoryDto> _categoryMapper;
     
-    public GetAllCategoriesUseCase(IApplicationMapper<Category, CategoryDto> categoryMapper, IDbContext dbContext)
+    public GetAllCategoriesUseCase(IApplicationMapper<Category, CategoryDto> categoryMapper, IDbUnitOfWork dbUnitOfWork)
     {
         _categoryMapper = categoryMapper;
-        _dbContext = dbContext;
+        _dbUnitOfWork = dbUnitOfWork;
     }
     
     public async Task<GetAllCategoriesResponseDto> Execute(GetAllCategoriesRequestDto contract)
     {
-        var categories = await _dbContext.CategoryRepository.GetAll();
+        var categories = await _dbUnitOfWork.CategoryRepository.GetAll();
         var categoriesDtos = categories
             .Select(_categoryMapper.MapToDto)
             .ToList();

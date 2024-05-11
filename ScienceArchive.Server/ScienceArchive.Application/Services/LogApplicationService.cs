@@ -9,8 +9,8 @@ namespace ScienceArchive.Application.Services;
 
 internal class LogApplicationService : BaseApplicationService, ILogApplicationService
 {
-    public LogApplicationService(IServiceProvider serviceProvider, IDbContext dbContext, IEventBus eventBus) 
-        : base(serviceProvider, dbContext, eventBus) { }
+    public LogApplicationService(IServiceProvider serviceProvider, IDbUnitOfWork dbUnitOfWork, IEventBus eventBus) 
+        : base(serviceProvider, dbUnitOfWork, eventBus) { }
 
     public Task<LogRequestResponseDto> LogRequest(LogRequestRequestDto dto)
     {
