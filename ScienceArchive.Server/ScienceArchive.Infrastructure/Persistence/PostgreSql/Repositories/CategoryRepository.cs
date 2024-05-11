@@ -1,7 +1,10 @@
+using Microsoft.EntityFrameworkCore;
 using ScienceArchive.Core.Domain.Aggregates.Category;
 using ScienceArchive.Core.Domain.Aggregates.Category.Entities;
 using ScienceArchive.Core.Domain.Aggregates.Category.Repositories;
 using ScienceArchive.Core.Domain.Aggregates.Category.ValueObjects;
+using ScienceArchive.Core.Exceptions;
+using ScienceArchive.Infrastructure.Persistence.Exceptions;
 
 namespace ScienceArchive.Infrastructure.Persistence.PostgreSql.Repositories;
 
@@ -14,24 +17,104 @@ internal class PostgresCategoryRepository : ICategoryRepository
 		_dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
 	}
 	
-	public Task<Category?> GetById(CategoryId id)
+	public async Task<Category?> GetById(CategoryId id)
 	{
-		throw new NotImplementedException();
+		var category = await _dbContext
+			.Categories
+			.Where(c => c.Id == id.Value)
+			.Include(c => c.Subcategories)
+			.FirstOrDefaultAsync();
+		
+		if (category is null)
+		{
+			return null;
+		}
+		
+		return new Category(CategoryId.CreateFromGuid(category.Id))
+		{
+			Name = category.Name,
+			Description = category.Description,
+			Subcategories = category
+				.Subcategories
+				.Select(s => new Subcategory(SubcategoryId.CreateFromGuid(s.Id))
+				{
+					Name = s.Name,
+					Description = s.Description
+				}).ToList()
+		};
 	}
 
-	public Task<List<Category>> GetAll()
+	public async Task<List<Category>> GetAll()
 	{
-		throw new NotImplementedException();
+		var categories = await _dbContext
+			.Categories
+			.Include(c => c.Subcategories)
+			.ToListAsync();
+
+		return categories.Select(c => new Category(CategoryId.CreateFromGuid(c.Id))
+		{
+			Name = c.Name,
+			Description = c.Description,
+			Subcategories = c
+				.Subcategories
+				.Select(s => new Subcategory(SubcategoryId.CreateFromGuid(s.Id))
+				{
+					Name = s.Name,
+					Description = s.Description
+				}).ToList()
+		}).ToList();
 	}
 
-	public Task<Category> Create(Category newValue)
+	public async Task<Category> Create(Category newValue)
 	{
-		throw new NotImplementedException();
+		var category = await _dbContext
+			.Categories
+			.AddAsync(new Entities.Category
+			{
+				Id = newValue.Id.Value,
+				Name = newValue.Name,
+				Description = newValue.Description
+			});
+		
+		await _dbContext
+			.Subcategories
+			.AddRangeAsync(newValue.Subcategories.Select(s => new Entities.Subcategory
+			{
+				Id = s.Id.Value,
+				CategoryId = newValue.Id.Value,
+				Name = s.Name,
+				Description = s.Description
+			}));
+
+		await _dbContext.SaveChangesAsync();
+
+		var createdCategory = await GetById(CategoryId.CreateFromGuid(category.Entity.Id));
+
+		if (createdCategory is null)
+		{
+			throw new PersistenceException("Category was not created");
+		}
+        
+		return createdCategory;
 	}
 
-	public Task<Category> Update(CategoryId id, Category newValue)
+	public async Task<Category> Update(CategoryId id, Category newValue)
 	{
-		throw new NotImplementedException();
+		var category = await _dbContext.Categories
+			.Where(c => c.Id == id.Value)
+			.FirstOrDefaultAsync();
+
+		if (category is null)
+		{
+			throw new EntityNotFoundException(nameof(Category));
+		}
+		
+		category.Name = newValue.Name;
+		category.Description = newValue.Description;
+
+		await _dbContext.SaveChangesAsync();
+
+		return (await GetById(id))!;
 	}
 
 	public Task<CategoryId> Delete(CategoryId id)
@@ -39,23 +122,21 @@ internal class PostgresCategoryRepository : ICategoryRepository
 		throw new NotImplementedException();
 	}
 
-	public Task<Subcategory?> GetSubcategoryById(CategoryId subcategoryId)
+	public async Task<Subcategory?> GetSubcategoryById(CategoryId subcategoryId)
 	{
-		throw new NotImplementedException();
-	}
+		var subcategory = await _dbContext.Subcategories
+			.Where(s => s.Id == subcategoryId.Value)
+			.FirstOrDefaultAsync();
 
-	public Task<Category> CreateSubcategory(CategoryId categoryId, Category subcategory)
-	{
-		throw new NotImplementedException();
-	}
+		if (subcategory is null)
+		{
+			return null;
+		}
 
-	public Task<Category> UpdateSubcategory(CategoryId subcategoryId, Category subcategory)
-	{
-		throw new NotImplementedException();
-	}
-
-	public Task<CategoryId> DeleteSubcategory(CategoryId subcategoryId)
-	{
-		throw new NotImplementedException();
+		return new Subcategory(SubcategoryId.CreateFromGuid(subcategory.Id))
+		{
+			Name = subcategory.Name,
+			Description = subcategory.Description
+		};
 	}
 }
