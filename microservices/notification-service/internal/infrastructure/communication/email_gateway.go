@@ -58,7 +58,12 @@ func (eg *EmailGateway) SendMessage(notification models.Notification) error {
 
 func (eg *EmailGateway) prepareEmail(subject string, message string) string {
 	from := eg.sender + "<" + eg.login + ">"
-	res := fmt.Sprintf("From: %s \r\nSubject: %s \r\n%s", from, subject, message)
+
+	res := fmt.Sprintf(
+		"From: %s \r\nSubject: %s \r\nMIME-version: 1.0;\nContent-Type: text/html; charset=\"UTF-8\";\n\n %s",
+		from,
+		subject,
+		message)
 
 	return res
 }

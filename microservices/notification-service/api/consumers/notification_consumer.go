@@ -10,17 +10,21 @@ import (
 )
 
 type NotificationConsumer struct {
-	service interfaces.NotificationService
+	connectionString string
+	queueName        string
+	service          interfaces.NotificationService
 }
 
-func NewNotificationConsumer(service interfaces.NotificationService) *NotificationConsumer {
+func NewNotificationConsumer(connectionString string, queueName string, service interfaces.NotificationService) *NotificationConsumer {
 	return &NotificationConsumer{
-		service: service,
+		connectionString: connectionString,
+		queueName:        queueName,
+		service:          service,
 	}
 }
 
 func (c *NotificationConsumer) WatchNotificationQueue() {
-	conn, err := amqp.Dial("amqp://guest:guest@localhost:5672/")
+	conn, err := amqp.Dial(c.connectionString)
 	if err != nil {
 		log.Fatal("Failed to connect to RabbitMQ")
 	}
@@ -33,7 +37,7 @@ func (c *NotificationConsumer) WatchNotificationQueue() {
 	defer ch.Close()
 
 	q, err := ch.QueueDeclare(
-		"notifications",
+		c.queueName,
 		false,
 		false,
 		false,
@@ -55,7 +59,7 @@ func (c *NotificationConsumer) WatchNotificationQueue() {
 		log.Fatal("Failed to register a consumer")
 	}
 
-	go c.handleRequestLogMessages(msgs)
+	go c.handleNotificationsMessages(msgs)
 
 	log.Println("Listening to notifications messages...")
 
@@ -63,7 +67,7 @@ func (c *NotificationConsumer) WatchNotificationQueue() {
 	<-forever
 }
 
-func (c *NotificationConsumer) handleRequestLogMessages(msgs <-chan amqp.Delivery) {
+func (c *NotificationConsumer) handleNotificationsMessages(msgs <-chan amqp.Delivery) {
 	for d := range msgs {
 		var reqDto dtos.NotificationDto
 		err := json.Unmarshal(d.Body, &reqDto)

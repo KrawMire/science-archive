@@ -14,7 +14,10 @@ func main() {
 
 	adapterFactory := factories.NewNotificationAdapterFactory(appConfig.Services)
 	service := application.NewNotificationService(adapterFactory)
-	consumer := consumers.NewNotificationConsumer(service)
+	consumer := consumers.NewNotificationConsumer(
+		appConfig.MqConsumer.ConnectionString,
+		appConfig.MqConsumer.QueueName,
+		service)
 	server := api.NewServer(consumer)
 
 	if err := server.Run(); err != nil {

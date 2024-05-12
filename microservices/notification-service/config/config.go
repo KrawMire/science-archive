@@ -12,7 +12,13 @@ const devEnv = "DEV"
 const releaseEnv = "RELEASE"
 
 type Config struct {
-	Services ServicesConfig `yaml:"services"`
+	Services   ServicesConfig   `yaml:"services"`
+	MqConsumer MqConsumerConfig `yaml:"mqConsumer"`
+}
+
+type MqConsumerConfig struct {
+	QueueName        string `yaml:"queueName"`
+	ConnectionString string `yaml:"connectionString"`
 }
 
 type ServicesConfig struct {
