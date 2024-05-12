@@ -92,7 +92,6 @@ public static class ApplicationRegistry
             .AddTransient<IApplicationMapper<News, NewsDto>, NewsMapper>()
             .AddTransient<IApplicationMapper<Role, RoleDto>, RoleMapper>()
             .AddTransient<IApplicationMapper<User, UserDto>, UserMapper>();
-            // .AddTransient<IApplicationMapper<Author, AuthorDto>, AuthorMapper>();
     }
 
     /// <summary>
@@ -119,6 +118,8 @@ public static class ApplicationRegistry
             .AddTransient<IUseCase<CheckUserClaimsRequestDto, CheckUserClaimsResponseDto>, CheckUserClaimsUseCase>()
             .AddTransient<IUseCase<LoginRequestDto, LoginResponseDto>, LoginUseCase>()
             .AddTransient<IUseCase<RegisterRequestDto, RegisterResponseDto>, RegisterUseCase>()
+            .AddTransient<IUseCase<ConfirmUserCodeRequestDto, ConfirmUserCodeResponseDto>, ConfirmUserCodeUseCase>()
+            .AddTransient<IUseCase<ResendConfirmationCodeRequestDto, ResendConfirmationCodeResponseDto>, ResendConfirmationCodeUseCase>()
 
             // Category use cases
             .AddTransient<IUseCase<GetAllCategoriesRequestDto, GetAllCategoriesResponseDto>, GetAllCategoriesUseCase>()

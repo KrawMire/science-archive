@@ -12,13 +12,18 @@ internal class AuthService : IAuthService
 {
     private readonly IDbUnitOfWork _dbUnitOfWork;
     private readonly IEncryptionService _encryptionService;
-    public AuthService(IEncryptionService encryptionService, IDbUnitOfWork dbUnitOfWork)
+    private readonly IConfirmationService _confirmationService;
+    public AuthService(
+        IEncryptionService encryptionService, 
+        IDbUnitOfWork dbUnitOfWork, 
+        IConfirmationService confirmationService)
     {
         _encryptionService = encryptionService;
         _dbUnitOfWork = dbUnitOfWork;
+        _confirmationService = confirmationService;
     }
     
-    public async Task<User> RegisterUser(User user, string password)
+    public async Task<(User User, string Code)> RegisterUser(User user, string password)
     {
         var dupEmailUser = await _dbUnitOfWork.UserRepository.GetUserByEmail(user.Email);
 
@@ -34,10 +39,57 @@ internal class AuthService : IAuthService
             throw new DuplicateLoginException();
         }
         
+        user.Disconfirm();
+        
+        user.Password ??= new UserPassword();
         user.Password.Salt = _encryptionService.CreateSalt();
         user.Password.Value = _encryptionService.HashPassword(password, user.Password.Salt);
         
-        return await _dbUnitOfWork.UserRepository.Create(user);
+        var createdUser = await _dbUnitOfWork.UserRepository.Create(user);
+        var code = await _confirmationService.GenerateConfirmationCode(createdUser.Id);
+
+        return (createdUser, code);
+    }
+
+    public async Task<(User User, string? Code)> RegenerateConfirmCode(UserId userId)
+    {
+        var user = await _dbUnitOfWork.UserRepository.GetById(userId);
+
+        if (user is null)
+        {
+            throw new EntityNotFoundException(nameof(User));
+        }
+        
+        if (user.IsConfirmed)
+        {
+            return (user, Code: null);
+        }
+        
+        var code = await _confirmationService.GenerateConfirmationCode(userId);
+
+        return (user, code);
+    }
+
+    public async Task<User> ConfirmUser(UserId userId, string confirmCode)
+    {
+        var success = await _confirmationService.ConfirmUserCode(userId, confirmCode);
+
+        if (!success)
+        {
+            throw new WrongConfirmationCodeException();
+        }
+
+        var user = await _dbUnitOfWork.UserRepository.GetById(userId);
+
+        if (user is null)
+        {
+            throw new EntityNotFoundException(nameof(User));
+        }
+        
+        user.Confirm();
+        var confirmedUser = await _dbUnitOfWork.UserRepository.Update(userId, user);
+
+        return confirmedUser;
     }
 
     public async Task<User> AuthorizeUser(string login, string password)
@@ -48,8 +100,8 @@ internal class AuthService : IAuthService
         {
             throw new WrongCredentialsException();
         }
-
-        var hash = _encryptionService.HashPassword(password, user.Password.Salt);
+        
+        var hash = _encryptionService.HashPassword(password, user.Password!.Salt);
 
         if (hash != user.Password.Value)
         {
@@ -59,8 +111,16 @@ internal class AuthService : IAuthService
         return user;
     }
 
-    public Task<bool> UserHasClaims(UserId userId, IEnumerable<RoleClaim> claims)
+    public async Task<bool> UserHasClaims(UserId userId, IEnumerable<RoleClaim> claims)
     {
-        throw new NotImplementedException();
+        var user = await _dbUnitOfWork.UserRepository.GetById(userId);
+
+        // var userClaims = await _dbUnitOfWork.RoleRepository.GetUserClaims(userId);
+        // var success = contract.RequiredClaims.All(claim => userClaims.Contains(claim));
+        //
+        // return Task.FromResult(new CheckUserClaimsResponseDto(success));
+
+        // TODO: Add validation later
+        return user is not null && user.IsConfirmed;
     }
 }

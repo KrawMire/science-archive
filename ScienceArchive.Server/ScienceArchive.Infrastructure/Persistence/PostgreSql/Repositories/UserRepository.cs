@@ -23,6 +23,7 @@ internal class PostgresUserRepository : IUserRepository
     {
         var user = await _dbContext.Users
             .Where(u => u.Id == id.Value)
+            .Include(u => u.UsersAuth)
             .FirstOrDefaultAsync();
 
         if (user is null)
@@ -37,6 +38,7 @@ internal class PostgresUserRepository : IUserRepository
             .AddLogin(user.Login)
             .AddName(user.Name)
             .AddAboutText(user.About)
+            .AddIsConfirmed(user.UsersAuth!.IsConfirmed)
             .Build();
     }
 
@@ -62,6 +64,7 @@ internal class PostgresUserRepository : IUserRepository
             .AddAboutText(user.About)
             .AddPassword(user.UsersAuth!.Password)
             .AddPasswordSalt(user.UsersAuth!.PasswordSalt)
+            .AddIsConfirmed(user.UsersAuth!.IsConfirmed)
             .Build();
     }
 
@@ -85,6 +88,7 @@ internal class PostgresUserRepository : IUserRepository
             .AddLogin(user.Login)
             .AddName(user.Name)
             .AddAboutText(user.About)
+            .AddIsConfirmed(user.UsersAuth!.IsConfirmed)
             .Build();
     }
 
@@ -108,6 +112,7 @@ internal class PostgresUserRepository : IUserRepository
             .AddLogin(user.Login)
             .AddName(user.Name)
             .AddAboutText(user.About)
+            .AddIsConfirmed(user.UsersAuth!.IsConfirmed)
             .Build();
     }
     
@@ -157,6 +162,8 @@ internal class PostgresUserRepository : IUserRepository
             .UsersAuths
             .AddAsync(new UsersAuth
             {
+                UserId = newUser.Id.Value,
+                IsConfirmed = newUser.IsConfirmed,
                 Password = newUser.Password!.Value!,
                 PasswordSalt = newUser.Password!.Salt!,
             });
@@ -193,13 +200,20 @@ internal class PostgresUserRepository : IUserRepository
         var userCredentials = await _dbContext
             .UsersAuths
             .Where(au => au.UserId == id.Value)
-            .FirstOrDefaultAsync() ?? new UsersAuth
+            .FirstOrDefaultAsync();
+        
+        if (userCredentials is null)
         {
-            UserId = id.Value
-        };
+            throw new PersistenceException("User auth data was not found");
+        }
+        
+        userCredentials.IsConfirmed = newUser.IsConfirmed;
 
-        userCredentials.Password = newUser.Password!.Value!;
-        userCredentials.PasswordSalt = newUser.Password!.Salt!;
+        if (newUser.Password?.Value is not null && newUser.Password?.Salt is not null)
+        {
+            userCredentials.Password = newUser.Password!.Value!;
+            userCredentials.PasswordSalt = newUser.Password!.Salt!;   
+        }
 
         await _dbContext.SaveChangesAsync();
 
@@ -209,7 +223,12 @@ internal class PostgresUserRepository : IUserRepository
     /// <inheritdoc/>
     public async Task<UserId> Delete(UserId id)
     {
-        var user = await _dbContext.Users
+        _dbContext
+            .UsersAuths
+            .RemoveRange(_dbContext.UsersAuths.Where(ua => ua.UserId == id.Value));
+        
+        var user = await _dbContext
+            .Users
             .Where(u => u.Id == id.Value)
             .FirstOrDefaultAsync();
         

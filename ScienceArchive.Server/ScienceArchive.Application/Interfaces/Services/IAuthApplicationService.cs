@@ -23,6 +23,20 @@ public interface IAuthApplicationService
     Task<RegisterResponseDto> Register(RegisterRequestDto dto);
 
     /// <summary>
+    /// Confirm user code, i.e. verify the confirmation code for user registration
+    /// </summary>
+    /// <param name="dto">DTO contract containing the user ID and confirmation code</param>
+    /// <returns>Response DTO containing the confirmed user details</returns>
+    Task<ConfirmUserCodeResponseDto> ConfirmUserCode(ConfirmUserCodeRequestDto dto);
+
+    /// <summary>
+    /// Resend the confirmation code for user registration
+    /// </summary>
+    /// <param name="dto">DTO contract containing the user ID</param>
+    /// <returns>Response DTO containing the user ID</returns>
+    Task<ResendConfirmationCodeResponseDto> ResendConfirmCode(ResendConfirmationCodeRequestDto dto);
+
+    /// <summary>
     /// Check user claims
     /// </summary>
     /// <param name="dto">DTO contract to check user claims</param>

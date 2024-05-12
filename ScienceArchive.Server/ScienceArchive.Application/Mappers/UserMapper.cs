@@ -22,6 +22,7 @@ internal class UserMapper : IApplicationMapper<User, UserDto>
             Name = user.Name,
             Email = user.Email,
             Login = user.Login,
+            IsConfirmed = user.IsConfirmed,
             Articles = articles,
             About = user.About
         };
@@ -41,6 +42,7 @@ internal class UserMapper : IApplicationMapper<User, UserDto>
             .AddEmail(model.Email)
             .AddLogin(model.Login)
             .AddAboutText(model.About)
+            .AddIsConfirmed(model.IsConfirmed)
             .Build();
     }
 }

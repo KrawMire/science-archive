@@ -13,6 +13,7 @@ public class User : AggregateRoot<UserId>
     private string _name = string.Empty;
     private string _email = string.Empty;
     private string _login = string.Empty;
+    private bool _isConfirmed = false;
 
     internal User(UserId? id = null) : base(id ?? UserId.CreateNew())
     {
@@ -73,6 +74,15 @@ public class User : AggregateRoot<UserId>
             _login = value.Trim();
         }
     }
+
+    /// <summary>
+    /// Value indicating whether the user is confirmed.
+    /// </summary>
+    public required bool IsConfirmed
+    {
+        get => _isConfirmed; 
+        init => _isConfirmed = value;
+    }
     
     /// <summary>
     /// List of articles which are related to user
@@ -88,4 +98,20 @@ public class User : AggregateRoot<UserId>
     /// User password
     /// </summary>
     public UserPassword? Password { get; set; }
+
+    /// <summary>
+    /// Confirms the user.
+    /// </summary>
+    public void Confirm()
+    {
+        _isConfirmed = true;
+    }
+
+    /// <summary>
+    /// Disconfirms the user.
+    /// </summary>
+    public void Disconfirm()
+    {
+        _isConfirmed = false;
+    }
 }

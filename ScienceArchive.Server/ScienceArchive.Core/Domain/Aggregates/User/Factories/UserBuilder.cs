@@ -10,6 +10,7 @@ public class UserBuilder
     private string _name = string.Empty;
     private string _login = string.Empty;
     private string _email = string.Empty;
+    private bool _isConfirmed = false;
     private List<UserRole> _roles = new();
     private List<UserArticle> _articles = new();
 
@@ -103,6 +104,12 @@ public class UserBuilder
         return this;
     }
 
+    public UserBuilder AddIsConfirmed(bool isConfirmed)
+    {
+        _isConfirmed = isConfirmed;
+        return this;
+    }
+    
     public UserBuilder AddPassword(string? password)
     {
         _password = password;
@@ -124,6 +131,8 @@ public class UserBuilder
             Email = _email,
             Login = _login,
             Articles = _articles,
+            IsConfirmed = _isConfirmed,
+            About = _aboutText,
             Password = new UserPassword
             {
                 Value = _password,

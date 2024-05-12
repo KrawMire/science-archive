@@ -18,6 +18,9 @@ internal partial class UsersAuth
     [StringLength(255)]
     public string PasswordSalt { get; set; } = null!;
 
+    [Column("is_confirmed")]
+    public bool IsConfirmed { get; set; }
+
     [ForeignKey("UserId")]
     [InverseProperty("UsersAuth")]
     public virtual User User { get; set; } = null!;

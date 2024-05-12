@@ -25,9 +25,13 @@ public class ExceptionHandlerMiddleware
         {
             await ProcessException(httpContext, ex.Message, 400);
         }
-        catch (WrongCredentialsException ex)
+        catch (WrongCredentialsException)
         {
             await ProcessException(httpContext, "Wrong credentials were provided", 400);
+        }
+        catch (WrongConfirmationCodeException)
+        {
+            await ProcessException(httpContext, "Wrong confirmation code", 400);
         }
         catch (InvalidFieldValueException ex)
         {
@@ -36,6 +40,14 @@ public class ExceptionHandlerMiddleware
         catch (EntityNotFoundException ex)
         {
             await ProcessException(httpContext, $"{ex.EntityName} was not found", 400);
+        }
+        catch (DuplicateLoginException)
+        {
+            await ProcessException(httpContext, $"User with such login already exists", 400);
+        }
+        catch (DuplicateEmailException)
+        {
+            await ProcessException(httpContext, $"User with such email already exists", 400);
         }
         catch (Exception ex)
         {

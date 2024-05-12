@@ -15,7 +15,25 @@ public interface IAuthService
     /// <param name="user">The user to register</param>
     /// <param name="password">Password of user</param>
     /// <returns>The registered user</returns>
-    Task<User> RegisterUser(User user, string password);
+    Task<(User User, string Code)> RegisterUser(User user, string password);
+
+    /// <summary>
+    /// Regenerates the confirmation code for a user with the given user ID.
+    /// </summary>
+    /// <param name="userId">The ID of the user to regenerate the confirmation code for</param>
+    /// <returns>
+    /// A tuple containing the user and the regenerated confirmation code.
+    /// Code may be null if user is already confirmed
+    /// </returns>
+    Task<(User User, string? Code)> RegenerateConfirmCode(UserId userId);
+
+    /// <summary>
+    /// Confirm the user with the given user ID and confirmation code
+    /// </summary>
+    /// <param name="userId">The ID of the user to confirm</param>
+    /// <param name="confirmCode">The confirmation code</param>
+    /// <returns>The confirmed user</returns>
+    Task<User> ConfirmUser(UserId userId, string confirmCode);
 
     /// <summary>
     /// Authorize user with the given login and password

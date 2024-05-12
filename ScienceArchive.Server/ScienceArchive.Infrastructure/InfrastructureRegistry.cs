@@ -26,7 +26,9 @@ public static class InfrastructureRegistry
 
     private static IServiceCollection RegisterDomainServices(this IServiceCollection services)
     {
-        return services.AddTransient<IAuthService, AuthService>();
+        return services
+            .AddSingleton<IConfirmationService, ConfirmationService>()
+            .AddTransient<IAuthService, AuthService>();
     }
     
     private static IServiceCollection RegisterApplicationServices(this IServiceCollection services)

@@ -10,8 +10,8 @@ namespace ScienceArchive.Core.Domain.Aggregates.News;
 /// </summary>
 public class News : AggregateRoot<NewsId>
 {
-    private string _title;
-    private string _body; 
+    private string? _title;
+    private string? _body; 
     
     internal News(NewsId? id = null) : base(id ?? NewsId.CreateNew())
     {
@@ -22,7 +22,7 @@ public class News : AggregateRoot<NewsId>
     /// </summary>
     public required string Title
     {
-        get => _title;
+        get => _title ?? throw new InvalidFieldValueException(nameof(Title));
         set
         {
             if (string.IsNullOrWhiteSpace(value))
@@ -39,7 +39,7 @@ public class News : AggregateRoot<NewsId>
     /// </summary>
     public required string Body
     {
-        get => _body;
+        get => _body ?? throw new InvalidFieldValueException(nameof(Body));
         set
         {
             if (string.IsNullOrWhiteSpace(value))

@@ -49,4 +49,18 @@ public class AuthController : ControllerBase
         var result = await _authService.Register(request);
         return new SuccessResponse(result);
     }
+
+    [HttpPost("confirm")]
+    public async Task<Response> Confirm([FromBody] ConfirmUserCodeRequestDto request)
+    {
+        var result = await _authService.ConfirmUserCode(request);
+        return new SuccessResponse(result);
+    }
+    
+    [HttpPost("resend-code")]
+    public async Task<Response> ResendCode([FromBody] ResendConfirmationCodeRequestDto request)
+    {
+        var result = await _authService.ResendConfirmCode(request);
+        return new SuccessResponse(result);
+    }
 }

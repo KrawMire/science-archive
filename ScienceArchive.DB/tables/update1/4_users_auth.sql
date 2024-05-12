@@ -1,5 +1,6 @@
 create table if not exists "auth".users_auth (
   user_id       uuid          primary key,
+  is_confirmed  boolean       not null,
   password      varchar(255)  not null,
   password_salt varchar(255)  not null,
   
