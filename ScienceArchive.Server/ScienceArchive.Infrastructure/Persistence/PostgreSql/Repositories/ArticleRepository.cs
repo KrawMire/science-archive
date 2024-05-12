@@ -348,9 +348,9 @@ internal class PostgresArticleRepository : IArticleRepository
                 .UsersArticles
                 .Where(ua => ua.ArticleId == id.Value));
         
-        _dbContext
+        await _dbContext
             .ArticlesDocuments
-            .AddRange(newValue
+            .AddRangeAsync(newValue
                 .Documents
                 .Select(ad => new ArticlesDocument
                 {
@@ -360,9 +360,9 @@ internal class PostgresArticleRepository : IArticleRepository
                     Filepath = ad.Path
                 }));
         
-        _dbContext
+        await _dbContext
             .UsersArticles
-            .AddRange(newValue
+            .AddRangeAsync(newValue
                 .Authors
                 .Select(ua => new UsersArticle()
                 {
