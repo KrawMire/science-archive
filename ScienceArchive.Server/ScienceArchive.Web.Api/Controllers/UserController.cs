@@ -1,7 +1,6 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using ScienceArchive.Application.Dtos.User.Request;
-using ScienceArchive.Application.Interfaces.Interactors;
+using ScienceArchive.Application.Interfaces.Services;
 using ScienceArchive.Web.Api.Responses;
 
 namespace ScienceArchive.Web.Api.Controllers;
@@ -9,27 +8,18 @@ namespace ScienceArchive.Web.Api.Controllers;
 [Route("api/users")]
 public class UserController : ControllerBase
 {
-    private readonly IUserInteractor _userInteractor;
+    private readonly IUserApplicationService _userApplicationService;
 
-    public UserController(IUserInteractor userInteractor)
+    public UserController(IUserApplicationService userApplicationService)
     {
-        _userInteractor = userInteractor ?? throw new ArgumentNullException(nameof(userInteractor));
+        _userApplicationService = userApplicationService;
     }
 
     [HttpGet("{id}")]
     public async Task<Response> GetById(string id)
     {
         var dto = new GetUserByIdRequestDto(id);
-        var result = await _userInteractor.GetUserById(dto);
-        return new SuccessResponse(result);
-    }
-
-    [HttpGet("get-authors")]
-    public async Task<Response> GetAllAuthors()
-    {
-        var emptyRequest = new GetAllAuthorsRequestDto();
-
-        var result = await _userInteractor.GetAllAuthors(emptyRequest);
+        var result = await _userApplicationService.GetUserById(dto);
         return new SuccessResponse(result);
     }
     
@@ -38,25 +28,23 @@ public class UserController : ControllerBase
     {
         var emptyRequest = new GetAllUsersRequestDto();
         
-        var result = await _userInteractor.GetAllUsers(emptyRequest);
+        var result = await _userApplicationService.GetAllUsers(emptyRequest);
         return new SuccessResponse(result);
     }
 
     [HttpPost("update")]
-    [Authorize]
     public async Task<Response> Update([FromBody] UpdateUserRequestDto dto)
     {
-        var result = await _userInteractor.UpdateUser(dto);
+        var result = await _userApplicationService.UpdateUser(dto);
         return new SuccessResponse(result);
     }
 
     [HttpDelete("{id}")]
-    [Authorize]
     public async Task<Response> Delete(string id)
     {
         var dto = new DeleteUserRequestDto(id);
 
-        var result = await _userInteractor.DeleteUser(dto);
+        var result = await _userApplicationService.DeleteUser(dto);
         return new SuccessResponse(result);;
     }
 }

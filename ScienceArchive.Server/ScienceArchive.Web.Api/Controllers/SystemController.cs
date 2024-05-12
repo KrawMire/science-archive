@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ScienceArchive.Application.Dtos.System.Request;
-using ScienceArchive.Application.Interfaces.Interactors;
+using ScienceArchive.Application.Interfaces.Services;
 using ScienceArchive.Web.Api.Responses;
 
 namespace ScienceArchive.Web.Api.Controllers;
@@ -8,11 +8,11 @@ namespace ScienceArchive.Web.Api.Controllers;
 [Route("api/system")]
 public class SystemController : Controller
 {
-    private readonly ISystemInteractor _systemInteractor;
+    private readonly ISystemApplicationService _systemApplicationService;
 
-    public SystemController(ISystemInteractor systemInteractor)
+    public SystemController(ISystemApplicationService systemApplicationService)
     {
-        _systemInteractor = systemInteractor ?? throw new ArgumentNullException(nameof(systemInteractor));
+        _systemApplicationService = systemApplicationService ?? throw new ArgumentNullException(nameof(systemApplicationService));
     }
 
     [HttpGet("check-status")]
@@ -20,7 +20,7 @@ public class SystemController : Controller
     {
         var emptyRequest = new CheckSystemStatusRequestDto();
         
-        var result = await _systemInteractor.CheckSystemStatus(emptyRequest);
+        var result = await _systemApplicationService.CheckSystemStatus(emptyRequest);
         var response = new SuccessResponse(result);
 
         return Json(response);

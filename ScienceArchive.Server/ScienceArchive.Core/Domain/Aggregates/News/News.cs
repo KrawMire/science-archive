@@ -1,6 +1,6 @@
 ﻿using ScienceArchive.Core.Domain.Aggregates.News.ValueObjects;
-using ScienceArchive.Core.Domain.Aggregates.User.ValueObjects;
 using ScienceArchive.Core.Domain.Common;
+using ScienceArchive.Core.Exceptions;
 
 namespace ScienceArchive.Core.Domain.Aggregates.News;
 
@@ -8,21 +8,48 @@ namespace ScienceArchive.Core.Domain.Aggregates.News;
 /// News entity. Represents
 /// news of the system
 /// </summary>
-public class News : Entity<NewsId>
+public class News : AggregateRoot<NewsId>
 {
-    public News(NewsId? id = null) : base(id ?? NewsId.CreateNew())
+    private string? _title;
+    private string? _body; 
+    
+    internal News(NewsId? id = null) : base(id ?? NewsId.CreateNew())
     {
     }
 
     /// <summary>
     /// News title
     /// </summary>
-    public required string Title { get; set; }
+    public required string Title
+    {
+        get => _title ?? throw new InvalidFieldValueException(nameof(Title));
+        set
+        {
+            if (string.IsNullOrWhiteSpace(value))
+            {
+                throw new InvalidFieldValueException(nameof(Title));
+            }
+
+            _title = value;
+        }
+    }
 
     /// <summary>
     /// News body
     /// </summary>
-    public required string Body { get; set; }
+    public required string Body
+    {
+        get => _body ?? throw new InvalidFieldValueException(nameof(Body));
+        set
+        {
+            if (string.IsNullOrWhiteSpace(value))
+            {
+                throw new InvalidFieldValueException(nameof(Body));
+            }
+
+            _body = value;
+        }
+    }
 
     /// <summary>
     /// News metadata. Contains information about

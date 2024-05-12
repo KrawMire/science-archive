@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Http.Extensions;
-using ScienceArchive.Core.Models.Logs;
-using ScienceArchive.Core.Repositories;
+using ScienceArchive.Application.Abstractions.Logging.Models;
+using ScienceArchive.Application.Dtos.Log.Request;
+using ScienceArchive.Application.Interfaces.Services;
 
 namespace ScienceArchive.Web.Api.Middleware;
 
@@ -8,19 +9,16 @@ public class RequestResponseLoggingMiddleware
 {
 	private readonly RequestDelegate _next;
 	private readonly ILogger<ExceptionHandlerMiddleware> _logger;
-	private readonly ILogRepository _logRepository;
 
 	public RequestResponseLoggingMiddleware(
 		RequestDelegate next, 
-		ILogger<ExceptionHandlerMiddleware> logger,
-		ILogRepository logRepository)
+		ILogger<ExceptionHandlerMiddleware> logger)
 	{
 		_next = next;
-		_logger = logger ?? throw new ArgumentNullException(nameof(logger));
-		_logRepository = logRepository ?? throw new ArgumentNullException(nameof(logRepository));
+		_logger = logger;
 	}
 	
-	public async Task Invoke(HttpContext httpContext)
+	public async Task Invoke(HttpContext httpContext, ILogApplicationService logService)
 	{
 		httpContext.Request.EnableBuffering();
 		
@@ -39,15 +37,11 @@ public class RequestResponseLoggingMiddleware
 		
 		var log = await GetRequestLog(httpContext);
 
-		log.Response = responseBody;
+		log.ResponseString = responseBody;
 		
-		_logger.LogInformation($"""
-		                        Received request:
-		                        			URL: {log.Url}
-		                        			IP: {log.Ip}
-		                        			User-Agent: {log.UserAgent}
-		                        """);
-		_logRepository.LogRequest(log);
+		_logger.LogInformation($"Received request: Timestamp={log.Timestamp:u}, URL={log.Url}, IP={log.Ip}, User-Agent={log.UserAgent}");
+		
+		_ = Task.Run(() => logService.LogRequest(new LogRequestRequestDto(log)));
 	}
 
 	private async Task<RequestLog> GetRequestLog(HttpContext httpContext)
@@ -86,7 +80,7 @@ public class RequestResponseLoggingMiddleware
 			Ip = ip,
 			Url = url,
 			UserAgent = userAgent,
-			Request = requestBody
+			RequestString = requestBody
 		};
 		
 		return requestLog;

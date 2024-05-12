@@ -1,27 +1,28 @@
-﻿using ScienceArchive.Core.Domain.Aggregates.Role.ValueObjects;
+﻿using System.Net.Mail;
 using ScienceArchive.Core.Domain.Aggregates.User.ValueObjects;
 using ScienceArchive.Core.Domain.Common;
-using ScienceArchive.Core.Domain.Utils;
+using ScienceArchive.Core.Exceptions;
 
 namespace ScienceArchive.Core.Domain.Aggregates.User;
 
 /// <summary>
 /// User entity
 /// </summary>
-public class User : Entity<UserId>
+public class User : AggregateRoot<UserId>
 {
     private string _name = string.Empty;
     private string _email = string.Empty;
     private string _login = string.Empty;
+    private bool _isConfirmed = false;
 
-    public User(UserId? id = null) : base(id ?? UserId.CreateNew())
+    internal User(UserId? id = null) : base(id ?? UserId.CreateNew())
     {
     }
 
     /// <summary>
     /// Set of user roles identifiers
     /// </summary>
-    public required List<RoleId> RolesIds { get; set; }
+    public required List<UserRole> Roles { get; init; }
     
     /// <summary>
     /// Name of the user
@@ -33,7 +34,7 @@ public class User : Entity<UserId>
         {
             if (string.IsNullOrWhiteSpace(value))
             {
-                throw new Exception("Name must not be empty or containing only whitespaces");
+                throw new InvalidFieldValueException(nameof(Name));
             }
 
             _name = value.Trim();
@@ -48,9 +49,9 @@ public class User : Entity<UserId>
         get => _email;
         set
         {
-            if (!StringValidator.IsEmail(value))
+            if (!MailAddress.TryCreate(value, out _))
             {
-                throw new Exception("Email value is invalid!");
+                throw new InvalidFieldValueException(nameof(Email));
             }
 
             _email = value.Trim();
@@ -63,21 +64,54 @@ public class User : Entity<UserId>
     public required string Login
     {
         get => _login;
-        set => _login = value.Trim();
+        set
+        {
+            if (string.IsNullOrWhiteSpace(value))
+            {
+                throw new InvalidFieldValueException(nameof(Login));
+            }
+
+            _login = value.Trim();
+        }
     }
+
+    /// <summary>
+    /// Value indicating whether the user is confirmed.
+    /// </summary>
+    public required bool IsConfirmed
+    {
+        get => _isConfirmed; 
+        init => _isConfirmed = value;
+    }
+    
+    /// <summary>
+    /// List of articles which are related to user
+    /// </summary>
+    public required List<UserArticle> Articles { get; set; }
+    
+    /// <summary>
+    /// Short user self-descriptive text
+    /// </summary>
+    public string? About { get; set; }
     
     /// <summary>
     /// User password
     /// </summary>
-    public required UserPassword Password { get; set; }
+    public UserPassword? Password { get; set; }
 
     /// <summary>
-    /// Does user have a password
+    /// Confirms the user.
     /// </summary>
-    public bool HasPassword => !string.IsNullOrWhiteSpace(Password.Value);
+    public void Confirm()
+    {
+        _isConfirmed = true;
+    }
 
     /// <summary>
-    /// Does user have a password salt
+    /// Disconfirms the user.
     /// </summary>
-    public bool HasPasswordSalt => !string.IsNullOrWhiteSpace(Password.Salt);
+    public void Disconfirm()
+    {
+        _isConfirmed = false;
+    }
 }

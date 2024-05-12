@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
@@ -27,14 +27,5 @@
     <None Remove="Services\User\Contracts\" />
     <None Remove="Services\System\" />
     <None Remove="Domain\Utils\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Domain\" />
-    <Folder Include="Services\Article\" />
-    <Folder Include="Services\News\" />
-    <Folder Include="Services\News\" />
-    <Folder Include="Services\Role\" />
-    <Folder Include="Services\User\" />
-    <Folder Include="Services\System\" />
   </ItemGroup>
 </Project>

@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ScienceArchive.Application.Dtos.Role.Request;
-using ScienceArchive.Application.Interfaces.Interactors;
-using ScienceArchive.Web.Api.Auth;
+using ScienceArchive.Application.Interfaces.Services;
 using ScienceArchive.Web.Api.Responses;
 
 namespace ScienceArchive.Web.Api.Controllers;
@@ -9,11 +8,11 @@ namespace ScienceArchive.Web.Api.Controllers;
 [Route("api/roles")]
 public class RoleController : Controller
 {
-    private readonly IRoleInteractor _roleInteractor;
+    private readonly IRoleApplicationService _roleApplicationService;
 
-    public RoleController(IRoleInteractor roleInteractor)
+    public RoleController(IRoleApplicationService roleApplicationService)
     {
-        _roleInteractor = roleInteractor ?? throw new ArgumentNullException(nameof(roleInteractor));
+        _roleApplicationService = roleApplicationService;
     }
 
     [HttpGet]
@@ -21,40 +20,8 @@ public class RoleController : Controller
     {
         var emptyRequest = new GetAllRolesRequestDto();
 
-        var result = await _roleInteractor.GetAllRoles(emptyRequest);
+        var result = await _roleApplicationService.GetAllRoles(emptyRequest);
         var response = new SuccessResponse(result);
-        return Json(response);
-    }
-    
-    [HttpPost("create")]
-    [AuthorizeClaims("ADMIN")]
-    public async Task<IActionResult> Create([FromBody] CreateRoleRequestDto dto)
-    {
-        var result = await _roleInteractor.CreateRole(dto);
-        var response = new SuccessResponse(result);
-
-        return Json(response);
-    }
-
-    [HttpPost("update")]
-    [AuthorizeClaims("ADMIN")]
-    public async Task<IActionResult> Update([FromBody] UpdateRoleRequestDto dto)
-    {
-        var result = await _roleInteractor.UpdateRole(dto);
-        var response = new SuccessResponse(result);
-
-        return Json(response);
-    }
-
-    [HttpDelete("{id}")]
-    [AuthorizeClaims("ADMIN")]
-    public async Task<IActionResult> Delete(string id)
-    {
-        var dto = new DeleteRoleRequestDto(id);
-
-        var result = await _roleInteractor.DeleteRole(dto);
-        var response = new SuccessResponse(result);
-
         return Json(response);
     }
 }

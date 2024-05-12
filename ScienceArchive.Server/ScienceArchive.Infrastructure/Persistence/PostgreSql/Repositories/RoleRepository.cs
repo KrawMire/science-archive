@@ -1,147 +1,167 @@
-﻿using System.Data;
-using Dapper;
+﻿using Microsoft.EntityFrameworkCore;
 using ScienceArchive.Core.Domain.Aggregates.Role;
+using ScienceArchive.Core.Domain.Aggregates.Role.Repositories;
 using ScienceArchive.Core.Domain.Aggregates.Role.ValueObjects;
 using ScienceArchive.Core.Domain.Aggregates.User.ValueObjects;
-using ScienceArchive.Core.Repositories;
+using ScienceArchive.Core.Exceptions;
 using ScienceArchive.Infrastructure.Persistence.Exceptions;
-using ScienceArchive.Infrastructure.Persistence.Interfaces;
-using ScienceArchive.Infrastructure.Persistence.PostgreSql.Models;
 
 namespace ScienceArchive.Infrastructure.Persistence.PostgreSql.Repositories;
 
 internal class PostgresRoleRepository : IRoleRepository
 {
-    private readonly IDbConnection _connection;
-    private readonly IPersistenceMapper<Role, RoleModel> _roleMapper;
-    private readonly IPersistenceMapper<RoleClaim, ClaimModel> _claimMapper;
+    private readonly PostgresDbContext _dbContext;
 
-    public PostgresRoleRepository(
-        PostgresContext dbContext, 
-        IPersistenceMapper<Role, RoleModel> roleMapper,
-        IPersistenceMapper<RoleClaim, ClaimModel> claimMapper)
+    public PostgresRoleRepository(PostgresDbContext dbContext)
     {
-        var context = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
-        _claimMapper = claimMapper ?? throw new ArgumentNullException(nameof(claimMapper));
-        _roleMapper = roleMapper ?? throw new ArgumentNullException(nameof(roleMapper));
-        _connection = context.CreateConnection();
+        _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
     }
 
     /// <inheritdoc/>
     public async Task<List<Role>> GetAll()
     {
-        var roles = await _connection.QueryAsync<RoleModel>(
-            "SELECT * FROM func_get_all_roles()",
-            commandType: CommandType.Text);
+        var roles = await _dbContext
+            .Roles
+            .Include(r => r.Claims)
+            .ToListAsync();
 
-        if (roles is null)
-        {
-            throw new EntityNotFoundException<Role[]>("Database returned NULL!");
-        }
-
-        return roles.Select(role => _roleMapper.MapToEntity(role)).ToList();
+        return roles
+            .Select(r => new Role(RoleId.CreateFromGuid(r.Id))
+            {
+                Name = r.Name,
+                Description = r.Description,
+                Claims = r.Claims.Select(c => new RoleClaim
+                {
+                    Value = c.Value,
+                    Description = c.Description
+                }).ToList()
+            }).ToList();
     }
 
     /// <inheritdoc/>
     public async Task<Role?> GetById(RoleId id)
     {
-        var parameters = new DynamicParameters();
-        parameters.Add("Id", id.Value);
+        var role = await _dbContext
+            .Roles
+            .Where(r => r.Id == id.Value)
+            .Include(r => r.Claims)
+            .FirstOrDefaultAsync();
 
-        var role = await _connection.QuerySingleOrDefaultAsync<RoleModel?>(
-            "SELECT * FROM func_get_role_by_id(@Id::uuid)",
-            parameters,
-            commandType: CommandType.Text);
+        if (role is null)
+        {
+            return null;
+        }
 
-        return role is null ? null : _roleMapper.MapToEntity(role);
+        return new Role(RoleId.CreateFromGuid(role.Id))
+        {
+            Name = role.Name,
+            Description = role.Description,
+            Claims = role.Claims.Select(c => new RoleClaim
+            {
+                Value = c.Value,
+                Description = c.Description
+            }).ToList()
+        };
     }
     
     /// <inheritdoc/>
     public async Task<List<RoleClaim>> GetUserClaims(UserId userId)
     {
-        var parameters = new DynamicParameters();
-        parameters.Add("UserId", userId.Value);
+        var user = await _dbContext
+            .Users
+            .Where(u => u.Id == userId.Value)
+            .FirstOrDefaultAsync();
 
-        var claims = await _connection.QueryAsync<ClaimModel>(
-            "SELECT * FROM func_get_claims_by_user_id(@UserId::uuid)",
-            parameters,
-            commandType: CommandType.Text);
-
-        if (claims is null)
+        if (user is null)
         {
-            throw new EntityNotFoundException<Role[]>("Database returned NULL!");
+            throw new EntityNotFoundException(nameof(userId));
         }
+        
+        var claims = await _dbContext
+            .Roles
+            .Where(r => r.Id == userId.Value)
+            .SelectMany(r => r.Claims)
+            .Distinct()
+            .ToListAsync();
 
-        return claims.Select(_claimMapper.MapToEntity).ToList();
+        return claims.Select(c => new RoleClaim
+        {
+            Value = c.Value,
+            Description = c.Description
+        }).ToList();
     }
 
     /// <inheritdoc/>
     public async Task<Role> Create(Role newValue)
     {
-        var roleToCreate = _roleMapper.MapToModel(newValue);
-        var parameters = new DynamicParameters(roleToCreate);
-
-        var sql = @"SELECT * FROM func_create_role(
-            @Id::uuid, 
-            @Name::varchar(255), 
-            @Description::varchar(255), 
-            @ClaimsIds::uuid[])"; 
+        var claims = await _dbContext
+            .Claims
+            .Where(c => newValue.Claims.Any(rc => rc.Value == c.Value))
+            .ToListAsync();
         
-        var createdRole = await _connection.QuerySingleOrDefaultAsync<RoleModel>(
-            sql,
-            parameters,
-            commandType: CommandType.Text);
+        var role = await _dbContext
+            .Roles
+            .AddAsync(new Entities.Role
+            {
+                Id = newValue.Id.Value,
+                Name = newValue.Name,
+                Description = newValue.Description ?? "No description",
+                Claims = claims
+            });
+
+        await _dbContext.SaveChangesAsync();
+        
+        var createdRole = await GetById(RoleId.CreateFromGuid(role.Entity.Id));
 
         if (createdRole is null)
         {
-            throw new PersistenceException("Role was not created!");
+            throw new PersistenceException("Role was not created");
+        }
+        
+        return createdRole;
+    }
+    
+    /// <inheritdoc/>
+    public async Task<Role> Update(RoleId id, Role newValue)
+    {
+        var role = await _dbContext.Roles
+            .Where(u => u.Id == id.Value)
+            .FirstOrDefaultAsync();
+
+        if (role is null)
+        {
+            throw new EntityNotFoundException(nameof(Role));
         }
 
-        return _roleMapper.MapToEntity(createdRole);
+        var claims = await _dbContext
+            .Claims
+            .Where(c => newValue.Claims.Any(rc => rc.Value == c.Value))
+            .ToListAsync();
+        
+        role.Name = newValue.Name;
+        role.Description = newValue.Description ?? "No description";
+        role.Claims = claims;
+
+        await _dbContext.SaveChangesAsync();
+
+        return (await GetById(id))!;
     }
 
     /// <inheritdoc/>
     public async Task<RoleId> Delete(RoleId id)
     {
-        var parameters = new DynamicParameters();
-        parameters.Add("Id", id.Value);
-
-        var deletedRoleId = await _connection.QuerySingleOrDefaultAsync<Guid>(
-            "SELECT * FROM func_delete_role(@Id::uuid)",
-            parameters,
-            commandType: CommandType.Text);
-
-        if (deletedRoleId == default)
-        {
-            throw new PersistenceException("Role was not deleted!");
-        }
-
-        return RoleId.CreateFromGuid(deletedRoleId);
-    }
-
-    /// <inheritdoc/>
-    public async Task<Role> Update(RoleId id, Role newValue)
-    {
-        var roleToUpdate = _roleMapper.MapToModel(newValue);
-        var parameters = new DynamicParameters(roleToUpdate);
-        parameters.Add("Id", id.Value);
-
-        var sql = @"SELECT * FROM func_update_role(
-            @Id::uuid,
-            @Name::varchar(255), 
-            @Description::varchar(255), 
-            @ClaimsIds::uuid[])";
+        var role = await _dbContext.Roles
+            .Where(u => u.Id == id.Value)
+            .FirstOrDefaultAsync();
         
-        var updatedRole = await _connection.QuerySingleOrDefaultAsync<RoleModel>(
-            sql,
-            parameters,
-            commandType: CommandType.Text);
-
-        if (updatedRole is null)
+        if (role is null)
         {
-            throw new PersistenceException("Role was not updated!");
+            throw new EntityNotFoundException(nameof(Role));
         }
-
-        return _roleMapper.MapToEntity(updatedRole);
+        
+        _dbContext.Roles.Remove(role);
+        await _dbContext.SaveChangesAsync();
+        
+        return id;
     }
 }

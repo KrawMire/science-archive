@@ -1,0 +1,7 @@
+services:
+  email:
+    sender: "SMTP_DISPLAY_NAME"
+    login: "SMTP_AUTH_LOGIN"
+    password: "SMTP_AUTH_PASSWORD"
+    host: "SMTP_HOST"
+    port: "SMTP_PORT"

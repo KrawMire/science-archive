@@ -1,8 +1,7 @@
-﻿using ScienceArchive.Application.Dtos;
+﻿using ScienceArchive.Application.Dtos.User;
 using ScienceArchive.Application.Interfaces;
-using ScienceArchive.Core.Domain.Aggregates.Role.ValueObjects;
 using ScienceArchive.Core.Domain.Aggregates.User;
-using ScienceArchive.Core.Domain.Aggregates.User.ValueObjects;
+using ScienceArchive.Core.Domain.Aggregates.User.Factories;
 
 namespace ScienceArchive.Application.Mappers;
 
@@ -10,33 +9,40 @@ internal class UserMapper : IApplicationMapper<User, UserDto>
 {
     public UserDto MapToDto(User user)
     {
-        var rolesIds = user.RolesIds.Select(r => r.ToString()).ToList();
+        var articles = user.Articles
+            .Select(a => new UserArticleDto
+            {
+                ArticleId = a.ArticleId.ToString(),
+                Title = a.Title,
+            }).ToList();
         
         return new UserDto
         {
             Id = user.Id.ToString(),
-            RolesIds = rolesIds,
             Name = user.Name,
             Email = user.Email,
-            Login = user.Login
+            Login = user.Login,
+            IsConfirmed = user.IsConfirmed,
+            Articles = articles,
+            About = user.About
         };
     }
 
     public User MapToEntity(UserDto model)
     {
-        var userId = model.Id is not null
-            ? UserId.CreateFromString(model.Id)
-            : UserId.CreateNew();
+        var builder = new UserBuilder(model.Id);
 
-        var rolesIds = model.RolesIds?.Select(RoleId.CreateFromString).ToList();
-        
-        return new User(userId)
+        foreach (var article in model.Articles)
         {
-            Name = model.Name,
-            Email = model.Email,
-            Login = model.Login,
-            RolesIds = rolesIds ?? new List<RoleId>(),
-            Password = new UserPassword()
-        };
+            builder.AddArticle(article.ArticleId, article.Title);
+        }
+
+        return builder
+            .AddName(model.Name)
+            .AddEmail(model.Email)
+            .AddLogin(model.Login)
+            .AddAboutText(model.About)
+            .AddIsConfirmed(model.IsConfirmed)
+            .Build();
     }
 }

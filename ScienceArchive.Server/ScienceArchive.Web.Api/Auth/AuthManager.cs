@@ -2,8 +2,7 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
-using ScienceArchive.Application.Dtos;
-
+using ScienceArchive.Application.Dtos.User;
 using JwtClaim = System.Security.Claims.Claim;
 
 namespace ScienceArchive.Web.Api.Auth;

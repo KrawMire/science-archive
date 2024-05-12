@@ -19,7 +19,7 @@ public abstract class EntityId<T> : ValueObject
 	/// Check if ID value is
 	/// equal to another entity ID
 	/// </summary>
-	/// <param name="compareValue">ID value to compare</param>
+	/// <param name="compareId">ID value to compare</param>
 	/// <returns>True, if they are equal, otherwise, false</returns>
-	public abstract bool Equals(EntityId<T> compareValue);
+	public abstract bool Equals(EntityId<T> compareId);
 }

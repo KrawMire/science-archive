@@ -1,118 +1,124 @@
-﻿using System.Data;
-using Dapper;
+﻿using Microsoft.EntityFrameworkCore;
 using ScienceArchive.Core.Domain.Aggregates.News;
+using ScienceArchive.Core.Domain.Aggregates.News.Factories;
+using ScienceArchive.Core.Domain.Aggregates.News.Repositories;
 using ScienceArchive.Core.Domain.Aggregates.News.ValueObjects;
-using ScienceArchive.Core.Repositories;
+using ScienceArchive.Core.Exceptions;
 using ScienceArchive.Infrastructure.Persistence.Exceptions;
-using ScienceArchive.Infrastructure.Persistence.Interfaces;
-using ScienceArchive.Infrastructure.Persistence.PostgreSql.Models;
 
 namespace ScienceArchive.Infrastructure.Persistence.PostgreSql.Repositories;
 
 internal class PostgresNewsRepository : INewsRepository
 {
-    private readonly IDbConnection _connection;
-    private readonly IPersistenceMapper<News, NewsModel> _mapper;
+    private readonly PostgresDbContext _dbContext;
 
-    public PostgresNewsRepository(PostgresContext dbContext, IPersistenceMapper<News, NewsModel> mapper)
+    public PostgresNewsRepository(PostgresDbContext dbContext)
     {
-        var context = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
-        
-        _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
-        _connection = context.CreateConnection();
+        _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
     }
 
     public async Task<List<News>> GetAll()
     {
-        var news = await _connection.QueryAsync<NewsModel>(
-            "SELECT * FROM func_get_all_news()",
-            commandType: CommandType.Text);
+        var news = await _dbContext.News.ToListAsync();
 
-        if (news is null)
-        {
-            throw new EntityNotFoundException<NewsModel>("Cannot get any news!");
-        }
-
-        return news.Select(n => _mapper.MapToEntity(n)).ToList();
+        return news.Select(n =>
+            {
+                var builder = new NewsBuilder(n.Id);
+                
+                return builder
+                    .AddTitle(n.Title)
+                    .AddBody(n.Body)
+                    .AddAuthorId(n.AuthorId)
+                    .AddCreationDate(n.CreationDate)
+                    .AddLastUpdatedDate(n.LastUpdatedDate)
+                    .Build();
+            }).ToList();
     }
 
     public async Task<News?> GetById(NewsId id)
     {
-        var parameters = new DynamicParameters();
-        parameters.Add("Id", id.Value);
+        var news = await _dbContext
+            .News
+            .Where(n => n.Id == id.Value)
+            .FirstOrDefaultAsync();
 
-        var news = await _connection.QueryFirstOrDefaultAsync<NewsModel?>(
-            "SELECT * FROM func_get_news_by_id(@Id::uuid)",
-            parameters,
-            commandType: CommandType.Text);
-
-        return news is null ? null : _mapper.MapToEntity(news);
+        if (news is null)
+        {
+            return null;
+        }
+        
+        var builder = new NewsBuilder(news.Id);
+            
+        return builder
+            .AddTitle(news.Title)
+            .AddBody(news.Body)
+            .AddAuthorId(news.AuthorId)
+            .AddCreationDate(news.CreationDate)
+            .AddLastUpdatedDate(news.LastUpdatedDate)
+            .Build();
     }
 
     public async Task<News> Create(News newValue)
     {
-        var newsToCreate = _mapper.MapToModel(newValue);
-        var parameters = new DynamicParameters(newsToCreate);
+        var news = await _dbContext
+            .News
+            .AddAsync(new Entities.News
+            {
+                Id = newValue.Id.Value,
+                AuthorId = newValue.Metadata.AuthorId.Value,
+                Title = newValue.Title,
+                Body = newValue.Body,
+                CreationDate = newValue.Metadata.CreationDate,
+                LastUpdatedDate = newValue.Metadata.LastUpdatedDate
+            });
 
-        var sql = @"SELECT * FROM func_create_news(
-            @Id::uuid, 
-            @Title::varchar(255), 
-            @Body::text, 
-            @AuthorId::uuid, 
-            @CreationDate::timestamp)";
-        
-        var createdNews = await _connection.QueryFirstOrDefaultAsync<NewsModel>(
-            sql,
-            parameters,
-            commandType: CommandType.Text);
+        await _dbContext.SaveChangesAsync();
+
+        var createdNews = await GetById(NewsId.CreateFromGuid(news.Entity.Id));
 
         if (createdNews is null)
         {
             throw new PersistenceException("News were not created");
         }
 
-        return _mapper.MapToEntity(createdNews);
+        return createdNews;
     }
 
     public async Task<NewsId> Delete(NewsId id)
     {
-        var parameters = new DynamicParameters();
-        parameters.Add("Id", id.Value);
+        var news = await _dbContext
+            .News
+            .Where(n => n.Id == id.Value)
+            .FirstOrDefaultAsync();
 
-        var deletedNewsId = await _connection.QueryFirstOrDefaultAsync<Guid>(
-            "SELECT * FROM func_delete_news(@Id::uuid)",
-            parameters,
-            commandType: CommandType.Text);
-
-        if (deletedNewsId == default)
+        if (news is null)
         {
-            throw new PersistenceException("News was not deleted");
+            throw new EntityNotFoundException(nameof(News));
         }
-
-        return NewsId.CreateFromGuid(deletedNewsId);
+        
+        _dbContext.News.Remove(news);
+        await _dbContext.SaveChangesAsync();
+        
+        return id;
     }
 
     public async Task<News> Update(NewsId id, News newValue)
     {
-        var newsToUpdate = _mapper.MapToModel(newValue);
-        var parameters = new DynamicParameters(newsToUpdate);
-        parameters.Add("Id", id.Value);
+        var existingNews = await _dbContext.News.Where(n => n.Id == id.Value).FirstOrDefaultAsync();
 
-        var sql = @"SELECT * FROM func_update_news(
-            @Id::uuid, 
-            @Title::varchar(255), 
-            @Body::text)";
-        
-        var updatedNews = await _connection.QueryFirstOrDefaultAsync<NewsModel>(
-            sql,
-            parameters,
-            commandType: CommandType.Text);
-
-        if (updatedNews is null)
+        if (existingNews is null)
         {
-            throw new PersistenceException("News were not updated!");
+            throw new EntityNotFoundException(nameof(News));
         }
 
-        return _mapper.MapToEntity(updatedNews);
+        existingNews.AuthorId = newValue.Metadata.AuthorId.Value;
+        existingNews.Title = newValue.Title;
+        existingNews.Body = newValue.Body;
+        existingNews.CreationDate = newValue.Metadata.CreationDate;
+        existingNews.LastUpdatedDate = newValue.Metadata.LastUpdatedDate;
+
+        await _dbContext.SaveChangesAsync();
+
+        return (await GetById(id))!;
     }
 }

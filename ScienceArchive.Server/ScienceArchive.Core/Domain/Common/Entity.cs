@@ -5,7 +5,7 @@
 /// is determined by its identifier
 /// </summary>
 /// <typeparam name="TId">Type of ID used in this entity</typeparam>
-public class Entity<TId>
+public abstract class Entity<TId>
 {
     protected Entity(TId id)
     {
