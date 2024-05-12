@@ -1,5 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using ScienceArchive.Application.Abstractions.Encryption;
+using ScienceArchive.Application.Abstractions.Templating;
 using ScienceArchive.Core.Domain.Services;
 using ScienceArchive.Infrastructure.Connectivity;
 using ScienceArchive.Infrastructure.Connectivity.Options;
@@ -33,6 +34,8 @@ public static class InfrastructureRegistry
     
     private static IServiceCollection RegisterApplicationServices(this IServiceCollection services)
     {
-        return services.AddTransient<IEncryptionService, EncryptionService>();
+        return services
+            .AddTransient<ITemplateService, TemplateService>()
+            .AddTransient<IEncryptionService, EncryptionService>();
     }
 }
