@@ -40,8 +40,5 @@
   </ItemGroup>
   <ItemGroup>
     <None Remove="Resources\EmailTemplates\otp-code.template.html" />
-    <Content Include="Resources\EmailTemplates\otp-code.template.html">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
 </Project>
