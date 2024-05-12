@@ -1,8 +1,7 @@
 ﻿using ScienceArchive.Application.Dtos.News;
 using ScienceArchive.Application.Interfaces;
 using ScienceArchive.Core.Domain.Aggregates.News;
-using ScienceArchive.Core.Domain.Aggregates.News.ValueObjects;
-using ScienceArchive.Core.Domain.Aggregates.User.ValueObjects;
+using ScienceArchive.Core.Domain.Aggregates.News.Factories;
 
 namespace ScienceArchive.Application.Mappers;
 
@@ -10,7 +9,7 @@ internal class NewsMapper : IApplicationMapper<News, NewsDto>
 {
     public NewsDto MapToDto(News entity)
     {
-        return new()
+        return new NewsDto
         {
             Id = entity.Id.ToString(),
             Body = entity.Body,
@@ -23,20 +22,14 @@ internal class NewsMapper : IApplicationMapper<News, NewsDto>
 
     public News MapToEntity(NewsDto model)
     {
-        var newsId = model.Id is not null
-            ? NewsId.CreateFromString(model.Id)
-            : NewsId.CreateNew();
+        var builder = new NewsBuilder(model.Id);
 
-        return new(newsId)
-        {
-            Body = model.Body,
-            Title = model.Title,
-            Metadata = new NewsMetadata
-            {
-                AuthorId = UserId.CreateFromString(model.AuthorId),
-                CreationDate = model.CreationDate.GetValueOrDefault(DateTime.Now),
-                LastUpdatedDate = model.LastUpdatedDate,
-            }
-        };
+        return builder
+            .AddTitle(model.Title)
+            .AddBody(model.Body)
+            .AddAuthorId(model.AuthorId)
+            .AddCreationDate(model.CreationDate)
+            .AddLastUpdatedDate(model.LastUpdatedDate)
+            .Build();
     }
 }

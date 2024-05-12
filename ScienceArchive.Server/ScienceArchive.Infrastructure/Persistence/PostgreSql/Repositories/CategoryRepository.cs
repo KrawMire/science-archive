@@ -1,69 +1,120 @@
-using System.Data;
-using Dapper;
+using Microsoft.EntityFrameworkCore;
 using ScienceArchive.Core.Domain.Aggregates.Category;
+using ScienceArchive.Core.Domain.Aggregates.Category.Entities;
+using ScienceArchive.Core.Domain.Aggregates.Category.Repositories;
 using ScienceArchive.Core.Domain.Aggregates.Category.ValueObjects;
-using ScienceArchive.Core.Repositories;
+using ScienceArchive.Core.Exceptions;
 using ScienceArchive.Infrastructure.Persistence.Exceptions;
-using ScienceArchive.Infrastructure.Persistence.Interfaces;
-using ScienceArchive.Infrastructure.Persistence.PostgreSql.Models;
 
 namespace ScienceArchive.Infrastructure.Persistence.PostgreSql.Repositories;
 
 internal class PostgresCategoryRepository : ICategoryRepository
 {
-	private readonly IDbConnection _connection;
-	private readonly IPersistenceMapper<Category, CategoryModel> _mapper;
-	private readonly IPersistenceMapper<Category, SubcategoryModel> _subcategoryMapper;
+	private readonly PostgresDbContext _dbContext;
 	
-	public PostgresCategoryRepository(
-		PostgresContext dbContext, 
-		IPersistenceMapper<Category, CategoryModel> mapper,
-		IPersistenceMapper<Category, SubcategoryModel> subcategoryMapper)
+	public PostgresCategoryRepository(PostgresDbContext dbContext)
 	{
-		var context = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
-
-		_mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
-		_subcategoryMapper = subcategoryMapper ?? throw new ArgumentNullException(nameof(subcategoryMapper));
-		_connection = context.CreateConnection();
+		_dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
 	}
 	
 	public async Task<Category?> GetById(CategoryId id)
 	{
-		var parameters = new DynamicParameters();
-		parameters.Add("Id", id.Value);
-
-		var category = await _connection.QueryFirstOrDefaultAsync<CategoryModel?>(
-			"SELECT * FROM func_get_category_by_id(@Id::uuid)",
-			parameters,
-			commandType: CommandType.Text);
-
-		return category is null 
-			? null 
-			: _mapper.MapToEntity(category);
+		var category = await _dbContext
+			.Categories
+			.Where(c => c.Id == id.Value)
+			.Include(c => c.Subcategories)
+			.FirstOrDefaultAsync();
+		
+		if (category is null)
+		{
+			return null;
+		}
+		
+		return new Category(CategoryId.CreateFromGuid(category.Id))
+		{
+			Name = category.Name,
+			Description = category.Description,
+			Subcategories = category
+				.Subcategories
+				.Select(s => new Subcategory(SubcategoryId.CreateFromGuid(s.Id))
+				{
+					Name = s.Name,
+					Description = s.Description
+				}).ToList()
+		};
 	}
 
 	public async Task<List<Category>> GetAll()
 	{
-		var categories = await _connection.QueryAsync<CategoryModel>(
-			"SELECT * FROM func_get_all_categories()",
-			commandType: CommandType.Text);
+		var categories = await _dbContext
+			.Categories
+			.Include(c => c.Subcategories)
+			.ToListAsync();
 
-		if (categories is null)
+		return categories.Select(c => new Category(CategoryId.CreateFromGuid(c.Id))
 		{
-			throw new EntityNotFoundException<CategoryModel>("Cannot get any category");
+			Name = c.Name,
+			Description = c.Description,
+			Subcategories = c
+				.Subcategories
+				.Select(s => new Subcategory(SubcategoryId.CreateFromGuid(s.Id))
+				{
+					Name = s.Name,
+					Description = s.Description
+				}).ToList()
+		}).ToList();
+	}
+
+	public async Task<Category> Create(Category newValue)
+	{
+		var category = await _dbContext
+			.Categories
+			.AddAsync(new Entities.Category
+			{
+				Id = newValue.Id.Value,
+				Name = newValue.Name,
+				Description = newValue.Description
+			});
+		
+		await _dbContext
+			.Subcategories
+			.AddRangeAsync(newValue.Subcategories.Select(s => new Entities.Subcategory
+			{
+				Id = s.Id.Value,
+				CategoryId = newValue.Id.Value,
+				Name = s.Name,
+				Description = s.Description
+			}));
+
+		await _dbContext.SaveChangesAsync();
+
+		var createdCategory = await GetById(CategoryId.CreateFromGuid(category.Entity.Id));
+
+		if (createdCategory is null)
+		{
+			throw new PersistenceException("Category was not created");
 		}
-
-		return categories.Select(c => _mapper.MapToEntity(c)).ToList();
+        
+		return createdCategory;
 	}
 
-	public Task<Category> Create(Category newValue)
+	public async Task<Category> Update(CategoryId id, Category newValue)
 	{
-		throw new NotImplementedException();
-	}
+		var category = await _dbContext.Categories
+			.Where(c => c.Id == id.Value)
+			.FirstOrDefaultAsync();
 
-	public Task<Category> Update(CategoryId id, Category newValue)
-	{
-		throw new NotImplementedException();
+		if (category is null)
+		{
+			throw new EntityNotFoundException(nameof(Category));
+		}
+		
+		category.Name = newValue.Name;
+		category.Description = newValue.Description;
+
+		await _dbContext.SaveChangesAsync();
+
+		return (await GetById(id))!;
 	}
 
 	public Task<CategoryId> Delete(CategoryId id)
@@ -71,33 +122,21 @@ internal class PostgresCategoryRepository : ICategoryRepository
 		throw new NotImplementedException();
 	}
 
-	public async Task<Category?> GetSubcategoryById(CategoryId subcategoryId)
+	public async Task<Subcategory?> GetSubcategoryById(CategoryId subcategoryId)
 	{
-		var parameters = new DynamicParameters();
-		parameters.Add("Id", subcategoryId.Value);
+		var subcategory = await _dbContext.Subcategories
+			.Where(s => s.Id == subcategoryId.Value)
+			.FirstOrDefaultAsync();
 
-		var subcategory = await _connection.QueryFirstOrDefaultAsync<SubcategoryModel?>(
-			"SELECT * FROM func_get_subcategory_by_id(@Id::uuid)",
-			parameters,
-			commandType: CommandType.Text);
+		if (subcategory is null)
+		{
+			return null;
+		}
 
-		return subcategory is null 
-			? null 
-			: _subcategoryMapper.MapToEntity(subcategory);
-	}
-
-	public Task<Category> CreateSubcategory(CategoryId categoryId, Category subcategory)
-	{
-		throw new NotImplementedException();
-	}
-
-	public Task<Category> UpdateSubcategory(CategoryId subcategoryId, Category subcategory)
-	{
-		throw new NotImplementedException();
-	}
-
-	public Task<CategoryId> DeleteSubcategory(CategoryId subcategoryId)
-	{
-		throw new NotImplementedException();
+		return new Subcategory(SubcategoryId.CreateFromGuid(subcategory.Id))
+		{
+			Name = subcategory.Name,
+			Description = subcategory.Description
+		};
 	}
 }

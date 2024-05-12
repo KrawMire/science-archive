@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ScienceArchive.Application.Dtos.Auth.Request;
-using ScienceArchive.Application.Interfaces.Interactors;
+using ScienceArchive.Application.Interfaces.Services;
 using ScienceArchive.Web.Api.Auth;
 using ScienceArchive.Web.Api.Responses;
+using ScienceArchive.Web.Api.Utils;
 
 namespace ScienceArchive.Web.Api.Controllers;
 
@@ -10,19 +11,26 @@ namespace ScienceArchive.Web.Api.Controllers;
 public class AuthController : ControllerBase
 {
     private readonly AuthManager _authManager;
-    private readonly IAuthInteractor _authInteractor;
+    private readonly IAuthApplicationService _authService;
 
-    public AuthController(AuthManager authManager, IAuthInteractor authInteractor)
+    public AuthController(AuthManager authManager, IAuthApplicationService authService)
     {
-        _authInteractor = authInteractor ?? throw new ArgumentNullException(nameof(authInteractor));
-        _authManager = authManager ?? throw new ArgumentNullException(nameof(authManager));
+        _authManager = authManager;
+        _authService = authService;
     }
 
     [HttpPost("check-admin")]
-    public async Task<Response> CheckAdmin([FromBody] CheckUserClaimsRequestDto request)
+    public async Task<Response> CheckAdmin()
     {
-        request.RequiredClaims = new List<string> { "ADMIN" };
-        var result = await _authInteractor.CheckUserClaims(request);
+        var userId = HttpContext.GetUserIdFromToken();
+
+        if (string.IsNullOrWhiteSpace(userId))
+        {
+            throw new BadHttpRequestException("Cannot get user ID", 401);
+        }
+        
+        var request = new CheckUserClaimsRequestDto(userId, new List<string> { "ADMIN" });
+        var result = await _authService.CheckUserClaims(request);
         
         return new SuccessResponse(new
         {
@@ -33,7 +41,7 @@ public class AuthController : ControllerBase
     [HttpPost("sign-in")]
     public async Task<Response> SignIn([FromBody] LoginRequestDto request)
     {
-        var result = await _authInteractor.Login(request);
+        var result = await _authService.Login(request);
         var token = _authManager.GenerateToken(result.User);
 
         return new SuccessResponse(new
@@ -44,9 +52,23 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("sign-up")]
-    public async Task<Response> SignUp([FromBody] SignUpRequestDto request)
+    public async Task<Response> SignUp([FromBody] RegisterRequestDto request)
     {
-        var result = await _authInteractor.SignUp(request);
+        var result = await _authService.Register(request);
+        return new SuccessResponse(result);
+    }
+
+    [HttpPost("confirm")]
+    public async Task<Response> Confirm([FromBody] ConfirmUserCodeRequestDto request)
+    {
+        var result = await _authService.ConfirmUserCode(request);
+        return new SuccessResponse(result);
+    }
+    
+    [HttpPost("resend-code")]
+    public async Task<Response> ResendCode([FromBody] ResendConfirmationCodeRequestDto request)
+    {
+        var result = await _authService.ResendConfirmCode(request);
         return new SuccessResponse(result);
     }
 }

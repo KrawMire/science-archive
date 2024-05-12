@@ -1,10 +1,7 @@
 ﻿using ScienceArchive.Application.Dtos.Article;
 using ScienceArchive.Application.Interfaces;
 using ScienceArchive.Core.Domain.Aggregates.Article;
-using ScienceArchive.Core.Domain.Aggregates.Article.Enums;
-using ScienceArchive.Core.Domain.Aggregates.Article.ValueObjects;
-using ScienceArchive.Core.Domain.Aggregates.Category.ValueObjects;
-using ScienceArchive.Core.Domain.Aggregates.User.ValueObjects;
+using ScienceArchive.Core.Domain.Aggregates.Article.Factories;
 
 namespace ScienceArchive.Application.Mappers;
 
@@ -12,45 +9,56 @@ internal class ArticleMapper : IApplicationMapper<Article, ArticleDto>
 {
     public ArticleDto MapToDto(Article entity)
     {
-        var authorsIds = entity.AuthorsIds.Select(a => a.ToString()).ToList();
-        var documentsPaths = entity.Documents.Select(d => d.DocumentPath).ToList();
+        var authors = entity.Authors
+            .Select(a => new ArticleAuthorDto
+            {
+                UserId = a.UserId.ToString(),
+                Name = a.Name,
+                Role = (int)a.Role
+            }).ToList();
         
-        return new()
+        var documents = entity.Documents
+            .Select(d => new ArticleDocumentDto
+            {
+                Name = d.Name,
+                Path = d.Path
+            })
+            .ToList();
+        
+        return new ArticleDto
         {
             Id = entity.Id.ToString(),
-            CategoryId = entity.CategoryId.ToString(),
-            Status = (int)entity.Status,
-            CreationDate = entity.CreationDate,
+            CategoryId = entity.Category.CategoryId.ToString(),
+            CategoryName = entity.Category.Name,
             Title = entity.Title,
-            Description = entity.Description,
-            AuthorsIds = authorsIds,
-            DocumentsPaths = documentsPaths
+            Authors = authors,
+            Status = (int)entity.Status,
+            Documents = documents,
+            CreationDate = entity.CreationDate,
+            Description = entity.Description
         };
     }
 
     public Article MapToEntity(ArticleDto dto)
     {
-        var articleId = string.IsNullOrWhiteSpace(dto.Id)
-            ? ArticleId.CreateNew()
-            : ArticleId.CreateFromString(dto.Id);
-
-        var authorsIds = dto.AuthorsIds.Select(UserId.CreateFromString).ToList();
-        var documents = dto.DocumentsPaths
-            .Select(d => new ArticleDocument
-            {
-                DocumentPath = d
-            })
-            .ToList();
+        var builder = new ArticleBuilder(dto.Id);
         
-        return new(articleId)
+        foreach (var author in dto.Authors)
         {
-            CategoryId = CategoryId.CreateFromString(dto.CategoryId),
-            Status = (ArticleStatus)dto.Status,
-            CreationDate = dto.CreationDate.GetValueOrDefault(DateTime.Now),
-            Title = dto.Title,
-            Description = dto.Description,
-            AuthorsIds = authorsIds,
-            Documents = documents
-        };
+            builder.AddAuthor(author.UserId, author.Name, author.Role);
+        }
+
+        foreach (var document in dto.Documents)
+        {
+            builder.AddDocument(document.Id, document.Name, document.Path);
+        }
+
+        return builder
+            .AddCategory(dto.CategoryId, dto.CategoryName)
+            .AddTitle(dto.Title)
+            .AddStatus(dto.Status)
+            .AddCreationDate(dto.CreationDate)
+            .AddDescription(dto.Description)
+            .Build();
     }
 }

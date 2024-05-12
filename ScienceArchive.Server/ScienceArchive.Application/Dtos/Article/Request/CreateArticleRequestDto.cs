@@ -1,7 +1,10 @@
-﻿namespace ScienceArchive.Application.Dtos.Article.Request;
+﻿using MediatR;
+using ScienceArchive.Application.Dtos.Article.Response;
+
+namespace ScienceArchive.Application.Dtos.Article.Request;
 
 /// <summary>
 /// Request contract to create article
 /// </summary>
 /// <param name="Article">Article to create</param>
-public record CreateArticleRequestDto(ArticleDto Article);
+public record CreateArticleRequestDto(ArticleDto Article) : IRequest<CreateArticleResponseDto>;

@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ScienceArchive.Application.Dtos.News.Request;
-using ScienceArchive.Application.Interfaces.Interactors;
-using ScienceArchive.Web.Api.Auth;
+using ScienceArchive.Application.Interfaces.Services;
 using ScienceArchive.Web.Api.Responses;
 
 namespace ScienceArchive.Web.Api.Controllers;
@@ -9,18 +8,18 @@ namespace ScienceArchive.Web.Api.Controllers;
 [Route("api/news")]
 public class NewsController : Controller
 {
-    private readonly INewsInteractor _newsInteractor;
+    private readonly INewsApplicationService _newsApplicationService;
 
-    public NewsController(INewsInteractor newsInteractor)
+    public NewsController(INewsApplicationService newsApplicationService)
     {
-        _newsInteractor = newsInteractor ?? throw new ArgumentNullException(nameof(newsInteractor));
+        _newsApplicationService = newsApplicationService ?? throw new ArgumentNullException(nameof(newsApplicationService));
     }
 
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById(string id)
     {
         var dto = new GetNewsByIdRequestDto(id);
-        var result = await _newsInteractor.GetNewsById(dto);
+        var result = await _newsApplicationService.GetNewsById(dto);
         var response = new SuccessResponse(result);
 
         return Json(response);
@@ -31,39 +30,36 @@ public class NewsController : Controller
     {
         var emptyRequest = new GetAllNewsRequestDto();
 
-        var result = await _newsInteractor.GetAllNews(emptyRequest);
+        var result = await _newsApplicationService.GetAllNews(emptyRequest);
         var response = new SuccessResponse(result);
         
         return Json(response);
     }
 
     [HttpPost("create")]
-    [AuthorizeClaims("ADMIN")]
     public async Task<IActionResult> Create([FromBody] CreateNewsRequestDto dto)
     {
-        var result = await _newsInteractor.CreateNews(dto);
+        var result = await _newsApplicationService.CreateNews(dto);
         var response = new SuccessResponse(result);
 
         return Json(response);
     }
 
     [HttpPost("update")]
-    [AuthorizeClaims("ADMIN")]
     public async Task<IActionResult> Update([FromBody] UpdateNewsRequestDto dto)
     {
-        var result = await _newsInteractor.UpdateNews(dto);
+        var result = await _newsApplicationService.UpdateNews(dto);
         var response = new SuccessResponse(result);
 
         return Json(response);
     }
 
     [HttpDelete("{id}")]
-    [AuthorizeClaims("ADMIN")]
     public async Task<IActionResult> Delete(string id)
     {
         var dto = new DeleteNewsRequestDto(id);
 
-        var result = await _newsInteractor.DeleteNews(dto);
+        var result = await _newsApplicationService.DeleteNews(dto);
         var response = new SuccessResponse(result);
 
         return Json(response);

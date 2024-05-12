@@ -1,164 +1,245 @@
-﻿using System.Data;
-using Dapper;
-using ScienceArchive.Core.Domain.Aggregates.User;
+﻿using Microsoft.EntityFrameworkCore;
+using ScienceArchive.Core.Domain.Aggregates.User.Factories;
+using ScienceArchive.Core.Domain.Aggregates.User.Repositories;
 using ScienceArchive.Core.Domain.Aggregates.User.ValueObjects;
-using ScienceArchive.Core.Repositories;
+using ScienceArchive.Core.Exceptions;
 using ScienceArchive.Infrastructure.Persistence.Exceptions;
-using ScienceArchive.Infrastructure.Persistence.Interfaces;
-using ScienceArchive.Infrastructure.Persistence.PostgreSql.Models;
+using ScienceArchive.Infrastructure.Persistence.PostgreSql.Entities;
+using User = ScienceArchive.Core.Domain.Aggregates.User.User;
 
 namespace ScienceArchive.Infrastructure.Persistence.PostgreSql.Repositories;
 
 internal class PostgresUserRepository : IUserRepository
 {
-    private readonly IDbConnection _connection;
-    private readonly IPersistenceMapper<User, UserModel> _userMapper;
-    private readonly IPersistenceMapper<Author, AuthorModel> _authorMapper;
+    private readonly PostgresDbContext _dbContext;
 
-    public PostgresUserRepository(
-        PostgresContext dbContext,
-        IPersistenceMapper<User, UserModel> userMapper,
-        IPersistenceMapper<Author, AuthorModel> authorMapper)
+    public PostgresUserRepository(PostgresDbContext dbContext)
     {
-        var context = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
-        _userMapper = userMapper ?? throw new ArgumentNullException(nameof(userMapper));
-        _authorMapper = authorMapper ?? throw new ArgumentNullException(nameof(authorMapper));
-        _connection = context.CreateConnection();
+        _dbContext = dbContext;
     }
 
     /// <inheritdoc/>
     public async Task<User?> GetById(UserId id)
     {
-        var parameters = new DynamicParameters();
-        parameters.Add("Id", id.Value);
+        var user = await _dbContext.Users
+            .Where(u => u.Id == id.Value)
+            .Include(u => u.UsersAuth)
+            .FirstOrDefaultAsync();
 
-        var user = await _connection.QuerySingleOrDefaultAsync<UserModel?>(
-            "SELECT * FROM func_get_user_by_id(@Id::uuid)", 
-            parameters, 
-            commandType: CommandType.Text);
-
-        return user is null ? null : _userMapper.MapToEntity(user);
+        if (user is null)
+        {
+            return null;
+        }
+            
+        var builder = new UserBuilder(user.Id);
+                
+        return builder
+            .AddEmail(user.Email)
+            .AddLogin(user.Login)
+            .AddName(user.Name)
+            .AddAboutText(user.About)
+            .AddIsConfirmed(user.UsersAuth!.IsConfirmed)
+            .Build();
     }
 
+    /// <inheritdoc/>
+    public async Task<User?> GetUserByLoginOrEmail(string login)
+    {
+        var user = await _dbContext.Users
+            .Where(u => u.Email == login || u.Login == login)
+            .Include(u => u.UsersAuth)
+            .FirstOrDefaultAsync();
+
+        if (user is null)
+        {
+            return null;
+        }
+            
+        var builder = new UserBuilder(user.Id);
+                
+        return builder
+            .AddEmail(user.Email)
+            .AddLogin(user.Login)
+            .AddName(user.Name)
+            .AddAboutText(user.About)
+            .AddPassword(user.UsersAuth!.Password)
+            .AddPasswordSalt(user.UsersAuth!.PasswordSalt)
+            .AddIsConfirmed(user.UsersAuth!.IsConfirmed)
+            .Build();
+    }
+
+    /// <inheritdoc/>
+    public async Task<User?> GetUserByLogin(string login)
+    {
+        var user = await _dbContext.Users
+            .Where(u => u.Login == login)
+            .Include(u => u.UsersAuth)
+            .FirstOrDefaultAsync();
+
+        if (user is null)
+        {
+            return null;
+        }
+            
+        var builder = new UserBuilder(user.Id);
+                
+        return builder
+            .AddEmail(user.Email)
+            .AddLogin(user.Login)
+            .AddName(user.Name)
+            .AddAboutText(user.About)
+            .AddIsConfirmed(user.UsersAuth!.IsConfirmed)
+            .Build();
+    }
+
+    /// <inheritdoc/>
+    public async Task<User?> GetUserByEmail(string email)
+    {
+        var user = await _dbContext.Users
+            .Where(u => u.Email == email)
+            .Include(u => u.UsersAuth)
+            .FirstOrDefaultAsync();
+
+        if (user is null)
+        {
+            return null;
+        }
+            
+        var builder = new UserBuilder(user.Id);
+                
+        return builder
+            .AddEmail(user.Email)
+            .AddLogin(user.Login)
+            .AddName(user.Name)
+            .AddAboutText(user.About)
+            .AddIsConfirmed(user.UsersAuth!.IsConfirmed)
+            .Build();
+    }
+    
     /// <inheritdoc/>
     public async Task<List<User>> GetAll()
     {
-        var users = await _connection.QueryAsync<UserModel>(
-            "SELECT * FROM func_get_all_users()", 
-            commandType: CommandType.Text);
+        var users = await _dbContext
+            .Users
+            .Include(u => u.UsersArticles)
+            .ThenInclude(a => a.Article)
+            .ToListAsync();
 
-        if (users is null)
-        {
-            throw new EntityNotFoundException<User[]>("Database returned NULL!");
-        }
-
-        return users.Select(user => _userMapper.MapToEntity(user)).ToList();
-    }
-
-    /// <inheritdoc/>
-    public async Task<User?> GetAuthUserByLogin(string login)
-    {
-        var parameters = new DynamicParameters();
-        parameters.Add("Login", login);
-
-        var user = await _connection.QuerySingleOrDefaultAsync<UserModel?>(
-            "SELECT * FROM func_get_auth_user_by_login(@Login::varchar(255))", 
-            parameters, 
-            commandType: CommandType.Text);
-
-        return user is not null ? _userMapper.MapToEntity(user) : null;
-    }
-
-    /// <inheritdoc/>
-    public async Task<List<Author>> GetAllAuthors()
-    {
-        var users = await _connection.QueryAsync<AuthorModel>(
-            "SELECT * FROM func_get_all_authors()",
-            commandType: CommandType.Text);
-
-        if (users is null)
-        {
-            throw new EntityNotFoundException<User[]>("Database returned NULL!");
-        }
-
-        return users.Select(_authorMapper.MapToEntity).ToList();
+        return users.Select(u =>
+            {
+                var builder = new UserBuilder(u.Id);
+                
+                foreach (var userArticle in u.UsersArticles)
+                {
+                    builder.AddArticle(userArticle.ArticleId, userArticle.Article.Title);
+                }
+                
+                return builder
+                    .AddEmail(u.Email)
+                    .AddLogin(u.Login)
+                    .AddName(u.Name)
+                    .AddAboutText(u.About)
+                    .Build();
+            })
+            .ToList();
     }
 
     /// <inheritdoc/>
     public async Task<User> Create(User newUser)
     {
-        var userToCreate = _userMapper.MapToModel(newUser);
-        var parameters = new DynamicParameters(userToCreate);
-
-        var sql = @"SELECT * FROM func_create_user(
-            @Id::uuid, 
-            @Name::varchar(100), 
-            @Email::varchar(50), 
-            @Login::varchar(30), 
-            @Password::varchar(255), 
-            @PasswordSalt::varchar(255), 
-            @RolesIds::uuid[])";
+        var user = await _dbContext
+            .Users
+            .AddAsync(new Entities.User
+            {
+                Id = newUser.Id.Value,
+                Name = newUser.Name,
+                Email = newUser.Email,
+                Login = newUser.Login,
+                About = newUser.About
+            });
         
-        var createdUser = await _connection.QuerySingleOrDefaultAsync<UserModel>(
-            sql,
-            parameters,
-            commandType: CommandType.Text);
+        await _dbContext
+            .UsersAuths
+            .AddAsync(new UsersAuth
+            {
+                UserId = newUser.Id.Value,
+                IsConfirmed = newUser.IsConfirmed,
+                Password = newUser.Password!.Value!,
+                PasswordSalt = newUser.Password!.Salt!,
+            });
+
+        await _dbContext.SaveChangesAsync();
+
+        var createdUser = await GetById(UserId.CreateFromGuid(user.Entity.Id));
 
         if (createdUser is null)
         {
-            throw new PersistenceException("New user was not created!");
+            throw new PersistenceException("User was not created");
         }
 
-        return _userMapper.MapToEntity(createdUser);
+        return createdUser;
     }
 
     /// <inheritdoc/>
     public async Task<User> Update(UserId id, User newUser)
     {
-        var userToUpdate = _userMapper.MapToModel(newUser);
-        var parameters = new DynamicParameters(userToUpdate);
-        parameters.Add("Id", id.Value);
+        var user = await _dbContext.Users
+            .Where(u => u.Id == id.Value)
+            .FirstOrDefaultAsync();
 
-        var sql = @"SELECT * FROM func_update_user(
-            @Id::uuid, 
-            @Name::varchar(100), 
-            @Email::varchar(50), 
-            @Login::varchar(30), 
-            @Password::varchar(255), 
-            @PasswordSalt::varchar(255), 
-            @RolesIds::uuid[])";
-        
-        var updatedUser = await _connection.QuerySingleOrDefaultAsync<UserModel>(
-            sql,
-            parameters,
-            commandType: CommandType.Text
-        );
-
-        if (updatedUser is null)
+        if (user is null)
         {
-            throw new PersistenceException("New user was not updated!");
+            throw new EntityNotFoundException(nameof(User));
+        }
+        
+        user.Name = newUser.Name;
+        user.Email = newUser.Email;
+        user.Login = newUser.Login;
+        user.About = newUser.About;
+
+        var userCredentials = await _dbContext
+            .UsersAuths
+            .Where(au => au.UserId == id.Value)
+            .FirstOrDefaultAsync();
+        
+        if (userCredentials is null)
+        {
+            throw new PersistenceException("User auth data was not found");
+        }
+        
+        userCredentials.IsConfirmed = newUser.IsConfirmed;
+
+        if (newUser.Password?.Value is not null && newUser.Password?.Salt is not null)
+        {
+            userCredentials.Password = newUser.Password!.Value!;
+            userCredentials.PasswordSalt = newUser.Password!.Salt!;   
         }
 
-        return _userMapper.MapToEntity(updatedUser);
+        await _dbContext.SaveChangesAsync();
+
+        return (await GetById(id))!;
     }
 
     /// <inheritdoc/>
     public async Task<UserId> Delete(UserId id)
     {
-        var parameters = new DynamicParameters();
-        parameters.Add("Id", id.Value);
-
-        var deletedUserId = await _connection.QuerySingleOrDefaultAsync<Guid>(
-            "SELECT * FROM func_delete_user(@Id::uuid)",
-            parameters,
-            commandType: CommandType.Text
-        );
-
-        if (deletedUserId == default)
+        _dbContext
+            .UsersAuths
+            .RemoveRange(_dbContext.UsersAuths.Where(ua => ua.UserId == id.Value));
+        
+        var user = await _dbContext
+            .Users
+            .Where(u => u.Id == id.Value)
+            .FirstOrDefaultAsync();
+        
+        if (user is null)
         {
-            throw new PersistenceException("User was not deleted!");
+            throw new EntityNotFoundException(nameof(User));
         }
-
-        return UserId.CreateFromGuid(deletedUserId);
+        
+        _dbContext.Users.Remove(user);
+        await _dbContext.SaveChangesAsync();
+        
+        return id;
     }
 }

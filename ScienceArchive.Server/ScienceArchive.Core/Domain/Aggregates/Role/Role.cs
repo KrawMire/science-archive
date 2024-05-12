@@ -6,7 +6,7 @@ namespace ScienceArchive.Core.Domain.Aggregates.Role;
 /// <summary>
 /// Role entity
 /// </summary>
-public class Role : Entity<RoleId>
+public class Role : AggregateRoot<RoleId>
 {
     public Role(RoleId? id = null) : base(id ?? RoleId.CreateNew())
     {
@@ -22,7 +22,7 @@ public class Role : Entity<RoleId>
     /// of a user to perform some
     /// actions in the system
     /// </summary>
-    public required List<RoleClaimId> ClaimsIds { get; init; }
+    public required List<RoleClaim> Claims { get; init; }
 
     /// <summary>
     /// Role description

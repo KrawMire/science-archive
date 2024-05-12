@@ -1,18 +1,23 @@
 namespace ScienceArchive.Core.Exceptions;
 
 /// <summary>
-/// Represents exception if it is not possible
-/// to create new instance of entity ID
+/// Represents exception if some errors occurred while creating entity ID
 /// </summary>
-public class InvalidEntityIdException : Exception
+public class InvalidEntityIdValueException : Exception
 {
-	public InvalidEntityIdException(string? message) 
-		: base(message)
+	public string? InvalidValue { get; }
+	public string? EntityIdName { get; }
+	
+	public InvalidEntityIdValueException(string? invalidValue, string? entityIdName)
 	{
+		InvalidValue = invalidValue;
+		EntityIdName = entityIdName;
 	}
 
-	public InvalidEntityIdException(string? message, Exception innerException)
-		: base(message, innerException)
+	public InvalidEntityIdValueException(string? invalidValue, string? entityIdName, Exception? innerException) 
+		: base(message: null, innerException)
 	{
+		InvalidValue = invalidValue;
+		EntityIdName = entityIdName;
 	}
 }
