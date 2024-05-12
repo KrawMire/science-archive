@@ -16,11 +16,17 @@ internal interface IEventBus
     /// Adds an event to the event bus.
     /// </summary>
     /// <param name="domainEvent">The event to be added.</param>
-    Task AddEventAsync(DomainEvent domainEvent);
+    public Task AddEventAsync<T>(EventWrapper<T> domainEvent) where T : DomainEvent;
+
+    /// <summary>
+    /// Removes all events from the event bus.
+    /// </summary>
+    /// <returns>A task representing the asynchronous operation.</returns>
+    Task ClearEvents();
 
     /// <summary>
     /// Removes an event from the event bus.
     /// </summary>
     /// <param name="domainEvent">The event to be removed.</param>
-    Task RemoveEventAsync(DomainEvent domainEvent);
+    public Task RemoveEventAsync<T>(EventWrapper<T> domainEvent) where T : DomainEvent;
 }

@@ -1,16 +1,13 @@
+using MediatR;
 using ScienceArchive.Core.Domain.Common;
 
 namespace ScienceArchive.Application.Interfaces;
 
 /// <summary>
-/// Represents an event handler for domain events.
+/// Represents an interface for event handlers.
 /// </summary>
-/// <typeparam name="T">The type of domain event.</typeparam>
-internal interface IEventHandler<in T> where T : DomainEvent
-{
-    /// <summary>
-    /// Handles a domain event.
-    /// </summary>
-    /// <param name="domainEvent">The domain event to handle.</param>
-    Task Handle(T domainEvent);
-}
+/// <typeparam name="TWrapper">The type of event wrapper.</typeparam>
+/// <typeparam name="TEvent">The type of domain event.</typeparam>
+internal interface IEventHandler<in TWrapper, TEvent> : INotificationHandler<TWrapper>
+    where TWrapper : EventWrapper<TEvent>
+    where TEvent : DomainEvent;

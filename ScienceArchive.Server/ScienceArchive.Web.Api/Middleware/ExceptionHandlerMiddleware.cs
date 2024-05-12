@@ -62,7 +62,7 @@ public class ExceptionHandlerMiddleware
 
         if (ex is not null)
         {
-            _logger.LogError(ex.Message);   
+            _logger.LogError($"{ex.Message}, {ex.StackTrace}");
         }
         
         try

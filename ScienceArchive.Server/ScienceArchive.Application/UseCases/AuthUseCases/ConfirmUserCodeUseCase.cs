@@ -19,9 +19,9 @@ internal class ConfirmUserCodeUseCase : IUseCase<ConfirmUserCodeRequestDto, Conf
         _userMapper = userMapper;
     }
 
-    public async Task<ConfirmUserCodeResponseDto> Execute(ConfirmUserCodeRequestDto contract)
+    public async Task<ConfirmUserCodeResponseDto> Handle(ConfirmUserCodeRequestDto request, CancellationToken cancellationToken)
     {
-        var user = await _authService.ConfirmUser(UserId.CreateFromString(contract.UserId), contract.ConfirmCode);
+        var user = await _authService.ConfirmUser(UserId.CreateFromString(request.UserId), request.ConfirmCode);
         return new ConfirmUserCodeResponseDto(_userMapper.MapToDto(user));
     }
 }

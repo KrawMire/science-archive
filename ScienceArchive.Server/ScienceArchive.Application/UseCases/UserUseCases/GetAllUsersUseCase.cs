@@ -18,7 +18,7 @@ internal class GetAllUsersUseCase : IUseCase<GetAllUsersRequestDto, GetAllUsersR
         _dbUnitOfWork = dbUnitOfWork;
     }
     
-    public async Task<GetAllUsersResponseDto> Execute(GetAllUsersRequestDto contract)
+    public async Task<GetAllUsersResponseDto> Handle(GetAllUsersRequestDto request, CancellationToken cancellationToken)
     {
         var users = await _dbUnitOfWork.UserRepository.GetAll();
         var usersDtos = users.Select(user => _userMapper.MapToDto(user)).ToList();

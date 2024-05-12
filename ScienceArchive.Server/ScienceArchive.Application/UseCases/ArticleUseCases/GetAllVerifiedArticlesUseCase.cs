@@ -17,8 +17,8 @@ internal class GetAllVerifiedArticlesUseCase : IUseCase<GetAllVerifiedArticlesRe
         _articleMapper = articleMapper;
         _dbUnitOfWork = dbUnitOfWork;
     }
-    
-    public async Task<GetAllVerifiedArticlesResponseDto> Execute(GetAllVerifiedArticlesRequestDto contract)
+
+    public async Task<GetAllVerifiedArticlesResponseDto> Handle(GetAllVerifiedArticlesRequestDto request, CancellationToken cancellationToken)
     {
         var articles = await _dbUnitOfWork.ArticleRepository.GetAllVerified();
         var articlesDtos = articles.Select(_articleMapper.MapToDto).ToList();

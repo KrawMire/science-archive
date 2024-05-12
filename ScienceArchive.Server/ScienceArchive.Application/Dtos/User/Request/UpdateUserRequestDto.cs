@@ -1,7 +1,10 @@
-﻿namespace ScienceArchive.Application.Dtos.User.Request;
+﻿using MediatR;
+using ScienceArchive.Application.Dtos.User.Response;
+
+namespace ScienceArchive.Application.Dtos.User.Request;
 
 /// <summary>
 /// Request contract to update user
 /// </summary>
 /// <param name="User">User data</param>
-public record class UpdateUserRequestDto(string Id, UserDto User);
+public record UpdateUserRequestDto(string Id, UserDto User) : IRequest<UpdateUserResponseDto>;

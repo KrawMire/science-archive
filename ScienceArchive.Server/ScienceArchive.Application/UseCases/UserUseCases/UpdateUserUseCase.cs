@@ -19,10 +19,10 @@ internal class UpdateUserUseCase : IUseCase<UpdateUserRequestDto, UpdateUserResp
         _dbUnitOfWork = dbUnitOfWork;
     }
     
-    public async Task<UpdateUserResponseDto> Execute(UpdateUserRequestDto contract)
+    public async Task<UpdateUserResponseDto> Handle(UpdateUserRequestDto request, CancellationToken cancellationToken)
     {
-        var userId = UserId.CreateFromString(contract.Id);
-        var user = _userMapper.MapToEntity(contract.User);
+        var userId = UserId.CreateFromString(request.Id);
+        var user = _userMapper.MapToEntity(request.User);
         var updatedUser = await _dbUnitOfWork.UserRepository.Update(userId, user);
 
         return new UpdateUserResponseDto(_userMapper.MapToDto(updatedUser));

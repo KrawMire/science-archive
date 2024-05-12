@@ -17,8 +17,8 @@ internal class GetAllArticlesUseCase : IUseCase<GetAllArticlesRequestDto, GetAll
         _articleMapper = articleMapper;
         _dbUnitOfWork = dbUnitOfWork;
     }
-    
-    public async Task<GetAllArticlesResponseDto> Execute(GetAllArticlesRequestDto contract)
+
+    public async Task<GetAllArticlesResponseDto> Handle(GetAllArticlesRequestDto request, CancellationToken cancellationToken)
     {
         var articles = await _dbUnitOfWork.ArticleRepository.GetAll();
         var articlesDtos = articles.Select(_articleMapper.MapToDto).ToList();

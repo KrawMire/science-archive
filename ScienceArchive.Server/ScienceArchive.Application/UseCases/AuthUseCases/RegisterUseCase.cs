@@ -1,6 +1,7 @@
 using ScienceArchive.Application.Dtos.Auth.Request;
 using ScienceArchive.Application.Dtos.Auth.Response;
 using ScienceArchive.Application.Dtos.User;
+using ScienceArchive.Application.Events.EventWrappers;
 using ScienceArchive.Application.Interfaces;
 using ScienceArchive.Core.Domain.Aggregates.User;
 using ScienceArchive.Core.Domain.Events;
@@ -24,17 +25,19 @@ internal class RegisterUseCase : IUseCase<RegisterRequestDto, RegisterResponseDt
         _eventBus = eventBus;
     }
     
-    public async Task<RegisterResponseDto> Execute(RegisterRequestDto contract)
+    public async Task<RegisterResponseDto> Handle(RegisterRequestDto request, CancellationToken cancellationToken)
     {
-        var user = _userMapper.MapToEntity(contract.User);
-        var (createdUser, confirmCode) = await _authService.RegisterUser(user, contract.Password);
+        var user = _userMapper.MapToEntity(request.User);
+        var (createdUser, confirmCode) = await _authService.RegisterUser(user, request.Password);
 
-        await _eventBus.AddEventAsync(new UserRegisteredEvent
+        await _eventBus.AddEventAsync(new UserRegisteredEventWrapper(
+            new UserRegisteredEvent
         {
             UserId = createdUser.Id,
+            Name = createdUser.Name,
             ConfirmationCode = confirmCode,
             Email = createdUser.Email
-        });
+        }));
         
         return new RegisterResponseDto(_userMapper.MapToDto(createdUser));
     }

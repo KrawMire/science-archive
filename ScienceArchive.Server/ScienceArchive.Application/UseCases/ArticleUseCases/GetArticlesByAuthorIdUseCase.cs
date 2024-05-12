@@ -19,9 +19,9 @@ internal class GetArticlesByAuthorIdUseCase : IUseCase<GetArticlesByAuthorIdRequ
         _dbUnitOfWork = dbUnitOfWork;
     }
     
-    public async Task<GetArticlesByAuthorIdResponseDto> Execute(GetArticlesByAuthorIdRequestDto contract)
+    public async Task<GetArticlesByAuthorIdResponseDto> Handle(GetArticlesByAuthorIdRequestDto request, CancellationToken cancellationToken)
     {
-        var authorId = UserId.CreateFromString(contract.AuthorId);
+        var authorId = UserId.CreateFromString(request.AuthorId);
         var articles = await _dbUnitOfWork.ArticleRepository.GetByAuthorId(authorId);
 
         var articlesDtos = articles.Select(_articleMapper.MapToDto).ToList();

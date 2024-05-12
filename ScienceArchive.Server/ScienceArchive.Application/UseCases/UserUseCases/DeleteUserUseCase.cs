@@ -15,9 +15,9 @@ internal class DeleteUserUseCase : IUseCase<DeleteUserRequestDto, DeleteUserResp
         _dbUnitOfWork = dbUnitOfWork;
     }
     
-    public async Task<DeleteUserResponseDto> Execute(DeleteUserRequestDto contract)
+    public async Task<DeleteUserResponseDto> Handle(DeleteUserRequestDto request, CancellationToken cancellationToken)
     {
-        var userId = UserId.CreateFromString(contract.Id);
+        var userId = UserId.CreateFromString(request.Id);
         var deletedUserId = await _dbUnitOfWork.UserRepository.Delete(userId);
 
         return new DeleteUserResponseDto(deletedUserId.ToString());

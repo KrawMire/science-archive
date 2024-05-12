@@ -19,9 +19,9 @@ internal class GetUserByIdUseCase : IUseCase<GetUserByIdRequestDto, GetUserByIdR
         _dbUnitOfWork = dbUnitOfWork;
     }
     
-    public async Task<GetUserByIdResponseDto> Execute(GetUserByIdRequestDto contract)
+    public async Task<GetUserByIdResponseDto> Handle(GetUserByIdRequestDto request, CancellationToken cancellationToken)
     {
-        var userId = UserId.CreateFromString(contract.Id);
+        var userId = UserId.CreateFromString(request.Id);
         var user = await _dbUnitOfWork.UserRepository.GetById(userId);
 
         var userDto = user is not null

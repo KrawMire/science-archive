@@ -1,3 +1,4 @@
+using MediatR;
 using ScienceArchive.Application.Abstractions.Persistence;
 using ScienceArchive.Application.Dtos.Log.Request;
 using ScienceArchive.Application.Dtos.Log.Response;
@@ -9,8 +10,8 @@ namespace ScienceArchive.Application.Services;
 
 internal class LogApplicationService : BaseApplicationService, ILogApplicationService
 {
-    public LogApplicationService(IServiceProvider serviceProvider, IDbUnitOfWork dbUnitOfWork, IEventBus eventBus) 
-        : base(serviceProvider, dbUnitOfWork, eventBus) { }
+    public LogApplicationService(IMediator mediator, IDbUnitOfWork dbUnitOfWork, IEventBus eventBus) 
+        : base(mediator, dbUnitOfWork, eventBus) { }
 
     public Task<LogRequestResponseDto> LogRequest(LogRequestRequestDto dto)
     {

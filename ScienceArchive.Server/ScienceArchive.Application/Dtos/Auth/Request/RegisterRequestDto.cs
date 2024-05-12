@@ -1,4 +1,6 @@
-﻿using ScienceArchive.Application.Dtos.User;
+﻿using MediatR;
+using ScienceArchive.Application.Dtos.Auth.Response;
+using ScienceArchive.Application.Dtos.User;
 
 namespace ScienceArchive.Application.Dtos.Auth.Request;
 
@@ -6,4 +8,4 @@ namespace ScienceArchive.Application.Dtos.Auth.Request;
 /// Sign up request contract
 /// </summary>
 /// <param name="User">New user to sign up</param>
-public record RegisterRequestDto(UserDto User, string Password);
+public record RegisterRequestDto(UserDto User, string Password) : IRequest<RegisterResponseDto>;

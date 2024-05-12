@@ -26,9 +26,9 @@ internal class GetArticlesByCategoryIdUseCase : IUseCase<GetArticlesByCategoryId
         _dbUnitOfWork = dbUnitOfWork;
     }
     
-    public async Task<GetArticlesByCategoryIdResponseDto> Execute(GetArticlesByCategoryIdRequestDto contract)
+    public async Task<GetArticlesByCategoryIdResponseDto> Handle(GetArticlesByCategoryIdRequestDto request, CancellationToken cancellationToken)
     {
-        var categoryId = CategoryId.CreateFromString(contract.CategoryId);
+        var categoryId = CategoryId.CreateFromString(request.CategoryId);
         var articles = await _dbUnitOfWork.ArticleRepository.GetVerifiedByCategoryId(categoryId);
         var articlesDtos = articles.Select(_articleMapper.MapToDto).ToList();
         

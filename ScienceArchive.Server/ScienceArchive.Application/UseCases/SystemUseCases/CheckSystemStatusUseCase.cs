@@ -6,7 +6,7 @@ namespace ScienceArchive.Application.UseCases.SystemUseCases;
 
 internal class CheckSystemStatusUseCase : IUseCase<CheckSystemStatusRequestDto, CheckSystemStatusResponseDto>
 {
-    public Task<CheckSystemStatusResponseDto> Execute(CheckSystemStatusRequestDto contract)
+    public Task<CheckSystemStatusResponseDto> Handle(CheckSystemStatusRequestDto request, CancellationToken cancellationToken)
     {
         return Task.FromResult(new CheckSystemStatusResponseDto(true));
     }

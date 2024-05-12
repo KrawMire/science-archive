@@ -18,9 +18,9 @@ internal class CreateNewsUseCase : IUseCase<CreateNewsRequestDto, CreateNewsResp
         _dbUnitOfWork = dbUnitOfWork;
     }
     
-    public async Task<CreateNewsResponseDto> Execute(CreateNewsRequestDto contract)
+    public async Task<CreateNewsResponseDto> Handle(CreateNewsRequestDto request, CancellationToken cancellationToken)
     {
-        var newsToCreate = _newsMapper.MapToEntity(contract.News);
+        var newsToCreate = _newsMapper.MapToEntity(request.News);
         var createdNews = await _dbUnitOfWork.NewsRepository.Create(newsToCreate);
 
         return new CreateNewsResponseDto(_newsMapper.MapToDto(createdNews));

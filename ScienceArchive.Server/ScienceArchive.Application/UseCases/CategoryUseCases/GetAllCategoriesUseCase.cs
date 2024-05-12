@@ -18,7 +18,7 @@ internal class GetAllCategoriesUseCase : IUseCase<GetAllCategoriesRequestDto, Ge
         _dbUnitOfWork = dbUnitOfWork;
     }
     
-    public async Task<GetAllCategoriesResponseDto> Execute(GetAllCategoriesRequestDto contract)
+    public async Task<GetAllCategoriesResponseDto> Handle(GetAllCategoriesRequestDto request, CancellationToken cancellationToken)
     {
         var categories = await _dbUnitOfWork.CategoryRepository.GetAll();
         var categoriesDtos = categories

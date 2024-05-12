@@ -1,4 +1,5 @@
-﻿using ScienceArchive.Application.Abstractions.Persistence;
+﻿using MediatR;
+using ScienceArchive.Application.Abstractions.Persistence;
 using ScienceArchive.Application.Dtos.Role.Request;
 using ScienceArchive.Application.Dtos.Role.Response;
 using ScienceArchive.Application.Interfaces;
@@ -12,8 +13,8 @@ namespace ScienceArchive.Application.Services;
 /// </summary>
 internal class RoleApplicationService : BaseApplicationService, IRoleApplicationService
 {
-    public RoleApplicationService(IServiceProvider serviceProvider, IDbUnitOfWork dbUnitOfWork, IEventBus eventBus) 
-        : base(serviceProvider, dbUnitOfWork, eventBus) { }
+    public RoleApplicationService(IMediator mediator, IDbUnitOfWork dbUnitOfWork, IEventBus eventBus) 
+        : base(mediator, dbUnitOfWork, eventBus) { }
     
     /// <inheritdoc/>
     public Task<GetAllRolesResponseDto> GetAllRoles(GetAllRolesRequestDto dto)

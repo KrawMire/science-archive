@@ -14,10 +14,10 @@ internal class DeleteArticleUseCase : IUseCase<DeleteArticleRequestDto, DeleteAr
     {
         _dbUnitOfWork = dbUnitOfWork;
     }
-    
-    public async Task<DeleteArticleResponseDto> Execute(DeleteArticleRequestDto contract)
+
+    public async Task<DeleteArticleResponseDto> Handle(DeleteArticleRequestDto request, CancellationToken cancellationToken)
     {
-        var articleId = ArticleId.CreateFromString(contract.Id);
+        var articleId = ArticleId.CreateFromString(request.Id);
         var deletedArticleId = await _dbUnitOfWork.ArticleRepository.Delete(articleId);
         
         return new DeleteArticleResponseDto(deletedArticleId.ToString());

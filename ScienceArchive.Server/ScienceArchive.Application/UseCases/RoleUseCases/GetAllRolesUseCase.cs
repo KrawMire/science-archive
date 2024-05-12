@@ -18,7 +18,7 @@ internal class GetAllRolesUseCase : IUseCase<GetAllRolesRequestDto, GetAllRolesR
         _dbUnitOfWork = dbUnitOfWork;
     }
     
-    public async Task<GetAllRolesResponseDto> Execute(GetAllRolesRequestDto contract)
+    public async Task<GetAllRolesResponseDto> Handle(GetAllRolesRequestDto request, CancellationToken cancellationToken)
     {
         var roles = await _dbUnitOfWork.RoleRepository.GetAll();
         var rolesDtos = roles.Select(role => _roleMapper.MapToDto(role)).ToList();

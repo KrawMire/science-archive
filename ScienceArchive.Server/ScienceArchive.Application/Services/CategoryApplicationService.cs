@@ -1,3 +1,4 @@
+using MediatR;
 using ScienceArchive.Application.Abstractions.Persistence;
 using ScienceArchive.Application.Dtos.Category.Request;
 using ScienceArchive.Application.Dtos.Category.Response;
@@ -12,8 +13,8 @@ namespace ScienceArchive.Application.Services;
 /// </summary>
 internal class CategoryApplicationService : BaseApplicationService, ICategoryApplicationService
 { 
-	public CategoryApplicationService(IServiceProvider serviceProvider, IDbUnitOfWork dbUnitOfWork, IEventBus eventBus) 
-		: base(serviceProvider, dbUnitOfWork, eventBus) { }
+	public CategoryApplicationService(IMediator mediator, IDbUnitOfWork dbUnitOfWork, IEventBus eventBus) 
+		: base(mediator, dbUnitOfWork, eventBus) { }
 
 	/// <inheritdoc/>
 	public Task<GetAllCategoriesResponseDto> GetAllCategories(GetAllCategoriesRequestDto dto)

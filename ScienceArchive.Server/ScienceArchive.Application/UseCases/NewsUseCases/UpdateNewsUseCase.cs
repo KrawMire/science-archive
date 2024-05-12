@@ -19,10 +19,10 @@ internal class UpdateNewsUseCase : IUseCase<UpdateNewsRequestDto, UpdateNewsResp
         _dbUnitOfWork = dbUnitOfWork;
     }
     
-    public async Task<UpdateNewsResponseDto> Execute(UpdateNewsRequestDto contract)
+    public async Task<UpdateNewsResponseDto> Handle(UpdateNewsRequestDto request, CancellationToken cancellationToken)
     {
-        var newsId = NewsId.CreateFromString(contract.Id);
-        var news = _newsMapper.MapToEntity(contract.News);
+        var newsId = NewsId.CreateFromString(request.Id);
+        var news = _newsMapper.MapToEntity(request.News);
         var updatedNews = await _dbUnitOfWork.NewsRepository.Update(newsId, news);
 
         return new UpdateNewsResponseDto(_newsMapper.MapToDto(updatedNews));

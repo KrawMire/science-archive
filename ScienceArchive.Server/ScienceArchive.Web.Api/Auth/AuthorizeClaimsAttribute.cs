@@ -42,11 +42,7 @@ public class AuthorizeClaimsAttribute : AuthorizeAttribute, IAuthorizationFilter
 			throw new NullReferenceException("Cannot get user ID from token");
 		}
 
-		var dto = new CheckUserClaimsRequestDto
-		{
-			UserId = userId,
-			RequiredClaims = _requiredClaims.ToList()
-		};
+		var dto = new CheckUserClaimsRequestDto(userId, _requiredClaims.ToList());
 		
 		var result = await authInteractor.CheckUserClaims(dto);
 

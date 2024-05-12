@@ -1,4 +1,5 @@
-﻿using ScienceArchive.Application.Abstractions.Persistence;
+﻿using MediatR;
+using ScienceArchive.Application.Abstractions.Persistence;
 using ScienceArchive.Application.Dtos.Article.Request;
 using ScienceArchive.Application.Dtos.Article.Response;
 using ScienceArchive.Application.Interfaces;
@@ -12,8 +13,8 @@ namespace ScienceArchive.Application.Services;
 /// </summary>
 internal class ArticleApplicationService : BaseApplicationService, IArticleApplicationService
 { 
-    public ArticleApplicationService(IServiceProvider serviceProvider, IDbUnitOfWork dbUnitOfWork, IEventBus eventBus) 
-        : base(serviceProvider, dbUnitOfWork, eventBus) { }
+    public ArticleApplicationService(IMediator mediator, IDbUnitOfWork dbUnitOfWork, IEventBus eventBus) 
+        : base(mediator, dbUnitOfWork, eventBus) { }
 
     /// <inheritdoc />
     public Task<GetAllArticlesResponseDto> GetAllArticles(GetAllArticlesRequestDto dto)

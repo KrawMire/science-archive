@@ -1,3 +1,4 @@
+using MediatR;
 using ScienceArchive.Application.Interfaces;
 using ScienceArchive.Core.Domain.Common;
 
@@ -8,30 +9,44 @@ namespace ScienceArchive.Application.Events;
 /// </summary>
 internal class EventBus : IEventBus
 {
-    private readonly IServiceProvider _serviceProvider;
-    private readonly ICollection<DomainEvent> _events;
+    private readonly IMediator _mediator;
+    private readonly ICollection<INotification> _events;
     
-    public EventBus(IServiceProvider serviceProvider)
+    public EventBus(IMediator mediator)
     {
-        _serviceProvider = serviceProvider;
-        _events = new List<DomainEvent>();
+        _mediator = mediator;
+        _events = new List<INotification>();
     }
 
     /// <inheritdoc/>
-    public Task HandleEvents()
+    public async Task HandleEvents()
     {
-        return Task.CompletedTask;
+        foreach (var domainEvent in _events)
+        {
+            await _mediator.Publish(domainEvent);
+        }
+
+        await ClearEvents();
     }
 
     /// <inheritdoc/>
-    public Task AddEventAsync(DomainEvent domainEvent)
+    public Task AddEventAsync<T>(EventWrapper<T> domainEvent)
+        where T : DomainEvent
     {
         _events.Add(domainEvent);
         return Task.CompletedTask;
     }
 
     /// <inheritdoc/>
-    public Task RemoveEventAsync(DomainEvent domainEvent)
+    public Task ClearEvents()
+    {
+        _events.Clear();
+        return Task.CompletedTask;
+    }
+
+    /// <inheritdoc/>
+    public Task RemoveEventAsync<T>(EventWrapper<T> domainEvent)
+        where T : DomainEvent
     {
         _events.Remove(domainEvent);
         return Task.CompletedTask;

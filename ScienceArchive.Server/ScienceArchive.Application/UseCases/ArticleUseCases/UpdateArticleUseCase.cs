@@ -19,10 +19,10 @@ internal class UpdateArticleUseCase : IUseCase<UpdateArticleRequestDto, UpdateAr
         _dbUnitOfWork = dbUnitOfWork;
     }
     
-    public async Task<UpdateArticleResponseDto> Execute(UpdateArticleRequestDto contract)
+    public async Task<UpdateArticleResponseDto> Handle(UpdateArticleRequestDto request, CancellationToken cancellationToken)
     {
-        var articleId = ArticleId.CreateFromString(contract.Id);
-        var article = _articleMapper.MapToEntity(contract.Article);
+        var articleId = ArticleId.CreateFromString(request.Id);
+        var article = _articleMapper.MapToEntity(request.Article);
         article.SetToVerify();
         
         var updatedArticle = await _dbUnitOfWork.ArticleRepository.Update(articleId, article);

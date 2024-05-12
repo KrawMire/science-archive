@@ -15,9 +15,9 @@ internal class DeleteNewsUseCase : IUseCase<DeleteNewsRequestDto, DeleteNewsResp
         _dbUnitOfWork = dbUnitOfWork;
     }
     
-    public async Task<DeleteNewsResponseDto> Execute(DeleteNewsRequestDto contract)
+    public async Task<DeleteNewsResponseDto> Handle(DeleteNewsRequestDto request, CancellationToken cancellationToken)
     {
-        var newsId = NewsId.CreateFromString(contract.Id);
+        var newsId = NewsId.CreateFromString(request.Id);
         var deletedNewsId = await _dbUnitOfWork.NewsRepository.Delete(newsId);
 
         return new DeleteNewsResponseDto(deletedNewsId.ToString());

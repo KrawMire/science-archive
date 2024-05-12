@@ -14,9 +14,9 @@ public class LogRequestUseCase : IUseCase<LogRequestRequestDto, LogRequestRespon
         _logGateway = logGateway;
     }
 
-    public async Task<LogRequestResponseDto> Execute(LogRequestRequestDto contract)
+    public async Task<LogRequestResponseDto> Handle(LogRequestRequestDto request, CancellationToken cancellationToken)
     {
-        await _logGateway.LogRequest(contract.RequestLog);
+        await _logGateway.LogRequest(request.RequestLog);
         return new LogRequestResponseDto();
     }
 }

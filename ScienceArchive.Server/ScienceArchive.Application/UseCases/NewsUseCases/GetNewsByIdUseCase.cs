@@ -19,9 +19,9 @@ internal class GetNewsByIdUseCase : IUseCase<GetNewsByIdRequestDto, GetNewsByIdR
         _dbUnitOfWork = dbUnitOfWork;
     }
     
-    public async Task<GetNewsByIdResponseDto> Execute(GetNewsByIdRequestDto contract)
+    public async Task<GetNewsByIdResponseDto> Handle(GetNewsByIdRequestDto request, CancellationToken cancellationToken)
     {
-        var newsId = NewsId.CreateFromString(contract.Id);
+        var newsId = NewsId.CreateFromString(request.Id);
         var news = await _dbUnitOfWork.NewsRepository.GetById(newsId);
 
         var newsDto = news is not null

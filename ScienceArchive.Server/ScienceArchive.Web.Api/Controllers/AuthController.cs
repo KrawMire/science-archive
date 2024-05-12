@@ -3,6 +3,7 @@ using ScienceArchive.Application.Dtos.Auth.Request;
 using ScienceArchive.Application.Interfaces.Services;
 using ScienceArchive.Web.Api.Auth;
 using ScienceArchive.Web.Api.Responses;
+using ScienceArchive.Web.Api.Utils;
 
 namespace ScienceArchive.Web.Api.Controllers;
 
@@ -19,9 +20,16 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("check-admin")]
-    public async Task<Response> CheckAdmin([FromBody] CheckUserClaimsRequestDto request)
+    public async Task<Response> CheckAdmin()
     {
-        request.RequiredClaims = new List<string> { "ADMIN" };
+        var userId = HttpContext.GetUserIdFromToken();
+
+        if (string.IsNullOrWhiteSpace(userId))
+        {
+            throw new BadHttpRequestException("Cannot get user ID", 401);
+        }
+        
+        var request = new CheckUserClaimsRequestDto(userId, new List<string> { "ADMIN" });
         var result = await _authService.CheckUserClaims(request);
         
         return new SuccessResponse(new

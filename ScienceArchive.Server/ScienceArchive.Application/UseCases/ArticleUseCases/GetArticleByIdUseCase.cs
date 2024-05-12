@@ -20,9 +20,9 @@ internal class GetArticleByIdUseCase : IUseCase<GetArticleByIdRequestDto, GetArt
         _dbUnitOfWork = dbUnitOfWork;
     }
     
-    public async Task<GetArticleByIdResponseDto> Execute(GetArticleByIdRequestDto contract)
+    public async Task<GetArticleByIdResponseDto> Handle(GetArticleByIdRequestDto request, CancellationToken token)
     {
-        var articleId = ArticleId.CreateFromString(contract.Id);
+        var articleId = ArticleId.CreateFromString(request.Id);
         var article = await _dbUnitOfWork.ArticleRepository.GetById(articleId);
         
         var articleDto = article is not null

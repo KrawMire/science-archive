@@ -20,9 +20,9 @@ internal class GetVerifiedArticlesByAuthorIdUseCase : IUseCase<GetVerifiedArticl
         _dbUnitOfWork = dbUnitOfWork;
     }
     
-    public async Task<GetVerifiedArticlesByAuthorIdResponseDto> Execute(GetVerifiedArticlesByAuthorIdRequestDto contract)
+    public async Task<GetVerifiedArticlesByAuthorIdResponseDto> Handle(GetVerifiedArticlesByAuthorIdRequestDto request, CancellationToken cancellationToken)
     {
-        var userId = UserId.CreateFromString(contract.AuthorId);
+        var userId = UserId.CreateFromString(request.AuthorId);
         var articles = await _dbUnitOfWork.ArticleRepository.GetVerifiedByAuthorId(userId);
         var articlesDtos = articles
             .Select(_articleMapper.MapToDto)

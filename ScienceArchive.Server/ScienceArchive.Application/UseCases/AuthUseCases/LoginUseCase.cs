@@ -19,10 +19,10 @@ internal class LoginUseCase : IUseCase<LoginRequestDto, LoginResponseDto>
         _userMapper = userMapper;
     }
     
-    public async Task<LoginResponseDto> Execute(LoginRequestDto contract)
+    public async Task<LoginResponseDto> Handle(LoginRequestDto request, CancellationToken cancellationToken)
     {
-        var login = contract.Login.Trim();
-        var password = contract.Password;
+        var login = request.Login.Trim();
+        var password = request.Password;
         
         var user = await _authService.AuthorizeUser(login, password);
         return new LoginResponseDto(_userMapper.MapToDto(user));

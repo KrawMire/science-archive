@@ -17,10 +17,10 @@ internal class CreateArticleUseCase : IUseCase<CreateArticleRequestDto, CreateAr
         _articleMapper = articleMapper;
         _dbUnitOfWork = dbUnitOfWork;
     }
-    
-    public async Task<CreateArticleResponseDto> Execute(CreateArticleRequestDto contract)
+
+    public async Task<CreateArticleResponseDto> Handle(CreateArticleRequestDto request, CancellationToken cancellationToken)
     {
-        var article = _articleMapper.MapToEntity(contract.Article);
+        var article = _articleMapper.MapToEntity(request.Article);
         article.SetToVerify();
         
         var createdArticle = await _dbUnitOfWork.ArticleRepository.Create(article);

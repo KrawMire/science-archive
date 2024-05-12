@@ -1,16 +1,17 @@
 using ScienceArchive.Application.Abstractions.Persistence;
+using ScienceArchive.Application.Events.EventWrappers;
 using ScienceArchive.Application.Interfaces;
 using ScienceArchive.Core.Domain.Events;
 using ScienceArchive.Core.Gateways;
 
 namespace ScienceArchive.Application.Events.Handlers;
 
-internal class UserRegisteredEventHandler : IEventHandler<UserRegisteredEvent>
+internal class ArticleStatusChangedEmailEventHandler : IEventHandler<ArticleStatusChangedEventWrapper, ArticleStatusChangedEvent>
 {
     private readonly IDbUnitOfWork _dbUnitOfWork;
     private readonly INotificationGateway _notificationGateway;
 
-    public UserRegisteredEventHandler(
+    public ArticleStatusChangedEmailEventHandler(
         IDbUnitOfWork dbUnitOfWork, 
         INotificationGateway notificationGateway)
     {
@@ -18,8 +19,9 @@ internal class UserRegisteredEventHandler : IEventHandler<UserRegisteredEvent>
         _notificationGateway = notificationGateway;
     }
 
-    public Task Handle(UserRegisteredEvent domainEvent)
+    public Task Handle(ArticleStatusChangedEventWrapper notification, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        // TODO: Complete later
+        return Task.CompletedTask;
     }
 }

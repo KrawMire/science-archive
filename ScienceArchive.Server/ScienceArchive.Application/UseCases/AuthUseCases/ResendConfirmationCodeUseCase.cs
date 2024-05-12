@@ -18,9 +18,9 @@ internal class ResendConfirmationCodeUseCase : IUseCase<ResendConfirmationCodeRe
         _authService = authService;
     }
 
-    public async Task<ResendConfirmationCodeResponseDto> Execute(ResendConfirmationCodeRequestDto contract)
+    public async Task<ResendConfirmationCodeResponseDto> Handle(ResendConfirmationCodeRequestDto request, CancellationToken cancellationToken)
     {
-        var (user, code) = await _authService.RegenerateConfirmCode(UserId.CreateFromString(contract.UserId));
+        var (user, code) = await _authService.RegenerateConfirmCode(UserId.CreateFromString(request.UserId));
         // await _notificationGateway.SendNotification(contract.UserId, code);
         return new ResendConfirmationCodeResponseDto(user.Id.ToString());
     }

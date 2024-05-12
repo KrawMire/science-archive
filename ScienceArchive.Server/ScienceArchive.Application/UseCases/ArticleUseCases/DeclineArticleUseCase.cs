@@ -2,6 +2,7 @@ using ScienceArchive.Application.Abstractions.Persistence;
 using ScienceArchive.Application.Dtos.Article;
 using ScienceArchive.Application.Dtos.Article.Request;
 using ScienceArchive.Application.Dtos.Article.Response;
+using ScienceArchive.Application.Events.EventWrappers;
 using ScienceArchive.Application.Interfaces;
 using ScienceArchive.Core.Domain.Aggregates.Article;
 using ScienceArchive.Core.Domain.Aggregates.Article.ValueObjects;
@@ -25,10 +26,10 @@ internal class DeclineArticleUseCase : IUseCase<DeclineArticleRequestDto, Declin
         _dbUnitOfWork = dbUnitOfWork;
         _eventBus = eventBus;
     }
-    
-    public async Task<DeclineArticleResponseDto> Execute(DeclineArticleRequestDto contract)
+
+    public async Task<DeclineArticleResponseDto> Handle(DeclineArticleRequestDto request, CancellationToken cancellationToken)
     {
-        var articleId = ArticleId.CreateFromString(contract.ArticleId);
+        var articleId = ArticleId.CreateFromString(request.ArticleId);
         var article = await _dbUnitOfWork.ArticleRepository.GetById(articleId);
 
         if (article is null)
@@ -40,11 +41,11 @@ internal class DeclineArticleUseCase : IUseCase<DeclineArticleRequestDto, Declin
 
         var updatedArticle = await _dbUnitOfWork.ArticleRepository.Update(articleId, article);
 
-        await _eventBus.AddEventAsync(new ArticleStatusChangedEvent
+        await _eventBus.AddEventAsync(new ArticleStatusChangedEventWrapper(new ArticleStatusChangedEvent
         {
             ArticleId = articleId,
             Status = updatedArticle.Status,
-        });
+        }));
         
         return new DeclineArticleResponseDto(_articleMapper.MapToDto(updatedArticle));
     }

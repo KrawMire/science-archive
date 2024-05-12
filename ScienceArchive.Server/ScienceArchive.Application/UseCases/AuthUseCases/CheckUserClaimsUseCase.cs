@@ -17,10 +17,10 @@ internal class CheckUserClaimsUseCase : IUseCase<CheckUserClaimsRequestDto, Chec
         _authService = authService;
         _dbUnitOfWork = dbUnitOfWork;
     }
-    
-    public Task<CheckUserClaimsResponseDto> Execute(CheckUserClaimsRequestDto contract)
+
+    public Task<CheckUserClaimsResponseDto> Handle(CheckUserClaimsRequestDto request, CancellationToken cancellationToken)
     {
-        var userId = UserId.CreateFromString(contract.UserId);
+        var userId = UserId.CreateFromString(request.UserId);
         throw new NotImplementedException();
     }
 }
