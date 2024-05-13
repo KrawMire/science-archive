@@ -11,7 +11,7 @@ import createNewsRequest from "@models/news/requests/create-news.request";
 @Injectable({
   providedIn: "root",
 })
-export class NewsService extends ApiService {
+export class NewsApiService extends ApiService {
   constructor(private readonly httpClient: HttpClient) {
     super();
   }

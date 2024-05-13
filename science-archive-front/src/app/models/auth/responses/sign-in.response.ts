@@ -1,4 +1,4 @@
-import { IdentifiedUser } from "@models/user/identified-user";
+import { User } from "@models/user/user";
 
 /**
  * Represent sign in response data
@@ -12,5 +12,5 @@ export interface SignInResponse {
   /**
    * Authenticated user
    */
-  user: IdentifiedUser;
+  user: User;
 }

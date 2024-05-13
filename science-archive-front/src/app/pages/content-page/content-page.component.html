@@ -40,12 +40,22 @@
           News
         </li>
       </ul>
-      <div
-        (click)="onAccountClick()"
-        class="sar-account-button"
-      >
-        <span>KrawMire</span>
-      </div>
+      <ng-container *ngIf="(currentUser$ | async) as currentUser; else signIn">
+        <div
+          (click)="onAccountClick()"
+          class="sar-account-button"
+        >
+          <span>{{currentUser.login}}</span>
+        </div>
+      </ng-container>
+      <ng-template #signIn>
+        <div
+          [routerLink]="['/auth', 'sign-in']"
+          class="sar-account-button"
+        >
+          <span>Sign in</span>
+        </div>
+      </ng-template>
     </nav>
   </nz-affix>
 </header>
@@ -58,7 +68,7 @@
   nzClosable="true"
   nzPlacement="right"
   nzTitle="KrawMire"
-  [nzVisible]="showAccountDrawer"
+  [nzVisible]="(showAccountDrawer$ | async) ?? false"
   (nzOnClose)="onAccountDrawerClose()"
 >
   <ng-container *nzDrawerContent>

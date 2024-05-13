@@ -9,12 +9,32 @@ import { AccountPageComponent } from "@pages/account-page/account-page.component
 import { AuthPageComponent } from "@pages/auth-page/auth-page.component";
 import { ArticlePageComponent } from "@modules/articles/pages/article-page/article-page.component";
 import { NewsDetailsPageComponent } from "@modules/news/pages/news-details-page/news-details-page.component";
+import { SignInPageComponent } from "@modules/auth/pages/sign-in-page/sign-in-page.component";
+import { SignUpPageComponent } from "@modules/auth/pages/sign-up-page/sign-up-page.component";
 
 const routes: Routes = [
   { path: "", pathMatch: "full", redirectTo: "welcome" },
   { path: "welcome", pathMatch: "full", component: WelcomePageComponent },
   { path: "account", pathMatch: "full", component: AccountPageComponent },
-  { path: "auth", pathMatch: "full", component: AuthPageComponent },
+  {
+    path: "auth",
+    component: AuthPageComponent,
+    children: [
+      {
+        path: "",
+        pathMatch: "full",
+        redirectTo: "sign-in"
+      },
+      {
+        path: "sign-in",
+        component: SignInPageComponent,
+      },
+      {
+        path: "sign-up",
+        component: SignUpPageComponent,
+      }
+    ]
+  },
   {
     path: "content",
     component: ContentPageComponent,

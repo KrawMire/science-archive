@@ -8,7 +8,7 @@ import { ApiService } from "@services/common/api.service";
 @Injectable({
   providedIn: "root",
 })
-export class CategoryService extends ApiService {
+export class CategoryApiService extends ApiService {
   constructor(private httpClient: HttpClient) {
     super();
   }

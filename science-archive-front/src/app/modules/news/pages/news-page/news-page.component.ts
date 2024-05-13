@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { BehaviorSubject, map } from "rxjs";
 import { News } from "@models/news/news";
-import { NewsService } from "@services/news.service";
+import { NewsApiService } from "@services/news-api.service";
 import { NzMessageService } from "ng-zorro-antd/message";
 import { Title } from "@angular/platform-browser";
 
@@ -15,7 +15,7 @@ export class NewsPageComponent implements OnInit {
   news$ = new BehaviorSubject<News[]>([]);
 
   constructor(
-    private readonly newsService: NewsService,
+    private readonly newsService: NewsApiService,
     private readonly message: NzMessageService,
     titleService: Title) {
     titleService.setTitle("Science Archive - News");

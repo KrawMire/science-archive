@@ -3,7 +3,7 @@ import { BehaviorSubject } from "rxjs";
 import { ActivatedRoute } from "@angular/router";
 import { Title } from "@angular/platform-browser";
 import { News } from "@models/news/news";
-import { NewsService } from "@services/news.service";
+import { NewsApiService } from "@services/news-api.service";
 
 @Component({
   selector: 'sar-news-details-page',
@@ -17,7 +17,7 @@ export class NewsDetailsPageComponent implements OnInit {
 
   constructor(
     private readonly router: ActivatedRoute,
-    private readonly newsService: NewsService,
+    private readonly newsService: NewsApiService,
     private readonly titleService: Title) {}
 
   ngOnInit(): void {

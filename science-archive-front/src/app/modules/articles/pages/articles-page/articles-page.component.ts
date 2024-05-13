@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { BehaviorSubject, map } from "rxjs";
 import { Article } from "@models/article/article";
-import { ArticleService } from "@services/article.service";
+import { ArticleApiService } from "@services/article-api.service";
 import { Title } from "@angular/platform-browser";
 import { NzMessageService } from "ng-zorro-antd/message";
 import { ActivatedRoute } from "@angular/router";
@@ -18,7 +18,7 @@ export class ArticlesPageComponent implements OnInit {
   isLoading$ = new BehaviorSubject<boolean>(true);
 
   constructor(
-    private readonly articleService: ArticleService,
+    private readonly articleService: ArticleApiService,
     private readonly message: NzMessageService,
     private readonly route: ActivatedRoute,
     private readonly titleService: Title) {

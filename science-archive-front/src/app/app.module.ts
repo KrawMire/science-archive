@@ -23,6 +23,7 @@ import { NzTypographyModule } from "ng-zorro-antd/typography";
 import { NzAffixModule } from "ng-zorro-antd/affix";
 import { AuthPageComponent } from "@pages/auth-page/auth-page.component";
 import { AccountPageComponent } from "@pages/account-page/account-page.component";
+import { AuthModule } from "@modules/auth/auth.module";
 
 registerLocaleData(en);
 
@@ -44,6 +45,7 @@ registerLocaleData(en);
 
     // App modules
     ArticlesModule,
+    AuthModule,
     CategoriesModule,
     NewsModule,
     NzDrawerModule,

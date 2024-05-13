@@ -1,0 +1,26 @@
+<form nz-form class="sign-in-form">
+  <h2>Sign in</h2>
+  <nz-form-item>
+    <nz-form-control nzErrorTip="Please input your username!">
+      <nz-input-group nzPrefixIcon="user">
+        <input type="text" nz-input placeholder="Username" />
+      </nz-input-group>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-control nzErrorTip="Please input your Password!">
+      <nz-input-group nzPrefixIcon="lock">
+        <input type="password" nz-input placeholder="Password" />
+      </nz-input-group>
+    </nz-form-control>
+  </nz-form-item>
+  <button nz-button class="sign-up-form-button" [nzType]="'primary'">
+    Log in
+  </button>
+  <p class="sign-in-suggest-wrapper">
+    Don't have an account?
+    <a [routerLink]="['/auth', 'sign-up']">
+      Sign up
+    </a>
+  </p>
+</form>

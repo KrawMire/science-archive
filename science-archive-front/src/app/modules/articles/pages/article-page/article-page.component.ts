@@ -2,7 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { Article } from "@models/article/article";
 import { Title } from "@angular/platform-browser";
 import { BehaviorSubject } from "rxjs";
-import { ArticleService } from "@services/article.service";
+import { ArticleApiService } from "@services/article-api.service";
 import { ActivatedRoute } from "@angular/router";
 
 @Component({
@@ -17,7 +17,7 @@ export class ArticlePageComponent implements OnInit {
 
   constructor(
     private readonly router: ActivatedRoute,
-    private readonly articleService: ArticleService,
+    private readonly articleService: ArticleApiService,
     private readonly titleService: Title) {}
 
   ngOnInit(): void {

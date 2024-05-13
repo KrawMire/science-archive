@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { BehaviorSubject } from "rxjs";
 import { Category } from "@models/category/category";
-import { CategoryService } from "@services/category.service";
+import { CategoryApiService } from "@services/category-api.service";
 import { NzMessageService } from "ng-zorro-antd/message";
 import { Title } from "@angular/platform-browser";
 
@@ -15,7 +15,7 @@ export class CategoriesPageComponent implements OnInit {
   categories$ = new BehaviorSubject<Category[]>([]);
 
   constructor(
-    private readonly categoryService: CategoryService,
+    private readonly categoryService: CategoryApiService,
     private readonly message: NzMessageService,
     titleService: Title) {
     titleService.setTitle("Science Archive - Categories");

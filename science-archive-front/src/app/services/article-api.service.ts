@@ -21,7 +21,7 @@ import { DeclineArticleRequest } from "@models/article/requests/decline-article.
 @Injectable({
   providedIn: "root",
 })
-export class ArticleService extends ApiService {
+export class ArticleApiService extends ApiService {
   constructor(private httpClient: HttpClient) {
     super();
   }
