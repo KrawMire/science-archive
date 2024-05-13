@@ -2,6 +2,8 @@ import { Component, OnInit } from "@angular/core";
 import { BehaviorSubject, map } from "rxjs";
 import { News } from "@models/news/news";
 import { NewsService } from "@services/news.service";
+import { NzMessageService } from "ng-zorro-antd/message";
+import { Title } from "@angular/platform-browser";
 
 @Component({
   selector: "sar-news-page",
@@ -9,10 +11,15 @@ import { NewsService } from "@services/news.service";
   styleUrls: ["./news-page.component.scss"],
 })
 export class NewsPageComponent implements OnInit {
-  isLoading = true;
+  isLoading$ = new BehaviorSubject<boolean>(true);
   news$ = new BehaviorSubject<News[]>([]);
 
-  constructor(private readonly newsService: NewsService) {}
+  constructor(
+    private readonly newsService: NewsService,
+    private readonly message: NzMessageService,
+    titleService: Title) {
+    titleService.setTitle("Science Archive - News");
+  }
 
   ngOnInit(): void {
     this.newsService
@@ -20,14 +27,19 @@ export class NewsPageComponent implements OnInit {
       .pipe(
         map((response) => {
           return response.news.map((singleNews) => {
-            singleNews.creationDate = new Date(singleNews.creationDate.toString());
+            singleNews.creationDate = new Date(singleNews.creationDate?.toString() ?? new Date());
             return singleNews;
           });
         }),
       )
       .subscribe({
-        complete: () => (this.isLoading = false),
+        complete: () => (this.isLoading$.next(false)),
         next: (news) => this.news$.next(news),
+        error: (error) => {
+          this.isLoading$.next(false);
+          this.news$.next([]);
+          this.message.error(error);
+        },
       });
   }
 }

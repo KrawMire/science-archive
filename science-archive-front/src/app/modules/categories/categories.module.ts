@@ -7,6 +7,7 @@ import { NzCardModule } from "ng-zorro-antd/card";
 import { NzButtonModule } from "ng-zorro-antd/button";
 import { CategoryCardSkeletonComponent } from "./components/category-card-skeleton/category-card-skeleton.component";
 import { NzSkeletonModule } from "ng-zorro-antd/skeleton";
+import { NzEmptyModule } from "ng-zorro-antd/empty";
 
 @NgModule({
   declarations: [
@@ -15,6 +16,6 @@ import { NzSkeletonModule } from "ng-zorro-antd/skeleton";
     SubcategoryCardComponent,
     CategoryCardSkeletonComponent,
   ],
-  imports: [CommonModule, NzCardModule, NzButtonModule, NzSkeletonModule],
+  imports: [CommonModule, NzCardModule, NzButtonModule, NzSkeletonModule, NzEmptyModule]
 })
 export class CategoriesModule {}

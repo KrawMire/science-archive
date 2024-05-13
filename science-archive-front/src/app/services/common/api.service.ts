@@ -1,5 +1,6 @@
 import { catchError, map, Observable } from "rxjs";
 import { Response } from "@models/common/response";
+import { ApiError } from "@services/common/api-error";
 
 export abstract class ApiService {
   protected handleResponse<T>(res: Observable<Response<T>>) {
@@ -17,7 +18,7 @@ export abstract class ApiService {
         return response.data!;
       }),
       catchError((err) => {
-        throw new Error(err.error?.error ?? err.message);
+        throw new ApiError(err.error?.error ?? err.message, err.status);
       })
     );
   }

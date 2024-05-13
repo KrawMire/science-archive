@@ -8,10 +8,17 @@ import { ArticleCardSkeletonComponent } from "./components/article-card-skeleton
 import { NzSkeletonModule } from "ng-zorro-antd/skeleton";
 import { NzTagModule } from "ng-zorro-antd/tag";
 import { RouterLink } from "@angular/router";
+import { ArticlePageComponent } from './pages/article-page/article-page.component';
+import { NzBreadCrumbModule } from "ng-zorro-antd/breadcrumb";
+import { NzListModule } from "ng-zorro-antd/list";
+import { NzTypographyModule } from "ng-zorro-antd/typography";
+import { NzEmptyModule } from "ng-zorro-antd/empty";
+import { BrowserModule } from "@angular/platform-browser";
+import { NzResultModule } from "ng-zorro-antd/result";
 
 @NgModule({
-  declarations: [ArticlesPageComponent, ArticleCardComponent, ArticleCardSkeletonComponent],
-  imports: [CommonModule, NzCardModule, NzButtonModule, NzSkeletonModule, NzTagModule, RouterLink],
-  exports: [ArticleCardComponent],
+  imports: [BrowserModule, CommonModule, NzCardModule, NzButtonModule, NzSkeletonModule, NzTagModule, RouterLink, NzBreadCrumbModule, NzListModule, NzTypographyModule, NzEmptyModule, NzResultModule],
+  declarations: [ArticlesPageComponent, ArticleCardComponent, ArticleCardSkeletonComponent, ArticlePageComponent],
+  exports: [ArticleCardComponent, ArticlePageComponent],
 })
 export class ArticlesModule {}

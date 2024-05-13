@@ -1,4 +1,4 @@
-<div *ngIf="isLoading; else categoriesView">
+<div *ngIf="(isLoading$ | async); else categoriesView">
   <sar-category-card-skeleton
     *ngFor="let _ of [1,2,3]"
     style="margin-top: 10px"
@@ -6,6 +6,11 @@
 </div>
 
 <ng-template #categoriesView>
+  <ng-container *ngIf="(categories$ | async)?.length === 0; else categoriesList">
+    <nz-empty nzNotFoundContent="No categories found"/>
+  </ng-container>
+</ng-template>
+<ng-template #categoriesList>
   <sar-category-card
     *ngFor="let category of categories$ | async"
     [category]="category"

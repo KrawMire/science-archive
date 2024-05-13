@@ -1,4 +1,4 @@
-<div *ngIf="isLoading; else articlesView">
+<div *ngIf="isLoading$ | async; else articlesView">
   <sar-article-card-skeleton
     [style]="'margin-top: 10px'"
     *ngFor="let _ of [1,2,3]"
@@ -6,13 +6,27 @@
 </div>
 
 <ng-template #articlesView>
+  <ng-container *ngIf="(articles$ | async)?.length === 0; else articlesList">
+    <nz-empty nzNotFoundContent="No articles found"/>
+  </ng-container>
+</ng-template>
+<ng-template #articlesList>
+  <ng-container *ngIf="(category$ | async) as category">
+    <nz-breadcrumb>
+      <nz-breadcrumb-item>
+        <a [routerLink]="['/content', 'articles']">Articles</a>
+      </nz-breadcrumb-item>
+      <nz-breadcrumb-item>
+        {{category.name}}
+      </nz-breadcrumb-item>
+    </nz-breadcrumb>
+  </ng-container>
   <sar-article-card
     [style]="'margin-top: 10px'"
     *ngFor="let article of articles$ | async"
     [article]="article"
   ></sar-article-card>
 </ng-template>
-
 
 
 

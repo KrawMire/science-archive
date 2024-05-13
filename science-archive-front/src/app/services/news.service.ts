@@ -4,7 +4,7 @@ import { Response } from "@models/common/response";
 import { GetAllNewsResponse } from "@models/news/responses/get-all-news.response";
 import { Observable } from "rxjs";
 import { GetNewsByIdResponse } from "@models/news/responses/get-news-by-id.response";
-import { ApiService } from "@services/api.service";
+import { ApiService } from "@services/common/api.service";
 import CreateNewsResponse from "@models/news/responses/create-news.response";
 import createNewsRequest from "@models/news/requests/create-news.request";
 

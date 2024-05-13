@@ -1,4 +1,4 @@
-<div *ngIf="isLoading; else newsView">
+<div *ngIf="(isLoading$ | async); else newsView">
   <sar-news-card-skeleton
     *ngFor="let _ of [1,2,3]"
     [style]="'margin-top: 10px'"
@@ -6,6 +6,11 @@
 </div>
 
 <ng-template #newsView>
+  <ng-container *ngIf="(news$ | async)?.length === 0; else newsList">
+    <nz-empty nzNotFoundContent="No news found"/>
+  </ng-container>
+</ng-template>
+<ng-template #newsList>
   <sar-news-card
     *ngFor="let singleNews of news$ | async"
     [news]="singleNews"

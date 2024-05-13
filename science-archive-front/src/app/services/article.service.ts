@@ -5,7 +5,7 @@ import { Response } from "@models/common/response";
 import { GetArticleByIdResponse } from "@models/article/responses/get-article-by-id.response";
 import { GetAllArticlesResponse } from "@models/article/responses/get-all-articles.response";
 import { GetArticlesByCategoryIdResponse } from "@models/article/responses/get-articles-by-category-id.response";
-import { ApiService } from "@services/api.service";
+import { ApiService } from "@services/common/api.service";
 import { GetArticlesByAuthorIdResponse } from "@models/article/responses/get-articles-by-author-id.response";
 import { Article } from "@models/article/article";
 import { CreateArticleResponse } from "@models/article/responses/create-article.response";
