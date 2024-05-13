@@ -2,6 +2,8 @@
   [style]="style"
   nz-button
   nzType="primary"
+  [routerLink]="['/content', 'articles']"
+  [queryParams]="{categoryId: subcategory.id}"
 >
   {{subcategory.name}}
 </button>

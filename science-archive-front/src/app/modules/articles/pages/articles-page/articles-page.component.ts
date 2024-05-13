@@ -10,7 +10,7 @@ import { Subcategory } from "@models/category/subcategory";
 @Component({
   selector: "sar-articles-page",
   templateUrl: "./articles-page.component.html",
-  styleUrls: ["./articles-page.component.scss"],
+  styleUrls: ["./articles-page.component.scss"]
 })
 export class ArticlesPageComponent implements OnInit {
   category$ = new BehaviorSubject<Subcategory | null>(null);
@@ -27,6 +27,7 @@ export class ArticlesPageComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.queryParams.subscribe((params) => {
+      this.isLoading$.next(true);
       const categoryId = params["categoryId"] as string;
 
       if (!categoryId) {

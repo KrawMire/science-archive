@@ -23,7 +23,7 @@
   <nz-list nzItemLayout="horizontal" nzHeader="Linked documents">
       <div *ngIf="article?.documents?.length && article.documents.length > 0; else emptyDocs">
         <nz-list-item *ngFor="let document of article?.documents">
-          <a [routerLink]="[]">{{ document.name }}</a>
+          <a href="/api/documents/{{document.path}}" target="_blank" rel="noopener noreferrer">{{ document.name }}</a>
         </nz-list-item>
       </div>
   </nz-list>
