@@ -1,53 +1,54 @@
-<header class="sar-header">
-  <a href="/">
-    <span class="sar-logo-wrapper">
-    <img
-      src="assets/images/science-archive.logo.with-text.svg"
-      alt="Logo"
-      class="sar-logo"
-    >
-  <title>Science Archive</title>
-  </span>
-  </a>
+<header>
+  <div class="sar-logo-wrapper">
+    <a href="/">
+      <span>
+        <img
+          src="assets/images/science-archive.logo.with-text.svg"
+          alt="Logo"
+          class="sar-logo"
+        >
+      <title>Science Archive</title>
+      </span>
+    </a>
+  </div>
+  <nz-affix nzOffsetTop="0">
+    <nav class="sar-top-menu-container">
+      <ul
+        nz-menu
+        nzTheme="light"
+        nzMode="horizontal"
+      >
+        <li
+          nz-menu-item
+          routerLink="articles"
+          nzMatchRouter
+        >
+          Articles
+        </li>
+        <li
+          nz-menu-item
+          routerLink="categories"
+          nzMatchRouter
+        >
+          Categories
+        </li>
+        <li
+          nz-menu-item
+          routerLink="news"
+          nzMatchRouter
+        >
+          News
+        </li>
+      </ul>
+      <div
+        (click)="onAccountClick()"
+        class="sar-account-button"
+      >
+        <span>KrawMire</span>
+      </div>
+    </nav>
+  </nz-affix>
 </header>
-
-<nz-affix nzOffsetTop="0">
-  <nav class="sar-top-menu-container">
-    <ul
-      nz-menu
-      nzTheme="light"
-      nzMode="horizontal"
-    >
-      <li
-        nz-menu-item
-        routerLink="articles"
-        nzMatchRouter
-      >
-        Articles
-      </li>
-      <li
-        nz-menu-item
-        routerLink="categories"
-        nzMatchRouter
-      >
-        Categories
-      </li>
-      <li
-        nz-menu-item
-        routerLink="news"
-        nzMatchRouter
-      >
-        News
-      </li>
-    </ul>
-    <div
-      (click)="onAccountClick()"
-      class="sar-account-button"
-    >
-      <span>KrawMire</span>
-    </div>
-  </nav>
-</nz-affix>
 
 <div class="sar-page-content">
   <router-outlet></router-outlet>

@@ -2,14 +2,15 @@
   [nzTitle]="news.title"
   [style]="style"
   [nzExtra]="newsCreationDate"
+  [nzBordered]="false"
 >
-  <p>
-    {{news.body}}
-  </p>
+  <nz-card-meta [nzDescription]="news.body"></nz-card-meta>
 
   <button
     nz-button
     nzType="primary"
+    class="read-more-button"
+    [routerLink]="[news.id]"
   >
     Read more
   </button>

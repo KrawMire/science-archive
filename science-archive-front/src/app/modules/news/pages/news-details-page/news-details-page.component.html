@@ -1,36 +1,18 @@
-<ng-container *ngIf="article$ | async as article; else errorView">
+<ng-container *ngIf="news$ | async as news; else errorView">
   <nz-breadcrumb>
     <nz-breadcrumb-item>
-      <a [routerLink]="['/content', 'articles']">Articles</a>
+      <a [routerLink]="['/content', 'news']">News</a>
     </nz-breadcrumb-item>
     <nz-breadcrumb-item>
-      <a
-        [routerLink]="['/content', 'articles']"
-        [queryParams]="{categoryId: article?.categoryId}"
-      >{{article?.categoryName?.substring(0, 10) + "..."}}</a>
-    </nz-breadcrumb-item>
-    <nz-breadcrumb-item>
-      {{article?.id?.substring(0, 10) + "..."}}
+      {{news?.id?.substring(0, 10) + "..."}}
     </nz-breadcrumb-item>
   </nz-breadcrumb>
 
-  <h2>{{article?.title}}</h2>
+  <h2>{{news?.title}}</h2>
 
-  <p>
-    {{article?.description}}
+  <p class="sar-news-body-text">
+    {{news?.body}}
   </p>
-
-  <nz-list nzItemLayout="horizontal" nzHeader="Linked documents">
-      <div *ngIf="article?.documents?.length && article.documents.length > 0; else emptyDocs">
-        <nz-list-item *ngFor="let document of article?.documents">
-          <a href="/api/documents/{{document.path}}" target="_blank" rel="noopener noreferrer">{{ document.name }}</a>
-        </nz-list-item>
-      </div>
-  </nz-list>
-
-  <ng-template #emptyDocs>
-    <nz-empty nzNotFoundContent="No documents"/>
-  </ng-template>
 </ng-container>
 
 <ng-template #errorView>

@@ -41,7 +41,6 @@ export class ArticlePageComponent implements OnInit {
             this.isLoading$.next(false);
             this.titleService.setTitle("Unknown article");
           }
-        }
-        );
+        });
   }
 }

@@ -8,6 +8,7 @@ import { CategoriesPageComponent } from "@modules/categories/pages/categories-pa
 import { AccountPageComponent } from "@pages/account-page/account-page.component";
 import { AuthPageComponent } from "@pages/auth-page/auth-page.component";
 import { ArticlePageComponent } from "@modules/articles/pages/article-page/article-page.component";
+import { NewsDetailsPageComponent } from "@modules/news/pages/news-details-page/news-details-page.component";
 
 const routes: Routes = [
   { path: "", pathMatch: "full", redirectTo: "welcome" },
@@ -38,6 +39,10 @@ const routes: Routes = [
       {
         path: "news",
         component: NewsPageComponent,
+      },
+      {
+        path: "news/:id",
+        component: NewsDetailsPageComponent
       },
     ],
   },

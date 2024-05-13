@@ -11,7 +11,7 @@
   <span [routerLink]="[article.id]" class="article-title">{{article.title}}</span>
 </ng-template>
 <ng-template #cardMetaTitle>
-  <nz-tag>
+  <nz-tag [nzColor]="'#4a77d3'">
     <a
       [routerLink]="['/content', 'articles']"
       [queryParams]="{categoryId: article.categoryId}"

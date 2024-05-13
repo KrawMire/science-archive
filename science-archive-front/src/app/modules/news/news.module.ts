@@ -8,9 +8,14 @@ import { NewsCardSkeletonComponent } from "./components/news-card-skeleton/news-
 import { NzSkeletonModule } from "ng-zorro-antd/skeleton";
 import { ArticlesModule } from "@modules/articles/articles.module";
 import { NzEmptyModule } from "ng-zorro-antd/empty";
+import { NewsDetailsPageComponent } from './pages/news-details-page/news-details-page.component';
+import { RouterLink } from "@angular/router";
+import { NzBreadCrumbModule } from "ng-zorro-antd/breadcrumb";
+import { NzListModule } from "ng-zorro-antd/list";
+import { NzResultModule } from "ng-zorro-antd/result";
 
 @NgModule({
-  declarations: [NewsPageComponent, NewsCardComponent, NewsCardSkeletonComponent],
-  imports: [CommonModule, NzCardModule, NzButtonModule, NzSkeletonModule, ArticlesModule, NzEmptyModule]
+  declarations: [NewsPageComponent, NewsCardComponent, NewsCardSkeletonComponent, NewsDetailsPageComponent],
+  imports: [CommonModule, NzCardModule, NzButtonModule, NzSkeletonModule, ArticlesModule, NzEmptyModule, RouterLink, NzBreadCrumbModule, NzListModule, NzResultModule]
 })
 export class NewsModule {}
