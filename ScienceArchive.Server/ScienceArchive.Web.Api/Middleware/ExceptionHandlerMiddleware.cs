@@ -39,7 +39,11 @@ public class ExceptionHandlerMiddleware
         }
         catch (EntityNotFoundException ex)
         {
-            await ProcessException(httpContext, $"{ex.EntityName} was not found", 400);
+            await ProcessException(httpContext, $"{ex.EntityName} was not found", 404);
+        }
+        catch (InvalidEntityIdValueException ex)
+        {
+            await ProcessException(httpContext, $"Invalid ID value: {ex.InvalidValue}", 400);
         }
         catch (DuplicateLoginException)
         {

@@ -21,7 +21,7 @@ public interface IArticleRepository : ICrudRepository<ArticleId, Article>
 	/// </summary>
 	/// <param name="categoryId">Category ID</param>
 	/// <returns>All articles of specified category</returns>
-	Task<List<Article>> GetVerifiedByCategoryId(CategoryId categoryId);
+	Task<List<Article>> GetVerifiedBySubcategoryId(SubcategoryId categoryId);
 
 	/// <summary>
 	/// Get articles by author ID

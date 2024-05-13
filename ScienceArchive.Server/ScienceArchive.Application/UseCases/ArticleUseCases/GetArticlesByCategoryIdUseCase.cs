@@ -28,8 +28,8 @@ internal class GetArticlesByCategoryIdUseCase : IUseCase<GetArticlesByCategoryId
     
     public async Task<GetArticlesByCategoryIdResponseDto> Handle(GetArticlesByCategoryIdRequestDto request, CancellationToken cancellationToken)
     {
-        var categoryId = CategoryId.CreateFromString(request.CategoryId);
-        var articles = await _dbUnitOfWork.ArticleRepository.GetVerifiedByCategoryId(categoryId);
+        var categoryId = SubcategoryId.CreateFromString(request.CategoryId);
+        var articles = await _dbUnitOfWork.ArticleRepository.GetVerifiedBySubcategoryId(categoryId);
         var articlesDtos = articles.Select(_articleMapper.MapToDto).ToList();
         
         var subcategory = await _dbUnitOfWork.CategoryRepository.GetSubcategoryById(categoryId);

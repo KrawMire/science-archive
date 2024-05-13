@@ -9,7 +9,7 @@ public static class ConfigurationManager
 {
 	/// <summary>
 	/// Get connection options
-	/// </summary>
+	/// </summary> 
 	/// <param name="builder">Instance of <see cref="WebApplicationBuilder"/></param>
 	/// <returns>Connection options</returns>
 	public static PersistenceOptions GetPersistenceOptions(WebApplicationBuilder builder)

@@ -94,10 +94,10 @@ internal class PostgresArticleRepository : IArticleRepository
             }).ToList();
     }
 
-    public async Task<List<Article>> GetVerifiedByCategoryId(CategoryId categoryId)
+    public async Task<List<Article>> GetVerifiedBySubcategoryId(SubcategoryId categoryId)
     {
         var category = await _dbContext
-            .Categories
+            .Subcategories
             .Where(c => c.Id == categoryId.Value)
             .FirstOrDefaultAsync();
 
@@ -300,7 +300,7 @@ internal class PostgresArticleRepository : IArticleRepository
             .AddAsync(new Entities.Article
             {
                 Id = newValue.Id.Value,
-                CategoryId = newValue.Id.Value,
+                CategoryId = newValue.Category.CategoryId.Value,
                 Title = newValue.Title,
                 Status = (short)newValue.Status,
                 CreationDate = newValue.CreationDate,

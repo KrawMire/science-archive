@@ -64,15 +64,15 @@ public class ArticleBuilder
 
     public ArticleBuilder AddCategory(string categoryId, string categoryName)
     {
-        return AddCategory(CategoryId.CreateFromString(categoryId), categoryName);
+        return AddCategory(SubcategoryId.CreateFromString(categoryId), categoryName);
     }
     
     public ArticleBuilder AddCategory(Guid categoryId, string categoryName)
     {
-        return AddCategory(CategoryId.CreateFromGuid(categoryId), categoryName);
+        return AddCategory(SubcategoryId.CreateFromGuid(categoryId), categoryName);
     }
 
-    public ArticleBuilder AddCategory(CategoryId categoryId, string categoryName)
+    public ArticleBuilder AddCategory(SubcategoryId categoryId, string categoryName)
     {
         _category = new ArticleCategory
         {
