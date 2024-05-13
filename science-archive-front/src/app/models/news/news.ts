@@ -1,7 +1,7 @@
-export interface News {
+export type News = {
   id?: string;
   title: string;
   body: string;
   authorId: string;
-  creationDate: Date;
+  creationDate?: Date;
 }

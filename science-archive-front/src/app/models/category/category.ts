@@ -1,7 +1,8 @@
 import { Subcategory } from "@models/category/subcategory";
 
-export interface Category {
+export type Category = {
   id: string;
   name: string;
+  description?: string;
   subcategories: Subcategory[];
 }

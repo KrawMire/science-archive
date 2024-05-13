@@ -1,7 +1,9 @@
 /**
  * Represents user data
  */
-export interface User {
+export type User = {
+  id?: string;
+
   /**
    * User name
    */
@@ -17,8 +19,12 @@ export interface User {
    */
   login: string;
 
-  /**
-   * List of identifiers of roles
-   */
-  rolesIds: string[];
+  isConfirmed: boolean;
+  articles: UserArticle[];
+  about?: string;
 }
+
+export type UserArticle = {
+  articleId: string;
+  title: string;
+} ;

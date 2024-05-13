@@ -1,11 +1,21 @@
 /**
  * Article data
  */
-export interface Article {
+export type Article = {
   /**
    * Identifier of the article
    */
   id?: string;
+
+  /**
+   * The name of the category.
+   */
+  categoryName: string;
+
+  /**
+   * ID of category
+   */
+  categoryId: string;
 
   /**
    * Article title
@@ -16,17 +26,12 @@ export interface Article {
    * Identifier of the user
    * created the article
    */
-  authorsIds: string[];
+  authors: ArticleAuthor[];
 
   /**
    * Date when article was created
    */
   creationDate?: Date;
-
-  /**
-   * ID of category
-   */
-  categoryId: string;
 
   /**
    * Article description
@@ -36,10 +41,22 @@ export interface Article {
   /**
    * Paths to documents linked to article
    */
-  documentsPaths: string[];
+  documents: ArticleDocument[];
 
   /**
    * Current article status represented as number
    */
   status: number;
+};
+
+export type ArticleDocument = {
+  id?: string;
+  name: string;
+  path: string;
+};
+
+export type ArticleAuthor = {
+  userId: string;
+  name: string;
+  role: number;
 }
