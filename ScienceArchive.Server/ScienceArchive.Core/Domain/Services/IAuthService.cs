@@ -41,7 +41,7 @@ public interface IAuthService
     /// <param name="login">User login</param>
     /// <param name="password">User password</param>
     /// <returns>The authorized user if the login and password are valid, null otherwise</returns>
-    Task<User> AuthorizeUser(string login, string password);
+    Task<(User User, string? Code)> AuthorizeUser(string login, string password);
 
     /// <summary>
     /// Determines whether a user has a specific set of claims.

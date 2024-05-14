@@ -43,12 +43,10 @@ public class AuthController : ControllerBase
     {
         var result = await _authService.Login(request);
         var token = _authManager.GenerateToken(result.User);
-
-        return new SuccessResponse(new
-        {
-            user = result.User,
-            token,
-        });
+        
+        Response.Cookies.Append("Authorization", token);
+        
+        return new SuccessResponse(result);
     }
 
     [HttpPost("sign-up")]
@@ -62,6 +60,9 @@ public class AuthController : ControllerBase
     public async Task<Response> Confirm([FromBody] ConfirmUserCodeRequestDto request)
     {
         var result = await _authService.ConfirmUserCode(request);
+        var token = _authManager.GenerateToken(result.User);
+        Response.Cookies.Append("Authorization", token);
+        
         return new SuccessResponse(result);
     }
     

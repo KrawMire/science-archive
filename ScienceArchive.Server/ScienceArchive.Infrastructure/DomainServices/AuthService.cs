@@ -92,7 +92,7 @@ internal class AuthService : IAuthService
         return confirmedUser;
     }
 
-    public async Task<User> AuthorizeUser(string login, string password)
+    public async Task<(User User, string? Code)> AuthorizeUser(string login, string password)
     {
         var user = await _dbUnitOfWork.UserRepository.GetUserByLoginOrEmail(login);
 
@@ -108,7 +108,14 @@ internal class AuthService : IAuthService
             throw new WrongCredentialsException();
         }
 
-        return user;
+        if (user.IsConfirmed)
+        {
+            return (user, null);
+        }
+        
+        var code = await _confirmationService.GenerateConfirmationCode(user.Id);
+        return (user, code);
+
     }
 
     public async Task<bool> UserHasClaims(UserId userId, IEnumerable<RoleClaim> claims)

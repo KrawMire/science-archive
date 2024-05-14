@@ -102,52 +102,6 @@ public static class ApplicationRegistry
     /// <returns>Instance of <see cref="IServiceCollection"/> after registering the use cases.</returns>
     private static IServiceCollection RegisterMediatR(this IServiceCollection services)
     {
-        // return services
-        //     // Article use cases
-        //     .AddTransient<IUseCase<ApproveArticleRequestDto, ApproveArticleResponseDto>, ApproveArticleUseCase>()
-        //     .AddTransient<IUseCase<CreateArticleRequestDto, CreateArticleResponseDto>, CreateArticleUseCase>()
-        //     .AddTransient<IUseCase<DeclineArticleRequestDto, DeclineArticleResponseDto>, DeclineArticleUseCase>()
-        //     .AddTransient<IUseCase<DeleteArticleRequestDto, DeleteArticleResponseDto>, DeleteArticleUseCase>()
-        //     .AddTransient<IUseCase<GetAllArticlesRequestDto, GetAllArticlesResponseDto>, GetAllArticlesUseCase>()
-        //     .AddTransient<IUseCase<GetAllVerifiedArticlesRequestDto, GetAllVerifiedArticlesResponseDto>, GetAllVerifiedArticlesUseCase>()
-        //     .AddTransient<IUseCase<GetArticleByIdRequestDto, GetArticleByIdResponseDto>, GetArticleByIdUseCase>()
-        //     .AddTransient<IUseCase<GetArticlesByAuthorIdRequestDto, GetArticlesByAuthorIdResponseDto>, GetArticlesByAuthorIdUseCase>()
-        //     .AddTransient<IUseCase<GetArticlesByCategoryIdRequestDto, GetArticlesByCategoryIdResponseDto>, GetArticlesByCategoryIdUseCase>()
-        //     .AddTransient<IUseCase<GetVerifiedArticlesByAuthorIdRequestDto, GetVerifiedArticlesByAuthorIdResponseDto>, GetVerifiedArticlesByAuthorIdUseCase>()
-        //     .AddTransient<IUseCase<UpdateArticleRequestDto, UpdateArticleResponseDto>, UpdateArticleUseCase>()
-        //
-        //     // Auth use cases
-        //     .AddTransient<IUseCase<CheckUserClaimsRequestDto, CheckUserClaimsResponseDto>, CheckUserClaimsUseCase>()
-        //     .AddTransient<IUseCase<LoginRequestDto, LoginResponseDto>, LoginUseCase>()
-        //     .AddTransient<IUseCase<RegisterRequestDto, RegisterResponseDto>, RegisterUseCase>()
-        //     .AddTransient<IUseCase<ConfirmUserCodeRequestDto, ConfirmUserCodeResponseDto>, ConfirmUserCodeUseCase>()
-        //     .AddTransient<IUseCase<ResendConfirmationCodeRequestDto, ResendConfirmationCodeResponseDto>, ResendConfirmationCodeUseCase>()
-        //
-        //     // Category use cases
-        //     .AddTransient<IUseCase<GetAllCategoriesRequestDto, GetAllCategoriesResponseDto>, GetAllCategoriesUseCase>()
-        //
-        //     // Log use cases
-        //     .AddTransient<IUseCase<LogRequestRequestDto, LogRequestResponseDto>, LogRequestUseCase>()
-        //     
-        //     // News use cases 
-        //     .AddTransient<IUseCase<CreateNewsRequestDto, CreateNewsResponseDto>, CreateNewsUseCase>()
-        //     .AddTransient<IUseCase<DeleteNewsRequestDto, DeleteNewsResponseDto>, DeleteNewsUseCase>()
-        //     .AddTransient<IUseCase<GetAllNewsRequestDto, GetAllNewsResponseDto>, GetAllNewsUseCase>()
-        //     .AddTransient<IUseCase<GetNewsByIdRequestDto, GetNewsByIdResponseDto>, GetNewsByIdUseCase>()
-        //     .AddTransient<IUseCase<UpdateNewsRequestDto, UpdateNewsResponseDto>, UpdateNewsUseCase>()
-        //
-        //     // Role use cases
-        //     .AddTransient<IUseCase<GetAllRolesRequestDto, GetAllRolesResponseDto>, GetAllRolesUseCase>()
-        //
-        //     // System use cases
-        //     .AddTransient<IUseCase<CheckSystemStatusRequestDto, CheckSystemStatusResponseDto>, CheckSystemStatusUseCase>()
-        //
-        //     // User use cases
-        //     .AddTransient<IUseCase<DeleteUserRequestDto, DeleteUserResponseDto>, DeleteUserUseCase>()
-        //     .AddTransient<IUseCase<GetAllUsersRequestDto, GetAllUsersResponseDto>, GetAllUsersUseCase>()
-        //     .AddTransient<IUseCase<GetUserByIdRequestDto, GetUserByIdResponseDto>, GetUserByIdUseCase>()
-        //     .AddTransient<IUseCase<UpdateUserRequestDto, UpdateUserResponseDto>, UpdateUserUseCase>();
-
         return services.AddMediatR(cfg =>
         {
             cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());

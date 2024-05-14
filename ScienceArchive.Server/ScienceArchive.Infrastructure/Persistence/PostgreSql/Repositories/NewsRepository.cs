@@ -19,7 +19,10 @@ internal class PostgresNewsRepository : INewsRepository
 
     public async Task<List<News>> GetAll()
     {
-        var news = await _dbContext.News.ToListAsync();
+        var news = await _dbContext
+            .News
+            .OrderByDescending(n => n.CreationDate)
+            .ToListAsync();
 
         return news.Select(n =>
             {

@@ -31,6 +31,7 @@ internal class PostgresArticleRepository : IArticleRepository
             .ThenInclude(ua => ua.User)
             .Include(a => a.Category)
             .Include(a => a.ArticlesDocuments)
+            .OrderByDescending(a => a.CreationDate)
             .ToListAsync();
 
         return articles
@@ -67,6 +68,7 @@ internal class PostgresArticleRepository : IArticleRepository
             .ThenInclude(ua => ua.User)
             .Include(a => a.Category)
             .Include(a => a.ArticlesDocuments)
+            .OrderByDescending(a => a.CreationDate)
             .ToListAsync();
 
         return articles
@@ -113,6 +115,7 @@ internal class PostgresArticleRepository : IArticleRepository
             .ThenInclude(ua => ua.User)
             .Include(a => a.Category)
             .Include(a => a.ArticlesDocuments)
+            .OrderByDescending(a => a.CreationDate)
             .ToListAsync();
 
         return articles
@@ -159,6 +162,7 @@ internal class PostgresArticleRepository : IArticleRepository
             .Where(a => a.UsersArticles.Any(ua => ua.UserId == userId.Value))
             .Include(a => a.Category)
             .Include(a => a.ArticlesDocuments)
+            .OrderByDescending(a => a.CreationDate)
             .ToListAsync();
 
         return articles
@@ -206,6 +210,7 @@ internal class PostgresArticleRepository : IArticleRepository
                         && a.Status == (short)ArticleStatus.Verified)
             .Include(a => a.Category)
             .Include(a => a.ArticlesDocuments)
+            .OrderByDescending(a => a.CreationDate)
             .ToListAsync();
 
         return articles
