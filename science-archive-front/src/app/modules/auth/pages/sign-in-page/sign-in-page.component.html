@@ -12,7 +12,13 @@
   </div>
   <div class="right-container">
     <div class="form-wrapper">
-      <sar-sign-in-form />
+      <ng-container *ngIf="isConfirmation$ | async; then confirmForm; else signInForm" />
+      <ng-template #confirmForm>
+        <sar-code-confirm-form />
+      </ng-template>
+      <ng-template #signInForm>
+        <sar-sign-in-form (onSignedIn)="onSignedIn()"/>
+      </ng-template>
     </div>
   </div>
 </div>

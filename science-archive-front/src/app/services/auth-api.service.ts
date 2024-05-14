@@ -7,6 +7,8 @@ import { SignUpResponse } from "@models/auth/responses/sign-up.response";
 import { Observable } from "rxjs";
 import { ConfirmUserResponse } from "@models/auth/responses/confirm-user.response";
 import { ConfirmUserRequest } from "@models/auth/requests/confirm-user.request";
+import { SignInResponse } from "@models/auth/responses/sign-in.response";
+import { SignInRequest } from "@models/auth/requests/sign-in.request";
 
 @Injectable({
   providedIn: "root"
@@ -14,6 +16,12 @@ import { ConfirmUserRequest } from "@models/auth/requests/confirm-user.request";
 export class AuthApiService extends ApiService {
   constructor(private httpClient: HttpClient) {
     super();
+  }
+
+  signIn(login: string, password: string): Observable<SignInResponse> {
+    const request: SignInRequest = { login, password };
+    const response = this.httpClient.post<Response<SignInResponse>>('/api/auth/sign-in', request);
+    return this.handleResponse(response);
   }
 
   signUp(name: string, email: string, login: string, password: string): Observable<SignUpResponse> {

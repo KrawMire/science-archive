@@ -12,7 +12,7 @@
   </div>
   <div class="right-container">
     <div class="form-wrapper">
-      <ng-container *ngIf="(isConfirmation$ | async) as isConfirmation; then confirmForm; else signUpForm" />
+      <ng-container *ngIf="isConfirmation$ | async; then confirmForm; else signUpForm" />
       <ng-template #confirmForm>
         <sar-code-confirm-form />
       </ng-template>

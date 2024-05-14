@@ -28,7 +28,7 @@ export class CodeConfirmFormComponent {
   }
 
   resendConfirmationCode() {
-    const user = this.authService.getCurrentUser();
+    const user = this.authService.getCurrentAuthUser();
 
     if (!user) {
       this.messageService.error("User is not present");
@@ -45,7 +45,7 @@ export class CodeConfirmFormComponent {
   }
 
   confirm() {
-    const user = this.authService.getCurrentUser();
+    const user = this.authService.getCurrentAuthUser();
 
     if (!user?.id) {
       this.messageService.error("User is not present");
@@ -58,7 +58,7 @@ export class CodeConfirmFormComponent {
         .confirmUserWithCode(user.id, code)
         .subscribe({
           next: async (response: ConfirmUserResponse) => {
-            this.authService.saveCurrentUser(response.user);
+            this.authService.saveCurrentAuthUser(response.user);
             await this.router.navigate(['/content']);
           },
           error: (error: any) => {

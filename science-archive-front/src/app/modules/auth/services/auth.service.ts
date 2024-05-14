@@ -5,20 +5,18 @@ import { User } from "@models/user/user";
   providedIn: 'root'
 })
 export class AuthService {
-  private readonly userKey: string = "user";
+  private authUser: User | null = null;
+  private readonly userDataKey: string = "userData";
 
-  public getCurrentUser(): User | null {
-    const json = localStorage.getItem(this.userKey);
-
-    if (!json) {
-      return null;
-    }
-
-    return JSON.parse(json);
+  public getCurrentAuthUser(): User | null {
+    return this.authUser;
   }
 
-  public saveCurrentUser(user: User): void {
-    const json = JSON.stringify(user);
-    localStorage.setItem(this.userKey, json);
+  public saveCurrentAuthUser(user: User): void {
+    this.authUser = user;
+  }
+
+  public deleteCurrentAuthUser(): void {
+    this.authUser = null;
   }
 }

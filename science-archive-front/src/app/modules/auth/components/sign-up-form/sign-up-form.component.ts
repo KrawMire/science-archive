@@ -62,8 +62,7 @@ export class SignUpFormComponent {
       this.validateForm.controls.password.value,
     ).subscribe({
       next: (response) => {
-        this.messageService.success("A confirmation email has been sent to your email address");
-        this.authService.saveCurrentUser(response.user);
+        this.authService.saveCurrentAuthUser(response.user);
         this.onSignedUp.emit();
       },
       error: (error) => (this.messageService.error(error.message ?? error))

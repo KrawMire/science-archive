@@ -1,20 +1,20 @@
-<form nz-form class="sign-in-form">
+<form nz-form class="sign-in-form" [formGroup]="validateForm" (ngSubmit)="submitForm()">
   <h2>Sign in</h2>
   <nz-form-item>
-    <nz-form-control nzErrorTip="Please input your username!">
+    <nz-form-control nzErrorTip="Please input valid login or email!">
       <nz-input-group nzPrefixIcon="user">
-        <input type="text" nz-input placeholder="Username" />
+        <input formControlName="login" type="text" nz-input placeholder="Login or email" />
       </nz-input-group>
     </nz-form-control>
   </nz-form-item>
   <nz-form-item>
     <nz-form-control nzErrorTip="Please input your Password!">
       <nz-input-group nzPrefixIcon="lock">
-        <input type="password" nz-input placeholder="Password" />
+        <input formControlName="password" type="password" nz-input placeholder="Password" />
       </nz-input-group>
     </nz-form-control>
   </nz-form-item>
-  <button nz-button class="sign-up-form-button" [nzType]="'primary'">
+  <button nz-button class="sign-in-form-button" [nzType]="'primary'">
     Log in
   </button>
   <p class="sign-in-suggest-wrapper">

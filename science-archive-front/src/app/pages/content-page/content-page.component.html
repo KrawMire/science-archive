@@ -96,7 +96,11 @@
           [nzTheme]="'twotone'"
           [nzTwotoneColor]="'#ff4d4f'"
         ></span>
-        <span nz-typography nzType="danger">
+        <span
+          nz-typography
+          nzType="danger"
+          (click)="onSignOut()"
+        >
           Sign out
         </span>
       </li>
