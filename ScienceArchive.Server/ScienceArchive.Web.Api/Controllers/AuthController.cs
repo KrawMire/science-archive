@@ -43,9 +43,12 @@ public class AuthController : ControllerBase
     public async Task<Response> SignIn([FromBody] LoginRequestDto request)
     {
         var result = await _authService.Login(request);
-        var token = _authManager.GenerateToken(result.User);
-        
-        Response.Cookies.Append("Authorization", token);
+
+        if (result.User.IsConfirmed)
+        {
+            var token = _authManager.GenerateToken(result.User);
+            Response.Cookies.Append("Authorization", token);   
+        }
         
         return new SuccessResponse(result);
     }
