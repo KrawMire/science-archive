@@ -37,6 +37,13 @@ public interface IAuthApplicationService
     Task<ResendConfirmationCodeResponseDto> ResendConfirmCode(ResendConfirmationCodeRequestDto dto);
 
     /// <summary>
+    /// Retrieves user data for the given user ID.
+    /// </summary>
+    /// <param name="dto">DTO contract containing the user ID</param>
+    /// <returns>Response DTO containing the user data</returns>
+    Task<GetUserDataResponseDto> GetUserData(GetUserDataRequestDto dto);
+
+    /// <summary>
     /// Check user claims
     /// </summary>
     /// <param name="dto">DTO contract to check user claims</param>

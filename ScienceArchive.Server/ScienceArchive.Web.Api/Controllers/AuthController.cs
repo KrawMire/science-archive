@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using ScienceArchive.Application.Dtos.Auth.Request;
 using ScienceArchive.Application.Interfaces.Services;
 using ScienceArchive.Web.Api.Auth;
@@ -63,6 +64,23 @@ public class AuthController : ControllerBase
         var token = _authManager.GenerateToken(result.User);
         Response.Cookies.Append("Authorization", token);
         
+        return new SuccessResponse(result);
+    }
+
+    [Authorize]
+    [HttpGet("me")]
+    public async Task<Response> GetUserData()
+    {
+        var userId = HttpContext.GetUserIdFromToken();
+
+        if (string.IsNullOrWhiteSpace(userId))
+        {
+            throw new BadHttpRequestException("Cannot get user ID", 401);
+        }
+
+        var request = new GetUserDataRequestDto(userId);
+        var result = await _authService.GetUserData(request);
+
         return new SuccessResponse(result);
     }
     

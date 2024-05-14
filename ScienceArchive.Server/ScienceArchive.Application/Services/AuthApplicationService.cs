@@ -39,6 +39,12 @@ internal class AuthApplicationService : BaseApplicationService, IAuthApplication
         return ExecuteTransactionalUseCase<ResendConfirmationCodeRequestDto, ResendConfirmationCodeResponseDto>(dto);
     }
 
+    public Task<GetUserDataResponseDto> GetUserData(GetUserDataRequestDto dto)
+    {
+        return ExecuteUseCase<GetUserDataRequestDto, GetUserDataResponseDto>(dto);
+    }
+
+
     /// <inheritdoc/>
     public Task<CheckUserClaimsResponseDto> CheckUserClaims(CheckUserClaimsRequestDto dto)
     {

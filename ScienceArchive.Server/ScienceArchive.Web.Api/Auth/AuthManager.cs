@@ -31,7 +31,8 @@ public class AuthManager
         }
         else
         {
-            jwtKey = Environment.GetEnvironmentVariable("SCIENCE_ARCHIVE_JWT_KEY") ?? throw new NullReferenceException("JWT key was not present!");
+            jwtKey = Environment.GetEnvironmentVariable("SCIENCE_ARCHIVE_JWT_KEY") 
+                     ?? throw new NullReferenceException("JWT key was not present!");
         }
 
         if (user.Id is null)
@@ -43,7 +44,7 @@ public class AuthManager
         {
             new JwtClaim(JwtRegisteredClaimNames.Sub, jwtSub),
             new JwtClaim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-            new JwtClaim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString(CultureInfo.InvariantCulture)),
+            new JwtClaim(JwtRegisteredClaimNames.Iat, DateTimeOffset.Now.ToUnixTimeSeconds().ToString()),
             new JwtClaim("UserId", user.Id)
         };
 
@@ -54,7 +55,7 @@ public class AuthManager
             jwtIssuer,
             jwtAudience,
             claims,
-            expires: DateTime.UtcNow.AddDays(7),
+            expires: DateTime.Now.AddDays(7),
             signingCredentials: signIn);
 
         return new JwtSecurityTokenHandler().WriteToken(token);
