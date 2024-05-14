@@ -17,6 +17,7 @@ import { ApproveArticleResponse } from "@models/article/responses/approve-articl
 import { DeclineArticleResponse } from "@models/article/responses/decline-article.response";
 import { ApproveArticleRequest } from "@models/article/requests/approve-article.request";
 import { DeclineArticleRequest } from "@models/article/requests/decline-article.request";
+import { GetProfileArticlesResponse } from "@models/article/responses/get-profile-articles.response";
 
 @Injectable({
   providedIn: "root",
@@ -40,6 +41,11 @@ export class ArticleApiService extends ApiService {
     const response = this.httpClient.get<Response<GetArticlesByCategoryIdResponse>>(
       `/api/articles/by-category/${categoryId}`
     );
+    return this.handleResponse(response);
+  }
+
+  getProfileArticles(): Observable<GetProfileArticlesResponse> {
+    const response = this.httpClient.get<Response<GetProfileArticlesResponse>>("/api/articles/my-articles");
     return this.handleResponse(response);
   }
 

@@ -1,1 +1,72 @@
-<p>user-articles-page works!</p>
+<nz-card [nzTitle]="articleTitle" [nzExtra]="addNewArticle">
+  <ng-container *ngIf="(articles$ | async) as articles">
+    <ng-container *ngIf="articles.length > 0; else emptyList">
+      <sar-article-card *ngFor="let article of articles" [article]="article" />
+    </ng-container>
+  </ng-container>
+
+  <ng-template #emptyList>
+    <nz-empty
+      nzNotFoundContent="You hasn't created any article"
+      [nzNotFoundFooter]="createArticle"
+    />
+    <ng-template #createArticle>
+      <button
+        nz-button
+        nzType="primary"
+        (click)="openCreateNewModal()"
+      >
+        Create first article
+      </button>
+    </ng-template>
+  </ng-template>
+</nz-card>
+
+<ng-template #articleTitle>
+  All articles
+</ng-template>
+
+<ng-template #addNewArticle>
+  <button
+    nz-button
+    nzType="primary"
+    (click)="openCreateNewModal()"
+  >
+    <span nz-icon nzType="plus"></span>
+    Add
+  </button>
+</ng-template>
+
+<nz-modal
+  [(nzVisible)]="showCreateNewModal"
+  nzTitle="Create new article"
+  (nzOnCancel)="onCancelCreateNewArticle()"
+  (nzOnOk)="onCreateNewArticle()"
+>
+  <ng-container *nzModalContent>
+    <form nz-form [formGroup]="validateForm">
+      <nz-form-item>
+        <nz-form-control  nzErrorTip="Please input valid login or email!">
+          <nz-form-label [nzSpan]="7" nzRequired>Title</nz-form-label>
+          <nz-input-group>
+            <input formControlName="title" type="text" nz-input placeholder="Article title" />
+          </nz-input-group>
+        </nz-form-control>
+        <nz-form-control nzErrorTip="Please input your Password!">
+          <nz-form-label>Category</nz-form-label>
+          <nz-select formControlName="category" nzPlaceHolder="Category">
+            <nz-option *ngFor="let category of categories$ | async" [nzLabel]="category.name" [nzValue]="category.id" />
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-control nzErrorTip="Please input your Password!">
+          <nz-form-label>Description</nz-form-label>
+          <nz-textarea-count [nzMaxCharacterCount]="2000">
+            <textarea formControlName="description" nz-input rows="3" placeholder="Describe what about your article is..."></textarea>
+          </nz-textarea-count>
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  </ng-container>
+</nz-modal>

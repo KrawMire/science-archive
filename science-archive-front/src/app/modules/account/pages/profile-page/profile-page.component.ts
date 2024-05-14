@@ -1,5 +1,7 @@
 import { Component, OnInit } from "@angular/core";
-import { AuthApiService } from "@services/auth-api.service";
+import { BehaviorSubject } from "rxjs";
+import { User } from "@models/user/user";
+import { AuthService } from "@modules/auth/services/auth.service";
 
 @Component({
   selector: 'sar-profile-page',
@@ -7,11 +9,20 @@ import { AuthApiService } from "@services/auth-api.service";
   styleUrls: ['./profile-page.component.scss']
 })
 export class ProfilePageComponent implements OnInit {
+  user$ = new BehaviorSubject<User | null>(null);
+
   constructor(
-    private readonly authApiService: AuthApiService
+    private readonly authService: AuthService,
   ) {}
 
   ngOnInit(): void {
-    this.authApiService.getMe();
+    const user = this.authService.getCurrentUser();
+
+    if (!user) {
+      window.location.assign("/auth");
+      return;
+    }
+
+    this.user$.next(user);
   }
 }

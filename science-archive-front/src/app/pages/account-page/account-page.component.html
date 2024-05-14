@@ -13,17 +13,18 @@
   </nz-header>
   <nz-layout>
     <nz-sider nzWidth="200px" nzTheme="light">
-      <ul nz-menu nzMode="inline" nzTheme="light" [nzInlineCollapsed]="isCollapsed$ | async">
+      <ul nz-menu nzMode="inline" nzTheme="light">
         <li
           nz-menu-item
-          [routerLink]="['profile']"
+          routerLink="profile"
+          nzMatchRouter
         >
           <span nz-icon nzType="user" nzTheme="outline"></span>
           <span>Profile</span>
         </li>
         <li nz-submenu nzTitle="My articles" nzIcon="book">
           <ul>
-            <li nz-menu-item [routerLink]="['user-articles']">All articles</li>
+            <li nz-menu-item routerLink="user-articles" nzMatchRouter>All articles</li>
           </ul>
         </li>
       </ul>
