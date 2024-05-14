@@ -1,1 +1,37 @@
-<p>account-page works!</p>
+<nz-layout class="page-layout">
+  <nz-header class="sar-account-page-header">
+    <div class="logo">
+      <button nz-button nzType="link" [routerLink]="['/content']">
+        <span nz-icon nzType="arrow-left"></span>
+      </button>
+      <img
+        src="assets/images/science-archive.logo.with-text.svg"
+        alt="Logo"
+        class="sar-logo"
+      >
+    </div>
+  </nz-header>
+  <nz-layout>
+    <nz-sider nzWidth="200px" nzTheme="light">
+      <ul nz-menu nzMode="inline" nzTheme="light" [nzInlineCollapsed]="isCollapsed$ | async">
+        <li
+          nz-menu-item
+          [routerLink]="['profile']"
+        >
+          <span nz-icon nzType="user" nzTheme="outline"></span>
+          <span>Profile</span>
+        </li>
+        <li nz-submenu nzTitle="My articles" nzIcon="book">
+          <ul>
+            <li nz-menu-item [routerLink]="['user-articles']">All articles</li>
+          </ul>
+        </li>
+      </ul>
+    </nz-sider>
+    <nz-layout class="inner-layout">
+      <nz-content>
+        <router-outlet/>
+      </nz-content>
+    </nz-layout>
+  </nz-layout>
+</nz-layout>

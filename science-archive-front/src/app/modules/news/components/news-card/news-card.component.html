@@ -17,5 +17,5 @@
 </nz-card>
 
 <ng-template #newsCreationDate>
-  <p>{{news.creationDate?.toDateString()}}</p>
+  <p>{{news.creationDate | dateFormat}}</p>
 </ng-template>

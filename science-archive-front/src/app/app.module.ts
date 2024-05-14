@@ -24,6 +24,10 @@ import { NzAffixModule } from "ng-zorro-antd/affix";
 import { AuthPageComponent } from "@pages/auth-page/auth-page.component";
 import { AccountPageComponent } from "@pages/account-page/account-page.component";
 import { AuthModule } from "@modules/auth/auth.module";
+import { AccountModule } from "@modules/account/account.module";
+import { NzButtonModule } from "ng-zorro-antd/button";
+import { NzToolTipModule } from "ng-zorro-antd/tooltip";
+import { NzBreadCrumbModule } from "ng-zorro-antd/breadcrumb";
 
 registerLocaleData(en);
 
@@ -45,12 +49,16 @@ registerLocaleData(en);
 
     // App modules
     ArticlesModule,
+    AccountModule,
     AuthModule,
     CategoriesModule,
     NewsModule,
     NzDrawerModule,
     NzTypographyModule,
     NzAffixModule,
+    NzButtonModule,
+    NzToolTipModule,
+    NzBreadCrumbModule
   ],
   providers: [{ provide: NZ_I18N, useValue: en_US }],
   bootstrap: [AppComponent],

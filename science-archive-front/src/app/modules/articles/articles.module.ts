@@ -15,9 +15,10 @@ import { NzTypographyModule } from "ng-zorro-antd/typography";
 import { NzEmptyModule } from "ng-zorro-antd/empty";
 import { BrowserModule } from "@angular/platform-browser";
 import { NzResultModule } from "ng-zorro-antd/result";
+import { SharedModule } from "@modules/shared/shared.module";
 
 @NgModule({
-  imports: [BrowserModule, CommonModule, NzCardModule, NzButtonModule, NzSkeletonModule, NzTagModule, RouterLink, NzBreadCrumbModule, NzListModule, NzTypographyModule, NzEmptyModule, NzResultModule],
+  imports: [BrowserModule, CommonModule, NzCardModule, NzButtonModule, NzSkeletonModule, NzTagModule, RouterLink, NzBreadCrumbModule, NzListModule, NzTypographyModule, NzEmptyModule, NzResultModule, SharedModule],
   declarations: [ArticlesPageComponent, ArticleCardComponent, ArticleCardSkeletonComponent, ArticlePageComponent],
   exports: [ArticleCardComponent, ArticlePageComponent],
 })

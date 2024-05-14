@@ -9,6 +9,7 @@ import { ConfirmUserResponse } from "@models/auth/responses/confirm-user.respons
 import { ConfirmUserRequest } from "@models/auth/requests/confirm-user.request";
 import { SignInResponse } from "@models/auth/responses/sign-in.response";
 import { SignInRequest } from "@models/auth/requests/sign-in.request";
+import { GetMeResponse } from "@models/auth/responses/get-me.response";
 
 @Injectable({
   providedIn: "root"
@@ -46,6 +47,11 @@ export class AuthApiService extends ApiService {
     };
 
     const response = this.httpClient.post<Response<ConfirmUserResponse>>('/api/auth/confirm', request);
+    return this.handleResponse(response);
+  }
+
+  getMe(): Observable<GetMeResponse> {
+    const response = this.httpClient.get<Response<GetMeResponse>>('/api/auth/me');
     return this.handleResponse(response);
   }
 }

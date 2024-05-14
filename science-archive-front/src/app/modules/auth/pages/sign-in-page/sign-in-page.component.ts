@@ -3,6 +3,7 @@ import { BehaviorSubject } from "rxjs";
 import { AuthService } from "@modules/auth/services/auth.service";
 import { NzMessageService } from "ng-zorro-antd/message";
 import { Router } from "@angular/router";
+import { Title } from "@angular/platform-browser";
 
 @Component({
   selector: 'sar-sign-in-page',
@@ -16,7 +17,10 @@ export class SignInPageComponent {
     private readonly router: Router,
     private readonly messageService: NzMessageService,
     private readonly authService: AuthService,
-  ) {}
+    titleService: Title,
+  ) {
+    titleService.setTitle("Science Archive - Sign In")
+  }
 
   async onSignedIn() {
     const user = this.authService.getCurrentAuthUser();

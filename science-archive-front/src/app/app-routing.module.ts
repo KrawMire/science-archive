@@ -11,6 +11,8 @@ import { ArticlePageComponent } from "@modules/articles/pages/article-page/artic
 import { NewsDetailsPageComponent } from "@modules/news/pages/news-details-page/news-details-page.component";
 import { SignInPageComponent } from "@modules/auth/pages/sign-in-page/sign-in-page.component";
 import { SignUpPageComponent } from "@modules/auth/pages/sign-up-page/sign-up-page.component";
+import { ProfilePageComponent } from "@modules/account/pages/profile-page/profile-page.component";
+import { UserArticlesPageComponent } from "@modules/account/pages/user-articles-page/user-articles-page.component";
 
 const routes: Routes = [
   { path: "", pathMatch: "full", redirectTo: "welcome" },
@@ -32,6 +34,25 @@ const routes: Routes = [
       {
         path: "sign-up",
         component: SignUpPageComponent,
+      }
+    ]
+  },
+  {
+    path: "account",
+    component: AccountPageComponent,
+    children: [
+      {
+        path: "",
+        pathMatch: "full",
+        redirectTo: "profile",
+      },
+      {
+        path: "profile",
+        component: ProfilePageComponent,
+      },
+      {
+        path: "user-articles",
+        component: UserArticlesPageComponent
       }
     ]
   },

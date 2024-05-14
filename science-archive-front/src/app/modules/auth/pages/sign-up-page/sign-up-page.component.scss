@@ -1,6 +1,7 @@
 .container {
   display: flex;
-  height: 100%;
+  min-height: 100%;
+  height: auto;
 }
 
 .left-container {
@@ -56,6 +57,10 @@
     margin-top: 40px;
     margin-bottom: 24px;
     box-shadow: 0 1px 10px 1px #9b9b9b4a;
+  }
+
+  .form-wrapper {
+    width: 90%;
   }
 }
 

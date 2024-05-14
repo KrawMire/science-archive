@@ -35,27 +35,27 @@
 </ng-template>
 
 <ng-template #badRequestErrorView>
-  <nz-result nzStatus="warning" nzTitle="Invalid search data" nzSubTitle="Incorrect search data were passed">
+  <nz-result nzStatus="warning" nzTitle="Invalid search data" nzSubTitle="Incorrect search data">
     <div nz-result-extra>
       <button
         nz-button
         nzType="primary"
-        [routerLink]="['/content', 'articles']"
+        [routerLink]="['/content', 'news']"
       >
-        Back to articles
+        Back to news
       </button>
     </div>
   </nz-result>
 </ng-template>
 <ng-template #notFoundErrorView>
-  <nz-result nzStatus="404" nzTitle="404" nzSubTitle="This article does not exist">
+  <nz-result nzStatus="404" nzTitle="404" nzSubTitle="This news does not exist">
     <div nz-result-extra>
       <button
         nz-button
         nzType="primary"
-        [routerLink]="['/content', 'articles']"
+        [routerLink]="['/content', 'news']"
       >
-        Back to articles
+        Back to news
       </button>
     </div>
   </nz-result>
@@ -66,9 +66,9 @@
       <button
         nz-button
         nzType="primary"
-        [routerLink]="['/content', 'articles']"
+        [routerLink]="['/content', 'news']"
       >
-        Back to articles
+        Back to news
       </button>
     </div>
   </nz-result>
@@ -79,9 +79,9 @@
       <button
         nz-button
         nzType="primary"
-        [routerLink]="['/content', 'articles']"
+        [routerLink]="['/content', 'news']"
       >
-        Back to articles
+        Back to news
       </button>
     </div>
   </nz-result>

@@ -1,21 +1,18 @@
-header {
-
-}
-
 .sar-logo {
   height: 24px;
 }
 
 .sar-logo-wrapper {
-  padding: 16px;
+  padding: 16px 20%;
   background-color: #ffffff;
 }
 
 .sar-top-menu-container {
+  padding: 0 20%;
   background-color: #ffffff;
   display: flex;
   justify-content: space-between;
-  box-shadow: 0 20px 8px -16px #9b9b9b4a;
+  box-shadow: 0 20px 8px -16px rgba(82, 82, 82, 0.29);
 }
 
 .sar-account-button {
@@ -32,11 +29,81 @@ header {
 }
 
 .sar-page-content {
-  padding: 50px;
+  background-color: #f0f2f5;
+  padding: 32px 20%;
+  min-height: 100%;
+}
+
+footer {
+  width: 100%;
+  background-color: #414141;
+  padding: 32px 20%;
+
+  h2 {
+    color: #ffffff;
+    font-size: 1.6em;
+  }
+
+  .footer-content {
+    padding: 48px 0;
+  }
+
+  .footer-info-container {
+    margin-top: 32px;
+    display: flex;
+    flex-direction: row;
+  }
+
+  .footer-info-block:not(:first-child) {
+    margin-left: 72px;
+  }
+
+  .footer-info-block {
+    color: #ffffff;
+  }
+
+  .footer-link {
+    margin-top: 8px;
+    cursor: pointer;
+    color: #d2d2d2;
+    text-decoration: none;
+  }
+
+  .footer-row {
+    margin-top: 8px;
+    color: #d2d2d2;
+  }
+
+  .footer-link:hover {
+    cursor: pointer;
+    color: #ffffff;
+  }
+
+  .footer-links-container {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .footer-category-header {
+    font-size: 1.2em;
+    font-weight: 700;
+  }
 }
 
 @media screen and (max-width: 768px) {
   .sar-page-content {
-    padding: 24px 8px 8px;
+    padding: 32px 8px;
+  }
+
+  .sar-top-menu-container {
+    padding: 0;
+  }
+
+  .sar-logo-wrapper {
+    padding: 16px;
+  }
+
+  footer {
+    padding: 16px;
   }
 }

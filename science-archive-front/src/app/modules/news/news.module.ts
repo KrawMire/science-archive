@@ -13,9 +13,10 @@ import { RouterLink } from "@angular/router";
 import { NzBreadCrumbModule } from "ng-zorro-antd/breadcrumb";
 import { NzListModule } from "ng-zorro-antd/list";
 import { NzResultModule } from "ng-zorro-antd/result";
+import { SharedModule } from "@modules/shared/shared.module";
 
 @NgModule({
   declarations: [NewsPageComponent, NewsCardComponent, NewsCardSkeletonComponent, NewsDetailsPageComponent],
-  imports: [CommonModule, NzCardModule, NzButtonModule, NzSkeletonModule, ArticlesModule, NzEmptyModule, RouterLink, NzBreadCrumbModule, NzListModule, NzResultModule]
+  imports: [CommonModule, NzCardModule, NzButtonModule, NzSkeletonModule, ArticlesModule, NzEmptyModule, RouterLink, NzBreadCrumbModule, NzListModule, NzResultModule, SharedModule]
 })
 export class NewsModule {}

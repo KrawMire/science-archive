@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { BehaviorSubject } from "rxjs";
 import { NzMessageService } from "ng-zorro-antd/message";
 import { AuthService } from "@modules/auth/services/auth.service";
+import { Title } from "@angular/platform-browser";
 
 @Component({
   selector: 'sar-sign-up-page',
@@ -14,7 +15,10 @@ export class SignUpPageComponent {
   constructor(
     private readonly messageService: NzMessageService,
     private readonly authService: AuthService,
-  ) {}
+    titleService: Title
+  ) {
+    titleService.setTitle("Science Archive - Sign Up")
+  }
 
   onSignedUp() {
     const user = this.authService.getCurrentAuthUser();

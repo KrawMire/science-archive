@@ -49,11 +49,8 @@
         </div>
       </ng-container>
       <ng-template #signIn>
-        <div
-          [routerLink]="['/auth', 'sign-in']"
-          class="sar-account-button"
-        >
-          <span>Sign in</span>
+        <div class="sar-account-button">
+          <a href="/auth">Sign in</a>
         </div>
       </ng-template>
     </nav>
@@ -63,6 +60,46 @@
 <div class="sar-page-content">
   <router-outlet></router-outlet>
 </div>
+
+<footer>
+  <div class="footer-content">
+    <h2>Science Archive</h2>
+
+    <div class="footer-info-container">
+      <div class="footer-info-block">
+        <p class="footer-category-header">Menu</p>
+        <div class="footer-links-container">
+          <p
+            class="footer-link"
+            routerLink="articles"
+          >
+            Articles
+          </p>
+          <p
+            class="footer-link"
+            routerLink="categories"
+          >
+            Categories
+          </p>
+          <p
+            class="footer-link"
+            routerLink="news"
+          >
+            News
+          </p>
+        </div>
+      </div>
+      <div class="footer-info-block">
+        <p class="footer-category-header">Contact Us</p>
+        <div class="footer-links-container">
+          <a class="footer-link" href="https://www.linkedin.com/in/anton-gavrilov-backend/" target="_blank">LinkedIn</a>
+          <a class="footer-link" href="https://t.me/science_archive_project" target="_blank">Telegram Channel</a>
+          <a class="footer-link" href="mailto:gavor0120@gmail.com">gavor0120@gmail.com</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
 
 <nz-drawer
   nzClosable="true"
@@ -77,11 +114,11 @@
       nzTheme="light"
       nzMode="vertical"
     >
-      <li nz-menu-item>
+      <li nz-menu-item [routerLink]="['/account', 'profile']">
         <span nz-icon nzType="user" nzTheme="outline"></span>
         My profile
       </li>
-      <li nz-menu-item>
+      <li nz-menu-item [routerLink]="['/account', 'user-articles']">
         <span nz-icon nzType="book" nzTheme="outline"></span>
         My articles
       </li>
