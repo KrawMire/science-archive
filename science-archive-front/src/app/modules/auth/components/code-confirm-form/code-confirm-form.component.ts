@@ -60,7 +60,7 @@ export class CodeConfirmFormComponent {
           next: async (response: ConfirmUserResponse) => {
             this.authService.deleteCurrentAuthUser();
             this.authService.saveCurrentUser(response.user);
-            await this.router.navigate(['/content']);
+            window.location.assign("/content");
           },
           error: (error: any) => {
             this.messageService.error(error.message ?? error);

@@ -2,6 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { BehaviorSubject } from "rxjs";
 import { AuthService } from "@modules/auth/services/auth.service";
 import { User } from "@models/user/user";
+import { CookieService } from "ngx-cookie-service";
 
 @Component({
   selector: "sar-content-page",
@@ -14,6 +15,7 @@ export class ContentPageComponent implements OnInit {
 
   constructor(
     private readonly authService: AuthService,
+    private readonly cookieService: CookieService
   ) {
     this.currentUser$.next(this.authService.getCurrentUser());
   }
@@ -23,6 +25,7 @@ export class ContentPageComponent implements OnInit {
   }
 
   onSignOut() {
+    this.cookieService.delete("Authorization", "/");
     this.authService.deleteCurrentUser();
     window.location.reload();
   }

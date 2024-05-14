@@ -28,6 +28,7 @@ import { AccountModule } from "@modules/account/account.module";
 import { NzButtonModule } from "ng-zorro-antd/button";
 import { NzToolTipModule } from "ng-zorro-antd/tooltip";
 import { NzBreadCrumbModule } from "ng-zorro-antd/breadcrumb";
+import { CookieService } from "ngx-cookie-service";
 
 registerLocaleData(en);
 
@@ -60,7 +61,7 @@ registerLocaleData(en);
     NzToolTipModule,
     NzBreadCrumbModule
   ],
-  providers: [{ provide: NZ_I18N, useValue: en_US }],
+  providers: [CookieService, { provide: NZ_I18N, useValue: en_US }],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

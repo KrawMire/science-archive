@@ -36,7 +36,7 @@ export class SignInPageComponent {
     } else {
       this.authService.deleteCurrentAuthUser();
       this.authService.saveCurrentUser(user);
-      await this.router.navigate(['/content']);
+      window.location.assign("/content");
     }
   }
 }
