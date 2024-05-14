@@ -30,6 +30,8 @@ export class SignInPageComponent {
       this.messageService.success("A confirmation email has been sent to your email address");
       this.isConfirmation$.next(true);
     } else {
+      this.authService.deleteCurrentAuthUser();
+      this.authService.saveCurrentUser(user);
       await this.router.navigate(['/content']);
     }
   }

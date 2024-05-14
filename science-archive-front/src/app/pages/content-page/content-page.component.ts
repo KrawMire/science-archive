@@ -15,7 +15,7 @@ export class ContentPageComponent implements OnInit {
   constructor(
     private readonly authService: AuthService,
   ) {
-    this.currentUser$.next(this.authService.getCurrentAuthUser());
+    this.currentUser$.next(this.authService.getCurrentUser());
   }
 
   ngOnInit(): void {
@@ -23,7 +23,7 @@ export class ContentPageComponent implements OnInit {
   }
 
   onSignOut() {
-    this.authService.deleteCurrentAuthUser();
+    this.authService.deleteCurrentUser();
     window.location.reload();
   }
 

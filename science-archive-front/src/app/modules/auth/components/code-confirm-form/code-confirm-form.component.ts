@@ -58,7 +58,8 @@ export class CodeConfirmFormComponent {
         .confirmUserWithCode(user.id, code)
         .subscribe({
           next: async (response: ConfirmUserResponse) => {
-            this.authService.saveCurrentAuthUser(response.user);
+            this.authService.deleteCurrentAuthUser();
+            this.authService.saveCurrentUser(response.user);
             await this.router.navigate(['/content']);
           },
           error: (error: any) => {

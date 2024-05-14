@@ -67,7 +67,7 @@
 <nz-drawer
   nzClosable="true"
   nzPlacement="right"
-  nzTitle="KrawMire"
+  [nzTitle]="(currentUser$ | async)?.login"
   [nzVisible]="(showAccountDrawer$ | async) ?? false"
   (nzOnClose)="onAccountDrawerClose()"
 >

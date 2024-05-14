@@ -1,6 +1,5 @@
 import { Component, EventEmitter, Output } from "@angular/core";
 import { FormControl, FormGroup, NonNullableFormBuilder, Validators } from "@angular/forms";
-import { Router } from "@angular/router";
 import { AuthService } from "@modules/auth/services/auth.service";
 import { AuthApiService } from "@services/auth-api.service";
 import { NzMessageService } from "ng-zorro-antd/message";
@@ -23,7 +22,6 @@ export class SignInFormComponent {
 
   constructor(
     private readonly fb: NonNullableFormBuilder,
-    private readonly router: Router,
     private readonly messageService: NzMessageService,
     private readonly authService: AuthService,
     private readonly authApiService: AuthApiService,
