@@ -24,7 +24,9 @@ internal class GetAllNewsUseCase : IUseCase<GetAllNewsRequestDto, GetAllNewsResp
         var newsDtos = news.Select(newsEntity =>
         {
             var newsDto = _newsMapper.MapToDto(newsEntity);
-            newsDto.Body = newsDto.Body.Substring(0, 350) + "...";
+            newsDto.Body = newsDto.Body.Length > 350 
+                ? newsDto.Body[..350] + "..." 
+                : newsDto.Body;
 
             return newsDto;
         }).ToList();
