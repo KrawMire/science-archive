@@ -6,9 +6,9 @@
 </div>
 
 <ng-template #categoriesView>
-  <ng-container *ngIf="(categories$ | async)?.length === 0; else categoriesList">
+  <nz-card *ngIf="(categories$ | async)?.length === 0; else categoriesList">
     <nz-empty nzNotFoundContent="No categories found"/>
-  </ng-container>
+  </nz-card>
 </ng-template>
 <ng-template #categoriesList>
   <sar-category-card

@@ -3,9 +3,10 @@ import { ArticleApiService } from "@services/article-api.service";
 import { BehaviorSubject } from "rxjs";
 import { Article } from "@models/article/article";
 import { NzMessageService } from "ng-zorro-antd/message";
-import { NonNullableFormBuilder, Validators } from "@angular/forms";
+import { FormControl, FormGroup, NonNullableFormBuilder, Validators } from "@angular/forms";
 import { CategoryApiService } from "@services/category-api.service";
 import { Category } from "@models/category/category";
+import { Subcategory } from "@models/category/subcategory";
 
 @Component({
   selector: 'sar-user-articles-page',
@@ -16,11 +17,18 @@ export class UserArticlesPageComponent implements OnInit {
   showCreateNewModal = false;
   articles$ = new BehaviorSubject<Article[]>([]);
   categories$ = new BehaviorSubject<Category[]>([]);
+  subcategories$ = new BehaviorSubject<Subcategory[]>([]);
 
-  validateForm = this.fb.group({
+  validateForm: FormGroup<{
+    title: FormControl<string>,
+    categoryId: FormControl<string>,
+    subcategoryId: FormControl<string>
+    description: FormControl<string | null>,
+  }> = this.fb.group({
     title: ['', Validators.required],
-    description: [null],
-    category: [null]
+    categoryId: ['', Validators.required],
+    subcategoryId: ['', Validators.required],
+    description: ['', null],
   })
 
   constructor(
@@ -28,7 +36,17 @@ export class UserArticlesPageComponent implements OnInit {
     private readonly messageService: NzMessageService,
     private readonly articleService: ArticleApiService,
     private readonly categoryService: CategoryApiService
-  ) {}
+  ) {
+    this.validateForm.get('categoryId')?.valueChanges.subscribe(categoryId => {
+      if (!categoryId) {
+        return;
+      }
+      let selectedCategory = this.categories$.value.find(category => category.id === categoryId);
+      if (selectedCategory) {
+        this.subcategories$.next(selectedCategory.subcategories);
+      }
+    });
+  }
 
   openCreateNewModal() {
     this.showCreateNewModal = true;

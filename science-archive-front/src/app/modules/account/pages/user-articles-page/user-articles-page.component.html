@@ -16,7 +16,7 @@
         nzType="primary"
         (click)="openCreateNewModal()"
       >
-        Create first article
+        Create your first article
       </button>
     </ng-template>
   </ng-template>
@@ -33,7 +33,7 @@
     (click)="openCreateNewModal()"
   >
     <span nz-icon nzType="plus"></span>
-    Add
+    New
   </button>
 </ng-template>
 
@@ -47,23 +47,48 @@
     <form nz-form [formGroup]="validateForm">
       <nz-form-item>
         <nz-form-control  nzErrorTip="Please input valid login or email!">
-          <nz-form-label [nzSpan]="7" nzRequired>Title</nz-form-label>
+          <nz-form-label nzRequired>Title</nz-form-label>
           <nz-input-group>
             <input formControlName="title" type="text" nz-input placeholder="Article title" />
           </nz-input-group>
         </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
         <nz-form-control nzErrorTip="Please input your Password!">
-          <nz-form-label>Category</nz-form-label>
-          <nz-select formControlName="category" nzPlaceHolder="Category">
-            <nz-option *ngFor="let category of categories$ | async" [nzLabel]="category.name" [nzValue]="category.id" />
+          <nz-form-label nzRequired>Category</nz-form-label>
+          <nz-select
+            formControlName="categoryId"
+            nzPlaceHolder="Category"
+          >
+            <nz-option
+              *ngFor="let category of categories$ | async"
+              [nzLabel]="category.name"
+              [nzValue]="category.id"
+            />
           </nz-select>
         </nz-form-control>
+        <ng-container *ngIf="subcategories$ | async as subcategories" >
+          <nz-form-control *ngIf="subcategories.length > 0" nzErrorTip="Please input your Password!">
+            <nz-form-label nzRequired>Subcategory</nz-form-label>
+            <nz-select formControlName="subcategoryId" nzPlaceHolder="Subcategory">
+              <nz-option
+                *ngFor="let subcategory of subcategories$ | async"
+                [nzLabel]="subcategory.name"
+                [nzValue]="subcategory.id" />
+            </nz-select>
+          </nz-form-control>
+        </ng-container>
       </nz-form-item>
       <nz-form-item>
         <nz-form-control nzErrorTip="Please input your Password!">
           <nz-form-label>Description</nz-form-label>
           <nz-textarea-count [nzMaxCharacterCount]="2000">
-            <textarea formControlName="description" nz-input rows="3" placeholder="Describe what about your article is..."></textarea>
+            <textarea
+              nz-input
+              formControlName="description"
+              rows="3"
+              placeholder="Describe what about your article is..."
+            ></textarea>
           </nz-textarea-count>
         </nz-form-control>
       </nz-form-item>

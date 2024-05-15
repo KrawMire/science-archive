@@ -28,7 +28,8 @@ export class CategoriesPageComponent implements OnInit {
       error: (error) => {
         this.isLoading$.next(false);
         this.categories$.next([]);
-        this.message.error(error);
+        console.log(error);
+        this.message.error("Unhandled error occurred.");
       }
     });
   }

@@ -63,7 +63,8 @@ export class CodeConfirmFormComponent {
             window.location.assign("/content");
           },
           error: (error: any) => {
-            this.messageService.error(error.message ?? error);
+            console.log(error);
+            this.messageService.error("Unhandled error occurred.");
           }
         });
       return;

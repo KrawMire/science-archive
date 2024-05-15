@@ -38,7 +38,8 @@ export class NewsPageComponent implements OnInit {
         error: (error) => {
           this.isLoading$.next(false);
           this.news$.next([]);
-          this.message.error(error);
+          console.log(error);
+          this.message.error("Unhandled error occurred.");
         },
       });
   }

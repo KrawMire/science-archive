@@ -6,9 +6,9 @@
 </div>
 
 <ng-template #newsView>
-  <ng-container *ngIf="(news$ | async)?.length === 0; else newsList">
+  <nz-card *ngIf="(news$ | async)?.length === 0; else newsList">
     <nz-empty nzNotFoundContent="No news found"/>
-  </ng-container>
+  </nz-card>
 </ng-template>
 <ng-template #newsList>
   <sar-news-card

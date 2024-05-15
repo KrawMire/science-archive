@@ -1,0 +1,41 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: linear-gradient(0deg, rgba(27,87,207,1) 0%, rgba(255,255,255,1) 35%);
+  color: #002065;
+  align-content: center;
+}
+
+.goto-articles-button {
+  margin-top: 24px;
+}
+
+.content-wrapper {
+  margin-top: 20%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.goal-text {
+  margin-top: 48px;
+  text-align: center;
+  width: 50%;
+}
+
+.logo {
+  margin: 0;
+  height: 48px;
+}
+
+@media screen and (max-width: 768px) {
+  .logo {
+    height: 24px;
+  }
+
+  .goal-text {
+    margin-top: 32px;
+    width: 80%;
+  }
+}

@@ -60,7 +60,8 @@ export class ArticlesPageComponent implements OnInit {
           this.titleService.setTitle("Science Archive - Articles");
           this.isLoading$.next(false);
           this.articles$.next([]);
-          this.message.error(error.message ?? error);
+          console.log(error);
+          this.message.error("Unhandled error occurred.");
         },
       });
   }
@@ -92,7 +93,8 @@ export class ArticlesPageComponent implements OnInit {
           this.isLoading$.next(false);
           this.articles$.next([]);
           this.titleService.setTitle("Science Archive - Articles");
-          this.message.error(error.message ?? error);
+          console.log(error);
+          this.message.error("Unhandled error occurred.");
         },
       });
   }

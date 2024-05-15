@@ -65,7 +65,10 @@ export class SignUpFormComponent {
         this.authService.saveCurrentAuthUser(response.user);
         this.onSignedUp.emit();
       },
-      error: (error) => (this.messageService.error(error.message ?? error))
+      error: (error) => {
+        console.log(error);
+        this.messageService.error("Unhandled error occurred.");
+      }
     });
   }
 }

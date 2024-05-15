@@ -6,13 +6,8 @@
 </div>
 
 <ng-template #articlesView>
-  <ng-container *ngIf="(articles$ | async)?.length === 0; else articlesList">
-    <nz-empty nzNotFoundContent="No articles found"/>
-  </ng-container>
-</ng-template>
-<ng-template #articlesList>
-  <ng-container *ngIf="(category$ | async) as category">
-    <nz-breadcrumb>
+  <ng-container>
+    <nz-breadcrumb *ngIf="(category$ | async) as category">
       <nz-breadcrumb-item>
         <a [routerLink]="['/content', 'articles']">Articles</a>
       </nz-breadcrumb-item>
@@ -20,9 +15,22 @@
         {{category.name}}
       </nz-breadcrumb-item>
     </nz-breadcrumb>
+    <nz-card *ngIf="(articles$ | async)?.length === 0; else articlesList">
+      <nz-empty
+        nzNotFoundContent="No articles found"
+        [nzNotFoundFooter]="goToArticles"
+      />
+      <ng-template #goToArticles>
+        <ng-container *ngIf="(category$ | async) as category">
+          <button nz-button nzType="primary" [routerLink]="['/content', 'articles']">Read all articles</button>
+        </ng-container>
+      </ng-template>
+    </nz-card>
   </ng-container>
+</ng-template>
+<ng-template #articlesList>
   <sar-article-card
-    [style]="'margin-top: 10px'"
+    [style]="'margin-top: 8px'"
     *ngFor="let article of articles$ | async"
     [article]="article"
   ></sar-article-card>
