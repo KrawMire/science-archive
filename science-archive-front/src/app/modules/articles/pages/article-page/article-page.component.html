@@ -6,24 +6,26 @@
       </nz-breadcrumb-item>
       <nz-breadcrumb-item>
         <a
+          nz-tooltip
+          [nzTooltipTitle]="article.categoryName"
           [routerLink]="['/content', 'articles']"
           [queryParams]="{categoryId: article?.categoryId}"
-        >{{article?.categoryName?.substring(0, 10) + "..."}}</a>
+        >{{article.categoryName?.substring(0, 10) + "..."}}</a>
       </nz-breadcrumb-item>
       <nz-breadcrumb-item>
-        {{article?.id?.substring(0, 10) + "..."}}
+        {{article.id?.substring(0, 10) + "..."}}
       </nz-breadcrumb-item>
     </nz-breadcrumb>
 
-    <h2>{{article?.title}}</h2>
+    <h2>{{article.title}}</h2>
 
     <p class="sar-article-description">
-      {{article?.description}}
+      {{article.description}}
     </p>
 
     <nz-list nzItemLayout="horizontal" nzHeader="Linked documents">
-        <div *ngIf="article?.documents?.length && article.documents.length > 0; else emptyDocs">
-          <nz-list-item *ngFor="let document of article?.documents">
+        <div *ngIf="article.documents.length && article.documents.length > 0; else emptyDocs">
+          <nz-list-item *ngFor="let document of article.documents">
             <a href="/api/documents/{{document.path}}" target="_blank" rel="noopener noreferrer">{{ document.name }}</a>
           </nz-list-item>
         </div>

@@ -118,6 +118,7 @@ export class UserArticlesPageComponent implements OnInit {
       .createArticle(newArticle)
       .subscribe({
         next: () => {
+          this.messageService.success("Article was successfully created");
           this.getArticles();
           this.showCreateNewModal = false;
           this.validateForm.reset();
@@ -132,7 +133,7 @@ export class UserArticlesPageComponent implements OnInit {
             this.messageService.error(error.message ?? error);
           }
         }
-      })
+      });
   }
 
   beforeUpload(file: NzUploadFile): boolean {
@@ -149,6 +150,7 @@ export class UserArticlesPageComponent implements OnInit {
       .uploadDocument(file)
       .subscribe({
         next: (response) => {
+          this.messageService.success("Document was successfully uploaded");
           const documents = this.documents$.value;
           documents.push({
             id: file.uid,
@@ -205,6 +207,7 @@ export class UserArticlesPageComponent implements OnInit {
         },
         error: () => {
           this.messageService.error("An error occurred");
+          this.isLoadingArticleList$.next(false);
         }
       });
   }

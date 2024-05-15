@@ -26,6 +26,7 @@ export class ArticlesPageComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    window.scrollTo(0, 0);
     this.route.queryParams.subscribe((params) => {
       this.isLoading$.next(true);
       const categoryId = params["categoryId"] as string;

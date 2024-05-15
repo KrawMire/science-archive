@@ -29,6 +29,7 @@ import { NzButtonModule } from "ng-zorro-antd/button";
 import { NzToolTipModule } from "ng-zorro-antd/tooltip";
 import { NzBreadCrumbModule } from "ng-zorro-antd/breadcrumb";
 import { CookieService } from "ngx-cookie-service";
+import { AdminModule } from "@modules/admin/admin.module";
 
 registerLocaleData(en);
 
@@ -51,6 +52,7 @@ registerLocaleData(en);
     // App modules
     ArticlesModule,
     AccountModule,
+    AdminModule,
     AuthModule,
     CategoriesModule,
     NewsModule,

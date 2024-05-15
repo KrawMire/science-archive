@@ -1,0 +1,72 @@
+<nz-card [nzTitle]="newsTitle" [nzExtra]="createNews">
+  <ng-container *ngIf="(news$ | async) as news">
+    <ng-container *ngIf="news.length > 0; else emptyList">
+      <sar-admin-news-card
+        style="margin-top: 8px"
+        *ngFor="let singleNews of news"
+        [news]="singleNews"
+      />
+    </ng-container>
+  </ng-container>
+
+  <ng-template #loading>
+    <nz-spin nzSize="large"/>
+  </ng-template>
+
+  <ng-template #emptyList>
+    <ng-container *ngIf="!(isLoadingNewsList$ | async); else loading">
+      <nz-empty
+        nzNotFoundContent="No news"
+      />
+    </ng-container>
+  </ng-template>
+</nz-card>
+
+<ng-template #newsTitle>
+  News
+</ng-template>
+
+<ng-template #createNews>
+  <button
+    nz-button
+    nzType="primary"
+    (click)="openCreateNewModal()"
+  >
+    <span nz-icon nzType="plus"></span>
+    New
+  </button>
+</ng-template>
+
+<nz-modal
+  [(nzVisible)]="showCreateNewModal"
+  nzTitle="Create new article"
+  (nzOnCancel)="closeCreateNewModal()"
+  (nzOnOk)="onCreateNews()"
+  [nzOkDisabled]="isCreatingNews$ | async"
+>
+  <ng-container *nzModalContent>
+    <form nz-form [formGroup]="validateForm">
+      <nz-form-item>
+        <nz-form-control  nzErrorTip="Please news title!">
+          <nz-form-label nzRequired>Title</nz-form-label>
+          <nz-input-group>
+            <input formControlName="title" type="text" nz-input placeholder="News title" />
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-control nzErrorTip="Please input news body!">
+          <nz-form-label nzRequired>Body</nz-form-label>
+          <nz-textarea-count [nzMaxCharacterCount]="2000">
+            <textarea
+              nz-input
+              formControlName="body"
+              rows="3"
+              placeholder="News body..."
+            ></textarea>
+          </nz-textarea-count>
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  </ng-container>
+</nz-modal>

@@ -13,6 +13,9 @@ import { SignInPageComponent } from "@modules/auth/pages/sign-in-page/sign-in-pa
 import { SignUpPageComponent } from "@modules/auth/pages/sign-up-page/sign-up-page.component";
 import { ProfilePageComponent } from "@modules/account/pages/profile-page/profile-page.component";
 import { UserArticlesPageComponent } from "@modules/account/pages/user-articles-page/user-articles-page.component";
+import { AdminPageComponent } from "@pages/admin-page/admin-page.component";
+import { AdminNewsPageComponent } from "@modules/admin/pages/admin-news-page/admin-news-page.component";
+import { AdminArticlesPageComponent } from "@modules/admin/pages/admin-articles-page/admin-articles-page.component";
 
 const routes: Routes = [
   { path: "", pathMatch: "full", redirectTo: "welcome" },
@@ -53,6 +56,25 @@ const routes: Routes = [
       {
         path: "user-articles",
         component: UserArticlesPageComponent
+      }
+    ]
+  },
+  {
+    path: "admin",
+    component: AdminPageComponent,
+    children: [
+      {
+        path: "",
+        pathMatch: "full",
+        redirectTo: "articles"
+      },
+      {
+        path: "articles",
+        component: AdminArticlesPageComponent
+      },
+      {
+        path: "news",
+        component: AdminNewsPageComponent,
       }
     ]
   },

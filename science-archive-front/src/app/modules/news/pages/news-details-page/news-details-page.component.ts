@@ -21,6 +21,7 @@ export class NewsDetailsPageComponent implements OnInit {
     private readonly titleService: Title) {}
 
   ngOnInit(): void {
+    window.scrollTo(0, 0);
     const newsId = this.router.snapshot.paramMap.get("id");
 
     if (!newsId) {

@@ -21,26 +21,27 @@ export class ArticlePageComponent implements OnInit {
     private readonly titleService: Title) {}
 
   ngOnInit(): void {
-      const articleId = this.router.snapshot.paramMap.get("id");
+    window.scrollTo(0, 0);
+    const articleId = this.router.snapshot.paramMap.get("id");
 
-      if (!articleId) {
-        this.error$.next(400);
-        return;
-      }
+    if (!articleId) {
+      this.error$.next(400);
+      return;
+    }
 
-      this.articleService
-        .getArticleById(articleId)
-        .subscribe({
-          complete: () => (this.isLoading$.next(true)),
-          next: (response) => {
-            this.article$.next(response.article)
-            this.titleService.setTitle(`Science Archive - ${response.article.title}`);
-          },
-          error: (error) => {
-            this.error$.next(error.status);
-            this.isLoading$.next(false);
-            this.titleService.setTitle("Unknown article");
-          }
-        });
+    this.articleService
+      .getArticleById(articleId)
+      .subscribe({
+        complete: () => (this.isLoading$.next(true)),
+        next: (response) => {
+          this.article$.next(response.article)
+          this.titleService.setTitle(`Science Archive - ${response.article.title}`);
+        },
+        error: (error) => {
+          this.error$.next(error.status);
+          this.isLoading$.next(false);
+          this.titleService.setTitle("Unknown article");
+        }
+      });
   }
 }

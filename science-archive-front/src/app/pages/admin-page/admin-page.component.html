@@ -1,5 +1,5 @@
 <nz-layout class="page-layout">
-  <nz-header class="sar-account-page-header">
+  <nz-header class="sar-admin-page-header">
     <div class="logo">
       <ng-container *ngIf="isMobile$ | async; else goBackButton">
         <button
@@ -27,7 +27,7 @@
   <nz-layout>
     <ng-container *ngIf="isMobile$ | async; else desktopSider">
       <nz-drawer
-        nzTitle="Account"
+        nzTitle="Administration"
         nzClosable="true"
         nzPlacement="left"
         [nzVisible]="(showMobileDrawer$ | async) ?? false"
@@ -35,18 +35,13 @@
       >
         <ng-container class="drawer-content" *nzDrawerContent>
           <ul nz-menu nzMode="inline" nzTheme="light">
-            <li
-              nz-menu-item
-            >
-              <span nz-icon nzType="user" nzTheme="outline"></span>
-              <a style="margin-left: 8px" (click)="onDrawerNavigateTo('/account', 'profile')">Profile</a>
+            <li nz-menu-item>
+              <span nz-icon nzType="book" nzTheme="outline"></span>
+              <a style="margin-left: 8px" (click)="onDrawerNavigateTo('/admin', 'articles')">Articles</a>
             </li>
-            <li nz-submenu nzTitle="My articles" nzIcon="book">
-              <ul>
-                <li nz-menu-item>
-                  <a style="margin-left: 8px" (click)="onDrawerNavigateTo('/account', 'user-articles')">All articles</a>
-                </li>
-              </ul>
+            <li nz-menu-item>
+              <span nz-icon nzType="container" nzTheme="outline"></span>
+              <a style="margin-left: 8px" (click)="onDrawerNavigateTo('/admin', 'news')">News</a>
             </li>
             <li nz-menu-item>
               <span nz-icon nzType="arrow-left" nzTheme="outline"></span>
@@ -61,16 +56,19 @@
         <ul nz-menu nzMode="inline" nzTheme="light">
           <li
             nz-menu-item
-            routerLink="profile"
+            routerLink="articles"
             nzMatchRouter
           >
-            <span nz-icon nzType="user" nzTheme="outline"></span>
-            <span>Profile</span>
+            <span nz-icon nzType="book" nzTheme="outline"></span>
+            <span>Articles</span>
           </li>
-          <li nz-submenu nzTitle="My articles" nzIcon="book">
-            <ul>
-              <li nz-menu-item routerLink="user-articles" nzMatchRouter>All articles</li>
-            </ul>
+          <li
+            nz-menu-item
+            routerLink="news"
+            nzMatchRouter
+          >
+            <span nz-icon nzType="container" nzTheme="outline"></span>
+            <span>News</span>
           </li>
         </ul>
       </nz-sider>
