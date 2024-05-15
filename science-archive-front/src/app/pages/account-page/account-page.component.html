@@ -1,9 +1,22 @@
 <nz-layout class="page-layout">
   <nz-header class="sar-account-page-header">
     <div class="logo">
-      <button nz-button nzType="link" [routerLink]="['/content']">
-        <span nz-icon nzType="arrow-left"></span>
-      </button>
+      <ng-container *ngIf="isMobile$ | async; else goBackButton">
+        <button
+          nz-button nzType="link"
+          (click)="openDrawer()"
+        >
+          <span nz-icon nzType="menu"></span>
+        </button>
+      </ng-container>
+      <ng-template #goBackButton>
+        <button
+          nz-button nzType="link"
+          [routerLink]="['/content']"
+        >
+          <span nz-icon nzType="arrow-left"></span>
+        </button>
+      </ng-template>
       <img
         src="assets/images/science-archive.logo.with-text.svg"
         alt="Logo"
@@ -12,25 +25,60 @@
     </div>
   </nz-header>
   <nz-layout>
-    <nz-sider nzWidth="200px" nzTheme="light">
-      <ul nz-menu nzMode="inline" nzTheme="light">
-        <li
-          nz-menu-item
-          routerLink="profile"
-          nzMatchRouter
-        >
-          <span nz-icon nzType="user" nzTheme="outline"></span>
-          <span>Profile</span>
-        </li>
-        <li nz-submenu nzTitle="My articles" nzIcon="book">
-          <ul>
-            <li nz-menu-item routerLink="user-articles" nzMatchRouter>All articles</li>
+    <ng-container *ngIf="isMobile$ | async; else desktopSider">
+      <nz-drawer
+        nzTitle="Account"
+        nzWidth="200"
+        nzClosable="true"
+        nzPlacement="left"
+        [nzVisible]="(showMobileDrawer$ | async) ?? false"
+        (nzOnClose)="closeDrawer()"
+      >
+        <ng-container class="drawer-content" *nzDrawerContent>
+          <ul nz-menu nzMode="inline" nzTheme="light">
+            <li
+              nz-menu-item
+              routerLink="profile"
+            >
+              <span nz-icon nzType="user" nzTheme="outline"></span>
+              <a style="margin-left: 8px" (click)="onDrawerNavigateTo('profile')">Profile</a>
+            </li>
+            <li nz-submenu nzTitle="My articles" nzIcon="book">
+              <ul>
+                <li nz-menu-item routerLink="user-articles">
+                  <a style="margin-left: 8px" (click)="onDrawerNavigateTo('user-articles')">All articles</a>
+                </li>
+              </ul>
+            </li>
+            <li nz-menu-item>
+              <span nz-icon nzType="arrow-left" nzTheme="outline"></span>
+              <a href="/content">Back to content</a>
+            </li>
           </ul>
-        </li>
-      </ul>
-    </nz-sider>
+        </ng-container>
+      </nz-drawer>
+    </ng-container>
+    <ng-template #desktopSider>
+      <nz-sider nzWidth="248px" nzTheme="light">
+        <ul nz-menu nzMode="inline" nzTheme="light">
+          <li
+            nz-menu-item
+            routerLink="profile"
+            nzMatchRouter
+          >
+            <span nz-icon nzType="user" nzTheme="outline"></span>
+            <span>Profile</span>
+          </li>
+          <li nz-submenu nzTitle="My articles" nzIcon="book">
+            <ul>
+              <li nz-menu-item routerLink="user-articles" nzMatchRouter>All articles</li>
+            </ul>
+          </li>
+        </ul>
+      </nz-sider>
+    </ng-template>
     <nz-layout class="inner-layout">
-      <nz-content>
+      <nz-content style="padding: 0">
         <router-outlet/>
       </nz-content>
     </nz-layout>

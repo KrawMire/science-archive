@@ -1,0 +1,22 @@
+<nz-card
+  [style]="style"
+  [nzTitle]="articleTitle"
+  [nzExtra]="articleCreationDate"
+>
+  <nz-card-meta [nzTitle]="cardMetaTitle" [nzDescription]="article.description"></nz-card-meta>
+</nz-card>
+
+
+<ng-template #articleTitle>
+  <span class="article-title">{{article.title}}</span>
+</ng-template>
+<ng-template #cardMetaTitle>
+  <nz-tag [nzColor]="'#4a77d3'">{{article.categoryName}}</nz-tag>
+</ng-template>
+<ng-template #articleCreationDate>
+  <nz-tag [nzColor]="getStatusColor()">
+    <span nz-icon [nzType]="getStatusIcon()"></span>
+    <span>{{getStatusText()}}</span>
+  </nz-tag>
+  <p style="margin-top: 2px">{{article.creationDate | dateFormat}}</p>
+</ng-template>

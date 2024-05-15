@@ -17,6 +17,8 @@ import { NzFormControlComponent, NzFormDirective, NzFormItemComponent, NzFormLab
 import { NzInputDirective, NzInputGroupComponent, NzTextareaCountComponent } from "ng-zorro-antd/input";
 import { ReactiveFormsModule } from "@angular/forms";
 import { NzOptionComponent, NzSelectComponent } from "ng-zorro-antd/select";
+import { NzUploadComponent } from "ng-zorro-antd/upload";
+import { UserArticleCardComponent } from "@modules/account/components/user-article-card/user-article-card.component";
 
 
 
@@ -49,7 +51,9 @@ import { NzOptionComponent, NzSelectComponent } from "ng-zorro-antd/select";
     NzTextareaCountComponent,
     NzFormLabelComponent,
     NzSelectComponent,
-    NzOptionComponent
+    NzOptionComponent,
+    NzUploadComponent,
+    UserArticleCardComponent
   ]
 })
 export class AccountModule { }

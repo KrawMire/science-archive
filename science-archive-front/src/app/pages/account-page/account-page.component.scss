@@ -1,14 +1,19 @@
 .page-layout {
-  height: 100%;
+  min-height: 100%;
+  height: auto;
 }
 
 .sar-logo {
-  margin-left: 24px;
+  margin-left: 8px;
   height: 24px;
 }
 .sar-account-page-header {
   background-color: #ffffff;
   box-shadow: 0 20px 8px -16px #9b9b9b4a;
+}
+
+.drawer-content {
+  padding: 0;
 }
 
 .sider-menu {
@@ -17,7 +22,7 @@
 }
 
 .inner-layout {
-  padding: 0 24px 24px;
+  padding: 24px;
 }
 
 nz-breadcrumb {
@@ -28,4 +33,18 @@ nz-content {
   //background: #fff;
   padding: 24px;
   min-height: 280px;
+}
+
+@media screen and (max-width: 768px) {
+  .inner-layout {
+    padding: 8px;
+    margin: 0;
+  }
+
+  .sar-account-page-header {
+    align-content: center;
+    padding: 8px;
+    background-color: #ffffff;
+    box-shadow: 0 20px 8px -16px #9b9b9b4a;
+  }
 }

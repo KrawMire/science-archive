@@ -114,17 +114,17 @@
       nzTheme="light"
       nzMode="vertical"
     >
-      <li nz-menu-item [routerLink]="['/account', 'profile']">
+      <li nz-menu-item>
         <span nz-icon nzType="user" nzTheme="outline"></span>
-        My profile
+        <a style="margin-left: 8px" href="/account/profile">My profile</a>
       </li>
-      <li nz-menu-item [routerLink]="['/account', 'user-articles']">
+      <li nz-menu-item>
         <span nz-icon nzType="book" nzTheme="outline"></span>
-        My articles
+        <a style="margin-left: 8px" href="/account/user-articles">My articles</a>
       </li>
       <li nz-menu-item>
         <span nz-icon nzType="lock" nzTheme="outline"></span>
-        Admin panel
+        <a style="margin-left: 8px" href="#">Admin panel</a>
       </li>
       <li nz-menu-item>
         <span
@@ -134,6 +134,7 @@
           [nzTwotoneColor]="'#ff4d4f'"
         ></span>
         <span
+          style="margin-left: 8px"
           nz-typography
           nzType="danger"
           (click)="onSignOut()"
