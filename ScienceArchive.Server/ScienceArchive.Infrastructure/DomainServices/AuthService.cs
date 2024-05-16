@@ -122,12 +122,14 @@ internal class AuthService : IAuthService
     {
         var user = await _dbUnitOfWork.UserRepository.GetById(userId);
 
-        // var userClaims = await _dbUnitOfWork.RoleRepository.GetUserClaims(userId);
-        // var success = contract.RequiredClaims.All(claim => userClaims.Contains(claim));
-        //
-        // return Task.FromResult(new CheckUserClaimsResponseDto(success));
+        if (user is null)
+        {
+            return false;
+        }
+        
+        var userClaims = await _dbUnitOfWork.RoleRepository.GetUserClaims(userId);
+        var success = claims.All(claim => userClaims.Any(uc => uc.Value == claim.Value));
 
-        // TODO: Add validation later
-        return user is not null && user.IsConfirmed;
+        return success;
     }
 }

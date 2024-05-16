@@ -19,25 +19,6 @@ public class AuthController : ControllerBase
         _authManager = authManager;
         _authService = authService;
     }
-
-    [HttpPost("check-admin")]
-    public async Task<Response> CheckAdmin()
-    {
-        var userId = HttpContext.GetUserIdFromToken();
-
-        if (string.IsNullOrWhiteSpace(userId))
-        {
-            throw new BadHttpRequestException("Cannot get user ID", 401);
-        }
-        
-        var request = new CheckUserClaimsRequestDto(userId, new List<string> { "ADMIN" });
-        var result = await _authService.CheckUserClaims(request);
-        
-        return new SuccessResponse(new
-        {
-            isAdmin = result.Success
-        });
-    }
     
     [HttpPost("sign-in")]
     public async Task<Response> SignIn([FromBody] LoginRequestDto request)

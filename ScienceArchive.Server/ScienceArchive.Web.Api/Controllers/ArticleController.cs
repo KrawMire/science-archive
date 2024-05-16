@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ScienceArchive.Application.Dtos.Article.Request;
 using ScienceArchive.Application.Interfaces.Services;
+using ScienceArchive.Web.Api.Auth;
 using ScienceArchive.Web.Api.Responses;
 using ScienceArchive.Web.Api.Utils;
 
@@ -64,11 +65,20 @@ public class ArticleController : ControllerBase
             throw new BadHttpRequestException("ID was not presented");
         }
         
-        var dto = new GetArticleByIdRequestDto(id);
+        var userId = HttpContext.GetUserIdFromToken();
+
+        if (string.IsNullOrWhiteSpace(userId))
+        {
+            throw new BadHttpRequestException("Cannot get user ID", 403);
+        }
+
+        var requiredClaims = new List<string> { AuthClaims.ViewDeclinedArticles, AuthClaims.ViewNotVerifiedArticles };
+        var dto = new GetArticleByIdRequestDto(id, userId, requiredClaims);
         var result = await _articleService.GetArticleById(dto);
         return new SuccessResponse(result);
     }
 
+    [AuthorizeClaims(AuthClaims.ViewNotVerifiedArticles, AuthClaims.ViewDeclinedArticles)]
     [HttpGet("all")]
     public async Task<Response> GetAll()
     {

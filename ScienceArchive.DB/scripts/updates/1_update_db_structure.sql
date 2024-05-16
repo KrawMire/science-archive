@@ -157,3 +157,15 @@ create table if not exists "article".users_articles (
 -- -----------------------------------------------------
 -- Import data from old tables to new
 -- -----------------------------------------------------
+
+-- -----------------------------------------------------
+-- Insert necessary data
+-- -----------------------------------------------------
+
+INSERT INTO auth.claims (id, description, value)
+VALUES
+    ('ae8d6f00-07a5-4a7e-b26a-ecef373d5216', 'Description for VIEW_NOT_VERIFIED_ARTICLES', 'VIEW_NOT_VERIFIED_ARTICLES'),
+    ('24ed5057-487d-4887-8ee8-7342a04c7695', 'Description for VIEW_DECLINED_ARTICLES', 'VIEW_DECLINED_ARTICLES'),
+    ('718c32b7-122b-4a62-a635-ef485f8d84cc', 'Description for APPROVE_ARTICLES', 'APPROVE_ARTICLES'),
+    ('9aab0940-4cf0-4f53-a5b2-8f8fe46fc64f', 'Description for DECLINE_ARTICLES', 'DECLINE_ARTICLES'),
+    ('f5934e5e-cc42-45b9-8151-094066968214', 'Description for ACCESS_ADMIN_PAGE', 'ACCESS_ADMIN_PAGE');

@@ -30,6 +30,10 @@ internal class GetUserDataUseCase : IUseCase<GetUserDataRequestDto, GetUserDataR
             throw new EntityNotFoundException(nameof(User));
         }
 
-        return new GetUserDataResponseDto(_userMapper.MapToDto(user));
+        var claims = await _dbUnitOfWork.RoleRepository.GetUserClaims(userId);
+
+        return new GetUserDataResponseDto(
+            _userMapper.MapToDto(user),
+            claims.Select(c => c.Value).ToList());
     }
 }

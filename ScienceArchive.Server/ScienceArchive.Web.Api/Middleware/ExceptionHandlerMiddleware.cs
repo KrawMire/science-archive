@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using ScienceArchive.Application.Exceptions;
 using ScienceArchive.Core.Exceptions;
 using ScienceArchive.Web.Api.Responses;
 
@@ -52,6 +53,22 @@ public class ExceptionHandlerMiddleware
         catch (DuplicateEmailException)
         {
             await ProcessException(httpContext, $"User with such email already exists", 400);
+        }
+        catch (UserCannotViewArticleException)
+        {
+            await ProcessException(httpContext, $"You have not rights to view this article", 403);
+        }
+        catch (CannotFindAllClaimsException)
+        {
+            await ProcessException(httpContext, $"User don't have enough rights for this action", 403);
+        }
+        catch (SpentConfirmationAttemptsException)
+        {
+            await ProcessException(httpContext, $"You have spent all confirmation attempts. Try again later", 400);
+        }
+        catch (SpentConfirmRegenerationTries)
+        {
+            await ProcessException(httpContext, $"You have spent all confirmation code resending attempts. Try again later", 400);
         }
         catch (Exception ex)
         {
