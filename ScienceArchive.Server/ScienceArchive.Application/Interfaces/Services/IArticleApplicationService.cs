@@ -48,7 +48,7 @@ public interface IArticleApplicationService
     /// </summary>
     /// <param name="dto">DTO contract to get articles by category ID</param>
     /// <returns>Response DTO</returns>
-    Task<GetArticlesByCategoryIdResponseDto> GetArticlesByCategoryId(GetArticlesByCategoryIdRequestDto dto);
+    Task<GetVerifiedArticlesByCategoryIdResponseDto> GetVerifiedArticlesByCategoryId(GetVerifiedArticlesByCategoryIdRequestDto dto);
 
     /// <summary>
     /// Create new article

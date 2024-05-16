@@ -6,4 +6,4 @@ namespace ScienceArchive.Application.Dtos.Article.Response;
 /// Response DTO of getting articles by category ID
 /// </summary>
 /// <param name="Articles"></param>
-public record GetArticlesByCategoryIdResponseDto(List<ArticleDto> Articles, CategoryDto Category);
+public record GetVerifiedArticlesByCategoryIdResponseDto(List<ArticleDto> Articles, CategoryDto Category);

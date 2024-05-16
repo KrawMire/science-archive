@@ -7,4 +7,4 @@ namespace ScienceArchive.Application.Dtos.Article.Request;
 /// Request contract to create article
 /// </summary>
 /// <param name="Article">Article to create</param>
-public record CreateArticleRequestDto(ArticleDto Article) : IRequest<CreateArticleResponseDto>;
+public record CreateArticleRequestDto(ArticleDto Article, string UserId) : IRequest<CreateArticleResponseDto>;

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ScienceArchive.Application.Dtos.News.Request;
 using ScienceArchive.Application.Interfaces.Services;
+using ScienceArchive.Web.Api.Auth;
 using ScienceArchive.Web.Api.Responses;
 
 namespace ScienceArchive.Web.Api.Controllers;
@@ -36,6 +37,7 @@ public class NewsController : Controller
         return Json(response);
     }
 
+    [AuthorizeClaims(AuthClaims.EditNews)]
     [HttpPost("create")]
     public async Task<IActionResult> Create([FromBody] CreateNewsRequestDto dto)
     {
@@ -45,6 +47,7 @@ public class NewsController : Controller
         return Json(response);
     }
 
+    [AuthorizeClaims(AuthClaims.EditNews)]
     [HttpPost("update")]
     public async Task<IActionResult> Update([FromBody] UpdateNewsRequestDto dto)
     {
@@ -54,6 +57,7 @@ public class NewsController : Controller
         return Json(response);
     }
 
+    [AuthorizeClaims(AuthClaims.EditNews)]
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(string id)
     {

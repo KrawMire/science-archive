@@ -47,9 +47,9 @@ internal class ArticleApplicationService : BaseApplicationService, IArticleAppli
     }
     
     /// <inheritdoc/>
-    public Task<GetArticlesByCategoryIdResponseDto> GetArticlesByCategoryId(GetArticlesByCategoryIdRequestDto dto)
+    public Task<GetVerifiedArticlesByCategoryIdResponseDto> GetVerifiedArticlesByCategoryId(GetVerifiedArticlesByCategoryIdRequestDto dto)
     {
-        return ExecuteUseCase<GetArticlesByCategoryIdRequestDto, GetArticlesByCategoryIdResponseDto>(dto);
+        return ExecuteUseCase<GetVerifiedArticlesByCategoryIdRequestDto, GetVerifiedArticlesByCategoryIdResponseDto>(dto);
     }
 
     /// <inheritdoc/>

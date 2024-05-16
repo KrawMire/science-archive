@@ -111,6 +111,7 @@ internal class PostgresArticleRepository : IArticleRepository
         var articles = await _dbContext
             .Articles
             .Where(a => a.CategoryId == category.Id)
+            .Where(a => a.Status == (short)ArticleStatus.Verified)
             .Include(a => a.UsersArticles)
             .ThenInclude(ua => ua.User)
             .Include(a => a.Category)

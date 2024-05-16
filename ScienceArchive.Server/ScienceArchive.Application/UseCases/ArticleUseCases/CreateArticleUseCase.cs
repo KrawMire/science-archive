@@ -4,6 +4,9 @@ using ScienceArchive.Application.Dtos.Article.Request;
 using ScienceArchive.Application.Dtos.Article.Response;
 using ScienceArchive.Application.Interfaces;
 using ScienceArchive.Core.Domain.Aggregates.Article;
+using ScienceArchive.Core.Domain.Aggregates.Article.Enums;
+using ScienceArchive.Core.Domain.Aggregates.User.ValueObjects;
+using ScienceArchive.Core.Exceptions;
 
 namespace ScienceArchive.Application.UseCases.ArticleUseCases;
 
@@ -21,8 +24,14 @@ internal class CreateArticleUseCase : IUseCase<CreateArticleRequestDto, CreateAr
     public async Task<CreateArticleResponseDto> Handle(CreateArticleRequestDto request, CancellationToken cancellationToken)
     {
         var article = _articleMapper.MapToEntity(request.Article);
-        article.SetToVerify();
+        var userId = UserId.CreateFromString(request.UserId);
+
+        if (!article.Authors.Any(a => a.Role == ArticleAuthorRole.Owner && a.UserId.Equals(userId)))
+        {
+            throw new IncorrectArticleCreatorException();
+        }
         
+        article.SetToVerify();
         var createdArticle = await _dbUnitOfWork.ArticleRepository.Create(article);
 
         return new CreateArticleResponseDto(_articleMapper.MapToDto(createdArticle));

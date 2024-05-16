@@ -70,6 +70,14 @@ public class ExceptionHandlerMiddleware
         {
             await ProcessException(httpContext, $"You have spent all confirmation code resending attempts. Try again later", 400);
         }
+        catch (IncorrectArticleCreatorException)
+        {
+            await ProcessException(httpContext, $"You are not an owner/creator of this article to perform this action", 403);
+        }
+        catch (InvalidInitiatorUserException)
+        {
+            await ProcessException(httpContext, $"You are not a user you try to perform an operation at", 403);
+        }
         catch (Exception ex)
         {
             await ProcessException(httpContext, "Unhandled error occurred", 500, ex);
