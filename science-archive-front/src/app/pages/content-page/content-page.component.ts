@@ -3,6 +3,7 @@ import { BehaviorSubject } from "rxjs";
 import { AuthService } from "@modules/auth/services/auth.service";
 import { User } from "@models/user/user";
 import { CookieService } from "ngx-cookie-service";
+import { AvailableClaims } from "@models/claims/available-claims";
 
 @Component({
   selector: "sar-content-page",
@@ -12,12 +13,14 @@ import { CookieService } from "ngx-cookie-service";
 export class ContentPageComponent implements OnInit {
   showAccountDrawer$ = new BehaviorSubject<boolean>(false);
   currentUser$ = new BehaviorSubject<User | null>(null);
+  currentClaims$ = new BehaviorSubject<string[]>([]);
 
   constructor(
     private readonly authService: AuthService,
     private readonly cookieService: CookieService
   ) {
     this.currentUser$.next(this.authService.getCurrentUser());
+    this.currentClaims$.next(this.authService.getCurrentClaims());
   }
 
   ngOnInit(): void {
@@ -27,6 +30,7 @@ export class ContentPageComponent implements OnInit {
   onSignOut() {
     this.cookieService.delete("Authorization", "/");
     this.authService.deleteCurrentUser();
+    this.authService.deleteCurrentClaims();
     window.location.reload();
   }
 
@@ -37,4 +41,6 @@ export class ContentPageComponent implements OnInit {
   onAccountDrawerClose() {
     this.showAccountDrawer$.next(false);
   }
+
+  protected readonly AvailableClaims = AvailableClaims;
 }

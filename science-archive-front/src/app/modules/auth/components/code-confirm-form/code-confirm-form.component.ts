@@ -30,7 +30,7 @@ export class CodeConfirmFormComponent {
   resendConfirmationCode() {
     const user = this.authService.getCurrentAuthUser();
 
-    if (!user) {
+    if (!user?.id) {
       this.messageService.error("User is not present");
       return;
     }
@@ -40,8 +40,17 @@ export class CodeConfirmFormComponent {
       return;
     }
 
-    this.messageService.info("Verification code was send to your email!");
-    this.resendTimes++;
+    this.authApiService
+      .resendConfirmationCode(user.id)
+      .subscribe({
+        next: () => {
+          this.messageService.info("Verification code was send to your email!");
+          this.resendTimes++;
+        },
+        error: (error) => {
+          this.messageService.error(error.message);
+        }
+      });
   }
 
   confirm() {
@@ -64,7 +73,7 @@ export class CodeConfirmFormComponent {
           },
           error: (error: any) => {
             console.log(error);
-            this.messageService.error("Unhandled error occurred.");
+            this.messageService.error(error.message ?? "Unhandled error occurred.");
           }
         });
       return;

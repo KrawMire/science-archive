@@ -10,7 +10,7 @@
           [nzTooltipTitle]="article.categoryName"
           [routerLink]="['/content', 'articles']"
           [queryParams]="{categoryId: article?.categoryId}"
-        >{{article.categoryName?.substring(0, 10) + "..."}}</a>
+        >{{article.categoryName.substring(0, 10) + "..."}}</a>
       </nz-breadcrumb-item>
       <nz-breadcrumb-item>
         {{article.id?.substring(0, 10) + "..."}}
@@ -42,6 +42,9 @@
         <ng-container *ngSwitchCase="400">
           <ng-container *ngTemplateOutlet="badRequestErrorView"/>
         </ng-container>
+        <ng-container *ngSwitchCase="403">
+          <ng-container *ngTemplateOutlet="forbiddenErrorView" />
+        </ng-container>
         <ng-container *ngSwitchCase="404">
           <ng-container *ngTemplateOutlet="notFoundErrorView" />
         </ng-container>
@@ -57,6 +60,19 @@
 
   <ng-template #badRequestErrorView>
     <nz-result nzStatus="warning" nzTitle="Invalid search data" nzSubTitle="Incorrect search data were passed">
+      <div nz-result-extra>
+        <button
+          nz-button
+          nzType="primary"
+          [routerLink]="['/content', 'articles']"
+        >
+          Back to articles
+        </button>
+      </div>
+    </nz-result>
+  </ng-template>
+  <ng-template #forbiddenErrorView>
+    <nz-result nzStatus="warning" nzTitle="Forbidden resource" nzSubTitle="You cannot view this article">
       <div nz-result-extra>
         <button
           nz-button

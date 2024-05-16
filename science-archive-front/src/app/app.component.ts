@@ -25,6 +25,7 @@ export class AppComponent {
     this.authApiService.getMe().subscribe({
       next: response => {
         this.authService.saveCurrentUser(response.user);
+        this.authService.saveCurrentClaims(response.claims);
       },
       error: err => {
         if (!err.status || err.status !== 401) {
@@ -32,6 +33,7 @@ export class AppComponent {
         }
 
         this.authService.deleteCurrentUser();
+        this.authService.deleteCurrentClaims();
         this.cookieService.delete("Authorization");
         window.location.reload();
       }

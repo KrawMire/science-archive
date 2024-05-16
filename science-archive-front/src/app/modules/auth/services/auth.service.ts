@@ -7,6 +7,8 @@ import { User } from "@models/user/user";
 export class AuthService {
   private authUser: User | null = null;
   private readonly userKey: string = "userData";
+  private readonly claimsKey: string = "claims";
+
 
   public getCurrentAuthUser(): User | null {
     return this.authUser;
@@ -37,5 +39,24 @@ export class AuthService {
 
   public deleteCurrentUser(): void {
     localStorage.removeItem(this.userKey);
+  }
+
+  public getCurrentClaims(): string[] {
+    const json = localStorage.getItem(this.claimsKey);
+
+    if (!json) {
+      return [];
+    }
+
+    return JSON.parse(json);
+  }
+
+  public saveCurrentClaims(claims: string[]): void {
+    const json = JSON.stringify(claims);
+    localStorage.setItem(this.claimsKey, json);
+  }
+
+  public deleteCurrentClaims(): void {
+    localStorage.removeItem(this.claimsKey);
   }
 }

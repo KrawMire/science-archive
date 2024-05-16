@@ -52,7 +52,7 @@ export class SignInFormComponent {
       },
       error: (error) => {
         console.log(error);
-        this.messageService.error("Unhandled error occurred.");
+        this.messageService.error(error.message ?? "Unhandled error occurred.");
       }
     });
   }

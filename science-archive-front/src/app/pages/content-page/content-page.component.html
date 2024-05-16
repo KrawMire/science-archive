@@ -122,10 +122,12 @@
         <span nz-icon nzType="book" nzTheme="outline"></span>
         <a style="margin-left: 8px" href="/account/user-articles">My articles</a>
       </li>
-      <li nz-menu-item>
-        <span nz-icon nzType="lock" nzTheme="outline"></span>
-        <a style="margin-left: 8px" href="/admin">Admin panel</a>
-      </li>
+      <ng-container *ngIf="(currentClaims$ | async) as currentClaims">
+        <li nz-menu-item *ngIf="currentClaims.includes(AvailableClaims.AccessAdminPage)">
+          <span nz-icon nzType="lock" nzTheme="outline"></span>
+          <a style="margin-left: 8px" href="/admin">Admin panel</a>
+        </li>
+      </ng-container>
       <li nz-menu-item>
         <span
           nz-icon

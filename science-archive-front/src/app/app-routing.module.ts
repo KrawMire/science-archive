@@ -16,6 +16,8 @@ import { UserArticlesPageComponent } from "@modules/account/pages/user-articles-
 import { AdminPageComponent } from "@pages/admin-page/admin-page.component";
 import { AdminNewsPageComponent } from "@modules/admin/pages/admin-news-page/admin-news-page.component";
 import { AdminArticlesPageComponent } from "@modules/admin/pages/admin-articles-page/admin-articles-page.component";
+import { isAdminGuard } from "@modules/auth/guards/is-admin.guard";
+import { isAuthorizedGuard } from "@modules/auth/guards/is-authorized.guard";
 
 const routes: Routes = [
   { path: "", pathMatch: "full", redirectTo: "welcome" },
@@ -42,6 +44,7 @@ const routes: Routes = [
   },
   {
     path: "account",
+    canActivate: [isAuthorizedGuard],
     component: AccountPageComponent,
     children: [
       {
@@ -61,6 +64,8 @@ const routes: Routes = [
   },
   {
     path: "admin",
+    canActivate: [isAdminGuard],
+    canActivateChild: [isAdminGuard],
     component: AdminPageComponent,
     children: [
       {
