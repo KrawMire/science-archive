@@ -30,11 +30,11 @@ func NewLogRepository(host string, database string, username string, password st
 	)
 
 	if err != nil {
-		log.Fatalf("Error while creating clickhouse connection: %s", err)
+		log.Panicf("Error while creating clickhouse connection: %s", err)
 	}
 
 	if err = conn.Ping(ctx); err != nil {
-		log.Fatalf("Exception %s", err)
+		log.Panicf("Exception %s", err)
 	}
 
 	return &LogRepository{
