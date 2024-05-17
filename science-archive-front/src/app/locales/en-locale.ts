@@ -82,6 +82,7 @@ export const enLocale = {
       readAllArticles: "Read all articles",
     },
     articlePage: {
+      articles: "Articles",
       linkedDocuments: "Linked documents",
       noDocuments: "No documents",
       backToArticles: "Back to articles",
@@ -96,5 +97,25 @@ export const enLocale = {
       unknownError: "Unknown error",
       unableToProcess: "We were unable to process your request"
     },
+    categoriesPage: {
+      noCategoriesFound: "No categories found"
+    },
+    newsCard: {
+      readMore: "Read more"
+    },
+    newsDetailsPage: {
+      news: "News",
+      invalidSearchData: "Invalid search data",
+      incorrectDataWasPassed: "Incorrect search data was passed",
+      notFound: "404",
+      newsNotExist: "This news does not exist",
+      serverError: "Server error",
+      internalServerError: "Internal server error",
+      unknownError: "Unknown error",
+      unableToProcess: "We were unable to process your request"
+    },
+    newsPage: {
+      backToNews: "Back to news"
+    }
   }
 }

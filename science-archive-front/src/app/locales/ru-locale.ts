@@ -84,6 +84,7 @@ export const ruLocale = {
       readAllArticles: "Перейти ко всем статьям",
     },
     articlePage: {
+      articles: "Статьи",
       linkedDocuments: "Прикрепленные документы",
       noDocuments: "Прикрепленных документов нет",
       backToArticles: "Назад к статьям",
@@ -98,5 +99,25 @@ export const ruLocale = {
       unknownError: "Неизвестная ошибка",
       unableToProcess: "Мы не смогли обработать ваш запрос"
     },
+    categoriesPage: {
+      noCategoriesFound: "Никаких категорий не найдено"
+    },
+    newsCard: {
+      readMore: "Читать далее"
+    },
+    newsDetailsPage: {
+      news: "Новости",
+      invalidSearchData: "Неверный формат данных для поиска",
+      incorrectDataWasPassed: "Неверные поисковые данные были переданы",
+      notFound: "404",
+      newsNotExist: "Такой новости нет",
+      serverError: "Серверная ошибка",
+      internalServerError: "Внутренная серверная ошибка",
+      unknownError: "Неизвестная ошибка",
+      unableToProcess: "Мы не смогли обработать ваш запрос"
+    },
+    newsPage: {
+      backToNews: "Назад к новостям"
+    }
   }
 }

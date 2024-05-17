@@ -2,7 +2,7 @@
   <ng-container *ngIf="article$ | async as article; else errorView">
     <nz-breadcrumb>
       <nz-breadcrumb-item>
-        <a [routerLink]="['/content', 'articles']">Articles</a>
+        <a [routerLink]="['/content', 'articles']">{{ 'articlePage.articles' | nzI18n }}</a>
       </nz-breadcrumb-item>
       <nz-breadcrumb-item>
         <a

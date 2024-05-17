@@ -9,6 +9,7 @@ import { CategoryCardSkeletonComponent } from "./components/category-card-skelet
 import { NzSkeletonModule } from "ng-zorro-antd/skeleton";
 import { NzEmptyModule } from "ng-zorro-antd/empty";
 import { RouterLink } from "@angular/router";
+import { NzI18nPipe } from "ng-zorro-antd/i18n";
 
 @NgModule({
   declarations: [
@@ -17,6 +18,6 @@ import { RouterLink } from "@angular/router";
     SubcategoryCardComponent,
     CategoryCardSkeletonComponent,
   ],
-  imports: [CommonModule, NzCardModule, NzButtonModule, NzSkeletonModule, NzEmptyModule, RouterLink]
+  imports: [CommonModule, NzCardModule, NzButtonModule, NzSkeletonModule, NzEmptyModule, RouterLink, NzI18nPipe]
 })
 export class CategoriesModule {}

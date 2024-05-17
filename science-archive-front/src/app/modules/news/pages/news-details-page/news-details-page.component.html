@@ -2,7 +2,7 @@
   <ng-container *ngIf="news$ | async as news; else errorView">
     <nz-breadcrumb>
       <nz-breadcrumb-item>
-        <a [routerLink]="['/content', 'news']">News</a>
+        <a [routerLink]="['/content', 'news']">{{ "newsDetailsPage.news" | nzI18n }}</a>
       </nz-breadcrumb-item>
       <nz-breadcrumb-item>
         {{news?.id?.substring(0, 10) + "..."}}
@@ -36,53 +36,53 @@
   </ng-template>
 
   <ng-template #badRequestErrorView>
-    <nz-result nzStatus="warning" nzTitle="Invalid search data" nzSubTitle="Incorrect search data">
+    <nz-result nzStatus="warning" [nzTitle]="'newsDetailsPage.invalidSearchData' | nzI18n" [nzSubTitle]="'newsDetailsPage.incorrectDataWasPassed' | nzI18n">
       <div nz-result-extra>
         <button
           nz-button
           nzType="primary"
           [routerLink]="['/content', 'news']"
         >
-          Back to news
+          {{ 'newsPage.backToNews' | nzI18n }}
         </button>
       </div>
     </nz-result>
   </ng-template>
   <ng-template #notFoundErrorView>
-    <nz-result nzStatus="404" nzTitle="404" nzSubTitle="This news does not exist">
+    <nz-result nzStatus="404" [nzTitle]="'newsDetailsPage.notFound' | nzI18n" [nzSubTitle]="'newsDetailsPage.newsNotExist' | nzI18n">
       <div nz-result-extra>
         <button
           nz-button
           nzType="primary"
           [routerLink]="['/content', 'news']"
         >
-          Back to news
+          {{ 'newsPage.backToNews' | nzI18n }}
         </button>
       </div>
     </nz-result>
   </ng-template>
   <ng-template #internalServerErrorView>
-    <nz-result nzStatus="error" nzTitle="Server error" nzSubTitle="Internal server error">
+    <nz-result nzStatus="error" [nzTitle]="'newsDetailsPage.serverError' | nzI18n" [nzSubTitle]="'newsDetailsPage.internalServerError' | nzI18n">
       <div nz-result-extra>
         <button
           nz-button
           nzType="primary"
           [routerLink]="['/content', 'news']"
         >
-          Back to news
+          {{ 'newsPage.backToNews' | nzI18n }}
         </button>
       </div>
     </nz-result>
   </ng-template>
   <ng-template #commonError>
-    <nz-result nzStatus="error" nzTitle="Unknown error" nzSubTitle="We were unable to process your request">
+    <nz-result nzStatus="error" [nzTitle]="'newsDetailsPage.unknownError' | nzI18n" [nzSubTitle]="'newsDetailsPage.unableToProcess' | nzI18n">
       <div nz-result-extra>
         <button
           nz-button
           nzType="primary"
           [routerLink]="['/content', 'news']"
         >
-          Back to news
+          {{ 'newsPage.backToNews' | nzI18n }}
         </button>
       </div>
     </nz-result>
