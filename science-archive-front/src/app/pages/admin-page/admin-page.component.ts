@@ -8,6 +8,7 @@ import { NzMenuDirective, NzMenuItemComponent, NzSubMenuComponent } from "ng-zor
 import { Router, RouterLink, RouterOutlet } from "@angular/router";
 import { BehaviorSubject, map, Observable } from "rxjs";
 import { BreakpointObserver, Breakpoints } from "@angular/cdk/layout";
+import { NzI18nPipe } from "ng-zorro-antd/i18n";
 
 @Component({
   selector: 'sar-admin-page',
@@ -27,7 +28,8 @@ import { BreakpointObserver, Breakpoints } from "@angular/cdk/layout";
     NzSubMenuComponent,
     RouterLink,
     RouterOutlet,
-    NzDrawerContentDirective
+    NzDrawerContentDirective,
+    NzI18nPipe
   ],
   templateUrl: './admin-page.component.html',
   styleUrl: './admin-page.component.scss'

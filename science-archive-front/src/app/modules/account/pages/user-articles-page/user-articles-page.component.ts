@@ -12,6 +12,7 @@ import { ContentStorageService } from "@services/content-storage-api.service";
 import { User } from "@models/user/user";
 import { AuthService } from "@modules/auth/services/auth.service";
 import { Router } from "@angular/router";
+import { NzI18nService } from "ng-zorro-antd/i18n";
 
 @Component({
   selector: 'sar-user-articles-page',
@@ -43,6 +44,7 @@ export class UserArticlesPageComponent implements OnInit {
 
   constructor(
     authService: AuthService,
+    private readonly i18nService: NzI18nService,
     private readonly router: Router,
     private readonly fb: NonNullableFormBuilder,
     private readonly messageService: NzMessageService,
@@ -85,7 +87,7 @@ export class UserArticlesPageComponent implements OnInit {
     }
 
     if (!this.user$.value) {
-      this.messageService.error("This action if only for authorized users!");
+      this.messageService.error(this.i18nService.translate("userArticlesPage.onlyForAuthorized"));
       await this.router.navigate(["/auth"]);
     }
 
@@ -118,14 +120,14 @@ export class UserArticlesPageComponent implements OnInit {
       .createArticle(newArticle)
       .subscribe({
         next: () => {
-          this.messageService.success("Article was successfully created");
+          this.messageService.success(this.i18nService.translate("userArticlesPage.articleCreated"));
           this.getArticles();
           this.showCreateNewModal = false;
           this.validateForm.reset();
         },
         error: (error) => {
           if (!error.status || error.status === 500) {
-            this.messageService.error("Unhandled error occurred. Try again later");
+            this.messageService.error(this.i18nService.translate("commonErrors.unhandledError"));
             console.log(error);
           }
 
@@ -150,7 +152,7 @@ export class UserArticlesPageComponent implements OnInit {
       .uploadDocument(file)
       .subscribe({
         next: (response) => {
-          this.messageService.success("Document was successfully uploaded");
+          this.messageService.success(this.i18nService.translate("userArticlesPage.documentUploaded"));
           const documents = this.documents$.value;
           documents.push({
             id: file.uid,
@@ -169,7 +171,7 @@ export class UserArticlesPageComponent implements OnInit {
         },
         error: (error) => {
           console.log(error);
-          this.messageService.error("Can not upload document");
+          this.messageService.error(this.i18nService.translate("userArticlesPage.cannotUploadDocument"));
 
           this.fileList = this.fileList.map((f) => {
             if (file.uid === f.uid) {
@@ -206,7 +208,7 @@ export class UserArticlesPageComponent implements OnInit {
           this.isLoadingArticleList$.next(false);
         },
         error: () => {
-          this.messageService.error("An error occurred");
+          this.messageService.error(this.i18nService.translate("commonErrors.unhandledError"));
           this.isLoadingArticleList$.next(false);
         }
       });
@@ -220,7 +222,7 @@ export class UserArticlesPageComponent implements OnInit {
           this.categories$.next(response.categories);
         },
         error: () => {
-          this.messageService.error("An error occurred");
+          this.messageService.error(this.i18nService.translate("commonErrors.unhandledError"));
         }
       });
   }

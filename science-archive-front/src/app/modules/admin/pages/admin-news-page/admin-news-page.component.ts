@@ -30,6 +30,7 @@ import { AuthService } from "@modules/auth/services/auth.service";
 import { User } from "@models/user/user";
 import { Router } from "@angular/router";
 import CreateNewsRequest from "@models/news/requests/create-news.request";
+import { NzI18nPipe } from "ng-zorro-antd/i18n";
 
 @Component({
   selector: 'sar-admin-news-page',
@@ -61,7 +62,8 @@ import CreateNewsRequest from "@models/news/requests/create-news.request";
     ReactiveFormsModule,
     NzButtonComponent,
     NzWaveDirective,
-    NzModalContentDirective
+    NzModalContentDirective,
+    NzI18nPipe
   ],
   templateUrl: './admin-news-page.component.html',
   styleUrl: './admin-news-page.component.scss'

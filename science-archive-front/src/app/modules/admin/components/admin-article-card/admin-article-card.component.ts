@@ -7,6 +7,7 @@ import { Article } from "@models/article/article";
 import { NzModalService } from "ng-zorro-antd/modal";
 import { ArticleApiService } from "@services/article-api.service";
 import { NzMessageService } from "ng-zorro-antd/message";
+import { NzI18nPipe, NzI18nService } from "ng-zorro-antd/i18n";
 
 @Component({
   selector: 'sar-admin-article-card',
@@ -16,7 +17,8 @@ import { NzMessageService } from "ng-zorro-antd/message";
     NzCardMetaComponent,
     NzIconDirective,
     NzTagComponent,
-    SharedModule
+    SharedModule,
+    NzI18nPipe
   ],
   templateUrl: './admin-article-card.component.html',
   styleUrl: './admin-article-card.component.scss'
@@ -27,6 +29,7 @@ export class AdminArticleCardComponent {
   @Output() articleChange = new EventEmitter<void>();
 
   constructor(
+    private readonly i18nService: NzI18nService,
     private readonly messageService: NzMessageService,
     private readonly modalService: NzModalService,
     private readonly articleService: ArticleApiService,
@@ -44,11 +47,11 @@ export class AdminArticleCardComponent {
 
   getStatusText(): string {
     if (this.article.status === 0) {
-      return 'On processing';
+      return this.i18nService.translate('userArticleCard.onProcessing');
     } else if (this.article.status === 1) {
-      return 'Published';
+      return this.i18nService.translate('userArticleCard.published');
     } else {
-      return 'Declined';
+      return this.i18nService.translate('userArticleCard.declined');
     }
   }
 
@@ -64,23 +67,23 @@ export class AdminArticleCardComponent {
 
   onApprove() {
     this.modalService.confirm({
-      nzTitle: "Are you sure about this article approval?",
-      nzContent: "This cannot be undone",
+      nzTitle: this.i18nService.translate("adminArticleCard.sureApproval"),
+      nzContent: this.i18nService.translate("adminArticleCard.cannotBeUndone"),
       nzOnOk: () => this.approve()
     });
   }
 
   onDecline() {
     this.modalService.confirm({
-      nzTitle: "Are you sure about this article deviation?",
-      nzContent: "This cannot be undone",
+      nzTitle: this.i18nService.translate("adminArticleCard.sureDeviation"),
+      nzContent: this.i18nService.translate("adminArticleCard.cannotBeUndone"),
       nzOnOk: () => this.decline()
     });
   }
 
   approve() {
     if (!this.article.id) {
-      this.messageService.error("Something went wrong!");
+      this.messageService.error(this.i18nService.translate("commonErrors.articleIdNotPresent"));
       return;
     }
 
@@ -88,7 +91,7 @@ export class AdminArticleCardComponent {
       .approveArticle(this.article.id)
       .subscribe({
         next: () => {
-          this.messageService.success("Article was successfully approved");
+          this.messageService.success(this.i18nService.translate("adminArticleCard.articleApproved"));
           this.articleChange.emit();
         },
         error: (error) => {
@@ -99,7 +102,7 @@ export class AdminArticleCardComponent {
 
   decline() {
     if (!this.article.id) {
-      this.messageService.error("Something went wrong!");
+      this.messageService.error(this.i18nService.translate("commonErrors.articleIdNotPresent"));
       return;
     }
 
@@ -107,7 +110,7 @@ export class AdminArticleCardComponent {
       .declineArticle(this.article.id)
       .subscribe({
         next: () => {
-          this.messageService.success("Article was successfully declined");
+          this.messageService.success("adminArticleCard.articleDeclined");
           this.articleChange.emit();
         },
         error: (error) => {

@@ -16,14 +16,14 @@
   <ng-template #emptyList>
     <ng-container *ngIf="!(isLoadingNewsList$ | async); else loading">
       <nz-empty
-        nzNotFoundContent="No news"
+        [nzNotFoundContent]="'adminNewsPage.noNews' | nzI18n"
       />
     </ng-container>
   </ng-template>
 </nz-card>
 
 <ng-template #newsTitle>
-  News
+  {{ 'adminNewsPage.news' | nzI18n }}
 </ng-template>
 
 <ng-template #createNews>
@@ -33,13 +33,13 @@
     (click)="openCreateNewModal()"
   >
     <span nz-icon nzType="plus"></span>
-    New
+    {{ 'adminNewsPage.new' | nzI18n }}
   </button>
 </ng-template>
 
 <nz-modal
   [(nzVisible)]="showCreateNewModal"
-  nzTitle="Create new article"
+  [nzTitle]="'adminNewsPage.createNewArticle' | nzI18n"
   (nzOnCancel)="closeCreateNewModal()"
   (nzOnOk)="onCreateNews()"
   [nzOkDisabled]="isCreatingNews$ | async"
@@ -47,22 +47,26 @@
   <ng-container *nzModalContent>
     <form nz-form [formGroup]="validateForm">
       <nz-form-item>
-        <nz-form-control  nzErrorTip="Please news title!">
-          <nz-form-label nzRequired>Title</nz-form-label>
+        <nz-form-control [nzErrorTip]="'adminNewsPage.specifyNewsTitle' | nzI18n">
+          <nz-form-label nzRequired>
+            {{ 'adminNewsPage.title' | nzI18n }}
+          </nz-form-label>
           <nz-input-group>
-            <input formControlName="title" type="text" nz-input placeholder="News title" />
+            <input formControlName="title" type="text" nz-input [placeholder]="'adminNewsPage.newsTitle' | nzI18n" />
           </nz-input-group>
         </nz-form-control>
       </nz-form-item>
       <nz-form-item>
-        <nz-form-control nzErrorTip="Please input news body!">
-          <nz-form-label nzRequired>Body</nz-form-label>
+        <nz-form-control [nzErrorTip]="'adminNewsPage.specifyNewsBody' | nzI18n">
+          <nz-form-label nzRequired>
+            {{ 'adminNewsPage.body' | nzI18n }}
+          </nz-form-label>
           <nz-textarea-count [nzMaxCharacterCount]="2000">
             <textarea
               nz-input
               formControlName="body"
               rows="3"
-              placeholder="News body..."
+              [placeholder]="'adminNewsPage.newsBody' | nzI18n"
             ></textarea>
           </nz-textarea-count>
         </nz-form-control>

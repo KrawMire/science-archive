@@ -25,12 +25,12 @@
 <ng-template #actionApprove>
   <span (click)="onApprove()">
     <span nz-icon nzType="check"></span>
-    Approve
+    {{ 'adminArticleCard.approve' | nzI18n }}
   </span>
 </ng-template>
 <ng-template #actionDecline>
   <span (click)="onDecline()">
     <span nz-icon nzType="close"></span>
-    Decline
+    {{ 'adminArticleCard.decline' | nzI18n }}
   </span>
 </ng-template>

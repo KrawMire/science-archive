@@ -8,6 +8,7 @@ import { AdminArticleCardComponent } from "@modules/admin/components/admin-artic
 import { AsyncPipe, NgForOf, NgIf } from "@angular/common";
 import { NzEmptyComponent } from "ng-zorro-antd/empty";
 import { NzSpinComponent } from "ng-zorro-antd/spin";
+import { NzI18nPipe } from "ng-zorro-antd/i18n";
 
 @Component({
   selector: 'sar-admin-articles-page',
@@ -19,7 +20,8 @@ import { NzSpinComponent } from "ng-zorro-antd/spin";
     NgForOf,
     AsyncPipe,
     NzEmptyComponent,
-    NzSpinComponent
+    NzSpinComponent,
+    NzI18nPipe
   ],
   templateUrl: './admin-articles-page.component.html',
   styleUrl: './admin-articles-page.component.scss'

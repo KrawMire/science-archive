@@ -27,7 +27,7 @@
   <nz-layout>
     <ng-container *ngIf="isMobile$ | async; else desktopSider">
       <nz-drawer
-        nzTitle="Administration"
+        [nzTitle]="'adminPage.administration' | nzI18n"
         nzClosable="true"
         nzPlacement="left"
         [nzVisible]="(showMobileDrawer$ | async) ?? false"
@@ -37,15 +37,21 @@
           <ul nz-menu nzMode="inline" nzTheme="light">
             <li nz-menu-item>
               <span nz-icon nzType="book" nzTheme="outline"></span>
-              <a style="margin-left: 8px" (click)="onDrawerNavigateTo('/admin', 'articles')">Articles</a>
+              <a style="margin-left: 8px" (click)="onDrawerNavigateTo('/admin', 'articles')">
+                {{ 'adminPage.articles' | nzI18n }}
+              </a>
             </li>
             <li nz-menu-item>
               <span nz-icon nzType="container" nzTheme="outline"></span>
-              <a style="margin-left: 8px" (click)="onDrawerNavigateTo('/admin', 'news')">News</a>
+              <a style="margin-left: 8px" (click)="onDrawerNavigateTo('/admin', 'news')">
+                {{ 'adminPage.news' | nzI18n }}
+              </a>
             </li>
             <li nz-menu-item>
               <span nz-icon nzType="arrow-left" nzTheme="outline"></span>
-              <a style="margin-left: 8px" href="/content">Back to content</a>
+              <a style="margin-left: 8px" href="/content">
+                {{ 'adminPage.backToMain' | nzI18n }}
+              </a>
             </li>
           </ul>
         </ng-container>
@@ -60,7 +66,9 @@
             nzMatchRouter
           >
             <span nz-icon nzType="book" nzTheme="outline"></span>
-            <span>Articles</span>
+            <span>
+              {{ 'adminPage.articles' | nzI18n }}
+            </span>
           </li>
           <li
             nz-menu-item
@@ -68,7 +76,9 @@
             nzMatchRouter
           >
             <span nz-icon nzType="container" nzTheme="outline"></span>
-            <span>News</span>
+            <span>
+              {{ 'adminPage.news' | nzI18n }}
+            </span>
           </li>
         </ul>
       </nz-sider>

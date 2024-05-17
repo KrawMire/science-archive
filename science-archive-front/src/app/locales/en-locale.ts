@@ -4,7 +4,8 @@ export const enLocale = {
   en_US,
   ...{
     commonErrors: {
-      unhandledError: "Unhandled error occurred"
+      unhandledError: "Unhandled error occurred",
+      articleIdNotPresent: "Article ID is not present"
     },
     contentPage: {
       headerMenu: {
@@ -153,7 +154,45 @@ export const enLocale = {
       specifyArticleSubcategory: "Please specify article subcategory",
       specifyDescription: "Please input article description",
       articleTitle: "Article title",
-      describeArticle: "Describe what about your article is..."
+      describeArticle: "Describe what about your article is...",
+      onlyForAuthorized: "This action is only for authorized users",
+      articleCreated: "Article was successfully created",
+      documentUploaded: "Document was successfully uploaded",
+      cannotUploadDocument: "An error occurred while uploading document"
+    },
+    adminPage: {
+      administration: "Administration",
+      articles: "Articles",
+      news: "News",
+      backToMain: "Back to main"
+    },
+    adminArticleCard: {
+      approve: "Approve",
+      decline: "Decline",
+      onProcessing: "On processing",
+      published: "Published",
+      declined: "Declined",
+      sureApproval: "Are you sure about this article approval?",
+      sureDeviation: "Are you sure about this article deviation?",
+      cannotBeUndone: "This cannot be undone",
+      articleApproved: "Article was successfully approved",
+      articleDeclined: "Article was successfully declined"
+    },
+    adminArticlesPage: {
+      noArticles: "No articles",
+      allArticles: "All articles"
+    },
+    adminNewsPage: {
+      noNews: "No news",
+      news: "News",
+      new: "New",
+      createNewArticle: "Create new article",
+      specifyNewsTitle: "Please specify news title",
+      specifyNewsBody: "Please input news body",
+      newsTitle: "News title",
+      newsBody: "News body...",
+      title: "Title",
+      body: "Body"
     }
   }
 }

@@ -6,7 +6,8 @@ export const ruLocale = {
   ...enLocale,
   ...{
     commonErrors: {
-      unhandledError: "Произошла непредвиденная ошибка"
+      unhandledError: "Произошла непредвиденная ошибка",
+      articleIdNotPresent: "Не удалось получить ID статьи"
     },
     contentPage: {
       headerMenu: {
@@ -155,7 +156,45 @@ export const ruLocale = {
       specifyArticleSubcategory: "Укажите подкатегорию статьи",
       specifyDescription: "Укажите описание статьи",
       articleTitle: "Заголовок статьи",
-      describeArticle: "Опишите о чем ваша статья..."
+      describeArticle: "Опишите о чем ваша статья...",
+      onlyForAuthorized: "Это действие доступно только для авторизованных пользователей",
+      articleCreated: "Статья успешно создана",
+      documentUploaded: "Документ был успешно загружен",
+      cannotUploadDocument: "Возникла ошибка во время загрузки документа"
+    },
+    adminPage: {
+      administration: "Панель администратора",
+      articles: "Статьи",
+      news: "Новости",
+      backToMain: "Назад на главную"
+    },
+    adminArticleCard: {
+      approve: "Одобрить",
+      decline: "Отклонить",
+      onProcessing: "На проверке",
+      published: "Опубликовано",
+      declined: "Отклонено",
+      sureApproval: "Вы уверены, что хотите одобрить эту статью?",
+      sureDeviation: "Вы уверены, что хотите отклонить эту статью?",
+      cannotBeUndone: "Это действие не может быть отменено",
+      articleApproved: "Статья успешно одобрена",
+      articleDeclined: "Статья успешно отклонена"
+    },
+    adminArticlesPage: {
+      noArticles: "Нет статей на проверку",
+      allArticles: "Все статьи"
+    },
+    adminNewsPage: {
+      noNews: "Нет новостей",
+      news: "Новости",
+      new: "Новая новость",
+      createNewArticle: "Создание новой новости",
+      specifyNewsTitle: "Укажите заголовок новости",
+      specifyNewsBody: "Укажите тело новости",
+      newsTitle: "Заголовок новости",
+      newsBody: "Тело новости...",
+      title: "Заголовок",
+      body: "Тело"
     }
   }
 }

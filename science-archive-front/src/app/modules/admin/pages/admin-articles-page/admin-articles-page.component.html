@@ -17,12 +17,12 @@
   <ng-template #emptyList>
     <ng-container *ngIf="!(isLoadingArticleList$ | async); else loading">
       <nz-empty
-        nzNotFoundContent="No articles"
+        [nzNotFoundContent]="'adminArticlesPage.noArticles' | nzI18n"
       />
     </ng-container>
   </ng-template>
 </nz-card>
 
 <ng-template #articleTitle>
-  All articles
+  {{ 'adminArticlesPage.allArticles' | nzI18n }}
 </ng-template>
