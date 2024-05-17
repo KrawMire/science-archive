@@ -66,13 +66,8 @@ public class ArticleController : ControllerBase
         {
             throw new BadHttpRequestException("ID was not presented");
         }
-        
-        var userId = HttpContext.GetUserIdFromToken();
 
-        if (string.IsNullOrWhiteSpace(userId))
-        {
-            throw new BadHttpRequestException("Cannot get user ID", 403);
-        }
+        var userId = HttpContext.GetUserIdFromToken();
 
         var requiredClaims = new List<string> { AuthClaims.ViewDeclinedArticles, AuthClaims.ViewNotVerifiedArticles };
         var dto = new GetArticleByIdRequestDto(id, userId, requiredClaims);
