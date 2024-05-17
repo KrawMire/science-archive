@@ -17,9 +17,10 @@ import { BrowserModule } from "@angular/platform-browser";
 import { NzResultModule } from "ng-zorro-antd/result";
 import { SharedModule } from "@modules/shared/shared.module";
 import { NzTooltipDirective } from "ng-zorro-antd/tooltip";
+import { NzI18nPipe } from "ng-zorro-antd/i18n";
 
 @NgModule({
-  imports: [BrowserModule, CommonModule, NzCardModule, NzButtonModule, NzSkeletonModule, NzTagModule, RouterLink, NzBreadCrumbModule, NzListModule, NzTypographyModule, NzEmptyModule, NzResultModule, SharedModule, NzTooltipDirective],
+  imports: [BrowserModule, CommonModule, NzCardModule, NzButtonModule, NzSkeletonModule, NzTagModule, RouterLink, NzBreadCrumbModule, NzListModule, NzTypographyModule, NzEmptyModule, NzResultModule, SharedModule, NzTooltipDirective, NzI18nPipe],
   declarations: [ArticlesPageComponent, ArticleCardComponent, ArticleCardSkeletonComponent, ArticlePageComponent],
   exports: [ArticleCardComponent, ArticlePageComponent],
 })

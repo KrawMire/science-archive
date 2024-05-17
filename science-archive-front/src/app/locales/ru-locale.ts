@@ -79,7 +79,24 @@ export const ruLocale = {
       }
     },
     articlesPage: {
-
-    }
+      articles: "Статьи",
+      noArticlesFound: "Ни одной статьи не найдено",
+      readAllArticles: "Перейти ко всем статьям",
+    },
+    articlePage: {
+      linkedDocuments: "Прикрепленные документы",
+      noDocuments: "Прикрепленных документов нет",
+      backToArticles: "Назад к статьям",
+      invalidSearchData: "Некорректные поисковые данные",
+      incorrectDataWasPassed: "Переданы некорректные данные для поиска",
+      forbiddenResource: "Доступ ограничен",
+      youCannotView: "Вы не можете просматривать эту статью",
+      notFound: "404",
+      articleNotExist: "Статья не существует",
+      serverError: "Серверная ошибка",
+      internalServerError: "Внутренняя серверная ошибка",
+      unknownError: "Неизвестная ошибка",
+      unableToProcess: "Мы не смогли обработать ваш запрос"
+    },
   }
 }

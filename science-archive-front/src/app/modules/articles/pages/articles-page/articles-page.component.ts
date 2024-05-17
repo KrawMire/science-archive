@@ -6,6 +6,7 @@ import { Title } from "@angular/platform-browser";
 import { NzMessageService } from "ng-zorro-antd/message";
 import { ActivatedRoute } from "@angular/router";
 import { Subcategory } from "@models/category/subcategory";
+import { NzI18nService } from "ng-zorro-antd/i18n";
 
 @Component({
   selector: "sar-articles-page",
@@ -18,12 +19,11 @@ export class ArticlesPageComponent implements OnInit {
   isLoading$ = new BehaviorSubject<boolean>(true);
 
   constructor(
+    private readonly i18nService: NzI18nService,
     private readonly articleService: ArticleApiService,
     private readonly message: NzMessageService,
     private readonly route: ActivatedRoute,
-    private readonly titleService: Title) {
-
-  }
+    private readonly titleService: Title) {}
 
   ngOnInit(): void {
     window.scrollTo(0, 0);
@@ -62,7 +62,7 @@ export class ArticlesPageComponent implements OnInit {
           this.isLoading$.next(false);
           this.articles$.next([]);
           console.log(error);
-          this.message.error("Unhandled error occurred.");
+          this.message.error(this.i18nService.translate("commonErrors.unhandledError"));
         },
       });
   }
@@ -95,7 +95,7 @@ export class ArticlesPageComponent implements OnInit {
           this.articles$.next([]);
           this.titleService.setTitle("Science Archive - Articles");
           console.log(error);
-          this.message.error("Unhandled error occurred.");
+          this.message.error(this.i18nService.translate("commonErrors.unhandledError"));
         },
       });
   }

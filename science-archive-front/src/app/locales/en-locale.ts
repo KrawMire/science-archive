@@ -76,11 +76,25 @@ export const enLocale = {
         confirmCode: "Confirm code",
       }
     },
-    articlePage: {
-
-    },
     articlesPage: {
-
-    }
+      articles: "Articles",
+      noArticlesFound: "No articles found",
+      readAllArticles: "Read all articles",
+    },
+    articlePage: {
+      linkedDocuments: "Linked documents",
+      noDocuments: "No documents",
+      backToArticles: "Back to articles",
+      invalidSearchData: "Invalid search data",
+      incorrectDataWasPassed: "Incorrect search data was passed",
+      forbiddenResource: "Forbidden resource",
+      youCannotView: "You cannot view this article",
+      notFound: "404",
+      articleNotExist: "This article does not exist",
+      serverError: "Server error",
+      internalServerError: "Internal server error",
+      unknownError: "Unknown error",
+      unableToProcess: "We were unable to process your request"
+    },
   }
 }

@@ -23,7 +23,7 @@
       {{article.description}}
     </p>
 
-    <nz-list nzItemLayout="horizontal" nzHeader="Linked documents">
+    <nz-list nzItemLayout="horizontal" [nzHeader]="'articlePage.linkedDocuments' | nzI18n">
         <div *ngIf="article.documents.length && article.documents.length > 0; else emptyDocs">
           <nz-list-item *ngFor="let document of article.documents">
             <a href="/api/documents/{{document.path}}" target="_blank" rel="noopener noreferrer">{{ document.name }}</a>
@@ -32,7 +32,7 @@
     </nz-list>
 
     <ng-template #emptyDocs>
-      <nz-empty nzNotFoundContent="No documents"/>
+      <nz-empty [nzNotFoundContent]="'articlePage.noDocuments' | nzI18n"/>
     </ng-template>
   </ng-container>
 
@@ -59,66 +59,66 @@
   </ng-template>
 
   <ng-template #badRequestErrorView>
-    <nz-result nzStatus="warning" nzTitle="Invalid search data" nzSubTitle="Incorrect search data were passed">
+    <nz-result nzStatus="warning" [nzTitle]="'articlePage.invalidSearchData' | nzI18n" [nzSubTitle]="'articlePage.incorrectDataWasPassed' | nzI18n">
       <div nz-result-extra>
         <button
           nz-button
           nzType="primary"
           [routerLink]="['/content', 'articles']"
         >
-          Back to articles
+          {{ 'articlePage.backToArticles' | nzI18n }}
         </button>
       </div>
     </nz-result>
   </ng-template>
   <ng-template #forbiddenErrorView>
-    <nz-result nzStatus="warning" nzTitle="Forbidden resource" nzSubTitle="You cannot view this article">
+    <nz-result nzStatus="warning" [nzTitle]="'articlePage.forbiddenResource' | nzI18n" [nzSubTitle]="'articlePage.youCannotView' | nzI18n">
       <div nz-result-extra>
         <button
           nz-button
           nzType="primary"
           [routerLink]="['/content', 'articles']"
         >
-          Back to articles
+          {{ 'articlePage.backToArticles' | nzI18n }}
         </button>
       </div>
     </nz-result>
   </ng-template>
   <ng-template #notFoundErrorView>
-    <nz-result nzStatus="404" nzTitle="404" nzSubTitle="This article does not exist">
+    <nz-result nzStatus="404" [nzTitle]="'articlePage.notFound' | nzI18n" [nzSubTitle]="'articlePage.articleNotExist' | nzI18n">
       <div nz-result-extra>
         <button
           nz-button
           nzType="primary"
           [routerLink]="['/content', 'articles']"
         >
-          Back to articles
+          {{ 'articlePage.backToArticles' | nzI18n }}
         </button>
       </div>
     </nz-result>
   </ng-template>
   <ng-template #internalServerErrorView>
-    <nz-result nzStatus="error" nzTitle="Server error" nzSubTitle="Internal server error">
+    <nz-result nzStatus="error" [nzTitle]="'articlePage.serverError' | nzI18n" [nzSubTitle]="'articlePage.internalServerError' | nzI18n">
       <div nz-result-extra>
         <button
           nz-button
           nzType="primary"
           [routerLink]="['/content', 'articles']"
         >
-          Back to articles
+          {{ 'articlePage.backToArticles' | nzI18n }}
         </button>
       </div>
     </nz-result>
   </ng-template>
   <ng-template #commonError>
-    <nz-result nzStatus="error" nzTitle="Unknown error" nzSubTitle="We were unable to process your request">
+    <nz-result nzStatus="error" [nzTitle]="'articlePage.unknownError' | nzI18n" [nzSubTitle]="'articlePage.unableToProcess' | nzI18n">
       <div nz-result-extra>
         <button
           nz-button
           nzType="primary"
           [routerLink]="['/content', 'articles']"
         >
-          Back to articles
+          {{ 'articlePage.backToArticles' | nzI18n }}
         </button>
       </div>
     </nz-result>

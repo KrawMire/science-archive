@@ -9,7 +9,7 @@
   <ng-container>
     <nz-breadcrumb *ngIf="(category$ | async) as category">
       <nz-breadcrumb-item>
-        <a [routerLink]="['/content', 'articles']">Articles</a>
+        <a [routerLink]="['/content', 'articles']">{{ "articlesPage.articles" | nzI18n }}</a>
       </nz-breadcrumb-item>
       <nz-breadcrumb-item>
         {{category.name}}
@@ -17,12 +17,12 @@
     </nz-breadcrumb>
     <nz-card *ngIf="(articles$ | async)?.length === 0; else articlesList">
       <nz-empty
-        nzNotFoundContent="No articles found"
+        [nzNotFoundContent]="'articlesPage.noArticlesFound' | nzI18n"
         [nzNotFoundFooter]="goToArticles"
       />
       <ng-template #goToArticles>
         <ng-container *ngIf="(category$ | async) as category">
-          <button nz-button nzType="primary" [routerLink]="['/content', 'articles']">Read all articles</button>
+          <button nz-button nzType="primary" [routerLink]="['/content', 'articles']">{{ "articlesPage.readAllArticles" | nzI18n }}</button>
         </ng-container>
       </ng-template>
     </nz-card>
