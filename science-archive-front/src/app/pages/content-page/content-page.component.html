@@ -37,7 +37,7 @@
           routerLink="news"
           nzMatchRouter
         >
-          News
+          {{ "ContentPage.NewsMenuElement" | nzI18n }}
         </li>
       </ul>
       <ng-container *ngIf="(currentUser$ | async) as currentUser; else signIn">
@@ -85,7 +85,7 @@
             class="footer-link"
             routerLink="news"
           >
-            News
+            {{ "ContentPage.NewsMenuElement" | nzI18n }}
           </p>
         </div>
       </div>
@@ -116,16 +116,16 @@
     >
       <li nz-menu-item>
         <span nz-icon nzType="user" nzTheme="outline"></span>
-        <a style="margin-left: 8px" href="/account/profile">My profile</a>
+        <a style="margin-left: 8px" [routerLink]="['/account','profile']">My profile</a>
       </li>
       <li nz-menu-item>
         <span nz-icon nzType="book" nzTheme="outline"></span>
-        <a style="margin-left: 8px" href="/account/user-articles">My articles</a>
+        <a style="margin-left: 8px" [routerLink]="['/account','user-articles']">My articles</a>
       </li>
       <ng-container *ngIf="(currentClaims$ | async) as currentClaims">
         <li nz-menu-item *ngIf="currentClaims.includes(AvailableClaims.AccessAdminPage)">
           <span nz-icon nzType="lock" nzTheme="outline"></span>
-          <a style="margin-left: 8px" href="/admin">Admin panel</a>
+          <a style="margin-left: 8px" [routerLink]="['/admin']">Admin panel</a>
         </li>
       </ng-container>
       <li nz-menu-item>

@@ -3,10 +3,8 @@ import { BrowserModule } from "@angular/platform-browser";
 
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
-import { NZ_I18N } from "ng-zorro-antd/i18n";
-import { en_US } from "ng-zorro-antd/i18n";
-import { NgOptimizedImage, registerLocaleData } from "@angular/common";
-import en from "@angular/common/locales/en";
+import { NZ_I18N, NzI18nPipe } from "ng-zorro-antd/i18n";
+import { NgOptimizedImage } from "@angular/common";
 import { FormsModule } from "@angular/forms";
 import { HttpClientModule } from "@angular/common/http";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
@@ -30,8 +28,9 @@ import { NzToolTipModule } from "ng-zorro-antd/tooltip";
 import { NzBreadCrumbModule } from "ng-zorro-antd/breadcrumb";
 import { CookieService } from "ngx-cookie-service";
 import { AdminModule } from "@modules/admin/admin.module";
-
-registerLocaleData(en);
+import { SharedModule } from "@modules/shared/shared.module";
+import { ruLocale } from "./locales/ru-locale";
+import { enLocale } from "./locales/en-locale";
 
 @NgModule({
   declarations: [AppComponent, AuthPageComponent, AccountPageComponent, ContentPageComponent, WelcomePageComponent],
@@ -61,9 +60,24 @@ registerLocaleData(en);
     NzAffixModule,
     NzButtonModule,
     NzToolTipModule,
-    NzBreadCrumbModule
+    NzBreadCrumbModule,
+    SharedModule,
+    NzI18nPipe
   ],
-  providers: [CookieService, { provide: NZ_I18N, useValue: en_US }],
+  providers: [CookieService, {
+    provide: NZ_I18N,
+    useFactory: () => {
+      console.log(navigator.language);
+      switch (navigator.language) {
+        case 'en':
+          return enLocale;
+        case 'ru':
+          return ruLocale;
+        default:
+          return enLocale;
+      }
+    }
+  }],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

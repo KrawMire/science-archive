@@ -3,6 +3,7 @@ import { AuthService } from "@modules/auth/services/auth.service";
 import { AuthApiService } from "@services/auth-api.service";
 import { NzMessageService } from "ng-zorro-antd/message";
 import { CookieService } from "ngx-cookie-service";
+import { LoadingService } from "@modules/shared/services/loading.service";
 
 @Component({
   selector: 'sar-app-root',
@@ -11,6 +12,7 @@ import { CookieService } from "ngx-cookie-service";
 })
 export class AppComponent {
   constructor(
+    public loadingService: LoadingService,
     private readonly messageService: NzMessageService,
     private readonly authApiService: AuthApiService,
     private readonly authService: AuthService,
