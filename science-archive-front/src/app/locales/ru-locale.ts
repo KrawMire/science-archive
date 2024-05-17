@@ -118,6 +118,44 @@ export const ruLocale = {
     },
     newsPage: {
       backToNews: "Назад к новостям"
+    },
+    accountPage: {
+      account: "Аккаунт",
+      profile: "Профиль",
+      myArticles: "Мои статьи",
+      allArticles: "Все статьи",
+      backToMain: "Назад на главную",
+    },
+    profilePage: {
+      profile: "Профиль",
+      name: "Имя",
+      login: "Логин",
+      email: "Email",
+      confirmed: "Подтвержден"
+    },
+    userArticleCard: {
+      onProcessing: "На проверке",
+      published: "Опубликовано",
+      declined: "Отклонено"
+    },
+    userArticlesPage: {
+      youHaveNotCreatedArticle: "Вы еще не создали ни одной статьи",
+      createFirstArticle: "Создайте свою первую статью",
+      allArticles: "Все статьи",
+      new: "Новая статья",
+      createNewArticle: "Создание новой статьи",
+      title: "Заголовок",
+      category: "Категория",
+      subcategory: "Подкатегория",
+      description: "Описание",
+      dragDocsToArea: "Кликните или перенесите документы в эту область для загрузки",
+      supportSingleUpload: "Поддерживает только загрузку по одному файлу. Строго не рекомендуем загружать конфиденциальные файлы",
+      specifyArticleTitle: "Укажите заголовок статьи",
+      specifyArticleCategory: "Укажите категорию статьи",
+      specifyArticleSubcategory: "Укажите подкатегорию статьи",
+      specifyDescription: "Укажите описание статьи",
+      articleTitle: "Заголовок статьи",
+      describeArticle: "Опишите о чем ваша статья..."
     }
   }
 }

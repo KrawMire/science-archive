@@ -1,4 +1,4 @@
-<nz-card [nzTitle]="articleTitle" [nzExtra]="addNewArticle">
+<nz-card [nzTitle]="pageTitle" [nzExtra]="addNewArticle">
   <ng-container *ngIf="(articles$ | async) as articles">
     <ng-container *ngIf="articles.length > 0; else emptyList">
       <sar-user-article-card style="margin-top: 8px" *ngFor="let article of articles" [article]="article" />
@@ -12,7 +12,7 @@
   <ng-template #emptyList>
     <ng-container *ngIf="!(isLoadingArticleList$ | async); else loading">
       <nz-empty
-        nzNotFoundContent="You haven't created any article"
+        [nzNotFoundContent]="'userArticlesPage.youHaveNotCreatedArticle' | nzI18n"
         [nzNotFoundFooter]="createArticle"
       />
     </ng-container>
@@ -22,14 +22,14 @@
         nzType="primary"
         (click)="openCreateNewModal()"
       >
-        Create your first article
+        {{ 'userArticlesPage.createFirstArticle' | nzI18n }}
       </button>
     </ng-template>
   </ng-template>
 </nz-card>
 
-<ng-template #articleTitle>
-  All articles
+<ng-template #pageTitle>
+  {{ 'userArticlesPage.allArticles' | nzI18n }}
 </ng-template>
 
 <ng-template #addNewArticle>
@@ -39,13 +39,13 @@
     (click)="openCreateNewModal()"
   >
     <span nz-icon nzType="plus"></span>
-    New
+    {{ 'userArticlesPage.new' | nzI18n }}
   </button>
 </ng-template>
 
 <nz-modal
   [(nzVisible)]="showCreateNewModal"
-  nzTitle="Create new article"
+  [nzTitle]="'userArticlesPage.createNewArticle' | nzI18n"
   (nzOnCancel)="onCancelCreateNewArticle()"
   (nzOnOk)="onCreateNewArticle()"
   [nzOkDisabled]="isCreatingNewArticle$ | async"
@@ -53,19 +53,19 @@
   <ng-container *nzModalContent>
     <form nz-form [formGroup]="validateForm">
       <nz-form-item>
-        <nz-form-control  nzErrorTip="Please article title!">
-          <nz-form-label nzRequired>Title</nz-form-label>
+        <nz-form-control [nzErrorTip]="'userArticlesPage.specifyArticleTitle' | nzI18n">
+          <nz-form-label nzRequired>{{ 'userArticlesPage.title' | nzI18n }}</nz-form-label>
           <nz-input-group>
-            <input formControlName="title" type="text" nz-input placeholder="Article title" />
+            <input formControlName="title" type="text" nz-input [placeholder]="'userArticlesPage.articleTitle' | nzI18n" />
           </nz-input-group>
         </nz-form-control>
       </nz-form-item>
       <nz-form-item>
-        <nz-form-control nzErrorTip="Please specify article category">
-          <nz-form-label nzRequired>Category</nz-form-label>
+        <nz-form-control [nzErrorTip]="'userArticlesPage.specifyArticleCategory' | nzI18n">
+          <nz-form-label nzRequired>{{ 'userArticlesPage.category' | nzI18n }}</nz-form-label>
           <nz-select
             formControlName="categoryId"
-            nzPlaceHolder="Category"
+            [nzPlaceHolder]="'userArticlesPage.category' | nzI18n"
           >
             <nz-option
               *ngFor="let category of categories$ | async"
@@ -75,9 +75,9 @@
           </nz-select>
         </nz-form-control>
         <ng-container *ngIf="subcategories$ | async as subcategories" >
-          <nz-form-control *ngIf="subcategories.length > 0" nzErrorTip="Please specify article subcategory">
-            <nz-form-label nzRequired>Subcategory</nz-form-label>
-            <nz-select formControlName="subcategoryId" nzPlaceHolder="Subcategory">
+          <nz-form-control *ngIf="subcategories.length > 0" [nzErrorTip]="'userArticlesPage.specifyArticleSubcategory' | nzI18n">
+            <nz-form-label nzRequired>{{ 'userArticlesPage.subcategory' | nzI18n }}</nz-form-label>
+            <nz-select formControlName="subcategoryId" [nzPlaceHolder]="'userArticlesPage.subcategory' | nzI18n">
               <nz-option
                 *ngFor="let subcategory of subcategories$ | async"
                 [nzLabel]="subcategory.name"
@@ -87,31 +87,30 @@
         </ng-container>
       </nz-form-item>
       <nz-form-item>
-        <nz-form-control nzErrorTip="Please input article description!">
-          <nz-form-label>Description</nz-form-label>
+        <nz-form-control [nzErrorTip]="'userArticlesPage.specifyDescription' | nzI18n">
+          <nz-form-label>{{ 'userArticlesPage.description' | nzI18n }}</nz-form-label>
           <nz-textarea-count [nzMaxCharacterCount]="2000">
             <textarea
               nz-input
               formControlName="description"
               rows="3"
-              placeholder="Describe what about your article is..."
+              [placeholder]="'userArticlesPage.describeArticle' | nzI18n"
             ></textarea>
           </nz-textarea-count>
         </nz-form-control>
       </nz-form-item>
       <nz-upload
         nzType="drag"
-        [nzMultiple]="true"
+        [nzMultiple]="false"
         [(nzFileList)]="fileList"
         [nzBeforeUpload]="beforeUpload.bind(this)"
       >
         <p class="ant-upload-drag-icon">
           <span nz-icon nzType="inbox"></span>
         </p>
-        <p class="ant-upload-text">Click or drag documents to this area to upload</p>
+        <p class="ant-upload-text">{{ 'userArticlesPage.dragDocsToArea' | nzI18n }}</p>
         <p class="ant-upload-hint">
-          Support for a single or bulk upload.
-          Strictly prohibit from uploading company data or other band files
+          {{ 'userArticlesPage.supportSingleUpload' | nzI18n }}
         </p>
       </nz-upload>
     </form>

@@ -116,6 +116,44 @@ export const enLocale = {
     },
     newsPage: {
       backToNews: "Back to news"
+    },
+    accountPage: {
+      account: "Account",
+      profile: "Profile",
+      myArticles: "My articles",
+      allArticles: "All articles",
+      backToMain: "Back to main",
+    },
+    profilePage: {
+      profile: "Profile",
+      name: "Name",
+      login: "Login",
+      email: "Email",
+      confirmed: "Confirmed"
+    },
+    userArticleCard: {
+      onProcessing: "On processing",
+      published: "Published",
+      declined: "Declined"
+    },
+    userArticlesPage: {
+      youHaveNotCreatedArticle: "You haven't created any article",
+      createFirstArticle: "Create your first article",
+      allArticles: "All articles",
+      new: "New",
+      createNewArticle: "Create new article",
+      title: "Title",
+      category: "Category",
+      subcategory: "Subcategory",
+      description: "Description",
+      dragDocsToArea: "Click or drag documents to this area to upload",
+      supportSingleUpload: "Support only single upload. Strictly prohibit from uploading company data or other band files",
+      specifyArticleTitle: "Please specify article title",
+      specifyArticleCategory: "Please specify article category",
+      specifyArticleSubcategory: "Please specify article subcategory",
+      specifyDescription: "Please input article description",
+      articleTitle: "Article title",
+      describeArticle: "Describe what about your article is..."
     }
   }
 }

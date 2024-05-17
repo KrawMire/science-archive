@@ -5,6 +5,7 @@ import { SharedModule } from "@modules/shared/shared.module";
 import { Article } from "@models/article/article";
 import { RouterLink } from "@angular/router";
 import { NzIconDirective } from "ng-zorro-antd/icon";
+import { NzI18nService } from "ng-zorro-antd/i18n";
 
 @Component({
   selector: 'sar-user-article-card',
@@ -24,6 +25,11 @@ export class UserArticleCardComponent {
   @Input() style?: string;
   @Input() article!: Article;
 
+  constructor(
+    private readonly i18nService: NzI18nService
+  ) {
+  }
+
   getStatusIcon(): string {
     if (this.article.status === 0) {
       return 'sync';
@@ -36,11 +42,11 @@ export class UserArticleCardComponent {
 
   getStatusText(): string {
     if (this.article.status === 0) {
-      return 'On processing';
+      return this.i18nService.translate('userArticleCard.onProcessing');
     } else if (this.article.status === 1) {
-      return 'Published';
+      return this.i18nService.translate('userArticleCard.published');
     } else {
-      return 'Declined';
+      return this.i18nService.translate('userArticleCard.declined');
     }
   }
 

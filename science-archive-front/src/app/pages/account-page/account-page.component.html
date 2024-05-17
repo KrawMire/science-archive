@@ -27,7 +27,7 @@
   <nz-layout>
     <ng-container *ngIf="isMobile$ | async; else desktopSider">
       <nz-drawer
-        nzTitle="Account"
+        [nzTitle]="'accountPage.account' | nzI18n"
         nzClosable="true"
         nzPlacement="left"
         [nzVisible]="(showMobileDrawer$ | async) ?? false"
@@ -39,18 +39,24 @@
               nz-menu-item
             >
               <span nz-icon nzType="user" nzTheme="outline"></span>
-              <a style="margin-left: 8px" (click)="onDrawerNavigateTo('/account', 'profile')">Profile</a>
+              <a style="margin-left: 8px" (click)="onDrawerNavigateTo('/account', 'profile')">
+                {{ 'accountPage.profile' | nzI18n }}
+              </a>
             </li>
-            <li nz-submenu nzTitle="My articles" nzIcon="book">
+            <li nz-submenu [nzTitle]="'accountPage.myArticles' | nzI18n" nzIcon="book">
               <ul>
                 <li nz-menu-item>
-                  <a style="margin-left: 8px" (click)="onDrawerNavigateTo('/account', 'user-articles')">All articles</a>
+                  <a style="margin-left: 8px" (click)="onDrawerNavigateTo('/account', 'user-articles')">
+                    {{ 'accountPage.allArticles' | nzI18n }}
+                  </a>
                 </li>
               </ul>
             </li>
             <li nz-menu-item>
               <span nz-icon nzType="arrow-left" nzTheme="outline"></span>
-              <a style="margin-left: 8px" href="/content">Back to content</a>
+              <a style="margin-left: 8px" href="/content">
+                {{ 'accountPage.backToMain' | nzI18n }}
+              </a>
             </li>
           </ul>
         </ng-container>
@@ -65,11 +71,15 @@
             nzMatchRouter
           >
             <span nz-icon nzType="user" nzTheme="outline"></span>
-            <span>Profile</span>
+            <span>
+              {{ 'accountPage.profile' | nzI18n }}
+            </span>
           </li>
-          <li nz-submenu nzTitle="My articles" nzIcon="book">
+          <li nz-submenu [nzTitle]="'accountPage.myArticles' | nzI18n" nzIcon="book">
             <ul>
-              <li nz-menu-item routerLink="user-articles" nzMatchRouter>All articles</li>
+              <li nz-menu-item routerLink="user-articles" nzMatchRouter>
+                {{ 'accountPage.allArticles' | nzI18n }}
+              </li>
             </ul>
           </li>
         </ul>

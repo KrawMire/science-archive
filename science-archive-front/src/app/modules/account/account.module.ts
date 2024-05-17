@@ -19,6 +19,7 @@ import { ReactiveFormsModule } from "@angular/forms";
 import { NzOptionComponent, NzSelectComponent } from "ng-zorro-antd/select";
 import { NzUploadComponent } from "ng-zorro-antd/upload";
 import { UserArticleCardComponent } from "@modules/account/components/user-article-card/user-article-card.component";
+import { NzI18nPipe } from "ng-zorro-antd/i18n";
 
 
 
@@ -53,7 +54,8 @@ import { UserArticleCardComponent } from "@modules/account/components/user-artic
     NzSelectComponent,
     NzOptionComponent,
     NzUploadComponent,
-    UserArticleCardComponent
+    UserArticleCardComponent,
+    NzI18nPipe
   ]
 })
 export class AccountModule { }
