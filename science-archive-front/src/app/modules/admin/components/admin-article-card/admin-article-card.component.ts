@@ -110,7 +110,7 @@ export class AdminArticleCardComponent {
       .declineArticle(this.article.id)
       .subscribe({
         next: () => {
-          this.messageService.success("adminArticleCard.articleDeclined");
+          this.messageService.success(this.i18nService.translate("adminArticleCard.articleDeclined"));
           this.articleChange.emit();
         },
         error: (error) => {

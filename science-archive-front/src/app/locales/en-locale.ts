@@ -30,7 +30,7 @@ export const enLocale = {
       }
     },
     welcomePage: {
-      goalText: "Our mission is to give to independent scientists and other explorers ability to publish their works and share it with the world. It's so expensive to get access to modern science literature in nowadays. So is to achieve publishing in any reputable publishing house.",
+      goalText: "Our mission is to give to independent scientists and other explorers ability to publish their works or preprints and share it with the world.",
       goToArticles: "Go to Articles",
     },
     authPage: {
@@ -42,7 +42,7 @@ export const enLocale = {
         codeWasResentManyTimes: "Code was resent over 5 times",
         invalidCode: "Code is invalid",
       },
-      goalText: "Our mission is to give to independent scientists and other explorers ability to publish their works and share it with the world. It's so expensive to get access to modern science literature in nowadays. So is to achieve publishing in any reputable publishing house.",
+      goalText: "Our mission is to give to independent scientists and other explorers ability to publish their works or preprints and share it with the world.",
       signInForm: {
         signIn: "Sign in",
         inputValidLoginOrEmail: "Please input valid login or email!",
