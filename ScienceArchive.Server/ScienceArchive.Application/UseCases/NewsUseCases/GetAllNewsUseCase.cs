@@ -21,7 +21,15 @@ internal class GetAllNewsUseCase : IUseCase<GetAllNewsRequestDto, GetAllNewsResp
     public async Task<GetAllNewsResponseDto> Handle(GetAllNewsRequestDto request, CancellationToken cancellationToken)
     {
         var news = await _dbUnitOfWork.NewsRepository.GetAll();
-        var newsDtos = news.Select(newsEntity => _newsMapper.MapToDto(newsEntity)).ToList();
+        var newsDtos = news.Select(newsEntity =>
+        {
+            var newsDto = _newsMapper.MapToDto(newsEntity);
+            newsDto.Body = newsDto.Body.Length > 350 
+                ? newsDto.Body[..350] + "..." 
+                : newsDto.Body;
+
+            return newsDto;
+        }).ToList();
 
         return new GetAllNewsResponseDto(newsDtos);
     }

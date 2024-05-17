@@ -1,0 +1,28 @@
+<nz-card [nzTitle]="articleTitle">
+  <ng-container *ngIf="(articles$ | async) as articles">
+    <ng-container *ngIf="articles.length > 0; else emptyList">
+      <sar-admin-article-card
+        style="margin-top: 8px"
+        *ngFor="let article of articles"
+        [article]="article"
+        (articleChange)="getArticles()"
+      />
+    </ng-container>
+  </ng-container>
+
+  <ng-template #loading>
+    <nz-spin nzSize="large"/>
+  </ng-template>
+
+  <ng-template #emptyList>
+    <ng-container *ngIf="!(isLoadingArticleList$ | async); else loading">
+      <nz-empty
+        [nzNotFoundContent]="'adminArticlesPage.noArticles' | nzI18n"
+      />
+    </ng-container>
+  </ng-template>
+</nz-card>
+
+<ng-template #articleTitle>
+  {{ 'adminArticlesPage.allArticles' | nzI18n }}
+</ng-template>

@@ -5,6 +5,7 @@ using ScienceArchive.Application.Dtos.User.Response;
 using ScienceArchive.Application.Interfaces;
 using ScienceArchive.Core.Domain.Aggregates.User;
 using ScienceArchive.Core.Domain.Aggregates.User.ValueObjects;
+using ScienceArchive.Core.Exceptions;
 
 namespace ScienceArchive.Application.UseCases.UserUseCases;
 
@@ -22,6 +23,13 @@ internal class UpdateUserUseCase : IUseCase<UpdateUserRequestDto, UpdateUserResp
     public async Task<UpdateUserResponseDto> Handle(UpdateUserRequestDto request, CancellationToken cancellationToken)
     {
         var userId = UserId.CreateFromString(request.Id);
+        var initiatorUserId = UserId.CreateFromString(request.InitiatorUserId);
+        
+        if (!userId.Equals(initiatorUserId))
+        {
+            throw new InvalidInitiatorUserException();
+        }
+        
         var user = _userMapper.MapToEntity(request.User);
         var updatedUser = await _dbUnitOfWork.UserRepository.Update(userId, user);
 

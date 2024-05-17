@@ -15,4 +15,11 @@ public interface IRoleRepository : ICrudRepository<RoleId, Role>
 	/// <param name="userId">User ID</param>
 	/// <returns>List of user claims</returns>
 	Task<List<RoleClaim>> GetUserClaims(UserId userId);
+
+	/// <summary>
+	/// Get the claims by their values
+	/// </summary>
+	/// <param name="claimsValues">List of claim values</param>
+	/// <returns>List of role claims</returns>
+	Task<List<RoleClaim>> GetClaimsByValues(List<string> claimsValues);
 }

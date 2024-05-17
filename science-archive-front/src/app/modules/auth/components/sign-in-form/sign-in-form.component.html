@@ -1,0 +1,26 @@
+<form nz-form class="sign-in-form" [formGroup]="validateForm" (ngSubmit)="submitForm()">
+  <h2>{{ "authPage.signInForm.signIn" | nzI18n }}</h2>
+  <nz-form-item>
+    <nz-form-control [nzErrorTip]="'authPage.signInForm.inputValidLoginOrEmail' | nzI18n">
+      <nz-input-group nzPrefixIcon="user">
+        <input formControlName="login" type="text" nz-input [placeholder]="'authPage.signInForm.loginOrEmail' | nzI18n" />
+      </nz-input-group>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-control [nzErrorTip]="'authPage.signInForm.inputPassword' | nzI18n">
+      <nz-input-group nzPrefixIcon="lock">
+        <input formControlName="password" type="password" nz-input [placeholder]="'authPage.signInForm.password' | nzI18n" />
+      </nz-input-group>
+    </nz-form-control>
+  </nz-form-item>
+  <button nz-button class="sign-in-form-button" [nzType]="'primary'">
+    {{ "authPage.signInForm.logIn" | nzI18n }}
+  </button>
+  <p class="sign-in-suggest-wrapper">
+    {{ "authPage.signInForm.dontHaveAccount" | nzI18n }}
+    <a href="/auth/sign-up">
+      {{ "authPage.signInForm.signUp" | nzI18n }}
+    </a>
+  </p>
+</form>

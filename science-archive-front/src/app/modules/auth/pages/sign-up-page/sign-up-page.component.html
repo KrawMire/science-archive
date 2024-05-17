@@ -1,0 +1,23 @@
+<div class="container">
+  <div class="left-container">
+    <a href="/content">
+      <img class="logo" src="assets/images/science-archive.logo.with-text.svg" alt="Logo">
+    </a>
+    <div class="goal-text-wrapper">
+      <p class="goal-text">
+        {{ "authPage.goalText" | nzI18n }}
+      </p>
+    </div>
+  </div>
+  <div class="right-container">
+    <div class="form-wrapper">
+      <ng-container *ngIf="isConfirmation$ | async; then confirmForm; else signUpForm" />
+      <ng-template #confirmForm>
+        <sar-code-confirm-form />
+      </ng-template>
+      <ng-template #signUpForm>
+        <sar-sign-up-form (onSignedUp)="onSignedUp()"/>
+      </ng-template>
+    </div>
+  </div>
+</div>

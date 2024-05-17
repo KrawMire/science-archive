@@ -7,4 +7,4 @@ namespace ScienceArchive.Application.Dtos.Article.Request;
 /// DTO contract to get articles by category ID
 /// </summary>
 /// <param name="CategoryId">Category ID</param>
-public record GetArticlesByCategoryIdRequestDto(string CategoryId) : IRequest<GetArticlesByCategoryIdResponseDto>;
+public record GetVerifiedArticlesByCategoryIdRequestDto(string CategoryId) : IRequest<GetVerifiedArticlesByCategoryIdResponseDto>;

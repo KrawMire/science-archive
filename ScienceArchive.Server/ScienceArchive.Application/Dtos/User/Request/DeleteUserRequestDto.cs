@@ -7,4 +7,4 @@ namespace ScienceArchive.Application.Dtos.User.Request;
 /// Request contract to delete user
 /// </summary>
 /// <param name="Id">ID of the user to delete</param>
-public record class DeleteUserRequestDto(string Id) : IRequest<DeleteUserResponseDto>;
+public record class DeleteUserRequestDto(string Id, string InitiatorUserId) : IRequest<DeleteUserResponseDto>;

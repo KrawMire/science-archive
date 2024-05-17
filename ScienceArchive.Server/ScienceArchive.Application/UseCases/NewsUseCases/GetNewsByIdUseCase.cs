@@ -5,6 +5,7 @@ using ScienceArchive.Application.Dtos.News.Response;
 using ScienceArchive.Application.Interfaces;
 using ScienceArchive.Core.Domain.Aggregates.News;
 using ScienceArchive.Core.Domain.Aggregates.News.ValueObjects;
+using ScienceArchive.Core.Exceptions;
 
 namespace ScienceArchive.Application.UseCases.NewsUseCases;
 
@@ -26,7 +27,7 @@ internal class GetNewsByIdUseCase : IUseCase<GetNewsByIdRequestDto, GetNewsByIdR
 
         var newsDto = news is not null
             ? _newsMapper.MapToDto(news)
-            : null;
+            : throw new EntityNotFoundException(nameof(News));;
 
         return new GetNewsByIdResponseDto(newsDto);
     }

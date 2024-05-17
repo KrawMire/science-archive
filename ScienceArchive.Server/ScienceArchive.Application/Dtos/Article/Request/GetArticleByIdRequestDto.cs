@@ -7,4 +7,4 @@ namespace ScienceArchive.Application.Dtos.Article.Request;
 /// Request contract to get article by its ID
 /// </summary>
 /// <param name="Id">Identifier of an article</param>
-public record GetArticleByIdRequestDto(string Id) : IRequest<GetArticleByIdResponseDto>;
+public record GetArticleByIdRequestDto(string Id, string? UserId, List<string> RequiredClaims) : IRequest<GetArticleByIdResponseDto>;

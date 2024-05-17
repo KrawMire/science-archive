@@ -47,10 +47,10 @@ internal static class PersistenceRegistry
                 options.UseNpgsql(persistenceOptions.PostgresConnectionOptions.PostgresConnectionString);
                 
             })
-            .AddScoped<PostgresDbExecutionContext>()
-            .AddScoped<PostgresDbUnitOfWork>()
-            .AddScoped<IDbUnitOfWork>(provider => provider.GetService<PostgresDbUnitOfWork>()
-                                               ?? throw new InvalidOperationException("PostgresDbUnitOfWork was not found as injectable service"));
+            .AddTransient<PostgresDbExecutionContext>()
+            .AddTransient<PostgresDbUnitOfWork>()
+            .AddTransient<IDbUnitOfWork>(provider => provider.GetService<PostgresDbUnitOfWork>()
+                                                     ?? throw new InvalidOperationException("PostgresDbUnitOfWork was not found as injectable service"));
     }
 
     private static IServiceCollection RegisterPersistenceMappers(this IServiceCollection services)

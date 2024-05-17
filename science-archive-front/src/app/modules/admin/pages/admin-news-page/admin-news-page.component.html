@@ -1,0 +1,76 @@
+<nz-card [nzTitle]="newsTitle" [nzExtra]="createNews">
+  <ng-container *ngIf="(news$ | async) as news">
+    <ng-container *ngIf="news.length > 0; else emptyList">
+      <sar-admin-news-card
+        style="margin-top: 8px"
+        *ngFor="let singleNews of news"
+        [news]="singleNews"
+      />
+    </ng-container>
+  </ng-container>
+
+  <ng-template #loading>
+    <nz-spin nzSize="large"/>
+  </ng-template>
+
+  <ng-template #emptyList>
+    <ng-container *ngIf="!(isLoadingNewsList$ | async); else loading">
+      <nz-empty
+        [nzNotFoundContent]="'adminNewsPage.noNews' | nzI18n"
+      />
+    </ng-container>
+  </ng-template>
+</nz-card>
+
+<ng-template #newsTitle>
+  {{ 'adminNewsPage.news' | nzI18n }}
+</ng-template>
+
+<ng-template #createNews>
+  <button
+    nz-button
+    nzType="primary"
+    (click)="openCreateNewModal()"
+  >
+    <span nz-icon nzType="plus"></span>
+    {{ 'adminNewsPage.new' | nzI18n }}
+  </button>
+</ng-template>
+
+<nz-modal
+  [(nzVisible)]="showCreateNewModal"
+  [nzTitle]="'adminNewsPage.createNewArticle' | nzI18n"
+  (nzOnCancel)="closeCreateNewModal()"
+  (nzOnOk)="onCreateNews()"
+  [nzOkDisabled]="isCreatingNews$ | async"
+>
+  <ng-container *nzModalContent>
+    <form nz-form [formGroup]="validateForm">
+      <nz-form-item>
+        <nz-form-control [nzErrorTip]="'adminNewsPage.specifyNewsTitle' | nzI18n">
+          <nz-form-label nzRequired>
+            {{ 'adminNewsPage.title' | nzI18n }}
+          </nz-form-label>
+          <nz-input-group>
+            <input formControlName="title" type="text" nz-input [placeholder]="'adminNewsPage.newsTitle' | nzI18n" />
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-control [nzErrorTip]="'adminNewsPage.specifyNewsBody' | nzI18n">
+          <nz-form-label nzRequired>
+            {{ 'adminNewsPage.body' | nzI18n }}
+          </nz-form-label>
+          <nz-textarea-count [nzMaxCharacterCount]="2000">
+            <textarea
+              nz-input
+              formControlName="body"
+              rows="3"
+              [placeholder]="'adminNewsPage.newsBody' | nzI18n"
+            ></textarea>
+          </nz-textarea-count>
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  </ng-container>
+</nz-modal>

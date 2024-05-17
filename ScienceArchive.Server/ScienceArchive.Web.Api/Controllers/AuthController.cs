@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using ScienceArchive.Application.Dtos.Auth.Request;
 using ScienceArchive.Application.Interfaces.Services;
 using ScienceArchive.Web.Api.Auth;
@@ -18,37 +19,19 @@ public class AuthController : ControllerBase
         _authManager = authManager;
         _authService = authService;
     }
-
-    [HttpPost("check-admin")]
-    public async Task<Response> CheckAdmin()
-    {
-        var userId = HttpContext.GetUserIdFromToken();
-
-        if (string.IsNullOrWhiteSpace(userId))
-        {
-            throw new BadHttpRequestException("Cannot get user ID", 401);
-        }
-        
-        var request = new CheckUserClaimsRequestDto(userId, new List<string> { "ADMIN" });
-        var result = await _authService.CheckUserClaims(request);
-        
-        return new SuccessResponse(new
-        {
-            isAdmin = result.Success
-        });
-    }
     
     [HttpPost("sign-in")]
     public async Task<Response> SignIn([FromBody] LoginRequestDto request)
     {
         var result = await _authService.Login(request);
-        var token = _authManager.GenerateToken(result.User);
 
-        return new SuccessResponse(new
+        if (result.User.IsConfirmed)
         {
-            user = result.User,
-            token,
-        });
+            var token = _authManager.GenerateToken(result.User);
+            Response.Cookies.Append("Authorization", token);   
+        }
+        
+        return new SuccessResponse(result);
     }
 
     [HttpPost("sign-up")]
@@ -62,6 +45,26 @@ public class AuthController : ControllerBase
     public async Task<Response> Confirm([FromBody] ConfirmUserCodeRequestDto request)
     {
         var result = await _authService.ConfirmUserCode(request);
+        var token = _authManager.GenerateToken(result.User);
+        Response.Cookies.Append("Authorization", token);
+        
+        return new SuccessResponse(result);
+    }
+
+    [Authorize]
+    [HttpGet("me")]
+    public async Task<Response> GetUserData()
+    {
+        var userId = HttpContext.GetUserIdFromToken();
+
+        if (string.IsNullOrWhiteSpace(userId))
+        {
+            throw new BadHttpRequestException("Cannot get user ID", 401);
+        }
+
+        var request = new GetUserDataRequestDto(userId);
+        var result = await _authService.GetUserData(request);
+
         return new SuccessResponse(result);
     }
     

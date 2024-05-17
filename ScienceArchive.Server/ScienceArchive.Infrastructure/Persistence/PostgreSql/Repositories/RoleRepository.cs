@@ -79,9 +79,25 @@ internal class PostgresRoleRepository : IRoleRepository
         
         var claims = await _dbContext
             .Roles
-            .Where(r => r.Id == userId.Value)
+            .Include(r => r.Users)
+            .Where(r => r.Users.Any(u => u.Id.Equals(userId.Value)))
             .SelectMany(r => r.Claims)
             .Distinct()
+            .ToListAsync();
+
+        return claims.Select(c => new RoleClaim
+        {
+            Value = c.Value,
+            Description = c.Description
+        }).ToList();
+    }
+
+    /// <inheritdoc/>
+    public async Task<List<RoleClaim>> GetClaimsByValues(List<string> claimsValues)
+    {
+        var claims = await _dbContext
+            .Claims
+            .Where(c => claimsValues.Any(cv => cv == c.Value))
             .ToListAsync();
 
         return claims.Select(c => new RoleClaim

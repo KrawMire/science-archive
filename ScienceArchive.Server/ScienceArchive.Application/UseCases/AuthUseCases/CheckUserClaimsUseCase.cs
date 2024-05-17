@@ -1,6 +1,7 @@
 using ScienceArchive.Application.Abstractions.Persistence;
 using ScienceArchive.Application.Dtos.Auth.Request;
 using ScienceArchive.Application.Dtos.Auth.Response;
+using ScienceArchive.Application.Exceptions;
 using ScienceArchive.Application.Interfaces;
 using ScienceArchive.Core.Domain.Aggregates.User.ValueObjects;
 using ScienceArchive.Core.Domain.Services;
@@ -18,9 +19,24 @@ internal class CheckUserClaimsUseCase : IUseCase<CheckUserClaimsRequestDto, Chec
         _dbUnitOfWork = dbUnitOfWork;
     }
 
-    public Task<CheckUserClaimsResponseDto> Handle(CheckUserClaimsRequestDto request, CancellationToken cancellationToken)
+    public async Task<CheckUserClaimsResponseDto> Handle(CheckUserClaimsRequestDto request, CancellationToken cancellationToken)
     {
+        if (request.RequiredClaims is null)
+        {
+            return new CheckUserClaimsResponseDto(true);
+        }
+        
         var userId = UserId.CreateFromString(request.UserId);
-        throw new NotImplementedException();
+        var requiredClaims = await _dbUnitOfWork.RoleRepository.GetClaimsByValues(request.RequiredClaims);
+
+        if (requiredClaims.Count != request.RequiredClaims.Count)
+        {
+            throw new CannotFindAllClaimsException(
+                request.RequiredClaims, 
+                requiredClaims.Select(rc => rc.Value).ToList());
+        }
+        
+        var hasAllClaims = await _authService.UserHasClaims(userId, requiredClaims);
+        return new CheckUserClaimsResponseDto(hasAllClaims);
     }
 }

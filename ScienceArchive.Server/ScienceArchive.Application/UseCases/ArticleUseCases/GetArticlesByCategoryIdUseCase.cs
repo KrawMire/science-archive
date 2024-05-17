@@ -10,13 +10,13 @@ using ScienceArchive.Core.Domain.Aggregates.Category.ValueObjects;
 
 namespace ScienceArchive.Application.UseCases.ArticleUseCases;
 
-internal class GetArticlesByCategoryIdUseCase : IUseCase<GetArticlesByCategoryIdRequestDto, GetArticlesByCategoryIdResponseDto>
+internal class GetVerifiedArticlesByCategoryIdUseCase : IUseCase<GetVerifiedArticlesByCategoryIdRequestDto, GetVerifiedArticlesByCategoryIdResponseDto>
 {
     private readonly IDbUnitOfWork _dbUnitOfWork;
     private readonly IApplicationMapper<Article, ArticleDto> _articleMapper;
     private readonly IApplicationMapper<Subcategory, CategoryDto> _categoryMapper;
     
-    public GetArticlesByCategoryIdUseCase(
+    public GetVerifiedArticlesByCategoryIdUseCase(
         IApplicationMapper<Article, ArticleDto> articleMapper,
         IApplicationMapper<Subcategory, CategoryDto> categoryMapper, 
         IDbUnitOfWork dbUnitOfWork)
@@ -26,10 +26,10 @@ internal class GetArticlesByCategoryIdUseCase : IUseCase<GetArticlesByCategoryId
         _dbUnitOfWork = dbUnitOfWork;
     }
     
-    public async Task<GetArticlesByCategoryIdResponseDto> Handle(GetArticlesByCategoryIdRequestDto request, CancellationToken cancellationToken)
+    public async Task<GetVerifiedArticlesByCategoryIdResponseDto> Handle(GetVerifiedArticlesByCategoryIdRequestDto request, CancellationToken cancellationToken)
     {
-        var categoryId = CategoryId.CreateFromString(request.CategoryId);
-        var articles = await _dbUnitOfWork.ArticleRepository.GetVerifiedByCategoryId(categoryId);
+        var categoryId = SubcategoryId.CreateFromString(request.CategoryId);
+        var articles = await _dbUnitOfWork.ArticleRepository.GetVerifiedBySubcategoryId(categoryId);
         var articlesDtos = articles.Select(_articleMapper.MapToDto).ToList();
         
         var subcategory = await _dbUnitOfWork.CategoryRepository.GetSubcategoryById(categoryId);
@@ -41,6 +41,6 @@ internal class GetArticlesByCategoryIdUseCase : IUseCase<GetArticlesByCategoryId
 
         var categoryDto = _categoryMapper.MapToDto(subcategory);
         
-        return new GetArticlesByCategoryIdResponseDto(articlesDtos, categoryDto);
+        return new GetVerifiedArticlesByCategoryIdResponseDto(articlesDtos, categoryDto);
     }
 }

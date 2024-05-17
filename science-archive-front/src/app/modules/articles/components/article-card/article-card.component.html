@@ -1,0 +1,25 @@
+<nz-card
+  [style]="style"
+  [nzTitle]="articleTitle"
+  [nzExtra]="articleCreationDate"
+>
+  <nz-card-meta [nzTitle]="cardMetaTitle" [nzDescription]="article.description"></nz-card-meta>
+</nz-card>
+
+
+<ng-template #articleTitle>
+  <span [routerLink]="[article.id]" class="article-title">{{article.title}}</span>
+</ng-template>
+<ng-template #cardMetaTitle>
+  <nz-tag [nzColor]="'#4a77d3'">
+    <a
+      [routerLink]="['/content', 'articles']"
+      [queryParams]="{categoryId: article.categoryId}"
+    >
+      {{article.categoryName}}
+    </a>
+  </nz-tag>
+</ng-template>
+<ng-template #articleCreationDate>
+  <p>{{article.creationDate | dateFormat}}</p>
+</ng-template>

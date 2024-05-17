@@ -31,6 +31,7 @@ internal class PostgresArticleRepository : IArticleRepository
             .ThenInclude(ua => ua.User)
             .Include(a => a.Category)
             .Include(a => a.ArticlesDocuments)
+            .OrderByDescending(a => a.CreationDate)
             .ToListAsync();
 
         return articles
@@ -67,6 +68,7 @@ internal class PostgresArticleRepository : IArticleRepository
             .ThenInclude(ua => ua.User)
             .Include(a => a.Category)
             .Include(a => a.ArticlesDocuments)
+            .OrderByDescending(a => a.CreationDate)
             .ToListAsync();
 
         return articles
@@ -94,10 +96,10 @@ internal class PostgresArticleRepository : IArticleRepository
             }).ToList();
     }
 
-    public async Task<List<Article>> GetVerifiedByCategoryId(CategoryId categoryId)
+    public async Task<List<Article>> GetVerifiedBySubcategoryId(SubcategoryId categoryId)
     {
         var category = await _dbContext
-            .Categories
+            .Subcategories
             .Where(c => c.Id == categoryId.Value)
             .FirstOrDefaultAsync();
 
@@ -109,10 +111,12 @@ internal class PostgresArticleRepository : IArticleRepository
         var articles = await _dbContext
             .Articles
             .Where(a => a.CategoryId == category.Id)
+            .Where(a => a.Status == (short)ArticleStatus.Verified)
             .Include(a => a.UsersArticles)
             .ThenInclude(ua => ua.User)
             .Include(a => a.Category)
             .Include(a => a.ArticlesDocuments)
+            .OrderByDescending(a => a.CreationDate)
             .ToListAsync();
 
         return articles
@@ -159,6 +163,7 @@ internal class PostgresArticleRepository : IArticleRepository
             .Where(a => a.UsersArticles.Any(ua => ua.UserId == userId.Value))
             .Include(a => a.Category)
             .Include(a => a.ArticlesDocuments)
+            .OrderByDescending(a => a.CreationDate)
             .ToListAsync();
 
         return articles
@@ -206,6 +211,7 @@ internal class PostgresArticleRepository : IArticleRepository
                         && a.Status == (short)ArticleStatus.Verified)
             .Include(a => a.Category)
             .Include(a => a.ArticlesDocuments)
+            .OrderByDescending(a => a.CreationDate)
             .ToListAsync();
 
         return articles
@@ -300,7 +306,7 @@ internal class PostgresArticleRepository : IArticleRepository
             .AddAsync(new Entities.Article
             {
                 Id = newValue.Id.Value,
-                CategoryId = newValue.Id.Value,
+                CategoryId = newValue.Category.CategoryId.Value,
                 Title = newValue.Title,
                 Status = (short)newValue.Status,
                 CreationDate = newValue.CreationDate,

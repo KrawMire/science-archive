@@ -8,7 +8,7 @@ public class ArticleCategory : ValueObject
     /// <summary>
     /// ID of category article is referenced to
     /// </summary>
-    public required CategoryId CategoryId { get; set; }
+    public required SubcategoryId CategoryId { get; set; }
     
     /// <summary>
     /// Name of category

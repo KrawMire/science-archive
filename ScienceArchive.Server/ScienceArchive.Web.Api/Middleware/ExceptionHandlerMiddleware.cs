@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using ScienceArchive.Application.Exceptions;
 using ScienceArchive.Core.Exceptions;
 using ScienceArchive.Web.Api.Responses;
 
@@ -39,7 +40,11 @@ public class ExceptionHandlerMiddleware
         }
         catch (EntityNotFoundException ex)
         {
-            await ProcessException(httpContext, $"{ex.EntityName} was not found", 400);
+            await ProcessException(httpContext, $"{ex.EntityName} was not found", 404);
+        }
+        catch (InvalidEntityIdValueException ex)
+        {
+            await ProcessException(httpContext, $"Invalid ID value: {ex.InvalidValue}", 400);
         }
         catch (DuplicateLoginException)
         {
@@ -48,6 +53,30 @@ public class ExceptionHandlerMiddleware
         catch (DuplicateEmailException)
         {
             await ProcessException(httpContext, $"User with such email already exists", 400);
+        }
+        catch (UserCannotViewArticleException)
+        {
+            await ProcessException(httpContext, $"You have not rights to view this article", 403);
+        }
+        catch (CannotFindAllClaimsException)
+        {
+            await ProcessException(httpContext, $"User don't have enough rights for this action", 403);
+        }
+        catch (SpentConfirmationAttemptsException)
+        {
+            await ProcessException(httpContext, $"You have spent all confirmation attempts. Try again later", 400);
+        }
+        catch (SpentConfirmRegenerationTries)
+        {
+            await ProcessException(httpContext, $"You have spent all confirmation code resending attempts. Try again later", 400);
+        }
+        catch (IncorrectArticleCreatorException)
+        {
+            await ProcessException(httpContext, $"You are not an owner/creator of this article to perform this action", 403);
+        }
+        catch (InvalidInitiatorUserException)
+        {
+            await ProcessException(httpContext, $"You are not a user you try to perform an operation at", 403);
         }
         catch (Exception ex)
         {

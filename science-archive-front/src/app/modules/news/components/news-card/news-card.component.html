@@ -1,0 +1,21 @@
+<nz-card
+  [nzTitle]="news.title"
+  [style]="style"
+  [nzExtra]="newsCreationDate"
+  [nzBordered]="false"
+>
+  <nz-card-meta [nzDescription]="news.body"></nz-card-meta>
+
+  <button
+    nz-button
+    nzType="primary"
+    class="read-more-button"
+    [routerLink]="[news.id]"
+  >
+    {{ 'newsCard.readMore' | nzI18n }}
+  </button>
+</nz-card>
+
+<ng-template #newsCreationDate>
+  <p>{{news.creationDate | dateFormat}}</p>
+</ng-template>

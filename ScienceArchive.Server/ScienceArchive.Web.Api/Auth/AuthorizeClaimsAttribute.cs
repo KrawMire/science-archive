@@ -16,7 +16,7 @@ public class AuthorizeClaimsAttribute : AuthorizeAttribute, IAuthorizationFilter
 		_requiredClaims = requiredClaims;
 	}
 
-	public async void OnAuthorization(AuthorizationFilterContext context)
+	public void OnAuthorization(AuthorizationFilterContext context)
 	{
 		if (context.HttpContext.User.Identity is null || !context.HttpContext.User.Identity.IsAuthenticated)
 		{
@@ -30,9 +30,9 @@ public class AuthorizeClaimsAttribute : AuthorizeAttribute, IAuthorizationFilter
 		}
 		
 		var userId = context.HttpContext.User.FindFirst("UserId")?.Value;
-		var authInteractor = context.HttpContext.RequestServices.GetService<IAuthApplicationService>();
+		var authService = context.HttpContext.RequestServices.GetService<IAuthApplicationService>();
 
-		if (authInteractor is null)
+		if (authService is null)
 		{
 			throw new NullReferenceException("Cannot get auth interactor");
 		}
@@ -43,10 +43,17 @@ public class AuthorizeClaimsAttribute : AuthorizeAttribute, IAuthorizationFilter
 		}
 
 		var dto = new CheckUserClaimsRequestDto(userId, _requiredClaims.ToList());
-		
-		var result = await authInteractor.CheckUserClaims(dto);
 
-		if (!result.Success)
+		try
+		{
+			var result = authService.CheckUserClaims(dto).Result;
+			
+			if (!result.Success)
+			{
+				context.Result = new ForbidResult();
+			}
+		}
+		catch (Exception)
 		{
 			context.Result = new ForbidResult();
 		}

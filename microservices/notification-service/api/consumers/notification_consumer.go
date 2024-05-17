@@ -7,6 +7,7 @@ import (
 	"notifications-service/api/dtos"
 	"notifications-service/internal/core/interfaces"
 	"notifications-service/internal/core/models"
+	"time"
 )
 
 type NotificationConsumer struct {
@@ -24,15 +25,30 @@ func NewNotificationConsumer(connectionString string, queueName string, service 
 }
 
 func (c *NotificationConsumer) WatchNotificationQueue() {
+	for {
+		func() {
+			defer func() {
+				if err := recover(); err != nil {
+					log.Printf("Error occurred: %v\n", err)
+					log.Printf("Retrying in 10 seconds")
+					time.Sleep(10 * time.Second)
+				}
+			}()
+			c.ConnectAndConsumeNotifications()
+		}()
+	}
+}
+
+func (c *NotificationConsumer) ConnectAndConsumeNotifications() {
 	conn, err := amqp.Dial(c.connectionString)
 	if err != nil {
-		log.Fatal("Failed to connect to RabbitMQ")
+		log.Panic("Failed to connect to RabbitMQ")
 	}
 	defer conn.Close()
 
 	ch, err := conn.Channel()
 	if err != nil {
-		log.Fatal("Failed to open a channel")
+		log.Panic("Failed to open a channel")
 	}
 	defer ch.Close()
 
@@ -44,7 +60,7 @@ func (c *NotificationConsumer) WatchNotificationQueue() {
 		false,
 		nil)
 	if err != nil {
-		log.Fatal("Failed to declare a queue")
+		log.Panic("Failed to declare a queue")
 	}
 
 	msgs, err := ch.Consume(
@@ -56,7 +72,7 @@ func (c *NotificationConsumer) WatchNotificationQueue() {
 		false,
 		nil)
 	if err != nil {
-		log.Fatal("Failed to register a consumer")
+		log.Panic("Failed to register a consumer")
 	}
 
 	go c.handleNotificationsMessages(msgs)

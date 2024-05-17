@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using ScienceArchive.Application.Dtos.User.Request;
 using ScienceArchive.Application.Interfaces.Services;
 using ScienceArchive.Web.Api.Responses;
+using ScienceArchive.Web.Api.Utils;
 
 namespace ScienceArchive.Web.Api.Controllers;
 
@@ -32,19 +34,37 @@ public class UserController : ControllerBase
         return new SuccessResponse(result);
     }
 
+    [Authorize]
     [HttpPost("update")]
     public async Task<Response> Update([FromBody] UpdateUserRequestDto dto)
     {
-        var result = await _userApplicationService.UpdateUser(dto);
+        var userId = HttpContext.GetUserIdFromToken();
+
+        if (string.IsNullOrWhiteSpace(userId))
+        {
+            throw new BadHttpRequestException("Cannot get user ID", 403);
+        }
+
+        var populatedDto = dto with { InitiatorUserId = userId };
+        var result = await _userApplicationService.UpdateUser(populatedDto);
+        
         return new SuccessResponse(result);
     }
 
+    [Authorize]
     [HttpDelete("{id}")]
     public async Task<Response> Delete(string id)
     {
-        var dto = new DeleteUserRequestDto(id);
+        var userId = HttpContext.GetUserIdFromToken();
 
+        if (string.IsNullOrWhiteSpace(userId))
+        {
+            throw new BadHttpRequestException("Cannot get user ID", 403);
+        }
+        
+        var dto = new DeleteUserRequestDto(id, userId);
         var result = await _userApplicationService.DeleteUser(dto);
+        
         return new SuccessResponse(result);;
     }
 }

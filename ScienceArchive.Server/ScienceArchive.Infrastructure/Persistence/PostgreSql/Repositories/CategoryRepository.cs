@@ -122,7 +122,7 @@ internal class PostgresCategoryRepository : ICategoryRepository
 		throw new NotImplementedException();
 	}
 
-	public async Task<Subcategory?> GetSubcategoryById(CategoryId subcategoryId)
+	public async Task<Subcategory?> GetSubcategoryById(SubcategoryId subcategoryId)
 	{
 		var subcategory = await _dbContext.Subcategories
 			.Where(s => s.Id == subcategoryId.Value)

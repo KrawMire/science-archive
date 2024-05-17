@@ -15,5 +15,5 @@ public interface ICategoryRepository : ICrudRepository<CategoryId, Category>
 	/// </summary>
 	/// <param name="subcategoryId">Subcategory ID</param>
 	/// <returns>Found subcategory or null</returns>
-	Task<Subcategory?> GetSubcategoryById(CategoryId subcategoryId);
+	Task<Subcategory?> GetSubcategoryById(SubcategoryId subcategoryId);
 }

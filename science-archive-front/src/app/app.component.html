@@ -1,0 +1,10 @@
+<ng-container *ngIf="loadingService.isLoading$ | async; else content">
+  <div class="sar-loading-wrapper">
+    <sar-loading />
+  </div>
+</ng-container>
+
+<ng-template #content>
+  <router-outlet/>
+</ng-template>
+

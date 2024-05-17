@@ -1,0 +1,41 @@
+<div *ngIf="isLoading$ | async; else articlesView">
+  <sar-article-card-skeleton
+    [style]="'margin-top: 10px'"
+    *ngFor="let _ of [1,2,3]"
+  ></sar-article-card-skeleton>
+</div>
+
+<ng-template #articlesView>
+  <ng-container>
+    <nz-breadcrumb *ngIf="(category$ | async) as category">
+      <nz-breadcrumb-item>
+        <a [routerLink]="['/content', 'articles']">{{ "articlesPage.articles" | nzI18n }}</a>
+      </nz-breadcrumb-item>
+      <nz-breadcrumb-item>
+        {{category.name}}
+      </nz-breadcrumb-item>
+    </nz-breadcrumb>
+    <nz-card *ngIf="(articles$ | async)?.length === 0; else articlesList">
+      <nz-empty
+        [nzNotFoundContent]="'articlesPage.noArticlesFound' | nzI18n"
+        [nzNotFoundFooter]="goToArticles"
+      />
+      <ng-template #goToArticles>
+        <ng-container *ngIf="(category$ | async) as category">
+          <button nz-button nzType="primary" [routerLink]="['/content', 'articles']">{{ "articlesPage.readAllArticles" | nzI18n }}</button>
+        </ng-container>
+      </ng-template>
+    </nz-card>
+  </ng-container>
+</ng-template>
+<ng-template #articlesList>
+  <sar-article-card
+    [style]="'margin-top: 8px'"
+    *ngFor="let article of articles$ | async"
+    [article]="article"
+  ></sar-article-card>
+</ng-template>
+
+
+
+
