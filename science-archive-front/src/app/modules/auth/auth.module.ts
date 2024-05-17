@@ -12,9 +12,10 @@ import { SignInFormComponent } from './components/sign-in-form/sign-in-form.comp
 import { RouterLink } from "@angular/router";
 import { NzSpaceModule } from "ng-zorro-antd/space";
 import { CodeConfirmFormComponent } from './components/code-confirm-form/code-confirm-form.component';
+import { NzI18nPipe } from "ng-zorro-antd/i18n";
 
 @NgModule({
   declarations: [SignInPageComponent, SignUpPageComponent, SignUpFormComponent, SignInFormComponent, CodeConfirmFormComponent],
-  imports: [CommonModule, NzFormModule, NzInputModule, ReactiveFormsModule, NzCheckboxModule, NzButtonModule, RouterLink, NzSpaceModule]
+  imports: [CommonModule, NzFormModule, NzInputModule, ReactiveFormsModule, NzCheckboxModule, NzButtonModule, RouterLink, NzSpaceModule, NzI18nPipe]
 })
 export class AuthModule { }

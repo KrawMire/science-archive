@@ -4,7 +4,7 @@ import { AuthService } from "@modules/auth/services/auth.service";
 import { AuthApiService } from "@services/auth-api.service";
 import { NonNullableFormBuilder, Validators } from "@angular/forms";
 import { ConfirmUserResponse } from "@models/auth/responses/confirm-user.response";
-import { Router } from "@angular/router";
+import { NzI18nService } from "ng-zorro-antd/i18n";
 
 @Component({
   selector: 'sar-code-confirm-form',
@@ -20,7 +20,7 @@ export class CodeConfirmFormComponent {
 
   constructor(
     private fb: NonNullableFormBuilder,
-    private router: Router,
+    private readonly i18nService: NzI18nService,
     private readonly messageService: NzMessageService,
     private readonly authService: AuthService,
     private readonly authApiService: AuthApiService,
@@ -31,12 +31,12 @@ export class CodeConfirmFormComponent {
     const user = this.authService.getCurrentAuthUser();
 
     if (!user?.id) {
-      this.messageService.error("User is not present");
+      this.messageService.error(this.i18nService.translate("authPage.errors.userNotPresent"));
       return;
     }
 
     if (this.resendTimes >= 5) {
-      this.messageService.error("Code was resent over 5 times");
+      this.messageService.error(this.i18nService.translate("authPage.errors.codeWasResentManyTimes"));
       return;
     }
 
@@ -44,7 +44,7 @@ export class CodeConfirmFormComponent {
       .resendConfirmationCode(user.id)
       .subscribe({
         next: () => {
-          this.messageService.info("Verification code was send to your email!");
+          this.messageService.info(this.i18nService.translate("authPage.messages.verificationCodeSent"));
           this.resendTimes++;
         },
         error: (error) => {
@@ -57,7 +57,7 @@ export class CodeConfirmFormComponent {
     const user = this.authService.getCurrentAuthUser();
 
     if (!user?.id) {
-      this.messageService.error("User is not present");
+      this.messageService.error(this.i18nService.translate("authPage.errors.userNotPresent"));
       return;
     }
 
@@ -73,12 +73,12 @@ export class CodeConfirmFormComponent {
           },
           error: (error: any) => {
             console.log(error);
-            this.messageService.error(error.message ?? "Unhandled error occurred.");
+            this.messageService.error(error.message ?? this.i18nService.translate("commonErrors.unhandledError"));
           }
         });
       return;
     } else {
-      this.messageService.error("Code is invalid");
+      this.messageService.error(this.i18nService.translate("authPage.errors.invalidCode"));
     }
   }
 }

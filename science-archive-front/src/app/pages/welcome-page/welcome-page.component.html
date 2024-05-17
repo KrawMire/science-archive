@@ -2,10 +2,7 @@
   <div class="content-wrapper">
     <img class="logo" src="assets/images/science-archive.logo.with-text.svg" alt="Logo">
     <p class="goal-text">
-      Our mission is to give to independent scientists and other knowledge
-      explorers ability to publish their works and share it across the world.
-      It's so expensive to get access to modern science literature in nowadays.
-      So is to achieve publishing in any reputable publishing house.
+      {{ "welcomePage.goalText" | nzI18n }}
     </p>
     <button
       nz-button
@@ -14,7 +11,7 @@
       nzSize="large"
     >
       <a href="/content">
-        Go to articles
+        {{ "welcomePage.goToArticles" | nzI18n }}
       </a>
     </button>
   </div>

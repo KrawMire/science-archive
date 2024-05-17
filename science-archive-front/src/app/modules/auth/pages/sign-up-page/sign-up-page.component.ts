@@ -3,6 +3,7 @@ import { BehaviorSubject } from "rxjs";
 import { NzMessageService } from "ng-zorro-antd/message";
 import { AuthService } from "@modules/auth/services/auth.service";
 import { Title } from "@angular/platform-browser";
+import { NzI18nService } from "ng-zorro-antd/i18n";
 
 @Component({
   selector: 'sar-sign-up-page',
@@ -13,6 +14,7 @@ export class SignUpPageComponent {
   isConfirmation$ = new BehaviorSubject<boolean>(false);
 
   constructor(
+    private readonly i18nService: NzI18nService,
     private readonly messageService: NzMessageService,
     private readonly authService: AuthService,
     titleService: Title
@@ -24,11 +26,11 @@ export class SignUpPageComponent {
     const user = this.authService.getCurrentAuthUser();
 
     if (!user) {
-      this.messageService.error("User is not present");
+      this.messageService.error(this.i18nService.translate("authPage.errors.userNotPresent"));
       return;
     }
 
-    this.messageService.success("A confirmation email has been sent to your email address");
+    this.messageService.success(this.i18nService.translate("authPage.messages.verificationCodeSent"));
     this.isConfirmation$.next(true);
   }
 }

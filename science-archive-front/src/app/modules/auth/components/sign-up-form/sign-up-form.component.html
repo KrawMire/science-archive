@@ -1,52 +1,52 @@
 <form nz-form class="sign-up-form" [formGroup]="validateForm" (ngSubmit)="submitForm()">
-  <h2>Sign up</h2>
+  <h2>{{ "authPage.signUpForm.signUp" | nzI18n }}</h2>
   <nz-form-item [nzJustify]="'space-between'">
-    <nz-form-control nzErrorTip="Name must contain al least 2 letters!">
+    <nz-form-control [nzErrorTip]="'authPage.signUpForm.nameMustContain' | nzI18n">
       <nz-input-group nzPrefixIcon="user">
-        <input formControlName="firstName" type="text" nz-input placeholder="First name" />
+        <input formControlName="firstName" type="text" nz-input [placeholder]="'authPage.signUpForm.firstName' | nzI18n" />
       </nz-input-group>
     </nz-form-control>
-    <nz-form-control nzErrorTip="Name must contain al least 2 letters!">
+    <nz-form-control [nzErrorTip]="'authPage.signUpForm.nameMustContain' | nzI18n">
       <nz-input-group nzPrefixIcon="user">
-        <input formControlName="secondName" type="text" nz-input placeholder="Second name" />
+        <input formControlName="secondName" type="text" nz-input [placeholder]="'authPage.signUpForm.secondName' | nzI18n" />
       </nz-input-group>
     </nz-form-control>
   </nz-form-item>
   <nz-form-item>
-    <nz-form-control nzErrorTip="Login must contain at least 3 letters!">
+    <nz-form-control [nzErrorTip]="'authPage.signUpForm.loginMustContain' | nzI18n">
       <nz-input-group nzPrefixIcon="login">
-        <input formControlName="login" type="text" nz-input placeholder="Login" />
+        <input formControlName="login" type="text" nz-input [placeholder]="'authPage.signUpForm.login' | nzI18n" />
       </nz-input-group>
     </nz-form-control>
   </nz-form-item>
   <nz-form-item>
-    <nz-form-control nzErrorTip="Please input your real email!">
+    <nz-form-control [nzErrorTip]="'authPage.signUpForm.inputEmail' | nzI18n">
       <nz-input-group nzPrefixIcon="mail">
-        <input formControlName="email" type="email" nz-input placeholder="Email" />
+        <input formControlName="email" type="email" nz-input [placeholder]="'authPage.signUpForm.email' | nzI18n" />
       </nz-input-group>
     </nz-form-control>
   </nz-form-item>
   <nz-form-item>
-    <nz-form-control nzErrorTip="Password must contain at least 10 symbols!">
+    <nz-form-control [nzErrorTip]="'authPage.signUpForm.passwordMustContain' | nzI18n">
       <nz-input-group nzPrefixIcon="lock">
-        <input formControlName="password" type="password" nz-input placeholder="Password" />
+        <input formControlName="password" type="password" nz-input [placeholder]="'authPage.signUpForm.password' | nzI18n" />
       </nz-input-group>
     </nz-form-control>
   </nz-form-item>
   <nz-form-item>
-    <nz-form-control nzErrorTip="Repeated password should be equal to password!">
+    <nz-form-control [nzErrorTip]="'authPage.signUpForm.repeatedPasswordMustBeEqual' | nzI18n">
       <nz-input-group nzPrefixIcon="lock">
-        <input formControlName="repeatPassword" type="password" nz-input placeholder="Repeat password" />
+        <input formControlName="repeatPassword" type="password" nz-input [placeholder]="'authPage.signUpForm.repeatPassword' | nzI18n" />
       </nz-input-group>
     </nz-form-control>
   </nz-form-item>
   <button nz-button class="login-form-button" [nzType]="'primary'">
-    Register
+    {{ "authPage.signUpForm.register" | nzI18n }}
   </button>
   <p class="sign-in-suggest-wrapper">
-    Already have an account?
+    {{ "authPage.signUpForm.alreadyHaveAnAccount" | nzI18n }}
     <a href="/auth/sign-in">
-      Sign in
+      {{ "authPage.signUpForm.signIn" | nzI18n }}
     </a>
   </p>
 </form>

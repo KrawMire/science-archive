@@ -3,6 +3,7 @@ import { FormControl, FormGroup, NonNullableFormBuilder, Validators } from "@ang
 import { AuthService } from "@modules/auth/services/auth.service";
 import { AuthApiService } from "@services/auth-api.service";
 import { NzMessageService } from "ng-zorro-antd/message";
+import { NzI18nService } from "ng-zorro-antd/i18n";
 
 @Component({
   selector: 'sar-sign-in-form',
@@ -22,6 +23,7 @@ export class SignInFormComponent {
 
   constructor(
     private readonly fb: NonNullableFormBuilder,
+    private readonly i18nService: NzI18nService,
     private readonly messageService: NzMessageService,
     private readonly authService: AuthService,
     private readonly authApiService: AuthApiService,
@@ -52,7 +54,7 @@ export class SignInFormComponent {
       },
       error: (error) => {
         console.log(error);
-        this.messageService.error(error.message ?? "Unhandled error occurred.");
+        this.messageService.error(error.message ?? this.i18nService.translate("commonErrors.unhandledError"));
       }
     });
   }

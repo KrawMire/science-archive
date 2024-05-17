@@ -1,16 +1,16 @@
 <form nz-form class="code-confirm-form" [formGroup]="formGroup">
-  <h2>Enter confirmation code</h2>
+  <h2>{{ "authPage.confirmForm.enterCode" | nzI18n }}</h2>
   <nz-form-item>
     <nz-form-control nzErrorTip="Please input your username!">
       <nz-input-group nzPrefixIcon="form">
-        <input type="text" formControlName="code" nz-input placeholder="Code" />
+        <input type="text" formControlName="code" nz-input [placeholder]="'authPage.confirmForm.confirmCode' | nzI18n" />
       </nz-input-group>
     </nz-form-control>
   </nz-form-item>
   <a (click)="resendConfirmationCode()">
-    Resend code
+    {{ "authPage.confirmForm.resendCode" | nzI18n }}
   </a>
   <button nz-button class="sign-in-form-button" [nzType]="'primary'" (click)="confirm()">
-    Confirm
+    {{ "authPage.confirmForm.confirm" | nzI18n }}
   </button>
 </form>

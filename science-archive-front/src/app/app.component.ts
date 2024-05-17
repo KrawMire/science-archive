@@ -14,7 +14,7 @@ import { Locales, LocaleService } from "@modules/localization/services/locale.se
 export class AppComponent {
   constructor(
     public loadingService: LoadingService,
-    private localeService: LocaleService,
+    private readonly localeService: LocaleService,
     private readonly messageService: NzMessageService,
     private readonly authApiService: AuthApiService,
     private readonly authService: AuthService,

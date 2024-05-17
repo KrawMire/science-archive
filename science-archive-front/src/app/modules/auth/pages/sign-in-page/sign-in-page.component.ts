@@ -2,8 +2,8 @@ import { Component } from '@angular/core';
 import { BehaviorSubject } from "rxjs";
 import { AuthService } from "@modules/auth/services/auth.service";
 import { NzMessageService } from "ng-zorro-antd/message";
-import { Router } from "@angular/router";
 import { Title } from "@angular/platform-browser";
+import { NzI18nService } from "ng-zorro-antd/i18n";
 
 @Component({
   selector: 'sar-sign-in-page',
@@ -14,7 +14,7 @@ export class SignInPageComponent {
   isConfirmation$ = new BehaviorSubject<boolean>(false);
 
   constructor(
-    private readonly router: Router,
+    private readonly i18nService: NzI18nService,
     private readonly messageService: NzMessageService,
     private readonly authService: AuthService,
     titleService: Title,
@@ -26,12 +26,12 @@ export class SignInPageComponent {
     const user = this.authService.getCurrentAuthUser();
 
     if (!user) {
-      this.messageService.error("User is not present");
+      this.messageService.error(this.i18nService.translate("authPage.errors.userNotPresent"));
       return;
     }
 
     if(!user.isConfirmed) {
-      this.messageService.success("A confirmation email has been sent to your email address");
+      this.messageService.success(this.i18nService.translate("authPage.messages.verificationCodeSent"));
       this.isConfirmation$.next(true);
     } else {
       this.authService.deleteCurrentAuthUser();
