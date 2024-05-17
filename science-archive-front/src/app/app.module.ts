@@ -1,4 +1,4 @@
-import { NgModule } from "@angular/core";
+import { inject, NgModule } from "@angular/core";
 import { BrowserModule } from "@angular/platform-browser";
 
 import { AppRoutingModule } from "./app-routing.module";
@@ -31,6 +31,7 @@ import { AdminModule } from "@modules/admin/admin.module";
 import { SharedModule } from "@modules/shared/shared.module";
 import { ruLocale } from "./locales/ru-locale";
 import { enLocale } from "./locales/en-locale";
+import { Locales, LocaleService } from "@modules/localization/services/locale.service";
 
 @NgModule({
   declarations: [AppComponent, AuthPageComponent, AccountPageComponent, ContentPageComponent, WelcomePageComponent],
@@ -64,18 +65,20 @@ import { enLocale } from "./locales/en-locale";
     SharedModule,
     NzI18nPipe
   ],
-  providers: [CookieService, {
-    provide: NZ_I18N,
-    useFactory: () => {
-      console.log(navigator.language);
-      switch (navigator.language) {
-        case 'en':
-          return enLocale;
-        case 'ru':
-          return ruLocale;
-        default:
-          return enLocale;
-      }
+  providers: [CookieService,
+    {
+      provide: NZ_I18N,
+      useFactory: () => {
+        const localeService = inject(LocaleService);
+
+        switch (localeService.getCurrentLocale()) {
+          case Locales.EN:
+            return enLocale;
+          case Locales.RU:
+            return ruLocale;
+          default:
+            return enLocale;
+        }
     }
   }],
   bootstrap: [AppComponent],

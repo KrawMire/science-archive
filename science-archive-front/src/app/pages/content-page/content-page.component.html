@@ -23,21 +23,21 @@
           routerLink="articles"
           nzMatchRouter
         >
-          Articles
+          {{ "contentPage.headerMenu.articles" | nzI18n }}
         </li>
         <li
           nz-menu-item
           routerLink="categories"
           nzMatchRouter
         >
-          Categories
+          {{ "contentPage.headerMenu.categories" | nzI18n }}
         </li>
         <li
           nz-menu-item
           routerLink="news"
           nzMatchRouter
         >
-          {{ "ContentPage.NewsMenuElement" | nzI18n }}
+          {{ "contentPage.headerMenu.news" | nzI18n }}
         </li>
       </ul>
       <ng-container *ngIf="(currentUser$ | async) as currentUser; else signIn">
@@ -67,33 +67,33 @@
 
     <div class="footer-info-container">
       <div class="footer-info-block">
-        <p class="footer-category-header">Menu</p>
+        <p class="footer-category-header">{{ "contentPage.footer.menu" | nzI18n }}</p>
         <div class="footer-links-container">
           <p
             class="footer-link"
             routerLink="articles"
           >
-            Articles
+            {{ "contentPage.footer.articles" | nzI18n }}
           </p>
           <p
             class="footer-link"
             routerLink="categories"
           >
-            Categories
+            {{ "contentPage.footer.categories" | nzI18n }}
           </p>
           <p
             class="footer-link"
             routerLink="news"
           >
-            {{ "ContentPage.NewsMenuElement" | nzI18n }}
+            {{ "contentPage.footer.news" | nzI18n }}
           </p>
         </div>
       </div>
       <div class="footer-info-block">
-        <p class="footer-category-header">Contact Us</p>
+        <p class="footer-category-header">{{ "contentPage.footer.contactUs" | nzI18n }}</p>
         <div class="footer-links-container">
           <a class="footer-link" href="https://www.linkedin.com/in/anton-gavrilov-backend/" target="_blank">LinkedIn</a>
-          <a class="footer-link" href="https://t.me/science_archive_project" target="_blank">Telegram Channel</a>
+          <a class="footer-link" href="https://t.me/science_archive_project" target="_blank">{{ "contentPage.footer.telegramChannel" | nzI18n }}</a>
           <a class="footer-link" href="mailto:gavor0120@gmail.com">gavor0120&#64;gmail.com</a>
         </div>
       </div>
@@ -116,16 +116,16 @@
     >
       <li nz-menu-item>
         <span nz-icon nzType="user" nzTheme="outline"></span>
-        <a style="margin-left: 8px" [routerLink]="['/account','profile']">My profile</a>
+        <a style="margin-left: 8px" [routerLink]="['/account','profile']">{{ "contentPage.accountDrawer.myProfile" | nzI18n }}</a>
       </li>
       <li nz-menu-item>
         <span nz-icon nzType="book" nzTheme="outline"></span>
-        <a style="margin-left: 8px" [routerLink]="['/account','user-articles']">My articles</a>
+        <a style="margin-left: 8px" [routerLink]="['/account','user-articles']">{{ "contentPage.accountDrawer.myArticles" | nzI18n }}</a>
       </li>
       <ng-container *ngIf="(currentClaims$ | async) as currentClaims">
         <li nz-menu-item *ngIf="currentClaims.includes(AvailableClaims.AccessAdminPage)">
           <span nz-icon nzType="lock" nzTheme="outline"></span>
-          <a style="margin-left: 8px" [routerLink]="['/admin']">Admin panel</a>
+          <a style="margin-left: 8px" [routerLink]="['/admin']">{{ "contentPage.accountDrawer.adminPanel" | nzI18n }}</a>
         </li>
       </ng-container>
       <li nz-menu-item>
@@ -141,7 +141,7 @@
           nzType="danger"
           (click)="onSignOut()"
         >
-          Sign out
+          {{ "contentPage.accountDrawer.signOut" | nzI18n }}
         </span>
       </li>
     </ul>
