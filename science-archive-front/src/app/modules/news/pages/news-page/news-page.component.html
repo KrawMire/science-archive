@@ -7,7 +7,7 @@
 
 <ng-template #newsView>
   <nz-card *ngIf="(news$ | async)?.length === 0; else newsList">
-    <nz-empty nzNotFoundContent="No news found"/>
+    <nz-empty [nzNotFoundContent]="'newsPage.noNews' | nzI18n"/>
   </nz-card>
 </ng-template>
 <ng-template #newsList>

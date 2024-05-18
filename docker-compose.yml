@@ -1,0 +1,52 @@
+services:
+  message_broker:
+    image: rabbitmq:3-alpine
+    container_name: 'rabbitmq'
+    networks:
+      - main_network
+
+  main_service:
+    build:
+      context: ScienceArchive.Server/
+      dockerfile: Dockerfile
+    container_name: 'main_service'
+    ports:
+      - 5000:5000
+    depends_on:
+      - message_broker
+    networks:
+      - main_network
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  content_storage:
+    build:
+      context: microservices/content-storage-service/
+      dockerfile: Dockerfile
+    container_name: 'content_storage_service'
+    networks:
+      - main_network
+
+  notification_service:
+    build:
+      context: microservices/notification-service
+      dockerfile: build/Dockerfile
+    container_name: 'notification_service'
+    depends_on:
+      - message_broker
+    networks:
+      - main_network
+
+  log_service:
+    build:
+      context: microservices/log-service
+      dockerfile: build/Dockerfile
+    container_name: 'log_service'
+    depends_on:
+      - message_broker
+    networks:
+      - main_network
+
+networks:
+  main_network:
+    driver: bridge

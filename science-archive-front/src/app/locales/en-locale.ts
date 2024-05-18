@@ -116,7 +116,8 @@ export const enLocale = {
       unableToProcess: "We were unable to process your request"
     },
     newsPage: {
-      backToNews: "Back to news"
+      backToNews: "Back to news",
+      noNews: "No news found"
     },
     accountPage: {
       account: "Account",

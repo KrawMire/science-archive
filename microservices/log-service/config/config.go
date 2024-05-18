@@ -1,10 +1,11 @@
 package config
 
 import (
-	"github.com/go-yaml/yaml"
 	"log"
 	"os"
 	"path/filepath"
+
+	"github.com/go-yaml/yaml"
 )
 
 const envKey = "LOG_SERVICE_ENV"
@@ -71,5 +72,16 @@ func getDevConfig() *Config {
 }
 
 func getReleaseConfig() *Config {
-	return nil
+	return &Config{
+		ClickHouse: ClickHouseConfig{
+			Host:     os.Getenv("CH_HOST"),
+			Database: os.Getenv("CH_DATABASE"),
+			Username: os.Getenv("CH_USERNAME"),
+			Password: os.Getenv("CH_PASSWORD"),
+		},
+		MqConsumer: MqConsumerConfig{
+			QueueName:        os.Getenv("RMQ_QUEUENAME"),
+			ConnectionString: os.Getenv("RMQ_CONNECTIONSTRING"),
+		},
+	}
 }

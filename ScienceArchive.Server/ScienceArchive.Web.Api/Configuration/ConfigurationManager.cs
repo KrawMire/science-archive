@@ -50,13 +50,35 @@ public static class ConfigurationManager
 	/// <returns>Connectivity options</returns>
 	public static ConnectivityOptions GetConnectivityOptions(WebApplicationBuilder builder)
 	{
+		string? host;
+		string? connectionString;
+		var notificationQueueName = "notifications";
+		var requestLogsQueueName = "request_logs";
+		
+		if (builder.Environment.IsDevelopment())
+		{
+			host = builder.Configuration.GetValue<string>("RabbitMq:Host");
+			connectionString = builder.Configuration.GetValue<string>("RabbitMq:ConnectionUri");
+		}
+		else
+		{
+			host = Environment.GetEnvironmentVariable("RABBITMQ_HOST");
+			connectionString = Environment.GetEnvironmentVariable("RABBITMQ_CONNECTION_STRING");
+		}
+
+		if (host is null && connectionString is null)
+		{
+			throw new NullReferenceException("Cannot get connection options for RabbitMQ!");
+		}
+		
 		return new ConnectivityOptions
 		{
 			RabbitMqConnectionOptions = new RabbitMqConnectionOptions
 			{
-				Host = "localhost",
-				NotificationsQueueName = "notifications",
-				RequestLogsQueueName = "request_logs"
+				ConnectionString = connectionString,
+				Host = host,
+				NotificationsQueueName = notificationQueueName,
+				RequestLogsQueueName = requestLogsQueueName
 			}
 		};
 	}

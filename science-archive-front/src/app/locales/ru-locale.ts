@@ -118,7 +118,8 @@ export const ruLocale = {
       unableToProcess: "Мы не смогли обработать ваш запрос"
     },
     newsPage: {
-      backToNews: "Назад к новостям"
+      backToNews: "Назад к новостям",
+      noNews: "Новостей пока нет"
     },
     accountPage: {
       account: "Аккаунт",

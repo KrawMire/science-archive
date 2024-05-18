@@ -120,12 +120,15 @@ export class UserArticlesPageComponent implements OnInit {
       .createArticle(newArticle)
       .subscribe({
         next: () => {
+          this.isCreatingNewArticle$.next(false);
           this.messageService.success(this.i18nService.translate("userArticlesPage.articleCreated"));
           this.getArticles();
           this.showCreateNewModal = false;
           this.validateForm.reset();
         },
         error: (error) => {
+          this.isCreatingNewArticle$.next(false);
+
           if (!error.status || error.status === 500) {
             this.messageService.error(this.i18nService.translate("commonErrors.unhandledError"));
             console.log(error);
@@ -139,8 +142,6 @@ export class UserArticlesPageComponent implements OnInit {
   }
 
   beforeUpload(file: NzUploadFile): boolean {
-    console.log(this.fileList);
-
     if (!file) {
       return false;
     }

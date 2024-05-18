@@ -1,13 +1,14 @@
 package config
 
 import (
-	"github.com/go-yaml/yaml"
 	"log"
 	"os"
 	"path/filepath"
+
+	"github.com/go-yaml/yaml"
 )
 
-const envKey = "LOG_SERVICE_ENV"
+const envKey = "NOTIFICATION_SERVICE_ENV"
 const devEnv = "DEV"
 const releaseEnv = "RELEASE"
 
@@ -76,5 +77,19 @@ func getDevConfig() *Config {
 }
 
 func getReleaseConfig() *Config {
-	return nil
+	return &Config{
+		Services: ServicesConfig{
+			Email: EmailConfig{
+				Sender:   os.Getenv("EMAIL_SENDER"),
+				Login:    os.Getenv("EMAIL_LOGIN"),
+				Password: os.Getenv("EMAIL_PASSWORD"),
+				Host:     os.Getenv("EMAIL_HOST"),
+				Port:     os.Getenv("EMAIL_PORT"),
+			},
+		},
+		MqConsumer: MqConsumerConfig{
+			QueueName:        os.Getenv("RMQ_QUEUENAME"),
+			ConnectionString: os.Getenv("RMQ_CONNECTIONSTRING"),
+		},
+	}
 }

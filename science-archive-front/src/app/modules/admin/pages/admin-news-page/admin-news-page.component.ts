@@ -136,12 +136,14 @@ export class AdminNewsPageComponent {
       .createNews(request)
       .subscribe({
         next: () => {
+          this.isCreatingNews$.next(false);
           this.messageService.success("News were successfully created");
           this.getNews();
           this.showCreateNewModal = false;
           this.validateForm.reset();
         },
         error: (error) => {
+          this.isCreatingNews$.next(false);
           this.messageService.error(error.message ?? error);
         }
       });
