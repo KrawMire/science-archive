@@ -1,12 +1,10 @@
--- Documents linked to articles
-
-CREATE TABLE IF NOT EXISTS "articles_documents" (
-  "article_id"    UUID         NOT NULL,
-  "document_path" VARCHAR(255) NOT NULL,
+create table if not exists "article".articles_documents (
+  id          uuid          primary key,
+  article_id  uuid          not null,
+  name        varchar(255)  not null,
+  filepath    varchar(255)  not null,
   
-  PRIMARY KEY ("article_id", "document_path"),
-  
-  CONSTRAINT "FK__articles_documents__article_id__articles__id"
-    FOREIGN KEY ("article_id")
-    REFERENCES "articles" ("id")
+  constraint "fk__articles_documents__article_id__articles__id"
+    foreign key (article_id)
+    references "article".articles(id)
 );

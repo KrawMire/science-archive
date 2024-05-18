@@ -1,12 +1,13 @@
--- Users main data
-
-CREATE TABLE IF NOT EXISTS "users" (
-  "id"    UUID         NOT NULL,
-  "name"  VARCHAR(100) NOT NULL,
-  "email" VARCHAR(50)  NOT NULL,
-  
-  PRIMARY KEY ("id")
+create table if not exists "user".users (
+  id    uuid          primary key,
+  name  varchar(255)  not null,
+  email varchar(255)  not null,
+  login varchar(255)  not null,
+  about text          null
 );
 
-CREATE INDEX IF NOT EXISTS "idx__users__email"
-  ON "users" ("email"); 
+create index if not exists "idx__users__login"
+  on "user".users(login);
+
+create index if not exists "idx__users__email"
+  on "user".users(email);

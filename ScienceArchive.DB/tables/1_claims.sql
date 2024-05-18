@@ -1,13 +1,8 @@
--- Claims
-
-CREATE TABLE IF NOT EXISTS "claims" (
-  "id"          UUID         NOT NULL,
-  "value"       VARCHAR(255) NOT NULL,
-  "name"        VARCHAR(255)     NULL,
-  "description" VARCHAR(255)     NULL,
-  
-  PRIMARY KEY ("id")
+create table if not exists "auth".claims (
+  id          uuid         primary key,
+  value       varchar(100) not null,
+  description varchar(255) null
 );
 
-CREATE INDEX IF NOT EXISTS "idx__claims__value"
-  ON "claims" ("value");
+create index if not exists "idx__claims__value"
+  on "auth".claims (value);

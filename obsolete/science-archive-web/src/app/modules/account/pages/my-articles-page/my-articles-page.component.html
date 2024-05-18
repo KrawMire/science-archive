@@ -46,7 +46,7 @@
       </div>
 
       <div *ngIf="selectedCategory" class="edit-modal-form-field">
-        <p>Category</p>
+        <p>Subcategory</p>
         <select class="edit-modal-form-field-input" [(ngModel)]="currentArticle.categoryId">
           <option
             *ngFor="let subcategory of selectedCategory.subcategories"

@@ -1,12 +1,12 @@
 -- -----------------------------------------------------
 -- Create DB schemas
 -- -----------------------------------------------------
-create schema "article";
-create schema "category";
-create schema "news";
-create schema "notification";
-create schema "user";
-create schema "auth";
+create schema if not exists "article";
+create schema if not exists "category";
+create schema if not exists "news";
+create schema if not exists "notification";
+create schema if not exists "user";
+create schema if not exists "auth";
 
 -- -----------------------------------------------------
 -- Create new tables
@@ -260,4 +260,5 @@ VALUES
     ('24ed5057-487d-4887-8ee8-7342a04c7695', 'Description for VIEW_DECLINED_ARTICLES', 'VIEW_DECLINED_ARTICLES'),
     ('718c32b7-122b-4a62-a635-ef485f8d84cc', 'Description for APPROVE_ARTICLES', 'APPROVE_ARTICLES'),
     ('9aab0940-4cf0-4f53-a5b2-8f8fe46fc64f', 'Description for DECLINE_ARTICLES', 'DECLINE_ARTICLES'),
-    ('f5934e5e-cc42-45b9-8151-094066968214', 'Description for ACCESS_ADMIN_PAGE', 'ACCESS_ADMIN_PAGE');
+    ('f5934e5e-cc42-45b9-8151-094066968214', 'Description for ACCESS_ADMIN_PAGE', 'ACCESS_ADMIN_PAGE'),
+    ('f47ac10b-58cc-4372-a567-0e02b2c3d479', 'Description for EDIT_NEWS', 'EDIT_NEWS');
