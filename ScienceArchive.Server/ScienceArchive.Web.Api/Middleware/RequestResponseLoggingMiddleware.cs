@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Http.Extensions;
+using ScienceArchive.Application.Abstractions.Logging.Gateways;
 using ScienceArchive.Application.Abstractions.Logging.Models;
-using ScienceArchive.Application.Dtos.Log.Request;
-using ScienceArchive.Application.Interfaces.Services;
 
 namespace ScienceArchive.Web.Api.Middleware;
 
@@ -18,7 +17,7 @@ public class RequestResponseLoggingMiddleware
 		_logger = logger;
 	}
 	
-	public async Task Invoke(HttpContext httpContext, ILogApplicationService logService)
+	public async Task Invoke(HttpContext httpContext, ILogGateway logGateway)
 	{
 		httpContext.Request.EnableBuffering();
 		
@@ -41,7 +40,7 @@ public class RequestResponseLoggingMiddleware
 		
 		_logger.LogInformation($"Received request: Timestamp={log.Timestamp:u}, URL={log.Url}, IP={log.Ip}, User-Agent={log.UserAgent}");
 		
-		_ = Task.Run(() => SendLogRequest(log, logService));
+		_ = Task.Run(() => SendLogRequest(log, logGateway));
 	}
 
 	private async Task<RequestLog> GetRequestLog(HttpContext httpContext)
@@ -86,11 +85,11 @@ public class RequestResponseLoggingMiddleware
 		return requestLog;
 	}
 
-	private async Task SendLogRequest(RequestLog log, ILogApplicationService logService)
+	private async Task SendLogRequest(RequestLog log, ILogGateway logGateway)
 	{
 		try
 		{
-			await logService.LogRequest(new LogRequestRequestDto(log));
+			await logGateway.LogRequest(log);
 		}
 		catch (Exception ex)
 		{
