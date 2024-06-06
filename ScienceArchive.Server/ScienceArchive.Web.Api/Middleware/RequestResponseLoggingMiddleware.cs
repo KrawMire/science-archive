@@ -8,11 +8,11 @@ namespace ScienceArchive.Web.Api.Middleware;
 public class RequestResponseLoggingMiddleware
 {
 	private readonly RequestDelegate _next;
-	private readonly ILogger<ExceptionHandlerMiddleware> _logger;
+	private readonly ILogger<RequestResponseLoggingMiddleware> _logger;
 
 	public RequestResponseLoggingMiddleware(
 		RequestDelegate next, 
-		ILogger<ExceptionHandlerMiddleware> logger)
+		ILogger<RequestResponseLoggingMiddleware> logger)
 	{
 		_next = next;
 		_logger = logger;
@@ -41,7 +41,7 @@ public class RequestResponseLoggingMiddleware
 		
 		_logger.LogInformation($"Received request: Timestamp={log.Timestamp:u}, URL={log.Url}, IP={log.Ip}, User-Agent={log.UserAgent}");
 		
-		_ = Task.Run(() => logService.LogRequest(new LogRequestRequestDto(log)));
+		_ = Task.Run(() => SendLogRequest(log, logService));
 	}
 
 	private async Task<RequestLog> GetRequestLog(HttpContext httpContext)
@@ -84,5 +84,17 @@ public class RequestResponseLoggingMiddleware
 		};
 		
 		return requestLog;
+	}
+
+	private async Task SendLogRequest(RequestLog log, ILogApplicationService logService)
+	{
+		try
+		{
+			await logService.LogRequest(new LogRequestRequestDto(log));
+		}
+		catch (Exception ex)
+		{
+			_logger.LogError($"Error while writing request log: {ex.Message}");
+		}
 	}
 }
