@@ -1,6 +1,8 @@
 <button
   [style]="style"
   nz-button
+  nz-tooltip
+  [nzTooltipTitle]="subcategory.description"
   nzType="primary"
   [routerLink]="['/content', 'articles']"
   [queryParams]="{categoryId: subcategory.id}"
