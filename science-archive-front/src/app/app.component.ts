@@ -4,7 +4,8 @@ import { AuthApiService } from "@services/auth-api.service";
 import { NzMessageService } from "ng-zorro-antd/message";
 import { CookieService } from "ngx-cookie-service";
 import { LoadingService } from "@modules/shared/services/loading.service";
-import { Locales, LocaleService } from "@modules/localization/services/locale.service";
+import { LocaleService } from "@modules/localization/services/locale.service";
+import { NzI18nService } from "ng-zorro-antd/i18n";
 
 @Component({
   selector: 'sar-app-root',
@@ -14,21 +15,13 @@ import { Locales, LocaleService } from "@modules/localization/services/locale.se
 export class AppComponent {
   constructor(
     public loadingService: LoadingService,
+    private readonly i18nService: NzI18nService,
     private readonly localeService: LocaleService,
     private readonly messageService: NzMessageService,
     private readonly authApiService: AuthApiService,
     private readonly authService: AuthService,
     private readonly cookieService: CookieService,
   ) {
-    switch (navigator.language) {
-      case 'ru':
-        this.localeService.setLocale(Locales.RU);
-        break;
-      default:
-        this.localeService.setLocale(Locales.EN);
-        break;
-    }
-
     const user = this.authService.getCurrentUser();
 
     if (!user) {
@@ -42,7 +35,7 @@ export class AppComponent {
       },
       error: err => {
         if (!err.status || err.status !== 401) {
-          this.messageService.error("Unhandled error occurred!");
+          this.messageService.error(this.i18nService.translate("commonErrors.unhandledError"));
         }
 
         this.authService.deleteCurrentUser();

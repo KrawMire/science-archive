@@ -4,6 +4,7 @@ import { Category } from "@models/category/category";
 import { CategoryApiService } from "@services/category-api.service";
 import { NzMessageService } from "ng-zorro-antd/message";
 import { Title } from "@angular/platform-browser";
+import { NzI18nService } from "ng-zorro-antd/i18n";
 
 @Component({
   selector: "sar-categories-page",
@@ -15,6 +16,7 @@ export class CategoriesPageComponent implements OnInit {
   categories$ = new BehaviorSubject<Category[]>([]);
 
   constructor(
+    private readonly i18nService: NzI18nService,
     private readonly categoryService: CategoryApiService,
     private readonly message: NzMessageService,
     titleService: Title) {
@@ -29,7 +31,7 @@ export class CategoriesPageComponent implements OnInit {
         this.isLoading$.next(false);
         this.categories$.next([]);
         console.log(error);
-        this.message.error("Unhandled error occurred.");
+        this.message.error(this.i18nService.translate("commonErrors.unhandledError"));
       }
     });
   }

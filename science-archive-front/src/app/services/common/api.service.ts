@@ -11,7 +11,6 @@ export abstract class ApiService {
         }
 
         if (!response.data) {
-          alert("Cannot get any data!");
           throw new Error("Cannot get any data!");
         }
 

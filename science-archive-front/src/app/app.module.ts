@@ -75,9 +75,8 @@ import { Locales, LocaleService } from "@modules/localization/services/locale.se
           case Locales.EN:
             return enLocale;
           case Locales.RU:
-            return ruLocale;
           default:
-            return enLocale;
+            return ruLocale;
         }
     }
   }],

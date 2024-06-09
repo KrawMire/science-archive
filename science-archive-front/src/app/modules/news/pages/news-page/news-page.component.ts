@@ -4,6 +4,7 @@ import { News } from "@models/news/news";
 import { NewsApiService } from "@services/news-api.service";
 import { NzMessageService } from "ng-zorro-antd/message";
 import { Title } from "@angular/platform-browser";
+import { NzI18nService } from "ng-zorro-antd/i18n";
 
 @Component({
   selector: "sar-news-page",
@@ -15,6 +16,7 @@ export class NewsPageComponent implements OnInit {
   news$ = new BehaviorSubject<News[]>([]);
 
   constructor(
+    private readonly i18nService: NzI18nService,
     private readonly newsService: NewsApiService,
     private readonly message: NzMessageService,
     titleService: Title) {
@@ -39,7 +41,7 @@ export class NewsPageComponent implements OnInit {
           this.isLoading$.next(false);
           this.news$.next([]);
           console.log(error);
-          this.message.error("Unhandled error occurred.");
+          this.message.error(this.i18nService.translate("commonErrors.unhandledError"));
         },
       });
   }
