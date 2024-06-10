@@ -3,6 +3,7 @@ using ScienceArchive.Core.Domain.Aggregates.Role;
 using ScienceArchive.Core.Domain.Aggregates.Role.Repositories;
 using ScienceArchive.Core.Domain.Aggregates.Role.ValueObjects;
 using ScienceArchive.Core.Domain.Aggregates.User.ValueObjects;
+using ScienceArchive.Core.Domain.Common;
 using ScienceArchive.Core.Exceptions;
 using ScienceArchive.Infrastructure.Persistence.Exceptions;
 
@@ -11,10 +12,12 @@ namespace ScienceArchive.Infrastructure.Persistence.PostgreSql.Repositories;
 internal class PostgresRoleRepository : IRoleRepository
 {
     private readonly PostgresDbContext _dbContext;
+    private readonly IDomainEventBus _eventBus;
 
-    public PostgresRoleRepository(PostgresDbContext dbContext)
+    public PostgresRoleRepository(PostgresDbContext dbContext, IDomainEventBus eventBus)
     {
         _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
+        _eventBus = eventBus;
     }
 
     /// <inheritdoc/>
@@ -52,7 +55,7 @@ internal class PostgresRoleRepository : IRoleRepository
             return null;
         }
 
-        return new Role(RoleId.CreateFromGuid(role.Id))
+        var domainRole = new Role(RoleId.CreateFromGuid(role.Id))
         {
             Name = role.Name,
             Description = role.Description,
@@ -62,6 +65,10 @@ internal class PostgresRoleRepository : IRoleRepository
                 Description = c.Description
             }).ToList()
         };
+        
+        _eventBus.AddTrackedEntity(domainRole);
+
+        return domainRole;
     }
     
     /// <inheritdoc/>

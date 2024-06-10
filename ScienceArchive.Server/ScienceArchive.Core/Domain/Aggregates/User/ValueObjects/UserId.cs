@@ -3,7 +3,7 @@ using ScienceArchive.Core.Exceptions;
 
 namespace ScienceArchive.Core.Domain.Aggregates.User.ValueObjects;
 
-public sealed class UserId : EntityId<Guid>
+public sealed class UserId : GuidEntityId
 {
 	private UserId(Guid value) : base(value)
 	{
@@ -61,8 +61,7 @@ public sealed class UserId : EntityId<Guid>
 		return Value.ToString();
 	}
 	
-	/// <inheritdoc />
-	public override bool Equals(EntityId<Guid> compareId)
+	public bool Equals(GuidEntityId compareId)
 	{
 		return compareId is UserId compareUserId && Value.Equals(compareUserId.Value);
 	}

@@ -3,7 +3,7 @@ using ScienceArchive.Core.Exceptions;
 
 namespace ScienceArchive.Core.Domain.Aggregates.Notification.ValueObjects;
 
-public class NotificationId : EntityId<Guid>
+public class NotificationId : GuidEntityId
 {
     private NotificationId(Guid value) : base(value)
     {
@@ -61,8 +61,7 @@ public class NotificationId : EntityId<Guid>
     	return Value.ToString();
     }
     
-    /// <inheritdoc />
-    public override bool Equals(EntityId<Guid> compareId)
+    public bool Equals(GuidEntityId compareId)
     {
     	return compareId is NotificationId compareNotificationId && Value.Equals(compareNotificationId.Value);
     }

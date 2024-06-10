@@ -2,6 +2,7 @@
 using ScienceArchive.Core.Domain.Aggregates.User.Factories;
 using ScienceArchive.Core.Domain.Aggregates.User.Repositories;
 using ScienceArchive.Core.Domain.Aggregates.User.ValueObjects;
+using ScienceArchive.Core.Domain.Common;
 using ScienceArchive.Core.Exceptions;
 using ScienceArchive.Infrastructure.Persistence.Exceptions;
 using ScienceArchive.Infrastructure.Persistence.PostgreSql.Entities;
@@ -12,10 +13,12 @@ namespace ScienceArchive.Infrastructure.Persistence.PostgreSql.Repositories;
 internal class PostgresUserRepository : IUserRepository
 {
     private readonly PostgresDbContext _dbContext;
+    private readonly IDomainEventBus _eventBus;
 
-    public PostgresUserRepository(PostgresDbContext dbContext)
+    public PostgresUserRepository(PostgresDbContext dbContext, IDomainEventBus eventBus)
     {
         _dbContext = dbContext;
+        _eventBus = eventBus;
     }
 
     /// <inheritdoc/>
@@ -33,13 +36,17 @@ internal class PostgresUserRepository : IUserRepository
             
         var builder = new UserBuilder(user.Id);
                 
-        return builder
+        var domainUser = builder
             .AddEmail(user.Email)
             .AddLogin(user.Login)
             .AddName(user.Name)
             .AddAboutText(user.About)
             .AddIsConfirmed(user.UsersAuth!.IsConfirmed)
             .Build();
+
+        _eventBus.AddTrackedEntity(domainUser);
+        
+        return domainUser;
     }
 
     /// <inheritdoc/>

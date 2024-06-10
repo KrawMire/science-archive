@@ -5,6 +5,7 @@ using ScienceArchive.Application.Dtos.News.Response;
 using ScienceArchive.Application.Interfaces;
 using ScienceArchive.Application.Interfaces.Services;
 using ScienceArchive.Application.Services.Common;
+using ScienceArchive.Core.Domain.Common;
 
 namespace ScienceArchive.Application.Services;
 
@@ -13,7 +14,7 @@ namespace ScienceArchive.Application.Services;
 /// </summary>
 internal class NewsApplicationService : BaseApplicationService, INewsApplicationService
 {
-    public NewsApplicationService(IMediator mediator, IDbUnitOfWork dbUnitOfWork, IEventBus eventBus) 
+    public NewsApplicationService(IMediator mediator, IDbUnitOfWork dbUnitOfWork, IDomainEventBus eventBus) 
         : base(mediator, dbUnitOfWork, eventBus) { }
 
     /// <inheritdoc/>

@@ -4,4 +4,4 @@
 /// Represents object which
 /// is determined by its set of fields
 /// </summary>
-public abstract class ValueObject { }
+public abstract class ValueObject;

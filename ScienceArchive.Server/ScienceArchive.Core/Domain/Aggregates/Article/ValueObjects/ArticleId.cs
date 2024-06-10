@@ -6,7 +6,7 @@ namespace ScienceArchive.Core.Domain.Aggregates.Article.ValueObjects;
 /// <summary>
 /// Identifier of an article
 /// </summary>
-public sealed class ArticleId : EntityId<Guid>
+public sealed class ArticleId : GuidEntityId
 {
 	private ArticleId(Guid value) : base(value)
 	{
@@ -64,8 +64,7 @@ public sealed class ArticleId : EntityId<Guid>
 		return Value.ToString();
 	}
 	
-	/// <inheritdoc />
-	public override bool Equals(EntityId<Guid> compareId)
+	public bool Equals(GuidEntityId compareId)
 	{
 		return compareId is ArticleId compareArticleId && Value.Equals(compareArticleId.Value);
 	}

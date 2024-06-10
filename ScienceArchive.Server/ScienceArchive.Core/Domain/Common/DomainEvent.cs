@@ -1,9 +1,11 @@
+using MediatR;
+
 namespace ScienceArchive.Core.Domain.Common;
 
 /// <summary>
 /// Base class representing a domain event.
 /// </summary>
-public abstract class DomainEvent
+public abstract record DomainEvent : INotification
 {
     /// <summary>
     /// The timestamp of the domain event

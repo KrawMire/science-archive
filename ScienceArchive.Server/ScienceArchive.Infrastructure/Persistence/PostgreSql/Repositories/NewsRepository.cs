@@ -3,6 +3,7 @@ using ScienceArchive.Core.Domain.Aggregates.News;
 using ScienceArchive.Core.Domain.Aggregates.News.Factories;
 using ScienceArchive.Core.Domain.Aggregates.News.Repositories;
 using ScienceArchive.Core.Domain.Aggregates.News.ValueObjects;
+using ScienceArchive.Core.Domain.Common;
 using ScienceArchive.Core.Exceptions;
 using ScienceArchive.Infrastructure.Persistence.Exceptions;
 
@@ -11,10 +12,12 @@ namespace ScienceArchive.Infrastructure.Persistence.PostgreSql.Repositories;
 internal class PostgresNewsRepository : INewsRepository
 {
     private readonly PostgresDbContext _dbContext;
+    private readonly IDomainEventBus _eventBus;
 
-    public PostgresNewsRepository(PostgresDbContext dbContext)
+    public PostgresNewsRepository(PostgresDbContext dbContext, IDomainEventBus eventBus)
     {
         _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
+        _eventBus = eventBus;
     }
 
     public async Task<List<News>> GetAll()
@@ -52,13 +55,17 @@ internal class PostgresNewsRepository : INewsRepository
         
         var builder = new NewsBuilder(news.Id);
             
-        return builder
+        var domainNews = builder
             .AddTitle(news.Title)
             .AddBody(news.Body)
             .AddAuthorId(news.AuthorId)
             .AddCreationDate(news.CreationDate)
             .AddLastUpdatedDate(news.LastUpdatedDate)
             .Build();
+        
+        _eventBus.AddTrackedEntity(domainNews);
+
+        return domainNews;
     }
 
     public async Task<News> Create(News newValue)

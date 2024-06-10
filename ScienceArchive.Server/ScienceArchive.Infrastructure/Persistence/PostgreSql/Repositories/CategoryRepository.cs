@@ -3,6 +3,7 @@ using ScienceArchive.Core.Domain.Aggregates.Category;
 using ScienceArchive.Core.Domain.Aggregates.Category.Entities;
 using ScienceArchive.Core.Domain.Aggregates.Category.Repositories;
 using ScienceArchive.Core.Domain.Aggregates.Category.ValueObjects;
+using ScienceArchive.Core.Domain.Common;
 using ScienceArchive.Core.Exceptions;
 using ScienceArchive.Infrastructure.Persistence.Exceptions;
 
@@ -11,10 +12,12 @@ namespace ScienceArchive.Infrastructure.Persistence.PostgreSql.Repositories;
 internal class PostgresCategoryRepository : ICategoryRepository
 {
 	private readonly PostgresDbContext _dbContext;
+	private readonly IDomainEventBus _eventBus;
 	
-	public PostgresCategoryRepository(PostgresDbContext dbContext)
+	public PostgresCategoryRepository(PostgresDbContext dbContext, IDomainEventBus eventBus)
 	{
 		_dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
+		_eventBus = eventBus;
 	}
 	
 	public async Task<Category?> GetById(CategoryId id)
@@ -30,7 +33,7 @@ internal class PostgresCategoryRepository : ICategoryRepository
 			return null;
 		}
 		
-		return new Category(CategoryId.CreateFromGuid(category.Id))
+		var domainCategory = new Category(CategoryId.CreateFromGuid(category.Id))
 		{
 			Name = category.Name,
 			Description = category.Description,
@@ -42,6 +45,10 @@ internal class PostgresCategoryRepository : ICategoryRepository
 					Description = s.Description
 				}).ToList()
 		};
+		
+		_eventBus.AddTrackedEntity(domainCategory);
+
+		return domainCategory;
 	}
 
 	public async Task<List<Category>> GetAll()

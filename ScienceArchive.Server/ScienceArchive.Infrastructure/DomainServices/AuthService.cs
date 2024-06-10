@@ -3,6 +3,8 @@ using ScienceArchive.Application.Abstractions.Persistence;
 using ScienceArchive.Core.Domain.Aggregates.Role.ValueObjects;
 using ScienceArchive.Core.Domain.Aggregates.User;
 using ScienceArchive.Core.Domain.Aggregates.User.ValueObjects;
+using ScienceArchive.Core.Domain.Common;
+using ScienceArchive.Core.Domain.Events;
 using ScienceArchive.Core.Domain.Services;
 using ScienceArchive.Core.Exceptions;
 
@@ -13,14 +15,18 @@ internal class AuthService : IAuthService
     private readonly IDbUnitOfWork _dbUnitOfWork;
     private readonly IEncryptionService _encryptionService;
     private readonly IConfirmationService _confirmationService;
+    private readonly IDomainEventBus _domainEventBus;
+    
     public AuthService(
         IEncryptionService encryptionService, 
         IDbUnitOfWork dbUnitOfWork, 
-        IConfirmationService confirmationService)
+        IConfirmationService confirmationService, 
+        IDomainEventBus domainEventBus)
     {
         _encryptionService = encryptionService;
         _dbUnitOfWork = dbUnitOfWork;
         _confirmationService = confirmationService;
+        _domainEventBus = domainEventBus;
     }
     
     public async Task<(User User, string Code)> RegisterUser(User user, string password)
@@ -48,6 +54,8 @@ internal class AuthService : IAuthService
         var createdUser = await _dbUnitOfWork.UserRepository.Create(user);
         var code = await _confirmationService.GenerateConfirmationCode(createdUser.Id);
 
+        _domainEventBus.AddEvent(new UserRegisteredEvent(createdUser.Id, createdUser.Name, code, createdUser.Email));
+        
         return (createdUser, code);
     }
 
@@ -114,6 +122,12 @@ internal class AuthService : IAuthService
         }
         
         var code = await _confirmationService.GenerateConfirmationCode(user.Id);
+        
+        if (!user.IsConfirmed)
+        {
+            _domainEventBus.AddEvent(new UserRegisteredEvent(user.Id, user.Name, code, user.Email));
+        }
+        
         return (user, code);
 
     }

@@ -5,6 +5,7 @@ using ScienceArchive.Core.Domain.Aggregates.Article.Repositories;
 using ScienceArchive.Core.Domain.Aggregates.Article.ValueObjects;
 using ScienceArchive.Core.Domain.Aggregates.Category.ValueObjects;
 using ScienceArchive.Core.Domain.Aggregates.User.ValueObjects;
+using ScienceArchive.Core.Domain.Common;
 using ScienceArchive.Core.Exceptions;
 using ScienceArchive.Infrastructure.Persistence.Exceptions;
 using ScienceArchive.Infrastructure.Persistence.PostgreSql.Entities;
@@ -17,10 +18,12 @@ namespace ScienceArchive.Infrastructure.Persistence.PostgreSql.Repositories;
 internal class PostgresArticleRepository : IArticleRepository
 {
     private readonly PostgresDbContext _dbContext;
+    private readonly IDomainEventBus _eventBus;
     
-    public PostgresArticleRepository(PostgresDbContext dbContext)
+    public PostgresArticleRepository(PostgresDbContext dbContext, IDomainEventBus eventBus)
     {
         _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
+        _eventBus = eventBus;
     }
 
     public async Task<List<Article>> GetAll()
@@ -267,13 +270,17 @@ internal class PostgresArticleRepository : IArticleRepository
             builder.AddDocument(articleDocument.Id, articleDocument.Name, articleDocument.Filepath);
         }
                 
-        return builder
+        var domainArticle = builder
             .AddTitle(article.Title)
             .AddStatus(article.Status)
             .AddCategory(article.CategoryId, article.Category.Name)
             .AddCreationDate(article.CreationDate)
             .AddDescription(article.Description)
             .Build();
+
+        _eventBus.AddTrackedEntity(domainArticle);
+        
+        return domainArticle;
     }
 
     public async Task<Article> Create(Article newValue)

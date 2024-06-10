@@ -1,6 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using ScienceArchive.Application.Abstractions.Encryption;
 using ScienceArchive.Application.Abstractions.Templating;
+using ScienceArchive.Core.Domain.Common;
 using ScienceArchive.Core.Domain.Services;
 using ScienceArchive.Infrastructure.Connectivity;
 using ScienceArchive.Infrastructure.Connectivity.Options;
@@ -29,7 +30,8 @@ public static class InfrastructureRegistry
     {
         return services
             .AddSingleton<IConfirmationService, ConfirmationService>()
-            .AddTransient<IAuthService, AuthService>();
+            .AddTransient<IAuthService, AuthService>()
+            .AddScoped<IDomainEventBus, DomainEventBus>();
     }
     
     private static IServiceCollection RegisterApplicationServices(this IServiceCollection services)

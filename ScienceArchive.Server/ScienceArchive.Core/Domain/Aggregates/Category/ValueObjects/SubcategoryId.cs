@@ -3,7 +3,7 @@ using ScienceArchive.Core.Exceptions;
 
 namespace ScienceArchive.Core.Domain.Aggregates.Category.ValueObjects;
 
-public class SubcategoryId : EntityId<Guid>
+public class SubcategoryId : GuidEntityId
 {
 	private SubcategoryId(Guid value) : base(value)
     {
@@ -61,8 +61,7 @@ public class SubcategoryId : EntityId<Guid>
     	return Value.ToString();
     }
     
-    /// <inheritdoc />
-    public override bool Equals(EntityId<Guid> compareId)
+    public bool Equals(GuidEntityId compareId)
     {
     	return compareId is SubcategoryId compareSubcategoryId && Value.Equals(compareSubcategoryId.Value);
     }

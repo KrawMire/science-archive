@@ -1,6 +1,6 @@
 using MediatR;
 using ScienceArchive.Application.Abstractions.Persistence;
-using ScienceArchive.Application.Interfaces;
+using ScienceArchive.Core.Domain.Common;
 
 namespace ScienceArchive.Application.Services.Common;
 
@@ -11,12 +11,12 @@ internal abstract class BaseApplicationService
 {
     private readonly IMediator _mediator;
     private readonly IDbUnitOfWork _dbUnitOfWork;
-    private readonly IEventBus _eventBus;
+    private readonly IDomainEventBus _eventBus;
 
     protected BaseApplicationService(
         IMediator mediator,
         IDbUnitOfWork dbUnitOfWork, 
-        IEventBus eventBus)
+        IDomainEventBus eventBus)
     {
         _mediator = mediator;
         _dbUnitOfWork = dbUnitOfWork;
@@ -47,7 +47,7 @@ internal abstract class BaseApplicationService
         }
         catch (Exception)
         {
-            await _eventBus.ClearEvents();
+            _eventBus.ClearEvents();
             await _dbUnitOfWork.RollbackAsync();
             throw;
         }

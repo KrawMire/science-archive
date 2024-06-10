@@ -2,6 +2,7 @@
 using ScienceArchive.Core.Domain.Aggregates.Article.Enums;
 using ScienceArchive.Core.Domain.Aggregates.Article.ValueObjects;
 using ScienceArchive.Core.Domain.Common;
+using ScienceArchive.Core.Domain.Events;
 using ScienceArchive.Core.Exceptions;
 
 namespace ScienceArchive.Core.Domain.Aggregates.Article;
@@ -82,6 +83,8 @@ public class Article : AggregateRoot<ArticleId>
     public void Approve()
     {
         _status = ArticleStatus.Verified;
+        
+        AddDomainEvent(new ArticleStatusChangedEvent(Id, Status, Message: null));
     }
 
     /// <summary>
@@ -90,6 +93,8 @@ public class Article : AggregateRoot<ArticleId>
     public void Decline()
     {
         _status = ArticleStatus.Declined;
+
+        AddDomainEvent(new ArticleStatusChangedEvent(Id, Status, Message: null));
     }
 
     /// <summary>
@@ -98,5 +103,7 @@ public class Article : AggregateRoot<ArticleId>
     public void SetToVerify()
     {
         _status = ArticleStatus.ToVerify;
+        
+        AddDomainEvent(new ArticleStatusChangedEvent(Id, Status, Message: null));
     }
 }

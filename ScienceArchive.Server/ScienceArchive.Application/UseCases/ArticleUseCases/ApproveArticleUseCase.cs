@@ -2,11 +2,9 @@ using ScienceArchive.Application.Abstractions.Persistence;
 using ScienceArchive.Application.Dtos.Article;
 using ScienceArchive.Application.Dtos.Article.Request;
 using ScienceArchive.Application.Dtos.Article.Response;
-using ScienceArchive.Application.Events.EventWrappers;
 using ScienceArchive.Application.Interfaces;
 using ScienceArchive.Core.Domain.Aggregates.Article;
 using ScienceArchive.Core.Domain.Aggregates.Article.ValueObjects;
-using ScienceArchive.Core.Domain.Events;
 using ScienceArchive.Core.Exceptions;
 
 namespace ScienceArchive.Application.UseCases.ArticleUseCases;
@@ -14,17 +12,14 @@ namespace ScienceArchive.Application.UseCases.ArticleUseCases;
 internal class ApproveArticleUseCase : IUseCase<ApproveArticleRequestDto, ApproveArticleResponseDto>
 {
     private readonly IDbUnitOfWork _dbUnitOfWork;
-    private readonly IEventBus _eventBus;
     private readonly IApplicationMapper<Article, ArticleDto> _articleMapper;
     
     public ApproveArticleUseCase(
         IDbUnitOfWork dbUnitOfWork, 
-        IEventBus eventBus,
         IApplicationMapper<Article, ArticleDto> articleMapper) 
     {
         _dbUnitOfWork = dbUnitOfWork;
         _articleMapper = articleMapper;
-        _eventBus = eventBus;
     }
 
     public async Task<ApproveArticleResponseDto> Handle(ApproveArticleRequestDto request, CancellationToken cancellationToken)
@@ -40,12 +35,6 @@ internal class ApproveArticleUseCase : IUseCase<ApproveArticleRequestDto, Approv
         article.Approve();
 
         var updatedArticle = await _dbUnitOfWork.ArticleRepository.Update(articleId, article);
-
-        await _eventBus.AddEventAsync(new ArticleStatusChangedEventWrapper(new ArticleStatusChangedEvent
-        {
-            ArticleId = articleId,
-            Status = updatedArticle.Status
-        }));
         
         return new ApproveArticleResponseDto(_articleMapper.MapToDto(updatedArticle));
     }
