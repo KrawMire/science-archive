@@ -28,7 +28,10 @@ public class AuthController : ControllerBase
         if (result.User.IsConfirmed)
         {
             var token = _authManager.GenerateToken(result.User);
-            Response.Cookies.Append("Authorization", token);   
+            Response.Cookies.Append("Authorization", token, new CookieOptions
+            {
+                Expires = DateTime.UtcNow.AddDays(7)
+            });
         }
         
         return new SuccessResponse(result);
@@ -46,7 +49,11 @@ public class AuthController : ControllerBase
     {
         var result = await _authService.ConfirmUserCode(request);
         var token = _authManager.GenerateToken(result.User);
-        Response.Cookies.Append("Authorization", token);
+        
+        Response.Cookies.Append("Authorization", token, new CookieOptions
+        {
+            Expires = DateTime.UtcNow.AddDays(7)
+        });
         
         return new SuccessResponse(result);
     }
