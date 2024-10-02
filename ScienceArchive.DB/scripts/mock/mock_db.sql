@@ -1,94 +1,61 @@
--- Claims
-INSERT INTO "claims" ("id", "value", "name", "description")
-VALUES
-    ('00000000-0000-0000-0000-000000000001', 'claim1', 'Claim 1', 'Description for Claim 1'),
-    ('00000000-0000-0000-0000-000000000002', 'claim2', 'Claim 2', 'Description for Claim 2');
+-- Mock data for "auth".claims
+INSERT INTO "auth".claims (id, value, description)
+VALUES ('a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11', 'Claim 1', 'This is claim 1'),
+       ('b0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11', 'Claim 2', 'This is claim 2');
 
--- Roles
-INSERT INTO "roles" ("id", "name", "description")
-VALUES
-    ('00000000-0000-0000-0000-000000000101', 'role1', 'Role 1 Description'),
-    ('00000000-0000-0000-0000-000000000102', 'role2', 'Role 2 Description');
+-- Mock data for "auth".roles
+INSERT INTO "auth".roles (id, name, description)
+VALUES ('a1eebc99-9c0b-4ef8-bb6d-6bb9bd380a11', 'Role 1', 'This is role 1'),
+       ('b1eebc99-9c0b-4ef8-bb6d-6bb9bd380a11', 'Role 2', 'This is role 2');
 
--- Roles and claims
-INSERT INTO "roles_claims" ("role_id", "claim_id")
-VALUES
-  ('00000000-0000-0000-0000-000000000101', '00000000-0000-0000-0000-000000000001'),
-  ('00000000-0000-0000-0000-000000000101', '00000000-0000-0000-0000-000000000002'),
-  ('00000000-0000-0000-0000-000000000102', '00000000-0000-0000-0000-000000000001');
+-- Mock data for "user".users
+INSERT INTO "user".users (id, name, email, login, about)
+VALUES ('a2eebc99-9c0b-4ef8-bb6d-6bb9bd380a11', 'User 1', 'user1@example.com', 'user1', 'About user 1'),
+       ('b2eebc99-9c0b-4ef8-bb6d-6bb9bd380a11', 'User 2', 'user2@example.com', 'user2', 'About user 2');
 
--- Users
-INSERT INTO "users" ("id", "name", "email")
-VALUES
-    ('00000000-0000-0000-0000-000000000201', 'user1', 'user1@example.com'),
-    ('00000000-0000-0000-0000-000000000202', 'user2', 'user2@example.com');
 
--- Users auth data
-INSERT INTO "users_auth" ("user_id", "login", "password", "password_salt")
-VALUES
-    ('00000000-0000-0000-0000-000000000201', 'user1_login', 'hashed_password1', 'salt1'),
-    ('00000000-0000-0000-0000-000000000202', 'user2_login', 'hashed_password2', 'salt2');
+-- Mock data for "auth".users_auth
+INSERT INTO "auth".users_auth (user_id, password, password_salt)
+VALUES ('a2eebc99-9c0b-4ef8-bb6d-6bb9bd380a11', 'password123', 'salt123'),
+       ('b2eebc99-9c0b-4ef8-bb6d-6bb9bd380a11', 'password456', 'salt456');
 
--- Users and roles
-INSERT INTO "users_roles" ("user_id", "role_id")
-VALUES
-  ('00000000-0000-0000-0000-000000000201', '00000000-0000-0000-0000-000000000101'),
-  ('00000000-0000-0000-0000-000000000201', '00000000-0000-0000-0000-000000000102'),
-  ('00000000-0000-0000-0000-000000000202', '00000000-0000-0000-0000-000000000101');
+-- Mock data for "news".news
+INSERT INTO "news".news (id, author_id, title, body, creation_date, last_updated_date)
+VALUES ('c2eebc99-9c0b-4ef8-bb6d-6bb9bd380a11', 'a2eebc99-9c0b-4ef8-bb6d-6bb9bd380a11', 'News Title 1',
+        'This is news body 1', CURRENT_DATE, null),
+       ('d2eebc99-9c0b-4ef8-bb6d-6bb9bd380a11', 'b2eebc99-9c0b-4ef8-bb6d-6bb9bd380a11', 'News Title 2',
+        'This is news body 2', CURRENT_DATE, null);
 
--- News
-INSERT INTO "news" ("id", "title", "body")
-VALUES
-    ('00000000-0000-0000-0000-000000000301', 'News Title 1', 'News Body 1'),
-    ('00000000-0000-0000-0000-000000000302', 'News Title 2', 'News Body 2');
+-- Mock data for "category".categories
+INSERT INTO "category".categories (id, name, description)
+VALUES ('e2eebc99-9c0b-4ef8-bb6d-6bb9bd380a11', 'Category 1', 'This is category 1'),
+       ('f2eebc99-9c0b-4ef8-bb6d-6bb9bd380a11', 'Category 2', 'This is category 2');
 
--- News creation data
-INSERT INTO "news_creation" ("news_id", "author_id", "created_timestamp")
-VALUES
-    ('00000000-0000-0000-0000-000000000301', '00000000-0000-0000-0000-000000000201', '2023-07-19 12:00:00'),
-    ('00000000-0000-0000-0000-000000000302', '00000000-0000-0000-0000-000000000202', '2023-07-19 13:00:00');
+-- Mock data for "category".subcategories
+INSERT INTO "category".subcategories (id, name, description)
+VALUES ('12eebc99-9c0b-4ef8-bb6d-6bb9bd380a11', 'Subcategory 1', 'This is subcategory 1'),
+       ('22eebc99-9c0b-4ef8-bb6d-6bb9bd380a11', 'Subcategory 2', 'This is subcategory 2');
 
--- Articles
-INSERT INTO "articles" ("id", "title", "description")
-VALUES
-    ('00000000-0000-0000-0000-000000000401', 'Article Title 1', 'Article Description 1'),
-    ('00000000-0000-0000-0000-000000000402', 'Article Title 2', 'Article Description 2');
+-- Mock data for "article".articles
+INSERT INTO "article".articles (id, category_id, title, status, creation_date, description)
+VALUES ('32eebc99-9c0b-4ef8-bb6d-6bb9bd380a11', '12eebc99-9c0b-4ef8-bb6d-6bb9bd380a11', 'Article Title 1', 1,
+        CURRENT_DATE, 'This is article description 1'),
+       ('42eebc99-9c0b-4ef8-bb6d-6bb9bd380a11', '22eebc99-9c0b-4ef8-bb6d-6bb9bd380a11', 'Article Title 2', 2,
+        CURRENT_DATE, 'This is article description 2');
 
--- Articles creation data
-INSERT INTO "articles_creation" ("article_id", "created_timestamp")
-VALUES
-    ('00000000-0000-0000-0000-000000000401', '2023-07-19 14:00:00'),
-    ('00000000-0000-0000-0000-000000000402', '2023-07-19 15:00:00');
+-- Mock data for "article".articles_documents
+INSERT INTO "article".articles_documents (id, article_id, name, filepath)
+VALUES ('52eebc99-9c0b-4ef8-bb6d-6bb9bd380a11', '42eebc99-9c0b-4ef8-bb6d-6bb9bd380a11', 'Document 1',
+        '/path/to/document1'),
+       ('62eebc99-9c0b-4ef8-bb6d-6bb9bd380a11', '32eebc99-9c0b-4ef8-bb6d-6bb9bd380a11', 'Document 2',
+        '/path/to/document2');
 
--- Articles authors data
-INSERT INTO "articles_authors" ("article_id", "author_id")
-VALUES 
-  ('00000000-0000-0000-0000-000000000401', '00000000-0000-0000-0000-000000000201'),
-  ('00000000-0000-0000-0000-000000000401', '00000000-0000-0000-0000-000000000202'),
-  ('00000000-0000-0000-0000-000000000402', '00000000-0000-0000-0000-000000000201'),
-  ('00000000-0000-0000-0000-000000000402', '00000000-0000-0000-0000-000000000202');
+-- Mock data for "auth".roles_claims
+INSERT INTO "auth".roles_claims (claim_id, role_id)
+VALUES ('a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11', 'a1eebc99-9c0b-4ef8-bb6d-6bb9bd380a11'),
+       ('b0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11', 'b1eebc99-9c0b-4ef8-bb6d-6bb9bd380a11');
 
--- Articles documents
-INSERT INTO "articles_documents" ("article_id", "document_path")
-VALUES
-    ('00000000-0000-0000-0000-000000000401', '/path/to/document1'),
-    ('00000000-0000-0000-0000-000000000401', '/path/to/document2'),
-    ('00000000-0000-0000-0000-000000000402', '/path/to/document3');
-
--- Categories
-INSERT INTO "categories" ("id", "name")
-VALUES
-    ('00000000-0000-0000-0000-000000000501', 'Category 1'),
-    ('00000000-0000-0000-0000-000000000502', 'Category 2');
-
--- Articles to categories
-INSERT INTO "subcategories" ("id", "name", "category_id")
-VALUES
-  ('00000000-0000-0000-0000-000000000401', 'Subcategory 1', '00000000-0000-0000-0000-000000000501'),
-  ('00000000-0000-0000-0000-000000000402', 'Subcategory 2', '00000000-0000-0000-0000-000000000502');
-
--- Subcategories
-INSERT INTO "articles_categories" ("article_id", "subcategory_id")
-VALUES
-    ('00000000-0000-0000-0000-000000000401', '00000000-0000-0000-0000-000000000401'),
-    ('00000000-0000-0000-0000-000000000402', '00000000-0000-0000-0000-000000000402');
+-- Mock data for "article".users_articles
+INSERT INTO "article".users_articles (user_id, article_id, role)
+VALUES ('a2eebc99-9c0b-4ef8-bb6d-6bb9bd380a11', '32eebc99-9c0b-4ef8-bb6d-6bb9bd380a11', 1),
+       ('b2eebc99-9c0b-4ef8-bb6d-6bb9bd380a11', '42eebc99-9c0b-4ef8-bb6d-6bb9bd380a11', 2);

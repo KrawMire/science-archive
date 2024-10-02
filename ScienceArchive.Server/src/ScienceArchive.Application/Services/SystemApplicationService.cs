@@ -1,0 +1,28 @@
+﻿using MediatR;
+using ScienceArchive.Shared.Abstractions.Persistence;
+using ScienceArchive.Application.Dtos.System.Request;
+using ScienceArchive.Application.Dtos.System.Response;
+using ScienceArchive.Application.Interfaces;
+using ScienceArchive.Application.Interfaces.Services;
+using ScienceArchive.Application.Services.Common;
+using ScienceArchive.Core.Domain.Common;
+
+namespace ScienceArchive.Application.Services;
+
+/// <summary>
+/// Represents the system application service.
+/// </summary>
+/// <remarks>
+/// This service is responsible for performing system-related operations and providing system information.
+/// </remarks>
+internal class SystemApplicationService : BaseApplicationService, ISystemApplicationService
+{
+    public SystemApplicationService(IMediator mediator, IDbUnitOfWork dbUnitOfWork, IDomainEventBus eventBus) 
+        : base(mediator, dbUnitOfWork, eventBus) { }
+
+    /// <inheritdoc/>
+    public Task<CheckSystemStatusResponseDto> CheckSystemStatus(CheckSystemStatusRequestDto dto)
+    {
+        return ExecuteUseCase<CheckSystemStatusRequestDto, CheckSystemStatusResponseDto>(dto);
+    }
+}
