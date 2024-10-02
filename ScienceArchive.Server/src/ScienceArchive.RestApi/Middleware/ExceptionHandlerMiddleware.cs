@@ -1,0 +1,108 @@
+﻿using System.Text.Json;
+using ScienceArchive.Application.Exceptions;
+using ScienceArchive.Core.Exceptions;
+using ScienceArchive.Rest.Api.Responses;
+
+namespace ScienceArchive.Rest.Api.Middleware;
+
+public class ExceptionHandlerMiddleware
+{
+    private readonly RequestDelegate _next;
+    private readonly ILogger<ExceptionHandlerMiddleware> _logger;
+
+    public ExceptionHandlerMiddleware(RequestDelegate next, ILogger<ExceptionHandlerMiddleware> logger)
+    {
+        _next = next;
+        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+    }
+
+    public async Task Invoke(HttpContext httpContext)
+    {
+        try
+        {
+            await _next(httpContext);
+        }
+        catch (BadHttpRequestException ex)
+        {
+            await ProcessException(httpContext, ex.Message, 400);
+        }
+        catch (WrongCredentialsException)
+        {
+            await ProcessException(httpContext, "Wrong credentials were provided", 400);
+        }
+        catch (WrongConfirmationCodeException)
+        {
+            await ProcessException(httpContext, "Wrong confirmation code", 400);
+        }
+        catch (InvalidFieldValueException ex)
+        {
+            await ProcessException(httpContext, $"Invalid value of field: {ex.InvalidFieldName}", 400);
+        }
+        catch (EntityNotFoundException ex)
+        {
+            await ProcessException(httpContext, $"{ex.EntityName} was not found", 404);
+        }
+        catch (InvalidEntityIdValueException ex)
+        {
+            await ProcessException(httpContext, $"Invalid ID value: {ex.InvalidValue}", 400);
+        }
+        catch (DuplicateLoginException)
+        {
+            await ProcessException(httpContext, $"User with such login already exists", 400);
+        }
+        catch (DuplicateEmailException)
+        {
+            await ProcessException(httpContext, $"User with such email already exists", 400);
+        }
+        catch (UserCannotViewArticleException)
+        {
+            await ProcessException(httpContext, $"You have not rights to view this article", 403);
+        }
+        catch (CannotFindAllClaimsException)
+        {
+            await ProcessException(httpContext, $"User don't have enough rights for this action", 403);
+        }
+        catch (SpentConfirmationAttemptsException)
+        {
+            await ProcessException(httpContext, $"You have spent all confirmation attempts. Try again later", 400);
+        }
+        catch (SpentConfirmRegenerationTries)
+        {
+            await ProcessException(httpContext, $"You have spent all confirmation code resending attempts. Try again later", 400);
+        }
+        catch (IncorrectArticleCreatorException)
+        {
+            await ProcessException(httpContext, $"You are not an owner/creator of this article to perform this action", 403);
+        }
+        catch (InvalidInitiatorUserException)
+        {
+            await ProcessException(httpContext, $"You are not a user you try to perform an operation at", 403);
+        }
+        catch (Exception ex)
+        {
+            await ProcessException(httpContext, "Unhandled error occurred", 500, ex);
+        }
+    }
+
+    private async Task ProcessException(HttpContext httpContext, string message, int statusCode, Exception? ex = null)
+    {
+        var response = new ErrorResponse(message);
+        var body = JsonSerializer.Serialize(response);
+
+        if (ex is not null)
+        {
+            _logger.LogError($"{ex.Message}, {ex.StackTrace}");
+        }
+        
+        try
+        {
+            httpContext.Response.ContentType = "application/json";
+            httpContext.Response.StatusCode = statusCode;
+            await httpContext.Response.WriteAsync(body);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError($"Error while writing response: {e.Message}");
+        }
+    }
+}
