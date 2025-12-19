@@ -1,4 +1,4 @@
-FROM golang:1.20
+FROM golang:1.20 AS build
 WORKDIR /app
 
 COPY go.mod ./
@@ -6,6 +6,9 @@ RUN go mod download
 
 COPY . .
 RUN go build -o /doc-store-api ./cmd
+
+FROM alpine:3.23 AS run
+COPY --from=build /doc-store-api /doc-store-api
 
 ARG OBJ_STOR_BASE_URL
 ENV OBJ_STOR_BASE_URL=$OBJ_STOR_BASE_URL
