@@ -5,6 +5,7 @@ COPY go.mod ./
 RUN go mod download
 
 COPY . .
+ENV CGO_ENABLED=0
 RUN go build -o /doc-store-api ./cmd
 
 FROM alpine:3.23 AS run

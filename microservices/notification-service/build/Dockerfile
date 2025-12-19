@@ -5,6 +5,7 @@ COPY go.mod go.sum ./
 RUN go mod download
 
 COPY . .
+ENV CGO_ENABLED=0
 RUN go build -o /notification_service ./cmd/
 
 FROM alpine:3.23 AS runtime
