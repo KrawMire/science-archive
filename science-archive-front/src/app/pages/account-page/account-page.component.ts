@@ -1,7 +1,8 @@
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component } from '@angular/core';
-import { BehaviorSubject, map, Observable } from "rxjs";
-import { Router } from "@angular/router";
+import { CookieService } from "ngx-cookie-service";
+import { AuthService } from "@modules/auth/services/auth.service";
+import { User } from "@models/user/user";
+import { AvailableClaims } from "@models/claims/available-claims";
 
 @Component({
   selector: 'sar-account-page',
@@ -9,27 +10,21 @@ import { Router } from "@angular/router";
   styleUrls: ['./account-page.component.scss']
 })
 export class AccountPageComponent {
-  showMobileDrawer$ = new BehaviorSubject(false);
-  isMobile$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
-    .pipe(
-      map(result => result.matches)
-    );
+  readonly user: User | null;
+  readonly isAdmin: boolean;
 
   constructor(
-    private readonly breakpointObserver: BreakpointObserver,
-    private readonly router: Router
-  ) {}
-
-  openDrawer(): void {
-    this.showMobileDrawer$.next(true);
+    private readonly authService: AuthService,
+    private readonly cookieService: CookieService,
+  ) {
+    this.user = this.authService.getCurrentUser();
+    this.isAdmin = this.authService.getCurrentClaims().includes(AvailableClaims.AccessAdminPage);
   }
 
-  closeDrawer(): void {
-    this.showMobileDrawer$.next(false);
-  }
-
-  async onDrawerNavigateTo(...route: string[]) {
-    this.closeDrawer();
-    await this.router.navigate([...route]);
+  signOut(): void {
+    this.cookieService.delete("Authorization", "/");
+    this.authService.deleteCurrentUser();
+    this.authService.deleteCurrentClaims();
+    window.location.assign("/");
   }
 }

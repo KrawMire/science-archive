@@ -1,0 +1,8 @@
+.skeleton {
+  padding: 24px 30px;
+  border-top: 1px solid var(--sa-border);
+}
+
+:host:first-child .skeleton {
+  border-top: 0;
+}

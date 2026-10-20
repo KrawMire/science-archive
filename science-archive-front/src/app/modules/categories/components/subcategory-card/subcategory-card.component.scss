@@ -1,0 +1,25 @@
+.subject {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  height: 100%;
+  min-height: 50px;
+  padding: 10px 16px;
+  box-sizing: border-box;
+  border: 1px solid var(--sa-border);
+  border-radius: var(--sa-radius-control);
+  background: var(--sa-subtle);
+  color: var(--sa-navy);
+  font-weight: 600;
+  font-size: 14px;
+  transition: border-color .15s, background-color .15s;
+
+  sar-icon { flex: none; color: var(--sa-blue); }
+
+  &:hover {
+    border-color: var(--sa-blue);
+    background: var(--sa-blue-tint);
+    color: var(--sa-navy);
+  }
+}

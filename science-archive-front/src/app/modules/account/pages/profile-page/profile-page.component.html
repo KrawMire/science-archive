@@ -1,20 +1,32 @@
-<nz-card
-  *ngIf="(user$ | async) as user; else loadingInfo"
-  [nzTitle]="'profilePage.profile' | nzI18n"
->
-  <nz-descriptions nzLayout="horizontal">
-    <nz-descriptions-item nzSpan="3" [nzTitle]="'profilePage.name' | nzI18n">{{user.name}}</nz-descriptions-item>
-    <nz-descriptions-item nzSpan="3" [nzTitle]="'profilePage.login' | nzI18n">{{user.login}}</nz-descriptions-item>
-    <nz-descriptions-item nzSpan="3" [nzTitle]="'profilePage.email' | nzI18n">
-      {{user.email}}
-      <nz-tag nzColor="success" style="margin-left: 8px">
-        <span nz-icon nzType="check-circle"></span>
-        <span>{{ 'profilePage.confirmed' | nzI18n }}</span>
-      </nz-tag>
-    </nz-descriptions-item>
-  </nz-descriptions>
-</nz-card>
+<ng-container *ngIf="(user$ | async) as user; else loadingInfo">
+  <h1 class="sa-h1 page-title">{{ 'profilePage.profile' | nzI18n }}</h1>
+
+  <section class="sa-card sa-card--pad profile">
+    <div class="sa-person">
+      <span class="sa-avatar sa-avatar--lg">{{ user.name | initials }}</span>
+      <div>
+        <div class="profile__name">{{ user.name }}</div>
+        <div class="sa-person__role">{{ user.login }}</div>
+      </div>
+    </div>
+
+    <dl class="profile__facts">
+      <dt>{{ 'profilePage.name' | nzI18n }}</dt>
+      <dd>{{ user.name }}</dd>
+      <dt>{{ 'profilePage.login' | nzI18n }}</dt>
+      <dd>{{ user.login }}</dd>
+      <dt>{{ 'profilePage.email' | nzI18n }}</dt>
+      <dd>
+        {{ user.email }}
+        <span class="sa-tag sa-tag--verified" *ngIf="user.isConfirmed">
+          <sar-icon name="check" [size]="12" [strokeWidth]="2.5" />
+          {{ 'profilePage.confirmed' | nzI18n }}
+        </span>
+      </dd>
+    </dl>
+  </section>
+</ng-container>
 
 <ng-template #loadingInfo>
-  <nz-spin nzSize="large"></nz-spin>
+  <sar-loading />
 </ng-template>

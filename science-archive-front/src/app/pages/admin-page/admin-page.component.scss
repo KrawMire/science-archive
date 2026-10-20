@@ -1,51 +1,83 @@
-.page-layout {
+:host {
+  display: block;
   min-height: 100%;
-  height: auto;
 }
 
-.sar-logo {
-  margin-left: 8px;
-  height: 24px;
-}
+.admin-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--sa-navy);
+  color: #fff;
 
-.sar-admin-page-header {
-  background: linear-gradient(270deg, rgba(171,41,2,1) 0%, rgba(255,255,255,1) 20%);
-  box-shadow: 0 20px 8px -16px #9b9b9b4a;
-}
-
-.drawer-content {
-  padding: 0;
-}
-
-.sider-menu {
-  height: 100%;
-  //border-right: 0;
-}
-
-.inner-layout {
-  padding: 24px;
-}
-
-nz-breadcrumb {
-  margin: 16px 0;
-}
-
-nz-content {
-  //background: #fff;
-  padding: 24px;
-  min-height: 280px;
-}
-
-@media screen and (max-width: 768px) {
-  .inner-layout {
-    padding: 8px;
-    margin: 0;
+  &__row {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    height: var(--sa-header-height);
   }
 
-  .sar-admin-page-header {
-    align-content: center;
-    padding: 8px;
-    background-color: #ffffff;
-    box-shadow: 0 20px 8px -16px #9b9b9b4a;
+  &__logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    font-size: 17px;
+  }
+
+  &__badge {
+    padding: 3px 9px;
+    border-radius: 6px;
+    background: var(--sa-on-navy);
+    color: var(--sa-navy);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+  }
+
+  &__nav {
+    display: flex;
+    gap: 6px;
+
+    a {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 14px;
+      border-radius: 9px;
+      color: #fff;
+      font-weight: 500;
+
+      &:hover { background: rgba(255, 255, 255, .08); color: #fff; }
+      &.is-active { background: var(--sa-blue); font-weight: 600; }
+    }
+  }
+
+  &__count {
+    min-width: 20px;
+    padding: 1px 6px;
+    border-radius: 999px;
+    background: var(--sa-rose);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    text-align: center;
+  }
+
+  &__back {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-left: auto;
+    color: var(--sa-on-navy);
+    font-size: 14px;
+
+    &:hover { color: #fff; }
+  }
+
+  @media (max-width: 768px) {
+    &__row { gap: 12px; }
+    &__logo ::ng-deep .sar-logo__text { display: none; }
+    &__back span { display: none; }
   }
 }

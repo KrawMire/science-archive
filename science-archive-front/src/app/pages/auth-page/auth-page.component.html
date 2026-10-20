@@ -1,1 +1,24 @@
-<router-outlet />
+<div class="auth">
+  <aside class="auth__brand">
+    <a routerLink="/" class="auth__logo" aria-label="Science Archive">
+      <sar-logo class="sar-logo--light" [tile]="true" />
+    </a>
+    <div class="auth__pitch">
+      <span class="sa-bookmark sa-bookmark--inline auth__bookmark"></span>
+      <h1 class="auth__title">{{ 'auth.pitchTitle' | nzI18n }}</h1>
+      <p class="auth__mission">{{ 'common.mission' | nzI18n }}</p>
+    </div>
+    <p class="auth__footnote">{{ 'auth.footnote' | nzI18n }}</p>
+  </aside>
+
+  <main class="auth__main">
+    <a routerLink="/" class="auth__mobile-logo" aria-label="Science Archive"><sar-logo /></a>
+    <div class="auth__panel">
+      <nav class="auth__tabs">
+        <a routerLink="/auth/sign-in" routerLinkActive="is-active">{{ 'auth.signInTab' | nzI18n }}</a>
+        <a routerLink="/auth/sign-up" routerLinkActive="is-active">{{ 'auth.signUpTab' | nzI18n }}</a>
+      </nav>
+      <router-outlet />
+    </div>
+  </main>
+</div>

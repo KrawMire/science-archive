@@ -1,10 +1,6 @@
 import { Component } from '@angular/core';
-import { NzCardComponent } from "ng-zorro-antd/card";
-import { AdminArticleCardComponent } from "@modules/admin/components/admin-article-card/admin-article-card.component";
 import { AsyncPipe, NgForOf, NgIf } from "@angular/common";
-import { NzEmptyComponent } from "ng-zorro-antd/empty";
-import { NzSpinComponent } from "ng-zorro-antd/spin";
-import { AdminNewsCardComponent } from "@modules/admin/components/admin-news-card/admin-news-card.component";
+import { SharedModule } from "@modules/shared/shared.module";
 import { BehaviorSubject, map } from "rxjs";
 import { NzMessageService } from "ng-zorro-antd/message";
 import { News } from "@models/news/news";
@@ -17,18 +13,15 @@ import {
   ReactiveFormsModule,
   Validators
 } from "@angular/forms";
-import { NzColDirective, NzRowDirective } from "ng-zorro-antd/grid";
 import { NzFormControlComponent, NzFormDirective, NzFormItemComponent, NzFormLabelComponent } from "ng-zorro-antd/form";
 import { NzIconDirective } from "ng-zorro-antd/icon";
 import { NzInputDirective, NzInputGroupComponent, NzTextareaCountComponent } from "ng-zorro-antd/input";
 import { NzModalComponent, NzModalContentDirective } from "ng-zorro-antd/modal";
-import { NzOptionComponent, NzSelectComponent } from "ng-zorro-antd/select";
-import { NzUploadComponent } from "ng-zorro-antd/upload";
 import { NzButtonComponent } from "ng-zorro-antd/button";
 import { NzWaveDirective } from "ng-zorro-antd/core/wave";
 import { AuthService } from "@modules/auth/services/auth.service";
 import { User } from "@models/user/user";
-import { Router } from "@angular/router";
+import { Router, RouterLink } from "@angular/router";
 import CreateNewsRequest from "@models/news/requests/create-news.request";
 import { NzI18nPipe } from "ng-zorro-antd/i18n";
 
@@ -36,16 +29,12 @@ import { NzI18nPipe } from "ng-zorro-antd/i18n";
   selector: 'sar-admin-news-page',
   standalone: true,
   imports: [
-    NzCardComponent,
-    AdminArticleCardComponent,
     AsyncPipe,
     NgForOf,
     NgIf,
-    NzEmptyComponent,
-    NzSpinComponent,
-    AdminNewsCardComponent,
+    SharedModule,
+    RouterLink,
     FormsModule,
-    NzColDirective,
     NzFormControlComponent,
     NzFormDirective,
     NzFormItemComponent,
@@ -54,11 +43,7 @@ import { NzI18nPipe } from "ng-zorro-antd/i18n";
     NzInputDirective,
     NzInputGroupComponent,
     NzModalComponent,
-    NzOptionComponent,
-    NzRowDirective,
-    NzSelectComponent,
     NzTextareaCountComponent,
-    NzUploadComponent,
     ReactiveFormsModule,
     NzButtonComponent,
     NzWaveDirective,
@@ -157,10 +142,12 @@ export class AdminNewsPageComponent {
       .getAllNews()
       .pipe(
         map((response) => {
-          return response.news.map((singleNews) => {
-            singleNews.creationDate = singleNews.creationDate ? new Date(singleNews.creationDate.toString()) : new Date();
-            return singleNews;
-          });
+          return response.news
+            .map((singleNews) => {
+              singleNews.creationDate = singleNews.creationDate ? new Date(singleNews.creationDate.toString()) : new Date();
+              return singleNews;
+            })
+            .sort((a, b) => (b.creationDate?.getTime() ?? 0) - (a.creationDate?.getTime() ?? 0));
         }),
       )
       .subscribe({

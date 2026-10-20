@@ -1,12 +1,11 @@
-<nz-card
-  [style]="style"
-  [nzTitle]="category.name"
->
-  <div class="sar-subcategories-container">
-    <sar-subcategory-card
-      *ngFor="let subcategory of category.subcategories"
-      [subcategory]="subcategory"
-      style="margin: 2px"
-    ></sar-subcategory-card>
+<section class="sa-card shelf">
+  <div class="shelf__intro">
+    <h2 class="shelf__name">
+      <a routerLink="/content/articles" [queryParams]="{ fieldId: category.id }">{{ category.name }}</a>
+    </h2>
+    <p class="shelf__description" *ngIf="category.description">{{ category.description }}</p>
   </div>
-</nz-card>
+  <div class="shelf__subjects">
+    <sar-subcategory-card *ngFor="let subcategory of category.subcategories" [subcategory]="subcategory" />
+  </div>
+</section>

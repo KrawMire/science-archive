@@ -1,46 +1,18 @@
-import { Component, OnInit } from "@angular/core";
-import { BehaviorSubject } from "rxjs";
-import { AuthService } from "@modules/auth/services/auth.service";
-import { User } from "@models/user/user";
-import { CookieService } from "ngx-cookie-service";
-import { AvailableClaims } from "@models/claims/available-claims";
+import { Component } from "@angular/core";
+import { ActivatedRoute } from "@angular/router";
 
 @Component({
   selector: "sar-content-page",
   templateUrl: "./content-page.component.html",
   styleUrls: ["./content-page.component.scss"],
 })
-export class ContentPageComponent implements OnInit {
-  showAccountDrawer$ = new BehaviorSubject<boolean>(false);
-  currentUser$ = new BehaviorSubject<User | null>(null);
-  currentClaims$ = new BehaviorSubject<string[]>([]);
+export class ContentPageComponent {
+  /**
+   * The home page is the shell mounted at the root path; it gets the full footer
+   */
+  readonly isHome: boolean;
 
-  constructor(
-    private readonly authService: AuthService,
-    private readonly cookieService: CookieService
-  ) {
-    this.currentUser$.next(this.authService.getCurrentUser());
-    this.currentClaims$.next(this.authService.getCurrentClaims());
+  constructor(route: ActivatedRoute) {
+    this.isHome = route.snapshot.routeConfig?.path === "";
   }
-
-  ngOnInit(): void {
-
-  }
-
-  onSignOut() {
-    this.cookieService.delete("Authorization", "/");
-    this.authService.deleteCurrentUser();
-    this.authService.deleteCurrentClaims();
-    window.location.reload();
-  }
-
-  onAccountClick() {
-    this.showAccountDrawer$.next(true);
-  }
-
-  onAccountDrawerClose() {
-    this.showAccountDrawer$.next(false);
-  }
-
-  protected readonly AvailableClaims = AvailableClaims;
 }

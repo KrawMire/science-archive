@@ -20,9 +20,7 @@ import { isAdminGuard } from "@modules/auth/guards/is-admin.guard";
 import { isAuthorizedGuard } from "@modules/auth/guards/is-authorized.guard";
 
 const routes: Routes = [
-  { path: "", pathMatch: "full", redirectTo: "welcome" },
-  { path: "welcome", pathMatch: "full", component: WelcomePageComponent },
-  { path: "account", pathMatch: "full", component: AccountPageComponent },
+  { path: "welcome", pathMatch: "full", redirectTo: "" },
   {
     path: "auth",
     component: AuthPageComponent,
@@ -114,10 +112,22 @@ const routes: Routes = [
       },
     ],
   },
+  {
+    path: "",
+    component: ContentPageComponent,
+    children: [
+      {
+        path: "",
+        pathMatch: "full",
+        component: WelcomePageComponent,
+      },
+    ],
+  },
+  { path: "**", redirectTo: "" },
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes, { scrollPositionRestoration: "enabled", anchorScrolling: "enabled" })],
   exports: [RouterModule],
 })
 export class AppRoutingModule {}

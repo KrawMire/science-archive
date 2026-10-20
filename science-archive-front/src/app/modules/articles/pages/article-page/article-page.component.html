@@ -1,126 +1,174 @@
-<nz-card>
-  <ng-container *ngIf="article$ | async as article; else errorView">
-    <nz-breadcrumb>
-      <nz-breadcrumb-item>
-        <a [routerLink]="['/content', 'articles']">{{ 'articlePage.articles' | nzI18n }}</a>
-      </nz-breadcrumb-item>
-      <nz-breadcrumb-item>
-        <a
-          nz-tooltip
-          [nzTooltipTitle]="article.categoryName"
-          [routerLink]="['/content', 'articles']"
-          [queryParams]="{categoryId: article?.categoryId}"
-        >{{article.categoryName.substring(0, 10) + "..."}}</a>
-      </nz-breadcrumb-item>
-      <nz-breadcrumb-item>
-        {{article.id?.substring(0, 10) + "..."}}
-      </nz-breadcrumb-item>
-    </nz-breadcrumb>
+<div class="sa-page-body">
+  <div class="sa-container">
+    <ng-container *ngIf="article$ | async as article; else notLoaded">
+      <nav class="sa-breadcrumb" aria-label="Breadcrumb">
+        <a routerLink="/content/articles">{{ 'header.articles' | nzI18n }}</a>
+        <ng-container *ngIf="field">
+          <span class="sa-breadcrumb__sep">/</span>
+          <a routerLink="/content/articles" [queryParams]="{ fieldId: field.id }">{{ field.name }}</a>
+        </ng-container>
+        <span class="sa-breadcrumb__sep">/</span>
+        <a routerLink="/content/articles" [queryParams]="{ categoryId: article.categoryId }">{{ article.categoryName }}</a>
+      </nav>
 
-    <h2>{{article.title}}</h2>
+      <div class="layout">
+        <article class="sa-card paper">
+          <span class="sa-bookmark sa-bookmark--lg paper__bookmark" *ngIf="isNew"></span>
 
-    <p class="sar-article-description">
-      {{article.description}}
-    </p>
+          <div class="sa-meta">
+            <a class="sa-tag" routerLink="/content/articles" [queryParams]="{ categoryId: article.categoryId }">{{ article.categoryName }}</a>
+            <span *ngIf="field">{{ field.name }}</span>
+            <span *ngIf="field" aria-hidden="true">·</span>
+            <span class="sa-mono">{{ 'article.published' | nzI18n }} {{ article.creationDate | dateFormat }}</span>
+          </div>
 
-    <nz-list nzItemLayout="horizontal" [nzHeader]="'articlePage.linkedDocuments' | nzI18n">
-        <div *ngIf="article.documents.length && article.documents.length > 0; else emptyDocs">
-          <nz-list-item *ngFor="let document of article.documents">
-            <a href="/api/documents/{{document.path}}" target="_blank" rel="noopener noreferrer">{{ document.name }}</a>
-          </nz-list-item>
+          <h1 class="sa-h1 paper__title">{{ article.title }}</h1>
+
+          <ul class="paper__authors" *ngIf="authors.length > 0">
+            <li class="sa-person" *ngFor="let author of authors; let index = index">
+              <span class="sa-avatar" [class.sa-avatar--blue]="index > 0">{{ author.name | initials }}</span>
+              <span>
+                <span class="sa-person__name">{{ author.name }}</span><br />
+                <span class="sa-person__role">
+                  {{ (author.role === ArticleAuthorRole.Owner ? 'article.leadAuthor' : 'article.coAuthor') | nzI18n }}
+                </span>
+              </span>
+            </li>
+          </ul>
+
+          <section class="paper__section" *ngIf="paragraphs.length > 0">
+            <h2 class="sa-eyebrow">{{ 'article.abstract' | nzI18n }}</h2>
+            <div class="sa-reading paper__abstract">
+              <p *ngFor="let paragraph of paragraphs">{{ paragraph }}</p>
+            </div>
+          </section>
+
+          <section class="paper__section">
+            <div class="paper__section-head">
+              <h2 class="sa-eyebrow">{{ 'article.linkedDocuments' | nzI18n }}</h2>
+              <button
+                type="button"
+                class="sa-btn sa-btn--secondary sa-btn--sm"
+                *ngIf="article.documents.length > 1"
+                (click)="downloadAll()"
+              >
+                <sar-icon name="download" [size]="16" />
+                {{ 'article.downloadAll' | nzI18n }}
+              </button>
+            </div>
+            <div class="paper__documents" *ngIf="article.documents.length > 0; else noDocuments">
+              <sar-document-tile *ngFor="let document of article.documents" [document]="document" />
+            </div>
+            <ng-template #noDocuments>
+              <p class="sa-muted">{{ 'article.noDocuments' | nzI18n }}</p>
+            </ng-template>
+          </section>
+        </article>
+
+        <aside class="sidebar">
+          <section class="sa-card sa-card--pad">
+            <h2 class="sa-eyebrow">{{ 'article.about' | nzI18n }}</h2>
+            <dl class="facts">
+              <ng-container *ngIf="field">
+                <dt>{{ 'article.field' | nzI18n }}</dt>
+                <dd>{{ field.name }}</dd>
+              </ng-container>
+              <dt>{{ 'article.category' | nzI18n }}</dt>
+              <dd><a routerLink="/content/articles" [queryParams]="{ categoryId: article.categoryId }">{{ article.categoryName }}</a></dd>
+              <dt>{{ 'article.publishedLabel' | nzI18n }}</dt>
+              <dd class="sa-mono">{{ article.creationDate | dateFormat }}</dd>
+              <dt>{{ 'article.documents' | nzI18n }}</dt>
+              <dd>{{ article.documents.length | plural:'documents.files' }}</dd>
+              <dt>ID</dt>
+              <dd class="sa-mono facts__id" [title]="article.id">{{ article.id }}</dd>
+            </dl>
+            <div class="sidebar__actions">
+              <button type="button" class="sa-btn sa-btn--primary sa-btn--block" (click)="copyCitation()">
+                <sar-icon name="quote" [size]="16" />
+                {{ 'article.copyCitation' | nzI18n }}
+              </button>
+              <button type="button" class="sa-btn sa-btn--neutral sa-btn--block" (click)="copyLink()">
+                <sar-icon name="link" [size]="16" />
+                {{ 'article.copyLink' | nzI18n }}
+              </button>
+            </div>
+          </section>
+
+          <section class="sa-panel-navy telegram">
+            <h2 class="telegram__title">{{ 'article.telegramTitle' | nzI18n }}</h2>
+            <p>{{ 'article.telegramText' | nzI18n }}</p>
+            <a class="sa-btn sa-btn--white sa-btn--sm" [href]="telegramUrl" target="_blank" rel="noopener noreferrer">
+              {{ 'article.telegramAction' | nzI18n }}
+            </a>
+          </section>
+        </aside>
+      </div>
+
+      <section class="more" *ngIf="moreArticles.length > 0">
+        <h2 class="sa-h2 more__title">{{ 'article.moreIn' | nzI18n: { name: article.categoryName } }}</h2>
+        <div class="more__grid">
+          <sar-article-card *ngFor="let other of moreArticles" [article]="other" variant="compact" />
         </div>
-    </nz-list>
+      </section>
 
-    <ng-template #emptyDocs>
-      <nz-empty [nzNotFoundContent]="'articlePage.noDocuments' | nzI18n"/>
+      <div class="mobile-bar">
+        <a
+          *ngIf="primaryDocument as document; else shareOnly"
+          class="sa-btn sa-btn--primary sa-btn--lg mobile-bar__main"
+          [href]="documentUrl(document)"
+          [attr.download]="document.name"
+        >
+          <sar-icon name="download" [size]="18" />
+          {{ 'article.downloadPaper' | nzI18n }}
+        </a>
+        <ng-template #shareOnly>
+          <button type="button" class="sa-btn sa-btn--primary sa-btn--lg mobile-bar__main" (click)="share()">
+            <sar-icon name="share" [size]="18" />
+            {{ 'article.share' | nzI18n }}
+          </button>
+        </ng-template>
+        <button type="button" class="sa-btn sa-btn--neutral sa-btn--lg sa-btn--icon" [attr.aria-label]="'article.copyCitation' | nzI18n" (click)="copyCitation()">
+          <sar-icon name="quote" [size]="18" />
+        </button>
+      </div>
+    </ng-container>
+
+    <ng-template #notLoaded>
+      <div class="sa-card paper" *ngIf="isLoading$ | async; else errorView">
+        <span class="sa-skeleton sa-skeleton--chip"></span>
+        <span class="sa-skeleton sa-skeleton--title" style="height: 40px"></span>
+        <span class="sa-skeleton sa-skeleton--line"></span>
+        <span class="sa-skeleton sa-skeleton--line"></span>
+        <span class="sa-skeleton sa-skeleton--line" style="width: 55%"></span>
+      </div>
     </ng-template>
-  </ng-container>
 
-  <ng-template #errorView>
-    <ng-container *ngIf="error$ | async as error">
-      <ng-container [ngSwitch]="error">
+    <ng-template #errorView>
+      <div class="sa-card sa-empty" [ngSwitch]="error$ | async">
         <ng-container *ngSwitchCase="400">
-          <ng-container *ngTemplateOutlet="badRequestErrorView"/>
+          <p class="sa-empty__title">{{ 'articlePage.invalidSearchData' | nzI18n }}</p>
+          <p>{{ 'articlePage.incorrectDataWasPassed' | nzI18n }}</p>
         </ng-container>
         <ng-container *ngSwitchCase="403">
-          <ng-container *ngTemplateOutlet="forbiddenErrorView" />
+          <p class="sa-empty__title">{{ 'articlePage.forbiddenResource' | nzI18n }}</p>
+          <p>{{ 'articlePage.youCannotView' | nzI18n }}</p>
         </ng-container>
         <ng-container *ngSwitchCase="404">
-          <ng-container *ngTemplateOutlet="notFoundErrorView" />
+          <p class="sa-empty__title">{{ 'articlePage.notFound' | nzI18n }}</p>
+          <p>{{ 'articlePage.articleNotExist' | nzI18n }}</p>
         </ng-container>
         <ng-container *ngSwitchCase="500">
-          <ng-container *ngTemplateOutlet="internalServerErrorView" />
+          <p class="sa-empty__title">{{ 'articlePage.serverError' | nzI18n }}</p>
+          <p>{{ 'articlePage.internalServerError' | nzI18n }}</p>
         </ng-container>
         <ng-container *ngSwitchDefault>
-          <ng-container *ngTemplateOutlet="commonError" />
+          <p class="sa-empty__title">{{ 'articlePage.unknownError' | nzI18n }}</p>
+          <p>{{ 'articlePage.unableToProcess' | nzI18n }}</p>
         </ng-container>
-      </ng-container>
-    </ng-container>
-  </ng-template>
-
-  <ng-template #badRequestErrorView>
-    <nz-result nzStatus="warning" [nzTitle]="'articlePage.invalidSearchData' | nzI18n" [nzSubTitle]="'articlePage.incorrectDataWasPassed' | nzI18n">
-      <div nz-result-extra>
-        <button
-          nz-button
-          nzType="primary"
-          [routerLink]="['/content', 'articles']"
-        >
-          {{ 'articlePage.backToArticles' | nzI18n }}
-        </button>
+        <div class="sa-empty__actions">
+          <a class="sa-btn sa-btn--primary" routerLink="/content/articles">{{ 'articlePage.backToArticles' | nzI18n }}</a>
+        </div>
       </div>
-    </nz-result>
-  </ng-template>
-  <ng-template #forbiddenErrorView>
-    <nz-result nzStatus="warning" [nzTitle]="'articlePage.forbiddenResource' | nzI18n" [nzSubTitle]="'articlePage.youCannotView' | nzI18n">
-      <div nz-result-extra>
-        <button
-          nz-button
-          nzType="primary"
-          [routerLink]="['/content', 'articles']"
-        >
-          {{ 'articlePage.backToArticles' | nzI18n }}
-        </button>
-      </div>
-    </nz-result>
-  </ng-template>
-  <ng-template #notFoundErrorView>
-    <nz-result nzStatus="404" [nzTitle]="'articlePage.notFound' | nzI18n" [nzSubTitle]="'articlePage.articleNotExist' | nzI18n">
-      <div nz-result-extra>
-        <button
-          nz-button
-          nzType="primary"
-          [routerLink]="['/content', 'articles']"
-        >
-          {{ 'articlePage.backToArticles' | nzI18n }}
-        </button>
-      </div>
-    </nz-result>
-  </ng-template>
-  <ng-template #internalServerErrorView>
-    <nz-result nzStatus="error" [nzTitle]="'articlePage.serverError' | nzI18n" [nzSubTitle]="'articlePage.internalServerError' | nzI18n">
-      <div nz-result-extra>
-        <button
-          nz-button
-          nzType="primary"
-          [routerLink]="['/content', 'articles']"
-        >
-          {{ 'articlePage.backToArticles' | nzI18n }}
-        </button>
-      </div>
-    </nz-result>
-  </ng-template>
-  <ng-template #commonError>
-    <nz-result nzStatus="error" [nzTitle]="'articlePage.unknownError' | nzI18n" [nzSubTitle]="'articlePage.unableToProcess' | nzI18n">
-      <div nz-result-extra>
-        <button
-          nz-button
-          nzType="primary"
-          [routerLink]="['/content', 'articles']"
-        >
-          {{ 'articlePage.backToArticles' | nzI18n }}
-        </button>
-      </div>
-    </nz-result>
-  </ng-template>
-</nz-card>
+    </ng-template>
+  </div>
+</div>

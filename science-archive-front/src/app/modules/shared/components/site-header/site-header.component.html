@@ -1,0 +1,108 @@
+<header class="header">
+  <div class="sa-container header__row">
+    <a routerLink="/" class="header__logo" aria-label="Science Archive">
+      <sar-logo />
+    </a>
+
+    <nav class="header__nav" aria-label="Main">
+      <a routerLink="/content/articles" routerLinkActive="is-active">{{ 'header.articles' | nzI18n }}</a>
+      <a routerLink="/content/categories" routerLinkActive="is-active">{{ 'header.categories' | nzI18n }}</a>
+      <a routerLink="/content/news" routerLinkActive="is-active">{{ 'header.news' | nzI18n }}</a>
+    </nav>
+
+    <div class="header__actions">
+      <button
+        type="button"
+        class="sa-btn sa-btn--neutral sa-btn--sm header__locale"
+        [attr.aria-label]="'header.switchLanguage' | nzI18n"
+        (click)="toggleLocale()"
+      >
+        <sar-icon name="globe" [size]="15" />
+        {{ locale }}
+      </button>
+
+      <ng-container *ngIf="user; else guestActions">
+        <div class="header__account">
+          <button
+            type="button"
+            class="header__account-button"
+            [attr.aria-expanded]="isAccountMenuOpen"
+            (click)="toggleAccountMenu()"
+          >
+            <span class="sa-avatar sa-avatar--sm">{{ user.name | initials }}</span>
+            <span class="header__account-login">{{ user.login }}</span>
+            <sar-icon name="chevron-down" [size]="14" />
+          </button>
+          <div class="header__dropdown" *ngIf="isAccountMenuOpen">
+            <ng-container *ngTemplateOutlet="accountLinks" />
+          </div>
+        </div>
+      </ng-container>
+
+      <ng-template #guestActions>
+        <a routerLink="/auth/sign-in" class="sa-btn sa-btn--ghost">{{ 'header.signIn' | nzI18n }}</a>
+        <a routerLink="/account/user-articles" class="sa-btn sa-btn--primary">
+          <sar-icon name="plus" [size]="16" />
+          {{ 'header.publish' | nzI18n }}
+        </a>
+      </ng-template>
+    </div>
+
+    <div class="header__mobile-actions">
+      <a routerLink="/content/articles" class="sa-btn sa-btn--ghost sa-btn--icon" [attr.aria-label]="'header.search' | nzI18n">
+        <sar-icon name="search" [size]="20" />
+      </a>
+      <button
+        type="button"
+        class="sa-btn sa-btn--ghost sa-btn--icon"
+        [attr.aria-label]="'header.openMenu' | nzI18n"
+        [attr.aria-expanded]="isMenuOpen"
+        (click)="toggleMenu()"
+      >
+        <sar-icon [name]="isMenuOpen ? 'x' : 'menu'" [size]="22" />
+      </button>
+    </div>
+  </div>
+
+  <div class="header__mobile-menu" *ngIf="isMenuOpen">
+    <nav class="sa-container">
+      <a routerLink="/content/articles" routerLinkActive="is-active">{{ 'header.articles' | nzI18n }}</a>
+      <a routerLink="/content/categories" routerLinkActive="is-active">{{ 'header.categories' | nzI18n }}</a>
+      <a routerLink="/content/news" routerLinkActive="is-active">{{ 'header.news' | nzI18n }}</a>
+      <hr />
+      <ng-container *ngIf="user; else mobileGuest">
+        <div class="sa-person header__mobile-user">
+          <span class="sa-avatar">{{ user.name | initials }}</span>
+          <div>
+            <div class="sa-person__name">{{ user.name }}</div>
+            <div class="sa-person__role">{{ user.login }}</div>
+          </div>
+        </div>
+        <ng-container *ngTemplateOutlet="accountLinks" />
+      </ng-container>
+      <ng-template #mobileGuest>
+        <a routerLink="/account/user-articles" class="sa-btn sa-btn--primary sa-btn--block">{{ 'header.publish' | nzI18n }}</a>
+        <a routerLink="/auth/sign-in" class="sa-btn sa-btn--secondary sa-btn--block">{{ 'header.signIn' | nzI18n }}</a>
+      </ng-template>
+      <button type="button" class="header__mobile-locale" (click)="toggleLocale()">
+        <sar-icon name="globe" [size]="16" />
+        {{ locale === Locales.EN ? 'Русский' : 'English' }}
+      </button>
+    </nav>
+  </div>
+</header>
+
+<ng-template #accountLinks>
+  <a routerLink="/account/profile" class="header__menu-item">
+    <sar-icon name="user" [size]="16" /> {{ 'header.profile' | nzI18n }}
+  </a>
+  <a routerLink="/account/user-articles" class="header__menu-item">
+    <sar-icon name="book" [size]="16" /> {{ 'header.myArticles' | nzI18n }}
+  </a>
+  <a *ngIf="isAdmin" routerLink="/admin" class="header__menu-item">
+    <sar-icon name="shield" [size]="16" /> {{ 'header.moderation' | nzI18n }}
+  </a>
+  <button type="button" class="header__menu-item header__menu-item--muted" (click)="signOut()">
+    <sar-icon name="log-out" [size]="16" /> {{ 'header.signOut' | nzI18n }}
+  </button>
+</ng-template>

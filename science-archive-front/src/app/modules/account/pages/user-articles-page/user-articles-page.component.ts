@@ -13,6 +13,7 @@ import { User } from "@models/user/user";
 import { AuthService } from "@modules/auth/services/auth.service";
 import { Router } from "@angular/router";
 import { NzI18nService } from "ng-zorro-antd/i18n";
+import { ArticleStatus, toDate } from "@modules/shared/utils/article-utils";
 
 @Component({
   selector: 'sar-user-articles-page',
@@ -29,6 +30,14 @@ export class UserArticlesPageComponent implements OnInit {
   categories$ = new BehaviorSubject<Category[]>([]);
   subcategories$ = new BehaviorSubject<Subcategory[]>([]);
   isCreatingNewArticle$ = new BehaviorSubject<boolean>(false);
+  statusFilter: ArticleStatus | null = null;
+
+  readonly ArticleStatus = ArticleStatus;
+  readonly statusFilters: { status: ArticleStatus, label: string }[] = [
+    { status: ArticleStatus.ToVerify, label: "status.toVerify" },
+    { status: ArticleStatus.Verified, label: "status.verified" },
+    { status: ArticleStatus.Declined, label: "status.declined" },
+  ];
 
   validateForm: FormGroup<{
     title: FormControl<string>,
@@ -65,6 +74,16 @@ export class UserArticlesPageComponent implements OnInit {
         this.subcategories$.next(selectedCategory.subcategories);
       }
     });
+  }
+
+  filterArticles(articles: Article[]): Article[] {
+    return this.statusFilter === null
+      ? articles
+      : articles.filter(article => article.status === this.statusFilter);
+  }
+
+  countByStatus(articles: Article[], status: ArticleStatus): number {
+    return articles.filter(article => article.status === status).length;
   }
 
   openCreateNewModal() {
@@ -197,10 +216,12 @@ export class UserArticlesPageComponent implements OnInit {
       .getProfileArticles()
       .pipe(
         map((response) => {
-          return response.articles.map((article) => {
-            article.creationDate = article.creationDate ? new Date(article.creationDate.toString()) : new Date();
-            return article;
-          });
+          return response.articles
+            .map((article) => {
+              article.creationDate = article.creationDate ? new Date(article.creationDate.toString()) : new Date();
+              return article;
+            })
+            .sort((a, b) => (toDate(b.creationDate)?.getTime() ?? 0) - (toDate(a.creationDate)?.getTime() ?? 0));
         }),
       )
       .subscribe({

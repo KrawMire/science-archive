@@ -1,46 +1,71 @@
-<nz-card [nzTitle]="pageTitle" [nzExtra]="addNewArticle">
-  <ng-container *ngIf="(articles$ | async) as articles">
-    <ng-container *ngIf="articles.length > 0; else emptyList">
-      <sar-user-article-card style="margin-top: 8px" *ngFor="let article of articles" [article]="article" />
-    </ng-container>
-  </ng-container>
+<div class="head">
+  <h1 class="sa-h1">{{ 'header.myArticles' | nzI18n }}</h1>
+  <button type="button" class="sa-btn sa-btn--primary sa-btn--lg" (click)="openCreateNewModal()">
+    <sar-icon name="plus" [size]="18" />
+    {{ 'account.newArticle' | nzI18n }}
+  </button>
+</div>
 
-  <ng-template #loading>
-    <nz-spin nzSize="large"/>
-  </ng-template>
+<ng-container *ngIf="(articles$ | async) as articles">
+  <div class="filters" *ngIf="articles.length > 0">
+    <button
+      type="button"
+      class="sa-chip sa-chip--outline sa-chip--sm"
+      [class.sa-chip--active]="statusFilter === null"
+      (click)="statusFilter = null"
+    >{{ 'account.all' | nzI18n }} · {{ articles.length }}</button>
+    <button
+      type="button"
+      *ngFor="let filter of statusFilters"
+      class="sa-chip sa-chip--outline sa-chip--sm"
+      [class.sa-chip--active]="statusFilter === filter.status"
+      (click)="statusFilter = filter.status"
+    >{{ filter.label | nzI18n }} · {{ countByStatus(articles, filter.status) }}</button>
+  </div>
 
-  <ng-template #emptyList>
-    <ng-container *ngIf="!(isLoadingArticleList$ | async); else loading">
-      <nz-empty
-        [nzNotFoundContent]="'userArticlesPage.youHaveNotCreatedArticle' | nzI18n"
-        [nzNotFoundFooter]="createArticle"
-      />
-    </ng-container>
-    <ng-template #createArticle>
-      <button
-        nz-button
-        nzType="primary"
-        (click)="openCreateNewModal()"
-      >
-        {{ 'userArticlesPage.createFirstArticle' | nzI18n }}
-      </button>
-    </ng-template>
-  </ng-template>
-</nz-card>
+  <div class="sa-card table" *ngIf="articles.length > 0; else emptyList">
+    <div class="table__row table__row--head" role="row">
+      <span>{{ 'account.article' | nzI18n }}</span>
+      <span>{{ 'account.status' | nzI18n }}</span>
+      <span>{{ 'account.created' | nzI18n }}</span>
+      <span class="sa-visually-hidden">{{ 'account.actions' | nzI18n }}</span>
+    </div>
+    <div class="table__row" role="row" *ngFor="let article of filterArticles(articles)">
+      <div class="table__article">
+        <a class="table__title" [routerLink]="['/content', 'articles', article.id]">{{ article.title }}</a>
+        <span class="table__meta">{{ article.categoryName }} · {{ article.documents.length | plural:'documents.count' }}</span>
+      </div>
+      <span><sar-status-tag [status]="article.status" /></span>
+      <span class="sa-mono table__date">{{ article.creationDate | dateFormat }}</span>
+      <span class="table__action">
+        <a class="sa-btn sa-btn--neutral sa-btn--sm" [routerLink]="['/content', 'articles', article.id]">{{ 'account.view' | nzI18n }}</a>
+      </span>
+    </div>
+    <div class="sa-empty" *ngIf="filterArticles(articles).length === 0">{{ 'account.noArticlesWithStatus' | nzI18n }}</div>
+  </div>
 
-<ng-template #pageTitle>
-  {{ 'userArticlesPage.allArticles' | nzI18n }}
+  <p class="sa-note" *ngIf="articles.length > 0">
+    <sar-icon name="info" [size]="18" />
+    <span [innerHTML]="'account.verificationNote' | nzI18n"></span>
+  </p>
+</ng-container>
+
+<ng-template #emptyList>
+  <div class="sa-card" *ngIf="!(isLoadingArticleList$ | async); else loading">
+    <div class="sa-empty">
+      <p class="sa-empty__title">{{ 'userArticlesPage.youHaveNotCreatedArticle' | nzI18n }}</p>
+      <p>{{ 'account.emptyHint' | nzI18n }}</p>
+      <div class="sa-empty__actions">
+        <button type="button" class="sa-btn sa-btn--primary" (click)="openCreateNewModal()">
+          {{ 'userArticlesPage.createFirstArticle' | nzI18n }}
+        </button>
+      </div>
+    </div>
+  </div>
 </ng-template>
 
-<ng-template #addNewArticle>
-  <button
-    nz-button
-    nzType="primary"
-    (click)="openCreateNewModal()"
-  >
-    <span nz-icon nzType="plus"></span>
-    {{ 'userArticlesPage.new' | nzI18n }}
-  </button>
+<ng-template #loading>
+  <sar-loading />
 </ng-template>
 
 <nz-modal
@@ -51,7 +76,7 @@
   [nzOkDisabled]="isCreatingNewArticle$ | async"
 >
   <ng-container *nzModalContent>
-    <form nz-form [formGroup]="validateForm">
+    <form nz-form nzLayout="vertical" [formGroup]="validateForm">
       <nz-form-item>
         <nz-form-control [nzErrorTip]="'userArticlesPage.specifyArticleTitle' | nzI18n">
           <nz-form-label nzRequired>{{ 'userArticlesPage.title' | nzI18n }}</nz-form-label>

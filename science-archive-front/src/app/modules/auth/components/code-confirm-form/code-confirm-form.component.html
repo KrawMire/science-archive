@@ -1,16 +1,28 @@
-<form nz-form class="code-confirm-form" [formGroup]="formGroup">
-  <h2>{{ "authPage.confirmForm.enterCode" | nzI18n }}</h2>
+<form nz-form nzLayout="vertical" class="sa-form" [formGroup]="formGroup" (ngSubmit)="confirm()">
+  <h2 class="sa-form__title">{{ 'auth.checkEmail' | nzI18n }}</h2>
+  <p class="sa-form__lead">{{ 'auth.checkEmailLead' | nzI18n }}</p>
+
   <nz-form-item>
-    <nz-form-control nzErrorTip="Please input your username!">
-      <nz-input-group nzPrefixIcon="form">
-        <input type="text" formControlName="code" nz-input [placeholder]="'authPage.confirmForm.confirmCode' | nzI18n" />
-      </nz-input-group>
+    <nz-form-label nzFor="confirm-code">{{ 'authPage.confirmForm.confirmCode' | nzI18n }}</nz-form-label>
+    <nz-form-control [nzErrorTip]="'authPage.errors.invalidCode' | nzI18n">
+      <input
+        id="confirm-code"
+        class="code-input"
+        type="text"
+        inputmode="numeric"
+        autocomplete="one-time-code"
+        maxlength="6"
+        formControlName="code"
+        nz-input
+      />
     </nz-form-control>
   </nz-form-item>
-  <a (click)="resendConfirmationCode()">
-    {{ "authPage.confirmForm.resendCode" | nzI18n }}
-  </a>
-  <button nz-button class="sign-in-form-button" [nzType]="'primary'" (click)="confirm()">
-    {{ "authPage.confirmForm.confirm" | nzI18n }}
+
+  <button type="submit" class="sa-btn sa-btn--primary sa-btn--lg sa-btn--block sa-form__submit">
+    {{ 'authPage.confirmForm.confirm' | nzI18n }}
   </button>
+  <p class="sa-form__footer">
+    {{ 'auth.noCode' | nzI18n }}
+    <button type="button" (click)="resendConfirmationCode()">{{ 'authPage.confirmForm.resendCode' | nzI18n }}</button>
+  </p>
 </form>

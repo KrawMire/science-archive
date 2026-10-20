@@ -34,6 +34,7 @@ export class NewsDetailsPageComponent implements OnInit {
       .subscribe({
         complete: () => (this.isLoading$.next(true)),
         next: (response) => {
+          response.news.creationDate = response.news.creationDate ? new Date(response.news.creationDate.toString()) : undefined;
           this.news$.next(response.news);
           this.titleService.setTitle(`Science Archive - ${response.news.title}`);
         },

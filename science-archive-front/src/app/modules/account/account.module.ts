@@ -18,7 +18,8 @@ import { NzInputDirective, NzInputGroupComponent, NzTextareaCountComponent } fro
 import { ReactiveFormsModule } from "@angular/forms";
 import { NzOptionComponent, NzSelectComponent } from "ng-zorro-antd/select";
 import { NzUploadComponent } from "ng-zorro-antd/upload";
-import { UserArticleCardComponent } from "@modules/account/components/user-article-card/user-article-card.component";
+import { RouterLink } from "@angular/router";
+import { SharedModule } from "@modules/shared/shared.module";
 import { NzI18nPipe } from "ng-zorro-antd/i18n";
 
 
@@ -54,7 +55,8 @@ import { NzI18nPipe } from "ng-zorro-antd/i18n";
     NzSelectComponent,
     NzOptionComponent,
     NzUploadComponent,
-    UserArticleCardComponent,
+    RouterLink,
+    SharedModule,
     NzI18nPipe
   ]
 })

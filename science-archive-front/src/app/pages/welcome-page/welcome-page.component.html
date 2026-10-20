@@ -1,18 +1,146 @@
-<div class="container">
-  <div class="content-wrapper">
-    <img class="logo" src="assets/images/science-archive.logo.with-text.svg" alt="Logo">
-    <p class="goal-text">
-      {{ "welcomePage.goalText" | nzI18n }}
-    </p>
-    <button
-      nz-button
-      class="goto-articles-button"
-      nzType="primary"
-      nzSize="large"
-    >
-      <a href="/content">
-        {{ "welcomePage.goToArticles" | nzI18n }}
-      </a>
-    </button>
+<section class="hero">
+  <div class="sa-container hero__grid">
+    <div class="hero__intro">
+      <p class="sa-eyebrow sa-eyebrow--rose">
+        <span class="sa-bookmark sa-bookmark--inline"></span>
+        {{ 'home.eyebrow' | nzI18n }}
+      </p>
+      <h1 class="sa-display hero__title">{{ 'home.title' | nzI18n }}</h1>
+      <p class="sa-reading hero__lead">{{ 'home.lead' | nzI18n }}</p>
+
+      <form class="hero__search" role="search" (ngSubmit)="search()">
+        <label class="sa-search">
+          <span class="sa-visually-hidden">{{ 'home.searchPlaceholder' | nzI18n }}</span>
+          <sar-icon class="sa-search__icon" name="search" />
+          <input type="search" name="q" [(ngModel)]="searchText" [placeholder]="'home.searchPlaceholder' | nzI18n" />
+        </label>
+        <button type="submit" class="sa-btn sa-btn--primary sa-btn--lg">{{ 'home.search' | nzI18n }}</button>
+      </form>
+
+      <div class="hero__browse">
+        <span class="sa-muted">{{ 'home.browse' | nzI18n }}</span>
+        <a
+          *ngFor="let category of browseChips"
+          class="sa-chip sa-chip--sm"
+          routerLink="/content/articles"
+          [queryParams]="{ categoryId: category.id }"
+        >{{ category.name }}</a>
+        <a class="sa-chip sa-chip--outline sa-chip--sm" routerLink="/content/categories">
+          {{ 'home.allFields' | nzI18n }} <sar-icon name="arrow-right" [size]="14" />
+        </a>
+      </div>
+    </div>
+
+    <div class="hero__featured" *ngIf="featured">
+      <article class="sa-card featured">
+        <span class="sa-bookmark sa-bookmark--lg"></span>
+        <p class="sa-eyebrow">{{ 'home.featured' | nzI18n }}</p>
+        <div class="sa-meta featured__meta">
+          <a class="sa-tag" routerLink="/content/articles" [queryParams]="{ categoryId: featured.categoryId }">{{ featured.categoryName }}</a>
+          <span *ngIf="fieldNameOf(featured) as fieldName">{{ fieldName }}</span>
+        </div>
+        <h2 class="featured__title">
+          <a [routerLink]="['/content', 'articles', featured.id]">{{ featured.title }}</a>
+        </h2>
+        <p class="sa-serif featured__text sa-clamp-3" *ngIf="featured.description">{{ featured.description }}</p>
+        <div class="featured__footer">
+          <span class="featured__authors">{{ authorsOf(featured) }}</span>
+          <span class="featured__docs">
+            <sar-icon name="file" [size]="14" />
+            {{ featured.documents.length | plural:'documents.count' }}
+          </span>
+        </div>
+      </article>
+    </div>
   </div>
-</div>
+</section>
+
+<section class="sa-section">
+  <div class="sa-container">
+    <div class="sa-section-head">
+      <div>
+        <h2 class="sa-h2">{{ 'home.latestArticles' | nzI18n }}</h2>
+        <p class="sa-section-head__sub">{{ 'home.latestArticlesSub' | nzI18n }}</p>
+      </div>
+      <a class="sa-link-arrow" routerLink="/content/articles">{{ 'home.allArticles' | nzI18n }} <sar-icon name="arrow-right" [size]="14" /></a>
+    </div>
+
+    <div class="grid grid--3" *ngIf="isLoadingArticles; else latest">
+      <sar-article-card-skeleton *ngFor="let _ of [1, 2, 3]" />
+    </div>
+    <ng-template #latest>
+      <div class="grid grid--3" *ngIf="latestArticles.length > 0; else noArticles">
+        <sar-article-card
+          *ngFor="let article of latestArticles"
+          [article]="article"
+          [fieldName]="fieldNameOf(article)"
+          variant="grid"
+        />
+      </div>
+    </ng-template>
+    <ng-template #noArticles>
+      <div class="sa-card sa-empty">
+        <p class="sa-empty__title">{{ 'home.noArticles' | nzI18n }}</p>
+        <p>{{ 'home.noArticlesHint' | nzI18n }}</p>
+      </div>
+    </ng-template>
+  </div>
+</section>
+
+<section class="sa-section fields" *ngIf="categories.length > 0">
+  <div class="sa-container">
+    <div class="sa-section-head">
+      <h2 class="sa-h2">{{ 'home.browseByField' | nzI18n }}</h2>
+      <a class="sa-link-arrow" routerLink="/content/categories">{{ 'home.allCategories' | nzI18n }} <sar-icon name="arrow-right" [size]="14" /></a>
+    </div>
+    <div class="grid grid--4">
+      <a
+        *ngFor="let category of categories"
+        class="sa-card sa-card--link field"
+        routerLink="/content/articles"
+        [queryParams]="{ fieldId: category.id }"
+      >
+        <span class="field__name">{{ category.name }}</span>
+        <span class="field__subs">{{ subcategoryNames(category) }}</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="sa-section">
+  <div class="sa-container archive">
+    <div class="archive__news">
+      <div class="sa-section-head">
+        <h2 class="sa-h2">{{ 'home.fromTheArchive' | nzI18n }}</h2>
+        <a class="sa-link-arrow" routerLink="/content/news">{{ 'home.allNews' | nzI18n }} <sar-icon name="arrow-right" [size]="14" /></a>
+      </div>
+      <div class="archive__list" *ngIf="latestNews.length > 0; else noNews">
+        <a
+          *ngFor="let news of latestNews"
+          class="sa-card sa-card--link news-item"
+          [routerLink]="['/content', 'news', news.id]"
+        >
+          <span class="sa-mono">{{ news.creationDate | dateFormat }}</span>
+          <span class="news-item__title">{{ news.title }}</span>
+          <span class="sa-serif sa-clamp-2 news-item__body">{{ news.body }}</span>
+        </a>
+      </div>
+      <ng-template #noNews>
+        <div class="sa-card sa-empty">{{ 'newsPage.noNews' | nzI18n }}</div>
+      </ng-template>
+    </div>
+
+    <aside class="sa-panel-navy steps">
+      <h2 class="steps__title">{{ 'home.stepsTitle' | nzI18n }}</h2>
+      <ol class="steps__list">
+        <li><span class="steps__num">1</span><span><b>{{ 'home.step1Title' | nzI18n }}</b> — {{ 'home.step1Text' | nzI18n }}</span></li>
+        <li><span class="steps__num">2</span><span><b>{{ 'home.step2Title' | nzI18n }}</b> — {{ 'home.step2Text' | nzI18n }}</span></li>
+        <li><span class="steps__num">3</span><span><b>{{ 'home.step3Title' | nzI18n }}</b> — {{ 'home.step3Text' | nzI18n }}</span></li>
+      </ol>
+      <a *ngIf="isSignedIn; else signUp" class="sa-btn sa-btn--white" routerLink="/account/user-articles">{{ 'header.publish' | nzI18n }}</a>
+      <ng-template #signUp>
+        <a class="sa-btn sa-btn--white" routerLink="/auth/sign-up">{{ 'home.createAccount' | nzI18n }}</a>
+      </ng-template>
+    </aside>
+  </div>
+</section>

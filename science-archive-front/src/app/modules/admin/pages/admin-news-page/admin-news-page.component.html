@@ -1,40 +1,30 @@
-<nz-card [nzTitle]="newsTitle" [nzExtra]="createNews">
-  <ng-container *ngIf="(news$ | async) as news">
-    <ng-container *ngIf="news.length > 0; else emptyList">
-      <sar-admin-news-card
-        style="margin-top: 8px"
-        *ngFor="let singleNews of news"
-        [news]="singleNews"
-      />
-    </ng-container>
-  </ng-container>
-
-  <ng-template #loading>
-    <nz-spin nzSize="large"/>
-  </ng-template>
-
-  <ng-template #emptyList>
-    <ng-container *ngIf="!(isLoadingNewsList$ | async); else loading">
-      <nz-empty
-        [nzNotFoundContent]="'adminNewsPage.noNews' | nzI18n"
-      />
-    </ng-container>
-  </ng-template>
-</nz-card>
-
-<ng-template #newsTitle>
-  {{ 'adminNewsPage.news' | nzI18n }}
-</ng-template>
-
-<ng-template #createNews>
-  <button
-    nz-button
-    nzType="primary"
-    (click)="openCreateNewModal()"
-  >
-    <span nz-icon nzType="plus"></span>
-    {{ 'adminNewsPage.new' | nzI18n }}
+<div class="head">
+  <h1 class="sa-h1">{{ 'adminNewsPage.news' | nzI18n }}</h1>
+  <button type="button" class="sa-btn sa-btn--primary sa-btn--lg" (click)="openCreateNewModal()">
+    <sar-icon name="plus" [size]="18" />
+    {{ 'admin.newPost' | nzI18n }}
   </button>
+</div>
+
+<ng-container *ngIf="(news$ | async) as news">
+  <div class="sa-card list" *ngIf="news.length > 0; else emptyList">
+    <a class="row" *ngFor="let singleNews of news" [routerLink]="['/content', 'news', singleNews.id]">
+      <span class="sa-mono">{{ singleNews.creationDate | dateFormat }}</span>
+      <span class="row__body">
+        <span class="row__title">{{ singleNews.title }}</span>
+        <span class="sa-serif sa-clamp-2">{{ singleNews.body }}</span>
+      </span>
+    </a>
+  </div>
+</ng-container>
+
+<ng-template #emptyList>
+  <div class="sa-card sa-empty">
+    <sar-loading *ngIf="isLoadingNewsList$ | async; else noNews" />
+    <ng-template #noNews>
+      <p class="sa-empty__title">{{ 'adminNewsPage.noNews' | nzI18n }}</p>
+    </ng-template>
+  </div>
 </ng-template>
 
 <nz-modal
@@ -45,7 +35,7 @@
   [nzOkDisabled]="isCreatingNews$ | async"
 >
   <ng-container *nzModalContent>
-    <form nz-form [formGroup]="validateForm">
+    <form nz-form nzLayout="vertical" [formGroup]="validateForm">
       <nz-form-item>
         <nz-form-control [nzErrorTip]="'adminNewsPage.specifyNewsTitle' | nzI18n">
           <nz-form-label nzRequired>

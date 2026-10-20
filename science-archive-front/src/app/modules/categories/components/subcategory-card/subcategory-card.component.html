@@ -1,11 +1,9 @@
-<button
-  [style]="style"
-  nz-button
-  nz-tooltip
-  [nzTooltipTitle]="subcategory.description"
-  nzType="primary"
-  [routerLink]="['/content', 'articles']"
-  [queryParams]="{categoryId: subcategory.id}"
+<a
+  class="subject"
+  [title]="subcategory.description ?? ''"
+  routerLink="/content/articles"
+  [queryParams]="{ categoryId: subcategory.id }"
 >
-  {{subcategory.name}}
-</button>
+  <span>{{ subcategory.name }}</span>
+  <sar-icon name="chevron-right" [size]="15" />
+</a>

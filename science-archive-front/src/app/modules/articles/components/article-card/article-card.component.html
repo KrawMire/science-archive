@@ -1,25 +1,35 @@
-<nz-card
-  [style]="style"
-  [nzTitle]="articleTitle"
-  [nzExtra]="articleCreationDate"
->
-  <nz-card-meta [nzTitle]="cardMetaTitle" [nzDescription]="article.description"></nz-card-meta>
-</nz-card>
+<article class="sa-card sa-card--link card" [ngClass]="'card--' + variant">
+  <span class="sa-bookmark" *ngIf="isNew && variant !== 'compact'"></span>
 
-
-<ng-template #articleTitle>
-  <span [routerLink]="[article.id]" class="article-title">{{article.title}}</span>
-</ng-template>
-<ng-template #cardMetaTitle>
-  <nz-tag [nzColor]="'#4a77d3'">
+  <div class="card__meta" *ngIf="variant !== 'compact'; else compactDate">
     <a
+      class="sa-tag card__raised"
       [routerLink]="['/content', 'articles']"
-      [queryParams]="{categoryId: article.categoryId}"
-    >
-      {{article.categoryName}}
-    </a>
-  </nz-tag>
-</ng-template>
-<ng-template #articleCreationDate>
-  <p>{{article.creationDate | dateFormat}}</p>
-</ng-template>
+      [queryParams]="{ categoryId: article.categoryId }"
+    >{{ article.categoryName }}</a>
+    <span class="card__field" *ngIf="variant === 'grid' && fieldName">{{ fieldName }}</span>
+    <span class="sa-mono" *ngIf="variant === 'list'">{{ article.creationDate | dateFormat }}</span>
+  </div>
+  <ng-template #compactDate>
+    <span class="sa-mono">{{ article.creationDate | dateFormat }}</span>
+  </ng-template>
+
+  <h3 class="sa-h3 card__title">
+    <a [routerLink]="link" class="card__link">{{ article.title }}</a>
+  </h3>
+
+  <p
+    *ngIf="variant !== 'compact' && article.description"
+    class="sa-serif card__description"
+    [ngClass]="variant === 'grid' ? 'sa-clamp-3' : 'sa-clamp-2'"
+  >{{ article.description }}</p>
+
+  <div class="card__footer">
+    <span class="card__authors">{{ authors }}</span>
+    <span class="sa-mono" *ngIf="variant === 'grid'">{{ article.creationDate | dateFormat }}</span>
+    <span class="card__docs" *ngIf="variant === 'list'">
+      <sar-icon name="file" [size]="14" />
+      {{ article.documents.length | plural:'documents.count' }}
+    </span>
+  </div>
+</article>

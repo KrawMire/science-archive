@@ -1,50 +1,82 @@
-.page-layout {
+:host {
+  display: block;
   min-height: 100%;
-  height: auto;
 }
 
-.sar-logo {
-  margin-left: 8px;
-  height: 24px;
-}
-.sar-account-page-header {
-  background-color: #ffffff;
-  box-shadow: 0 20px 8px -16px #9b9b9b4a;
-}
-
-.drawer-content {
-  padding: 0;
-}
-
-.sider-menu {
-  height: 100%;
-  //border-right: 0;
-}
-
-.inner-layout {
-  padding: 24px;
-}
-
-nz-breadcrumb {
-  margin: 16px 0;
-}
-
-nz-content {
-  //background: #fff;
-  padding: 24px;
-  min-height: 280px;
-}
-
-@media screen and (max-width: 768px) {
-  .inner-layout {
-    padding: 8px;
-    margin: 0;
+.account {
+  &__grid {
+    display: grid;
+    grid-template-columns: 256px minmax(0, 1fr);
+    gap: 28px;
+    align-items: start;
   }
 
-  .sar-account-page-header {
-    align-content: center;
-    padding: 8px;
-    background-color: #ffffff;
-    box-shadow: 0 20px 8px -16px #9b9b9b4a;
+  &__side {
+    position: sticky;
+    top: calc(var(--sa-header-height) + 24px);
+    padding: 14px;
+  }
+
+  &__user {
+    padding: 8px 8px 16px;
+    border-bottom: 1px solid var(--sa-border);
+  }
+
+  &__nav {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding-top: 12px;
+
+    a,
+    button {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 12px;
+      border: 0;
+      border-radius: 10px;
+      background: none;
+      color: var(--sa-ink);
+      font: inherit;
+      font-weight: 500;
+      text-align: left;
+      cursor: pointer;
+
+      &:hover { color: var(--sa-blue); }
+
+      &.is-active {
+        background: var(--sa-blue-tint);
+        color: var(--sa-blue);
+        font-weight: 600;
+      }
+    }
+  }
+
+  &__signout {
+    margin-top: 8px;
+    border-top: 1px solid var(--sa-border) !important;
+    border-radius: 0 0 10px 10px !important;
+    padding-top: 16px !important;
+    color: var(--sa-muted) !important;
+  }
+
+  @media (max-width: 900px) {
+    &__grid { grid-template-columns: 1fr; gap: 16px; }
+
+    &__side { position: static; }
+
+    &__nav {
+      flex-direction: row;
+      overflow-x: auto;
+
+      a, button { flex: none; }
+    }
+
+    &__signout {
+      margin-top: 0;
+      border-top: 0 !important;
+      padding-top: 10px !important;
+    }
   }
 }

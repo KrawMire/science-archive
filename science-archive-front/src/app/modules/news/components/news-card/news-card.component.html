@@ -1,21 +1,8 @@
-<nz-card
-  [nzTitle]="news.title"
-  [style]="style"
-  [nzExtra]="newsCreationDate"
-  [nzBordered]="false"
->
-  <nz-card-meta [nzDescription]="news.body"></nz-card-meta>
-
-  <button
-    nz-button
-    nzType="primary"
-    class="read-more-button"
-    [routerLink]="[news.id]"
-  >
-    {{ 'newsCard.readMore' | nzI18n }}
-  </button>
-</nz-card>
-
-<ng-template #newsCreationDate>
-  <p>{{news.creationDate | dateFormat}}</p>
-</ng-template>
+<a class="row" [routerLink]="['/content', 'news', news.id]">
+  <span class="sa-mono row__date">{{ news.creationDate | dateFormat }}</span>
+  <span class="row__body">
+    <span class="row__title">{{ news.title }}</span>
+    <span class="sa-serif sa-clamp-2 row__text">{{ news.body }}</span>
+  </span>
+  <span class="sa-link-arrow row__read">{{ 'news.read' | nzI18n }} <sar-icon name="arrow-right" [size]="14" /></span>
+</a>

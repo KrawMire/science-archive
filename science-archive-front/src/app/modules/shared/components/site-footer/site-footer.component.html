@@ -1,0 +1,40 @@
+<footer class="footer">
+  <div class="sa-container" *ngIf="full; else compact">
+    <div class="footer__grid">
+      <div>
+        <sar-logo class="sar-logo--light" />
+        <p class="footer__mission">{{ 'common.mission' | nzI18n }}</p>
+      </div>
+      <div>
+        <p class="footer__heading">{{ 'footer.menu' | nzI18n }}</p>
+        <a routerLink="/content/articles">{{ 'header.articles' | nzI18n }}</a>
+        <a routerLink="/content/categories">{{ 'header.categories' | nzI18n }}</a>
+        <a routerLink="/content/news">{{ 'header.news' | nzI18n }}</a>
+      </div>
+      <div>
+        <p class="footer__heading">{{ 'footer.contactUs' | nzI18n }}</p>
+        <a [href]="telegramUrl" target="_blank" rel="noopener noreferrer">{{ 'footer.telegramChannel' | nzI18n }}</a>
+        <a [href]="linkedInUrl" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+        <a [href]="'mailto:' + email">{{ email }}</a>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <a [href]="repositoryUrl" target="_blank" rel="noopener noreferrer">{{ 'footer.openSource' | nzI18n }}</a>
+      <span class="footer__locales">
+        <button type="button" [class.is-active]="locale === Locales.EN" (click)="setLocale(Locales.EN)">English</button>
+        ·
+        <button type="button" [class.is-active]="locale === Locales.RU" (click)="setLocale(Locales.RU)">Русский</button>
+      </span>
+    </div>
+  </div>
+
+  <ng-template #compact>
+    <div class="sa-container footer__compact">
+      <a routerLink="/"><sar-logo class="sar-logo--light sar-logo--sm" /></a>
+      <div class="footer__compact-links">
+        <a [href]="telegramUrl" target="_blank" rel="noopener noreferrer">Telegram</a>
+        <a [href]="'mailto:' + email">{{ email }}</a>
+      </div>
+    </div>
+  </ng-template>
+</footer>

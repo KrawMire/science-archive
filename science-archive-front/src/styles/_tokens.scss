@@ -1,0 +1,57 @@
+// "Archive Blue" design language.
+// Colors come from the existing brand: the wordmark blue, the navy of the old welcome page
+// and the rose bookmark in the logo. Keep in sync with src/theme.less.
+
+:root {
+  // Core palette
+  --sa-blue: #1B57CF;
+  --sa-blue-hover: #1544A6;
+  --sa-blue-tint: #EAF0FC;
+  --sa-navy: #002065;
+  --sa-sky: #3F9BF3;
+  --sa-rose: #F24F6F;
+  --sa-rose-text: #B8243F;
+  --sa-rose-tint: #FDE8EC;
+  --sa-ink: #313131;
+  --sa-reading: #3D4350;
+  --sa-muted: #5A6272;
+  --sa-border: #DCDFE6;
+  --sa-paper: #F0F2F5;
+  --sa-surface: #FFFFFF;
+  --sa-subtle: #F6F7F9;
+  --sa-on-navy: #C7D2EA;
+
+  // Status
+  --sa-amber-tint: #FDF1D3;
+  --sa-amber-text: #8A5A00;
+  --sa-green: #1E7A46;
+  --sa-green-hover: #17633A;
+  --sa-green-tint: #E3F4EA;
+
+  // Typography
+  --sa-font-ui: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --sa-font-serif: "Source Serif 4", Georgia, "Times New Roman", serif;
+  --sa-font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  // Radius
+  --sa-radius-file: 6px;
+  --sa-radius-control: 10px;
+  --sa-radius-card: 14px;
+  --sa-radius-panel: 20px;
+
+  // Elevation
+  --sa-shadow-card: 0 1px 2px rgba(0, 32, 101, 0.04);
+  --sa-shadow-raised: 0 12px 32px -12px rgba(0, 32, 101, 0.25);
+
+  // Layout
+  --sa-container: 1128px;
+  --sa-gutter: 24px;
+  --sa-header-height: 68px;
+}
+
+@media (max-width: 768px) {
+  :root {
+    --sa-gutter: 16px;
+    --sa-header-height: 58px;
+  }
+}

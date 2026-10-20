@@ -12,6 +12,7 @@ import { NzI18nService } from "ng-zorro-antd/i18n";
 })
 export class SignUpFormComponent {
   @Output() onSignedUp = new EventEmitter<void>();
+  isSubmitting = false;
 
   validateForm: FormGroup<{
     firstName: FormControl<string>;
@@ -56,6 +57,7 @@ export class SignUpFormComponent {
   }
 
   signUp() {
+    this.isSubmitting = true;
     const username = this.validateForm.controls.firstName.value + " " + this.validateForm.controls.secondName.value;
     this.authApiService.signUp(
       username,
@@ -64,10 +66,12 @@ export class SignUpFormComponent {
       this.validateForm.controls.password.value,
     ).subscribe({
       next: (response) => {
+        this.isSubmitting = false;
         this.authService.saveCurrentAuthUser(response.user);
         this.onSignedUp.emit();
       },
       error: (error) => {
+        this.isSubmitting = false;
         this.messageService.error(error.message ?? this.i18nService.translate("commonErrors.unhandledError"));
       }
     });

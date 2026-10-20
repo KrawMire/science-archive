@@ -2,9 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { BehaviorSubject } from "rxjs";
 import { Category } from "@models/category/category";
 import { CategoryApiService } from "@services/category-api.service";
-import { NzMessageService } from "ng-zorro-antd/message";
 import { Title } from "@angular/platform-browser";
-import { NzI18nService } from "ng-zorro-antd/i18n";
 
 @Component({
   selector: "sar-categories-page",
@@ -13,26 +11,46 @@ import { NzI18nService } from "ng-zorro-antd/i18n";
 })
 export class CategoriesPageComponent implements OnInit {
   isLoading$ = new BehaviorSubject<boolean>(true);
-  categories$ = new BehaviorSubject<Category[]>([]);
+  hasError = false;
+  searchText = "";
+
+  private categories: Category[] = [];
+  visibleCategories: Category[] = [];
 
   constructor(
-    private readonly i18nService: NzI18nService,
     private readonly categoryService: CategoryApiService,
-    private readonly message: NzMessageService,
     titleService: Title) {
     titleService.setTitle("Science Archive - Categories");
   }
 
   ngOnInit(): void {
     this.categoryService.getAllCategories().subscribe({
-      complete: () => (this.isLoading$.next(false)),
-      next: (response) => this.categories$.next(response.categories),
-      error: (error) => {
+      next: (response) => {
+        this.categories = response.categories;
+        this.applySearch();
         this.isLoading$.next(false);
-        this.categories$.next([]);
+      },
+      error: (error) => {
         console.log(error);
-        this.message.error(this.i18nService.translate("commonErrors.unhandledError"));
+        this.hasError = true;
+        this.isLoading$.next(false);
       }
     });
+  }
+
+  applySearch(): void {
+    const query = this.searchText.trim().toLowerCase();
+
+    if (!query) {
+      this.visibleCategories = this.categories;
+      return;
+    }
+
+    // A matching field keeps all of its subjects; otherwise only the matching subjects are shown
+    this.visibleCategories = this.categories
+      .map(category => category.name.toLowerCase().includes(query)
+        ? category
+        : { ...category, subcategories: category.subcategories.filter(sub => sub.name.toLowerCase().includes(query)) })
+      .filter(category => category.subcategories.length > 0 || category.name.toLowerCase().includes(query));
   }
 }

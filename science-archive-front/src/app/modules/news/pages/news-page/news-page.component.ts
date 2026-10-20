@@ -15,6 +15,8 @@ export class NewsPageComponent implements OnInit {
   isLoading$ = new BehaviorSubject<boolean>(true);
   news$ = new BehaviorSubject<News[]>([]);
 
+  readonly telegramUrl = "https://t.me/science_archive_project";
+
   constructor(
     private readonly i18nService: NzI18nService,
     private readonly newsService: NewsApiService,
@@ -28,10 +30,12 @@ export class NewsPageComponent implements OnInit {
       .getAllNews()
       .pipe(
         map((response) => {
-          return response.news.map((singleNews) => {
-            singleNews.creationDate = new Date(singleNews.creationDate?.toString() ?? new Date());
-            return singleNews;
-          });
+          return response.news
+            .map((singleNews) => {
+              singleNews.creationDate = new Date(singleNews.creationDate?.toString() ?? new Date());
+              return singleNews;
+            })
+            .sort((a, b) => (b.creationDate?.getTime() ?? 0) - (a.creationDate?.getTime() ?? 0));
         }),
       )
       .subscribe({

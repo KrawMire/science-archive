@@ -1,4 +1,4 @@
-import { Component, Input } from "@angular/core";
+import { Component } from "@angular/core";
 
 @Component({
   selector: "sar-news-card-skeleton",
@@ -6,5 +6,4 @@ import { Component, Input } from "@angular/core";
   styleUrls: ["./news-card-skeleton.component.scss"],
 })
 export class NewsCardSkeletonComponent {
-  @Input() style?: string;
 }

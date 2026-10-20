@@ -7,6 +7,5 @@ import { News } from "@models/news/news";
   styleUrls: ["./news-card.component.scss"],
 })
 export class NewsCardComponent {
-  @Input() style?: string;
   @Input() news!: News;
 }

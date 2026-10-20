@@ -1,92 +1,25 @@
-<nz-layout class="page-layout">
-  <nz-header class="sar-admin-page-header">
-    <div class="logo">
-      <ng-container *ngIf="isMobile$ | async; else goBackButton">
-        <button
-          nz-button nzType="link"
-          (click)="openDrawer()"
-        >
-          <span nz-icon nzType="menu"></span>
-        </button>
-      </ng-container>
-      <ng-template #goBackButton>
-        <button
-          nz-button nzType="link"
-          [routerLink]="['/content']"
-        >
-          <span nz-icon nzType="arrow-left"></span>
-        </button>
-      </ng-template>
-      <img
-        src="assets/images/science-archive.logo.with-text.svg"
-        alt="Logo"
-        class="sar-logo"
-      >
-    </div>
-  </nz-header>
-  <nz-layout>
-    <ng-container *ngIf="isMobile$ | async; else desktopSider">
-      <nz-drawer
-        [nzTitle]="'adminPage.administration' | nzI18n"
-        nzClosable="true"
-        nzPlacement="left"
-        [nzVisible]="(showMobileDrawer$ | async) ?? false"
-        (nzOnClose)="closeDrawer()"
-      >
-        <ng-container class="drawer-content" *nzDrawerContent>
-          <ul nz-menu nzMode="inline" nzTheme="light">
-            <li nz-menu-item>
-              <span nz-icon nzType="book" nzTheme="outline"></span>
-              <a style="margin-left: 8px" (click)="onDrawerNavigateTo('/admin', 'articles')">
-                {{ 'adminPage.articles' | nzI18n }}
-              </a>
-            </li>
-            <li nz-menu-item>
-              <span nz-icon nzType="container" nzTheme="outline"></span>
-              <a style="margin-left: 8px" (click)="onDrawerNavigateTo('/admin', 'news')">
-                {{ 'adminPage.news' | nzI18n }}
-              </a>
-            </li>
-            <li nz-menu-item>
-              <span nz-icon nzType="arrow-left" nzTheme="outline"></span>
-              <a style="margin-left: 8px" href="/content">
-                {{ 'adminPage.backToMain' | nzI18n }}
-              </a>
-            </li>
-          </ul>
-        </ng-container>
-      </nz-drawer>
-    </ng-container>
-    <ng-template #desktopSider>
-      <nz-sider nzWidth="248px" nzTheme="light">
-        <ul nz-menu nzMode="inline" nzTheme="light">
-          <li
-            nz-menu-item
-            routerLink="articles"
-            nzMatchRouter
-          >
-            <span nz-icon nzType="book" nzTheme="outline"></span>
-            <span>
-              {{ 'adminPage.articles' | nzI18n }}
-            </span>
-          </li>
-          <li
-            nz-menu-item
-            routerLink="news"
-            nzMatchRouter
-          >
-            <span nz-icon nzType="container" nzTheme="outline"></span>
-            <span>
-              {{ 'adminPage.news' | nzI18n }}
-            </span>
-          </li>
-        </ul>
-      </nz-sider>
-    </ng-template>
-    <nz-layout class="inner-layout">
-      <nz-content style="padding: 0">
-        <router-outlet/>
-      </nz-content>
-    </nz-layout>
-  </nz-layout>
-</nz-layout>
+<header class="admin-header">
+  <div class="sa-container admin-header__row">
+    <a routerLink="/admin" class="admin-header__logo" aria-label="Science Archive">
+      <sar-logo class="sar-logo--light" [tile]="true" />
+      <span class="admin-header__badge">{{ 'admin.badge' | nzI18n }}</span>
+    </a>
+    <nav class="admin-header__nav">
+      <a routerLink="articles" routerLinkActive="is-active">
+        {{ 'header.articles' | nzI18n }}
+        <span class="admin-header__count" *ngIf="(pendingCount$ | async) as count">{{ count }}</span>
+      </a>
+      <a routerLink="news" routerLinkActive="is-active">{{ 'header.news' | nzI18n }}</a>
+    </nav>
+    <a routerLink="/" class="admin-header__back">
+      <sar-icon name="arrow-left" [size]="14" />
+      <span>{{ 'admin.backToArchive' | nzI18n }}</span>
+    </a>
+  </div>
+</header>
+
+<main class="sa-page-body">
+  <div class="sa-container">
+    <router-outlet />
+  </div>
+</main>

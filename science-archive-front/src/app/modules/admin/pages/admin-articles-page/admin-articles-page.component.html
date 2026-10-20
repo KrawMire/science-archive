@@ -1,28 +1,99 @@
-<nz-card [nzTitle]="articleTitle">
-  <ng-container *ngIf="(articles$ | async) as articles">
-    <ng-container *ngIf="articles.length > 0; else emptyList">
-      <sar-admin-article-card
-        style="margin-top: 8px"
-        *ngFor="let article of articles"
-        [article]="article"
-        (articleChange)="getArticles()"
-      />
-    </ng-container>
-  </ng-container>
+<div class="head">
+  <div>
+    <h1 class="sa-h1">{{ 'admin.queueTitle' | nzI18n }}</h1>
+    <p class="sa-muted head__sub">{{ description | nzI18n }}</p>
+  </div>
+  <div class="sa-segmented" role="tablist">
+    <button
+      type="button"
+      role="tab"
+      *ngFor="let tab of tabs"
+      [class.is-active]="tab.status === status"
+      [attr.aria-selected]="tab.status === status"
+      (click)="setStatus(tab.status)"
+    >{{ tab.label | nzI18n }}</button>
+  </div>
+</div>
 
-  <ng-template #loading>
-    <nz-spin nzSize="large"/>
-  </ng-template>
+<div class="sa-card sa-empty" *ngIf="hasError$ | async; else content">
+  <p class="sa-empty__title">{{ 'common.loadFailed' | nzI18n }}</p>
+  <p>{{ 'common.tryAgainLater' | nzI18n }}</p>
+</div>
 
-  <ng-template #emptyList>
-    <ng-container *ngIf="!(isLoadingArticleList$ | async); else loading">
-      <nz-empty
-        [nzNotFoundContent]="'adminArticlesPage.noArticles' | nzI18n"
-      />
-    </ng-container>
-  </ng-template>
-</nz-card>
+<ng-template #content>
+  <div class="sa-card sa-empty" *ngIf="queue.length === 0; else queueView">
+    <sar-loading *ngIf="isLoading$ | async; else emptyQueue" />
+    <ng-template #emptyQueue>
+      <p class="sa-empty__title">{{ 'admin.emptyQueue' | nzI18n }}</p>
+      <p>{{ 'admin.emptyQueueHint' | nzI18n }}</p>
+    </ng-template>
+  </div>
+</ng-template>
 
-<ng-template #articleTitle>
-  {{ 'adminArticlesPage.allArticles' | nzI18n }}
+<ng-template #queueView>
+  <div class="layout">
+    <ul class="sa-card queue">
+      <li *ngFor="let article of queue">
+        <button
+          type="button"
+          class="queue__item"
+          [class.is-active]="article.id === selected?.id"
+          (click)="select(article)"
+        >
+          <span class="queue__title">{{ article.title }}</span>
+          <span class="queue__meta">
+            <span class="queue__authors">{{ authorsOf(article) }} · {{ article.categoryName }}</span>
+            <span class="sa-mono">{{ article.creationDate | dateFormat:'short' }}</span>
+          </span>
+        </button>
+      </li>
+    </ul>
+
+    <article class="sa-card sa-card--pad detail" *ngIf="selected as article">
+      <div class="sa-meta">
+        <sar-status-tag [status]="article.status" />
+        <span class="sa-tag">{{ article.categoryName }}</span>
+        <span class="sa-mono">{{ 'admin.submitted' | nzI18n }} {{ article.creationDate | dateFormat }}</span>
+      </div>
+      <h2 class="sa-h2 detail__title">{{ article.title }}</h2>
+      <p class="detail__by" *ngIf="authorsOf(article)">{{ 'admin.by' | nzI18n }} <b>{{ authorsOf(article) }}</b></p>
+      <p class="sa-serif detail__text" *ngIf="article.description">{{ article.description }}</p>
+
+      <div class="detail__documents" *ngIf="article.documents.length > 0; else noDocuments">
+        <sar-document-tile *ngFor="let document of article.documents" [document]="document" action="open" />
+      </div>
+      <ng-template #noDocuments>
+        <p class="sa-muted detail__no-docs">{{ 'article.noDocuments' | nzI18n }}</p>
+      </ng-template>
+
+      <div class="detail__actions">
+        <button
+          type="button"
+          class="sa-btn sa-btn--success"
+          *ngIf="article.status !== ArticleStatus.Verified"
+          [disabled]="isProcessing"
+          (click)="onApprove(article)"
+        >
+          <sar-icon name="check" [size]="16" [strokeWidth]="2.5" />
+          {{ 'admin.approve' | nzI18n }}
+        </button>
+        <button
+          type="button"
+          class="sa-btn sa-btn--danger"
+          *ngIf="article.status !== ArticleStatus.Declined"
+          [disabled]="isProcessing"
+          (click)="onDecline(article)"
+        >
+          <sar-icon name="x" [size]="16" [strokeWidth]="2.5" />
+          {{ 'adminArticleCard.decline' | nzI18n }}
+        </button>
+        <a class="sa-btn sa-btn--ghost" *ngIf="article.status === ArticleStatus.Verified" [routerLink]="['/content', 'articles', article.id]">
+          {{ 'admin.openPublic' | nzI18n }}
+        </a>
+        <button type="button" class="sa-btn sa-btn--ghost detail__skip" *ngIf="queue.length > 1" (click)="skip()">
+          {{ 'admin.skip' | nzI18n }} <sar-icon name="arrow-right" [size]="16" />
+        </button>
+      </div>
+    </article>
+  </div>
 </ng-template>

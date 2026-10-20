@@ -1,10 +1,6 @@
-.sar-header {
-  padding: 16px;
-  background-color: #00306b;
-}
-
-.sar-logo {
-  width: 300px;
+:host {
+  display: block;
+  height: 100%;
 }
 
 .sar-loading-wrapper {

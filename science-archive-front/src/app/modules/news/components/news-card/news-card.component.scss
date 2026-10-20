@@ -1,3 +1,28 @@
-.read-more-button {
-  margin-top: 16px;
+:host {
+  display: block;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 140px minmax(0, 1fr) auto;
+  gap: 24px;
+  align-items: center;
+  padding: 24px 30px;
+  color: inherit;
+
+  &:hover { background: var(--sa-subtle); color: inherit; }
+
+  &__date { align-self: start; padding-top: 4px; }
+  &__body { display: flex; flex-direction: column; gap: 6px; }
+  &__title { color: var(--sa-navy); font-size: 19px; font-weight: 700; }
+  &__text { font-size: 16px; }
+  &__read { color: var(--sa-blue); }
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: 8px;
+    padding: 18px;
+
+    &__read { display: none; }
+  }
 }

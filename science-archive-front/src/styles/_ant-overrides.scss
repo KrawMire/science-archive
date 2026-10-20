@@ -1,0 +1,75 @@
+// Align the ng-zorro controls that are still in use (forms, modals, messages) with the design language.
+
+.ant-input,
+.ant-input-affix-wrapper,
+.ant-select:not(.ant-select-customize-input) .ant-select-selector {
+  border-color: var(--sa-border);
+  border-radius: var(--sa-radius-control) !important;
+}
+
+.ant-input,
+.ant-input-affix-wrapper {
+  padding: 10px 14px;
+  font-size: 15px;
+}
+
+.ant-input-affix-wrapper > .ant-input {
+  padding: 0;
+}
+
+.ant-input:focus,
+.ant-input-focused,
+.ant-input-affix-wrapper-focused,
+.ant-select-focused:not(.ant-select-disabled).ant-select:not(.ant-select-customize-input) .ant-select-selector {
+  border-color: var(--sa-blue) !important;
+  box-shadow: 0 0 0 3px rgba(27, 87, 207, .15) !important;
+}
+
+.ant-form-item-label > label {
+  color: var(--sa-ink);
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.ant-form-vertical .ant-form-item-label {
+  padding-bottom: 6px;
+}
+
+.ant-form-item {
+  margin-bottom: 18px;
+}
+
+.ant-modal-content {
+  border-radius: var(--sa-radius-panel);
+  overflow: hidden;
+}
+
+.ant-modal-header {
+  border-bottom: 0;
+  padding: 24px 24px 8px;
+}
+
+.ant-modal-title {
+  color: var(--sa-navy);
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+.ant-modal-footer {
+  border-top: 0;
+  padding: 8px 24px 24px;
+}
+
+.ant-btn {
+  border-radius: var(--sa-radius-control);
+  font-weight: 600;
+}
+
+.ant-upload.ant-upload-drag {
+  border-radius: var(--sa-radius-card);
+  background: var(--sa-subtle);
+}
+
+.ant-message-notice-content {
+  border-radius: var(--sa-radius-control);
+}

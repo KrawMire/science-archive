@@ -1,1 +1,5 @@
-/* You can add global styles to this file, and also import other style files */
+/* Global styles: the "Archive Blue" design language */
+@import "styles/tokens";
+@import "styles/base";
+@import "styles/components";
+@import "styles/ant-overrides";

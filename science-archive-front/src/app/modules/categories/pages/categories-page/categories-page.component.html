@@ -1,19 +1,38 @@
-<div *ngIf="(isLoading$ | async); else categoriesView">
-  <sar-category-card-skeleton
-    *ngFor="let _ of [1,2,3]"
-    style="margin-top: 10px"
-  ></sar-category-card-skeleton>
-</div>
+<section class="sa-page-head">
+  <div class="sa-container sa-page-head__row">
+    <div>
+      <h1 class="sa-h1">{{ 'header.categories' | nzI18n }}</h1>
+      <p class="sa-page-head__lead">{{ 'categories.lead' | nzI18n }}</p>
+    </div>
+    <label class="sa-search sa-page-head__aside">
+      <span class="sa-visually-hidden">{{ 'categories.find' | nzI18n }}</span>
+      <sar-icon class="sa-search__icon" name="search" />
+      <input type="search" [(ngModel)]="searchText" (ngModelChange)="applySearch()" [placeholder]="'categories.find' | nzI18n" />
+    </label>
+  </div>
+</section>
 
-<ng-template #categoriesView>
-  <nz-card *ngIf="(categories$ | async)?.length === 0; else categoriesList">
-    <nz-empty [nzNotFoundContent]="'categoriesPage.noCategoriesFound' | nzI18n"/>
-  </nz-card>
-</ng-template>
-<ng-template #categoriesList>
-  <sar-category-card
-    *ngFor="let category of categories$ | async"
-    [category]="category"
-    style="margin-top: 10px"
-  ></sar-category-card>
-</ng-template>
+<div class="sa-page-body">
+  <div class="sa-container shelves">
+    <ng-container *ngIf="isLoading$ | async; else loaded">
+      <sar-category-card-skeleton *ngFor="let _ of [1, 2, 3]" />
+    </ng-container>
+
+    <ng-template #loaded>
+      <div class="sa-card sa-empty" *ngIf="hasError; else list">
+        <p class="sa-empty__title">{{ 'common.loadFailed' | nzI18n }}</p>
+        <p>{{ 'common.tryAgainLater' | nzI18n }}</p>
+      </div>
+    </ng-template>
+
+    <ng-template #list>
+      <div class="sa-card sa-empty" *ngIf="visibleCategories.length === 0; else categoriesList">
+        <p class="sa-empty__title">{{ 'categoriesPage.noCategoriesFound' | nzI18n }}</p>
+      </div>
+    </ng-template>
+
+    <ng-template #categoriesList>
+      <sar-category-card *ngFor="let category of visibleCategories" [category]="category" />
+    </ng-template>
+  </div>
+</div>
